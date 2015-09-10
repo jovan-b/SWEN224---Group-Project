@@ -1,1 +1,1 @@
-# SWEN224---Group-Project
+# The ECS Games
