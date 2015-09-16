@@ -40,7 +40,7 @@ public class GUICanvas extends JComponent{
 		//paint background
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		Room r = new Room("EastBase.png", "EastTop.png"); //FIXME get passed the client-side room
+		Room r = new Room("Classroom"); //FIXME get passed the client-side room
 		r.draw(g, this);
 	}
 }
