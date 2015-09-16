@@ -19,7 +19,7 @@ public class Controller implements KeyListener{
 	
 	public static final double FRAME_RATE = 1.0/60;	//a 60th of a second
 	public boolean isRunning = false;
-	GUI gui;
+	GUIFrame gui;
 	Player player;
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
@@ -116,7 +116,7 @@ public class Controller implements KeyListener{
 	 */
 	private void initialise() {
 		isRunning = true;
-		gui = new GUI(this);
+		gui = new GUIFrame(this);
 	}
 
 	/**
@@ -141,6 +141,10 @@ public class Controller implements KeyListener{
 		
 	}
 	
+
 	
+	public static void main(String[] args){
+		new Controller();
+	}
 
 }

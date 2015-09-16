@@ -1,5 +1,7 @@
 package characters;
 
+import gameObjects.Drawable;
+
 /**
  * An interface representing a playable character
  * Players base speed and size are defined
@@ -9,7 +11,7 @@ package characters;
  * @author Jah Seng Lee
  *
  */
-public interface Player {
+public interface Player extends Drawable {
 	
 	public static final int FIRERATE = 4;	//projectiles per second
 	public static final int SPEED = 2;	//pixels per frame
