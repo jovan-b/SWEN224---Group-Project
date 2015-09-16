@@ -78,4 +78,58 @@ public class Room implements Drawable {
 			}
 		}
 	}
+	
+	/** 
+	* Create a clone of the contents array which has then been
+	* rotated 90 degrees clockwise
+	* @return A clone of this.contents which has been rotated 90
+	* degrees clockwise.
+	*/
+	public Item[][] rotatedArrayClockwise(){
+		int rows = contents.length;
+		int cols = contents[0].length;
+		
+		 // Make a new array where width and height are swtiched
+		Item[][] rotate = new Item[cols][rows];
+		
+		// Rows and cols for rotated array
+		int rRows = cols;
+		int rCols = rows;
+		
+		// Rotates 90 clockwise
+		for(int r=0; r<rRows; r++){
+			for(int c=0; c<rCols; c++){
+				rotate[r][c] = contents[rCols-1-c][r];
+			}
+		}
+		
+		return rotate;
+	}
+	
+	/** 
+	* Create a clone of the contents array which has then been
+	* rotated 90 degrees anti-clockwise
+	* @return A clone of this.contents which has been rotated 90
+	* degrees anti-clockwise.
+	*/
+	public Item[][] rotatedArrayAntiClockwise(){
+		int rows = contents.length;
+		int cols = contents[0].length;
+
+		// Makes a new array where width and height are swtiched
+		Item[][] rotate = new Item[cols][rows];
+		
+		// Rows and cols for rotated array
+		int rRows = cols;
+		int rCols = rows;
+		
+		// Rotates 90 anticlockwise
+		for(int r=0; r<rRows; r++){
+			for(int c=0; c<rCols; c++){
+				rotate[r][c] = contents[c][rRows-1-r];
+			}
+		}
+		
+		return rotate;
+	}
 }
