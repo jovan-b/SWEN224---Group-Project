@@ -1,7 +1,4 @@
-Room name
 Room description
-Background image file name (not full path, just name)
-Foreground image file name (not full path, just name)
 # cols
 # rows
 cols * rows grid of item codes

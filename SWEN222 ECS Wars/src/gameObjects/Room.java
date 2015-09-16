@@ -41,24 +41,30 @@ public class Room implements Drawable {
 	}
 
 	public void draw(Graphics g, GUICanvas c){
-		int viewDirection = 0; //TODO get from player view direction (0=North, 1=East, 2=South, 3=West)
+		int viewDirection = 3; //TODO get from player view direction (0=North, 1=East, 2=South, 3=West)
 		int squareSize = 24; //TODO get this value from player view scale
 		int playerX = cols*12; //TODO replace these with player coordinates in room
 		int playerY = rows*12; //TODO replace these with player coordinates in room
 		
-		int drawX = (c.getWidth()/2)-playerX;
-		int drawY = (c.getHeight()/2)-playerY-(squareSize*2);
+		int drawX;
+		int drawY;
 		
 		switch(viewDirection){
-			case 0: // NORTH
-				break;
 			case 1: // EAST
+				drawX = (c.getWidth()/2)-playerY;
+				drawY = (c.getHeight()/2)-((cols*24)-playerX)-(squareSize*2);
 				break;
 			case 2: // SOUTH
+				drawX = (c.getWidth()/2)-((cols*24)-playerX);
+				drawY = (c.getHeight()/2)-((rows*24)-playerY)-(squareSize*2);
 				break;
 			case 3: // WEST
+				drawX = (c.getWidth()/2)-((rows*24)-playerY);
+				drawY = (c.getHeight()/2)-playerX-(squareSize*2);
 				break;
-			default: // SOMETHING WENT REALLY WRONG
+			case 0: default: // DEFAULT TO NORTH
+				drawX = (c.getWidth()/2)-playerX;
+				drawY = (c.getHeight()/2)-playerY-(squareSize*2);
 				break;
 		}
 		
