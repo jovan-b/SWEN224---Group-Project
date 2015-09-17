@@ -123,7 +123,7 @@ public class Controller implements KeyListener{
 	private void initialise() {
 		isRunning = true;
 		room = new Room("Classroom");
-		player = new TestPlayer(room, 24, 24);
+		player = new TestPlayer(room, 48, 48);
 		room.addPlayer(player);
 		gui = new GUIFrame(this, player);
 	}
