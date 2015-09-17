@@ -2,8 +2,10 @@ package gameObjects;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -18,6 +20,8 @@ import main.GUICanvas;
  *
  */
 public class Room {
+	private String name;
+	private String description;
 	private Image[][] images;
 	private Item[][] contents; // items in the room
 	private int cols = 12; //FIXME temporarily hardcoded for testing
@@ -26,8 +30,35 @@ public class Room {
 	private Set<Player> players = new HashSet<>();
 	
 	public Room(String roomName){
+		name = roomName;
 		images = new Image[4][4];
-		contents = new Item[cols][rows];
+		loadImages(roomName);
+		parseFile();
+	}
+
+	private void parseFile() {
+		try {
+			Scanner s = new Scanner(new File("Resources"+File.separator+name+".txt"));
+			description = s.nextLine();
+			cols = Integer.parseInt(s.nextLine());
+			rows = Integer.parseInt(s.nextLine());
+			contents = new Item[cols][rows];
+			
+			for(int c=0; c<cols; c++){
+				for(int r=0; r<rows; r++){
+//					char code = s.nextChar();
+				}
+			}
+			
+			
+			
+			
+		} catch (IOException e) {
+			System.out.println("Error loading room file: "+ e.getMessage());
+		}
+	}
+
+	private void loadImages(String roomName) {
 		try {
 			images[0][0] = ImageIO.read(new File("Resources"+File.separator+roomName+File.separator+"NorthBase.png"));
 			images[0][1] = ImageIO.read(new File("Resources"+File.separator+roomName+File.separator+"NorthTop.png"));
