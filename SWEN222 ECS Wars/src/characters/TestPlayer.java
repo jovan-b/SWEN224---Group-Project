@@ -11,6 +11,7 @@ public class TestPlayer implements Player {
 	//position describing the centre of a player object
 	private int posX;
 	private int posY;
+	private int viewDirection;
 	
 	private Room currentRoom;
 
@@ -22,6 +23,7 @@ public class TestPlayer implements Player {
 		this.currentRoom = room;
 		this.posX = posX;
 		this.posY = posY;
+		this.viewDirection = 0; //FIXME hardcoded for testing
 	}
 
 	@Override
@@ -68,6 +70,11 @@ public class TestPlayer implements Player {
 	@Override
 	public int getY() {
 		return posY;
+	}
+
+	@Override
+	public int getViewDirection() {
+		return viewDirection;
 	}
 
 }

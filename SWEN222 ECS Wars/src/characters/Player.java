@@ -23,4 +23,5 @@ public interface Player extends Drawable {
 	
 	abstract int getX();
 	abstract int getY();
+	abstract int getViewDirection();
 }

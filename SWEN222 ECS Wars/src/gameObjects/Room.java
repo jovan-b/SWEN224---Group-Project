@@ -24,8 +24,8 @@ public class Room {
 	private String description;
 	private Image[][] images;
 	private Item[][] contents; // items in the room
-	private int cols = 12; //FIXME temporarily hardcoded for testing
-	private int rows = 14;
+	private int cols;
+	private int rows;
 	
 	private Set<Player> players = new HashSet<>();
 	
@@ -44,17 +44,25 @@ public class Room {
 			rows = Integer.parseInt(s.nextLine());
 			contents = new Item[cols][rows];
 			
-			for(int c=0; c<cols; c++){
-				for(int r=0; r<rows; r++){
-//					char code = s.nextChar();
+			for(int r=0; r<rows; r++){
+				String line = s.nextLine();
+				for(int c=0; c<cols; c++){
+					char code = line.charAt(c);
+					contents[c][r] = itemFromCode(code);
 				}
 			}
-			
-			
-			
+			s.close();
 			
 		} catch (IOException e) {
 			System.out.println("Error loading room file: "+ e.getMessage());
+		}
+	}
+	
+	private Item itemFromCode(char code){
+		switch(code){
+		case '#' : return new Wall();
+		case '_' :
+		default: return null;
 		}
 	}
 
