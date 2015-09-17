@@ -91,16 +91,17 @@ public class Controller implements KeyListener{
 	 * Updates player appropriately depending on current keys pressed
 	 */
 	private void dealWithInput() {
-		if(isKeyPressed(KeyEvent.VK_RIGHT)){
+		// Player Movement
+		if(isKeyPressed(KeyEvent.VK_RIGHT) || isKeyPressed(KeyEvent.VK_D)){
 			player.move("right");
 		}
-		if(isKeyPressed(KeyEvent.VK_LEFT)){
+		if(isKeyPressed(KeyEvent.VK_LEFT) || isKeyPressed(KeyEvent.VK_A)){
 			player.move("left");
 		}
-		if(isKeyPressed(KeyEvent.VK_UP)){
+		if(isKeyPressed(KeyEvent.VK_UP) || isKeyPressed(KeyEvent.VK_W)){
 			player.move("up");
 		}
-		if(isKeyPressed(KeyEvent.VK_DOWN)){
+		if(isKeyPressed(KeyEvent.VK_DOWN) || isKeyPressed(KeyEvent.VK_S)){
 			player.move("down");
 		}
 	}
@@ -140,6 +141,13 @@ public class Controller implements KeyListener{
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
+		// View Rotation
+		if(e.getKeyCode() == KeyEvent.VK_Q){
+			player.rotateViewLeft();
+		}
+		if(e.getKeyCode() == KeyEvent.VK_E){
+			player.rotateViewRight();
+		}
 		keyBits.clear(e.getKeyCode());
 	}
 

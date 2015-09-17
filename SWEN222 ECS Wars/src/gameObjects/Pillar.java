@@ -12,7 +12,7 @@ import main.GUICanvas;
 public class Pillar implements Item {
 
 	private Image image;
-	private int yOffset = 2;
+	private int yOffset = 3;
 	
 	public Pillar() {
 		try {

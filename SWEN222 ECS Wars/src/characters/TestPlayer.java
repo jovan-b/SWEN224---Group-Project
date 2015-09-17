@@ -133,4 +133,20 @@ public class TestPlayer implements Player {
 		return viewDirection;
 	}
 
+	@Override
+	public void rotateViewLeft() {
+		viewDirection--;
+		if (viewDirection < 0){
+			viewDirection = 3;
+		}
+	}
+
+	@Override
+	public void rotateViewRight() {
+		viewDirection++;
+		if (viewDirection > 3){
+			viewDirection = 0;
+		}
+	}
+
 }
