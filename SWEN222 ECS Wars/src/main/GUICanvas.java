@@ -8,6 +8,9 @@ import java.awt.Graphics;
 
 import javax.swing.JComponent;
 
+import characters.Player;
+import characters.TestPlayer;
+
 /**
  * The main canvas inside the game window in which the game is drawn.
  * 
@@ -18,8 +21,11 @@ public class GUICanvas extends JComponent{
 	
 	private GUIFrame frame;
 	
-	public GUICanvas(GUIFrame frame){
+	private Player player;
+	
+	public GUICanvas(GUIFrame frame, Player player){
 		this.frame = frame;
+		this.player = player;
 	}
 	
 	protected void paintComponent(Graphics g){
@@ -40,7 +46,12 @@ public class GUICanvas extends JComponent{
 		//paint background
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		Room r = new Room("Classroom"); //FIXME get passed the client-side room
-		r.draw(g, this);
+		Room r = ((TestPlayer) player).getCurrentRoom();
+		r.draw(g, this, player);
+		drawHUD(g, this, r);
+	}
+
+	private void drawHUD(Graphics g, GUICanvas guiCanvas, Room r) {
+		// TODO Auto-generated method stub
 	}
 }

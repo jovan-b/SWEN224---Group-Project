@@ -1,10 +1,13 @@
 package main;
 
+import gameObjects.Room;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.BitSet;
 
 import characters.Player;
+import characters.TestPlayer;
 
 /**
  * Main controller for ECS Wars
@@ -21,6 +24,8 @@ public class Controller implements KeyListener{
 	public boolean isRunning = false;
 	GUIFrame gui;
 	Player player;
+	
+	Room room;
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
 	
@@ -116,7 +121,10 @@ public class Controller implements KeyListener{
 	 */
 	private void initialise() {
 		isRunning = true;
-		gui = new GUIFrame(this);
+		room = new Room("Classroom");
+		player = new TestPlayer(room, 24, 24);
+		room.addPlayer(player);
+		gui = new GUIFrame(this, player);
 	}
 
 	/**

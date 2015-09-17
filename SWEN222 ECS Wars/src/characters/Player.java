@@ -20,4 +20,7 @@ public interface Player extends Drawable {
 	
 	abstract void shoot();
 	abstract void move(String dir);
+	
+	abstract int getX();
+	abstract int getY();
 }

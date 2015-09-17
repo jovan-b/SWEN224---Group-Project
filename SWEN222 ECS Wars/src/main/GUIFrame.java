@@ -1,8 +1,12 @@
 package main;
 
+import gameObjects.Room;
+
 import java.awt.BorderLayout;
 
 import javax.swing.*;
+
+import characters.Player;
 
 /**
  * The game winndow.
@@ -17,9 +21,9 @@ public class GUIFrame extends JFrame {
 		Controller controller;
 		GUICanvas canvas;
 		
-		public GUIFrame(Controller controller){
+		public GUIFrame(Controller controller, Player player){
 			super("ECS Wars");
-			canvas = new GUICanvas(this);
+			canvas = new GUICanvas(this, player);
 			setLayout(new BorderLayout());
 			add(canvas, BorderLayout.CENTER);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
