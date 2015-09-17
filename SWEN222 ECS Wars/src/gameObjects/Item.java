@@ -13,4 +13,6 @@ public interface Item extends Drawable {
 	public Image getImage();
 
 	public boolean canWalk();
+	
+	public int yOffset();
 }

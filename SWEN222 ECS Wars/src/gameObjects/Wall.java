@@ -34,4 +34,9 @@ public class Wall implements Item {
 		return false;
 	}
 
+	@Override
+	public int yOffset() {
+		return 0;
+	}
+
 }

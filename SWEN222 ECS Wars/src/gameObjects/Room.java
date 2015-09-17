@@ -98,17 +98,16 @@ public class Room {
 		switch(viewDirection){
 			case 1: // EAST
 				drawX = (c.getWidth()/2)-playerY;
-				drawY = (c.getHeight()/2)-((cols*24)-playerX);
+				drawY = (c.getHeight()/2)-((cols*squareSize)-playerX);
 				rotated = rotatedArrayClockwise(contents);
 				break;
 			case 2: // SOUTH
-				drawX = (c.getWidth()/2)-((cols*24)-playerX);
-				drawY = (c.getHeight()/2)-((rows*24)-playerY);
-				rotated = rotatedArrayClockwise(contents); // need to rotate 180degrees
-				rotated = rotatedArrayClockwise(rotated);
+				drawX = (c.getWidth()/2)-((cols*squareSize)-playerX);
+				drawY = (c.getHeight()/2)-((rows*squareSize)-playerY);
+				rotated = rotatedArray180(contents);
 				break;
 			case 3: // WEST
-				drawX = (c.getWidth()/2)-((rows*24)-playerY);
+				drawX = (c.getWidth()/2)-((rows*squareSize)-playerY);
 				drawY = (c.getHeight()/2)-playerX;
 				rotated = rotatedArrayAntiClockwise(contents);
 				break;
@@ -120,10 +119,15 @@ public class Room {
 		
 		// Draw background Image
 		g.drawImage(images[viewDirection][0], drawX, drawY-(squareSize*3), c);
+		
+		// Draw items in room
+		Image image;
 		for(int col=0; col<rotated.length; col++){
 			for(int row=0; row<rotated[0].length; row++){
-				if(rotated[col][row] != null){
-					rotated[col][row].draw(g, c);
+				Item item = rotated[col][row];
+				if(item != null && !(item instanceof Wall)){
+					image = rotated[col][row].getImage();
+					g.drawImage(image, drawX+(col*squareSize), drawY+(row*squareSize)-(item.yOffset()*squareSize), c);
 				}
 			}
 		}
