@@ -23,7 +23,7 @@ public class TestPlayer implements Player {
 		this.currentRoom = room;
 		this.posX = posX;
 		this.posY = posY;
-		this.viewDirection = 0; //FIXME hardcoded for testing
+		this.viewDirection = 3; //FIXME hardcoded for testing
 	}
 
 	@Override
@@ -42,6 +42,23 @@ public class TestPlayer implements Player {
 	 */
 	@Override
 	public void move(String dir) {
+		switch(viewDirection){
+		case 1:
+			moveEast(dir);
+			return;
+		case 2:
+			moveSouth(dir);
+			return;
+		case 3:
+			moveWest(dir);
+			return;
+		default :
+			moveNorth(dir);
+			return;
+		}
+	}
+
+	private void moveNorth(String dir) {
 		switch(dir){
 		case "right": posX += speed;
 			break;
@@ -50,6 +67,45 @@ public class TestPlayer implements Player {
 		case "down": posY += speed;
 			break;
 		case "up": posY -= speed;
+			break;
+		}
+	}
+	
+	private void moveEast(String dir) {
+		switch(dir){
+		case "right": posY += speed;
+			break;
+		case "left": posY -= speed;
+			break;
+		case "down": posX -= speed;
+			break;
+		case "up": posX += speed;
+			break;
+		}
+	}
+	
+	private void moveSouth(String dir) {
+		switch(dir){
+		case "right": posX -= speed;
+			break;
+		case "left": posX += speed;
+			break;
+		case "down": posY -= speed;
+			break;
+		case "up": posY += speed;
+			break;
+		}
+	}
+	
+	private void moveWest(String dir) {
+		switch(dir){
+		case "right": posY -= speed;
+			break;
+		case "left": posY += speed;
+			break;
+		case "down": posX += speed;
+			break;
+		case "up": posX -= speed;
 			break;
 		}
 	}
