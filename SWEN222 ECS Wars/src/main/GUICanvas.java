@@ -17,6 +17,7 @@ import characters.TestPlayer;
  * @author Sarah Dobie, Chris Read
  *
  */
+@SuppressWarnings("serial")
 public class GUICanvas extends JComponent{
 	
 	private GUIFrame frame;

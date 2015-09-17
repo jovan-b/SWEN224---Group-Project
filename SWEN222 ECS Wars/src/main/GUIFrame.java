@@ -13,6 +13,7 @@ import characters.Player;
  * @author Sarah Dobie, Chris Read
  *
  */
+@SuppressWarnings("serial")
 public class GUIFrame extends JFrame {
 	//width and height of main panel
 		public static final int INIT_WIDTH = 400;
