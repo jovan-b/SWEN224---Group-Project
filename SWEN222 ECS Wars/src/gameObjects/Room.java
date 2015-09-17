@@ -149,6 +149,29 @@ public class Room {
 		
 		return rotate;
 	}
+	
+	/** 
+	* Create a clone of the contents array which has then been
+	* rotated 180 degrees.
+	* @return A clone of this.contents which has been rotated 180
+	* degrees
+	*/
+	public Item[][] rotatedArray180(Item[][] contents){
+		int rows = contents.length;
+		int cols = contents[0].length;
+
+		// Makes a new array where width and height are swtiched
+		Item[][] rotate = new Item[rows][cols];
+		
+		//Rotates the image
+        for(int r=0; r<rows; r++){
+            for(int c=0; c<cols; c++){
+                rotate[r][c] = contents[rows-1-r][cols-1-c];
+            }
+        }
+		
+		return rotate;
+	}
 
 	public void addPlayer(Player player) {
 		players.add(player);
