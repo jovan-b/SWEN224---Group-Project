@@ -1,5 +1,6 @@
 package main;
 
+import gameObjects.Compass;
 import gameObjects.Room;
 
 import java.awt.Color;
@@ -26,11 +27,14 @@ public class GUICanvas extends JComponent{
 	private GUIFrame frame;
 	
 	private Player player;
+	private Compass compass;
 	
 	public GUICanvas(GUIFrame frame, Player player){
 		this.frame = frame;
 		this.player = player;
+		this.compass = new Compass();
 		
+		this.player.setCompass(compass);
 	}
 	
 	protected void paintComponent(Graphics g){
@@ -58,6 +62,7 @@ public class GUICanvas extends JComponent{
 
 	private void drawHUD(Graphics g, GUICanvas guiCanvas, Room r) {
 		// Draw compass
-		g.drawImage(player.getCompass(), getWidth()-96-20, 20, this);
+		compass.update();
+		g.drawImage(compass.getImage(), getWidth()-96-20, 20, this);
 	}
 }

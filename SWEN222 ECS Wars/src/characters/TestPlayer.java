@@ -1,5 +1,6 @@
 package characters;
 
+import gameObjects.Compass;
 import gameObjects.Room;
 
 import java.awt.Graphics;
@@ -21,7 +22,7 @@ public class TestPlayer implements Player {
 	private int posY;
 	private int viewDirection;
 	
-	private BufferedImage compass;
+	private Compass compass;
 	
 	private Room currentRoom;
 
@@ -34,11 +35,6 @@ public class TestPlayer implements Player {
 		this.posX = posX;
 		this.posY = posY;
 		this.viewDirection = 0; //FIXME hardcoded for testing
-		try {
-			compass = ImageIO.read(new File("Resources"+File.separator+"Compass.png"));
-		} catch (IOException e) {
-			System.out.println("Error reading Compass image: " + e.getMessage());
-		}
 	}
 
 	@Override
@@ -154,7 +150,7 @@ public class TestPlayer implements Player {
 		if (viewDirection < 0){
 			viewDirection = 3;
 		}
-		rotateCompass(90);
+		compass.rotate(90);
 	}
 
 	@Override
@@ -163,24 +159,11 @@ public class TestPlayer implements Player {
 		if (viewDirection > 3){
 			viewDirection = 0;
 		}
-		rotateCompass(-90);
-	}
-
-	private void rotateCompass(double angle) {
-		double rotate = Math.toRadians(angle);
-		double locationX = compass.getWidth(null) / 2;
-		double locationY = compass.getHeight(null) / 2;
-		AffineTransform tx = AffineTransform.getRotateInstance(rotate, locationX, locationY);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-		
-		compass = op.filter(compass, null);
-	}
-
-	@Override
-	public Image getCompass() {
-		return compass;
+		compass.rotate(-90);
 	}
 	
-	
+	public void setCompass(Compass c){
+		this.compass = c;
+	}
 
 }

@@ -2,6 +2,7 @@ package characters;
 
 import java.awt.Image;
 
+import gameObjects.Compass;
 import gameObjects.Drawable;
 
 /**
@@ -28,5 +29,5 @@ public interface Player extends Drawable {
 	abstract int getViewDirection();
 	abstract void rotateViewLeft();
 	abstract void rotateViewRight();
-	abstract Image getCompass();
+	abstract void setCompass(Compass compass);
 }
