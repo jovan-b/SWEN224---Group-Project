@@ -141,20 +141,20 @@ public class Room {
 		g.setColor(Color.GREEN);
 		
 		//TODO remove this - is for testing accuracy of player drawing, can replace with just drawing in centre of screen
+		Image playerImage = player.getImage();
 		switch(viewDirection){
 			case 1:
-				g.fillRect(drawX+playerY-5, drawY+(width-playerX)-5, 10, 10);
+				g.drawImage(playerImage, drawX+playerY-16, drawY+(width-playerX)-16, c);
 				break;
 			case 2:
-				g.fillRect(drawX+(width-playerX)-5, drawY+(height-playerY)-5, 10, 10);
+				g.drawImage(playerImage, drawX+(width-playerX)-16, drawY+(height-playerY)-16, c);
 				break;
 			case 3:
-				g.fillRect(drawX+(height-playerY)-5, drawY+playerX-5, 10, 10);
+				g.drawImage(playerImage, drawX+(height-playerY)-16, drawY+playerX-16, c);
 				break;
 			default:
-				g.fillRect(drawX+playerX-5, drawY+playerY-5, 10, 10);
+				g.drawImage(playerImage, drawX+playerX-16, drawY+playerY-16, c);
 		}
-		//g.fillRect(drawX+playerX-5, drawY+playerY-5, 10, 10);
 		
 		// Draw foreground Image
 		g.drawImage(images[viewDirection][1], drawX, drawY-(squareSize*3), c);

@@ -29,12 +29,21 @@ public class GUICanvas extends JComponent{
 	private Player player;
 	private Compass compass;
 	
+	// Static UI Images
+	private Image compassControls;
+	
 	public GUICanvas(GUIFrame frame, Player player){
 		this.frame = frame;
 		this.player = player;
 		this.compass = new Compass();
 		
 		this.player.setCompass(compass);
+		
+		try {
+			compassControls = ImageIO.read(new File("Resources"+File.separator+"CompassControls.png"));
+		} catch (IOException e) {
+			System.out.println("Error loading UI Images: " + e.getMessage());;
+		}
 	}
 	
 	protected void paintComponent(Graphics g){
@@ -64,5 +73,6 @@ public class GUICanvas extends JComponent{
 		// Draw compass
 		compass.update();
 		g.drawImage(compass.getImage(), getWidth()-96-20, 20, this);
+		g.drawImage(compassControls, getWidth()-96-20, 20, this);
 	}
 }

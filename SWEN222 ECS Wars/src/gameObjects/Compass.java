@@ -46,8 +46,8 @@ public class Compass {
 	}
 
 	public void update() {
-		double diff = targetRot-rot;
-		double rotateAngle = diff*0.1;
+		//double rotateAngle = ((targetRot+(Math.random()*20)-10)-rot)*0.1;
+		double rotateAngle = (targetRot-rot)*0.1;
 		rot += rotateAngle;
 		rotateImage(rot);
 	}
