@@ -126,22 +126,34 @@ public class Room {
 		// Draw background Image
 		g.drawImage(images[viewDirection][0], drawX, drawY-(squareSize*3), c);
 		
-		// Draw items in room
+		checkPlayers(viewDirection);
+		
+		// Draw items in room, also draw players at correct depth level
 		Image image;
-		for(int col=0; col<rotated.length; col++){
-			for(int row=0; row<rotated[0].length; row++){
+		for(int row=0; row<rotated[0].length; row++){
+			for(int col=0; col<rotated.length; col++){
 				Item item = rotated[col][row];
 				if(item != null && !(item instanceof Wall)){
 					image = rotated[col][row].getImage();
 					g.drawImage(image, drawX+(col*squareSize), drawY+(row*squareSize)-(item.yOffset()*squareSize), c);
 				}
+				for (Player p : players){
+					if (p.getRow() == row){
+						drawPlayer(g, c, viewDirection, drawX, drawY, p);
+						p.setRow(-1);
+					}
+				}
 			}
 		}
 		
-		g.setColor(Color.GREEN);
-		
-		//TODO remove this - is for testing accuracy of player drawing, can replace with just drawing in centre of screen
-		Image playerImage = player.getImage();
+		// Draw foreground Image
+		g.drawImage(images[viewDirection][1], drawX, drawY-(squareSize*3), c);
+	}
+
+	private void drawPlayer(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Player p) {
+		Image playerImage = p.getImage();
+		int playerX = p.getX();
+		int playerY = p.getY();
 		switch(viewDirection){
 			case 1:
 				g.drawImage(playerImage, drawX+playerY-16, drawY+(width-playerX)-16, c);
@@ -155,11 +167,34 @@ public class Room {
 			default:
 				g.drawImage(playerImage, drawX+playerX-16, drawY+playerY-16, c);
 		}
-		
-		// Draw foreground Image
-		g.drawImage(images[viewDirection][1], drawX, drawY-(squareSize*3), c);
 	}
 	
+	// sets the current row of the players for drawing
+	private void checkPlayers(int viewDirection) {
+		switch(viewDirection){
+		case 1: // EAST
+			for (Player p : players){
+				p.setRow((width-p.getX())/24);
+			}
+			break;
+		case 2: // SOUTH
+			for (Player p : players){
+				p.setRow((height-p.getY())/24);
+			}
+			break;
+		case 3: // WEST
+			for (Player p : players){
+				p.setRow(p.getX()/24);
+			}
+			break;
+		case 0: default: // DEFAULT TO NORTH
+			for (Player p : players){
+				p.setRow(p.getY()/24);
+			}
+			break;
+		}
+	}
+
 	/** 
 	* Create a clone of the contents array which has then been
 	* rotated 90 degrees clockwise

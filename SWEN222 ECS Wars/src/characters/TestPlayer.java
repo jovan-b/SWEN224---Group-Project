@@ -29,6 +29,7 @@ public class TestPlayer implements Player {
 	private int animModifier; // flicks between 1 and -1 to loop animation
 	private int animCounter; // counts each frame the player has moved
 	private Room currentRoom;
+	private int currentRow; // view dependant row - for drawing correctly
 	
 	// Player sprite images
 	Image[][] sprites;
@@ -228,6 +229,16 @@ public class TestPlayer implements Player {
 	@Override
 	public Image getImage() {		
 		return sprites[lastDirMoved][animState];
+	}
+
+	@Override
+	public void setRow(int row) {
+		currentRow = row;
+	}
+
+	@Override
+	public int getRow() {
+		return currentRow;
 	}
 
 }
