@@ -52,6 +52,6 @@ public interface Player extends Drawable {
 	    double angle1 = Math.atan2(point1Y - 0, point1X - 0);
 	    double angle2 = Math.atan2(point2Y - 0, point2X - 0);
 
-	    return Math.toDegrees(angle1 - angle2); 
+	    return angle1 - angle2; 
 	}
 }

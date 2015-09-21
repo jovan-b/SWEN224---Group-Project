@@ -47,9 +47,15 @@ public class BasicProjectile implements Projectile {
 
 	@Override
 	public void update() {
-		//TODO: update projectile's x, y by it's speed
-		//needs to be in relation to angle theta
-		//update until wall it hit
+		//TODO: May have to change all this, since we
+		// have no consistent coordinate system other than
+		// the array
+		
+		//TODO: Collision detection
+		
+		x += Projectile.xDiff(theta, speed);
+		y += Projectile.yDiff(theta, speed);
+		
 	}
 
 	@Override

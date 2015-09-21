@@ -27,4 +27,12 @@ public interface Projectile {
 	 * @return a new projectile object
 	 */
 	public abstract Projectile newInstance(Player p, double theta);
+	
+	public static int xDiff(double theta, int speed){
+		return (int)(Math.cos(theta)*speed);
+	}
+	
+	public static int yDiff(double theta, int speed){
+		return (int)(Math.sin(theta)*speed);
+	}
 }
