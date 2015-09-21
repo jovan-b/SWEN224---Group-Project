@@ -4,6 +4,7 @@ import gameObjects.Item;
 import gameObjects.weapons.Weapon;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -15,6 +16,7 @@ public class DavidJPearce implements Player{
 	
 	private Weapon currentWeapon;
 	private Item[] inventory = new Item[INVENTORY_SIZE];
+	private Image currentImage; //TODO: initialise with image of DJP
 	
 	//in order to change movement speed, speedMulti should be changed
 	private int speedMulti = 1;
@@ -76,14 +78,12 @@ public class DavidJPearce implements Player{
 
 	@Override
 	public int getX() {
-		// TODO Auto-generated method stub
-		return 0;
+		return posX;
 	}
 
 	@Override
 	public int getY() {
-		// TODO Auto-generated method stub
-		return 0;
+		return posY;
 	}
 
 	@Override
