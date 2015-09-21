@@ -10,7 +10,7 @@ import characters.Player;
  * @author Carl Anderson
  *
  */
-public class BasicProjectile implements Projectile {
+public abstract class BasicProjectile implements Projectile {
 	//The owner of the projectile
 	private Player player;
 	private int x;
@@ -37,7 +37,7 @@ public class BasicProjectile implements Projectile {
 	 * @param y
 	 * @param theta direction of travel
 	 */
-	private BasicProjectile(Player p, int x, int y, double theta){
+	protected BasicProjectile(Player p, int x, int y, double theta){
 		this.player = p;
 		
 		this.x = x;
@@ -58,8 +58,4 @@ public class BasicProjectile implements Projectile {
 		
 	}
 
-	@Override
-	public Projectile newInstance(Player p, double theta) {
-		return new BasicProjectile(p, this.x, this.y, theta);
-	}
 }
