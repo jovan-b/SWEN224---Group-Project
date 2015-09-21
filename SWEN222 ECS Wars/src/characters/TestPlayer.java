@@ -17,7 +17,7 @@ public class TestPlayer implements Player {
 
 	//player's speed is this constant * Player.SPEED
 	private int speedMulti = 1;
-	private int speed = speedMulti * Player.SPEED;
+	private int speed = speedMulti * Player.BASE_SPEED;
 
 	public TestPlayer(Room room, int posX, int posY){
 		this.currentRoom = room;
@@ -32,7 +32,7 @@ public class TestPlayer implements Player {
 	}
 
 	@Override
-	public void shoot() {
+	public void shoot(int x, int y) {
 		//blank for now
 	}
 

@@ -38,6 +38,18 @@ public class Weapon implements Item {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Spawns a new projectile at location of Player p
+	 * Projectile should move in direction from player described by angle theta
+	 * 
+	 * @param p
+	 * @param theta
+	 */
+	public Projectile fire(Player p, double theta) {
+		return new BasicProjectile(p.getX(), p.getY(), theta);
+	}
+
 
 	@Override
 	public void draw(Graphics g, GUICanvas c) {
@@ -62,5 +74,32 @@ public class Weapon implements Item {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	/**
+	 * A basic projectile which this weapon can fire
+	 * Should travel in a linear fashion in theta angle last x, y position
+	 * 
+	 * @author Jah Seng Lee
+	 *
+	 */
+	private class BasicProjectile implements Projectile{
+		
+		private int x;
+		private int y;
+		private double theta;
+		
+		public BasicProjectile(int x, int y, double theta){
+			this.x = x;
+			this.y = y;
+			this.theta = theta;
+		}
 
+		@Override
+		public void update() {
+			//TODO: update projectile's x, y by it's speed
+			//needs to be in relation to angle theta
+			//update until wall it hit
+		}
+		
+	}
 }
