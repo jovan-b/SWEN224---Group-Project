@@ -34,4 +34,6 @@ public interface Player extends Drawable {
 	abstract void setCompass(Compass compass);
 	abstract void setRow(int row);
 	abstract int getRow();
+	abstract Image[][] getImages();
+	abstract void setScaledImages(Image[][] newImages);
 }

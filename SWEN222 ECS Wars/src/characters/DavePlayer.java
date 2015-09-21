@@ -37,9 +37,11 @@ public class DavePlayer implements Player {
 	private int animCounter; // counts each frame the player has moved
 	private Room currentRoom;
 	private int currentRow; // view dependant row - for drawing correctly
-	
+
+
 	// Player sprite images
 	Image[][] sprites;
+	Image[][] scaledSprites;
 
 	//player's speed is this constant * Player.SPEED
 	private int speedMulti = 1;
@@ -66,6 +68,7 @@ public class DavePlayer implements Player {
 		} catch (IOException e) {
 			System.out.println("Error loading player images: " + e.getMessage());
 		}
+		scaledSprites = sprites;
 	}
 
 	@Override
@@ -269,7 +272,7 @@ public class DavePlayer implements Player {
 
 	@Override
 	public Image getImage() {		
-		return sprites[lastDirMoved][animState];
+		return scaledSprites[lastDirMoved][animState];
 	}
 
 	@Override
@@ -280,6 +283,16 @@ public class DavePlayer implements Player {
 	@Override
 	public int getRow() {
 		return currentRow;
+	}
+
+	@Override
+	public Image[][] getImages() {
+		return sprites;
+	}
+
+	@Override
+	public void setScaledImages(Image[][] newImages) {
+		scaledSprites = newImages;
 	}
 
 }

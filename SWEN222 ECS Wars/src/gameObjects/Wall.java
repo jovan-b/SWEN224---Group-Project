@@ -39,4 +39,13 @@ public class Wall implements Item {
 		return 0;
 	}
 
+	@Override
+	public void setScaledImage(int viewDirection, Image scaledImage) {
+	}
+
+	@Override
+	public Image getScaledImage(int viewDirection) {
+		return null;
+	}
+
 }

@@ -12,11 +12,13 @@ import main.GUICanvas;
 public class Pillar implements Item {
 
 	private Image image;
+	private Image scaledImage;
 	private int yOffset = 3;
 	
 	public Pillar() {
 		try {
 			image = ImageIO.read(new File("Resources"+File.separator+"Pillar.png"));
+			scaledImage = image;
 		} catch (IOException e) {
 			System.out.println("Failed to read Pillar image file: " + e.getMessage());
 		}
@@ -44,6 +46,16 @@ public class Pillar implements Item {
 	@Override
 	public int yOffset() {
 		return yOffset;
+	}
+
+	@Override
+	public void setScaledImage(int viewDirection, Image scaledImage) {
+		this.scaledImage = scaledImage;
+	}
+
+	@Override
+	public Image getScaledImage(int viewDirection) {
+		return scaledImage;
 	}
 
 }

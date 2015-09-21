@@ -29,6 +29,8 @@ public class GUICanvas extends JComponent{
 	private Player player;
 	private Compass compass;
 	
+	private int viewScale = 1; // view drawing scale
+	
 	// Static UI Images
 	private Image compassControls;
 	
@@ -74,5 +76,13 @@ public class GUICanvas extends JComponent{
 		compass.update();
 		g.drawImage(compass.getImage(), getWidth()-96-20, 20, this);
 		g.drawImage(compassControls, getWidth()-96-20, 20, this);
+	}
+	
+	public int getViewScale() {
+		return viewScale;
+	}
+
+	public void setViewScale(int viewScale) {
+		this.viewScale = viewScale;
 	}
 }

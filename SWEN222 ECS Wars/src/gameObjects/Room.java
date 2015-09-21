@@ -23,20 +23,23 @@ public class Room {
 	private String name;
 	private String description;
 	private Image[][] images;
+	private Image[][] scaledImages;
 	private Item[][] contents; // items in the room
 	private int cols;
 	private int rows;
 	private int squareSize = 24; //TODO get this value from player view scale
 	private int width;
 	private int height;
+	
 
 	
 	private Set<Player> players = new HashSet<>();
 	
 	public Room(String roomName){
 		name = roomName;
-		images = new Image[4][4];
+		images = new Image[4][2];
 		loadImages(roomName);
+		scaledImages = images;
 		parseFile();
 		width = cols*squareSize;
 		height = rows*squareSize;
@@ -92,6 +95,7 @@ public class Room {
 	}
 
 	public void draw(Graphics g, GUICanvas c, Player player){
+		int viewScale = c.getViewScale();
 		int viewDirection = player.getViewDirection(); 
 		int playerX = player.getX(); 
 		int playerY = player.getY(); 
@@ -103,28 +107,28 @@ public class Room {
 		
 		switch(viewDirection){
 			case 1: // EAST
-				drawX = (c.getWidth()/2)-playerY;
-				drawY = (c.getHeight()/2)-(width-playerX);
+				drawX = (c.getWidth()/2)-(playerY*viewScale);
+				drawY = (c.getHeight()/2)-((width*viewScale)-(playerX*viewScale));
 				rotated = rotatedArrayClockwise(contents);
 				break;
 			case 2: // SOUTH
-				drawX = (c.getWidth()/2)-(width-playerX);
-				drawY = (c.getHeight()/2)-(height-playerY);
+				drawX = (c.getWidth()/2)-((width*viewScale)-(playerX*viewScale));
+				drawY = (c.getHeight()/2)-((height*viewScale)-(playerY*viewScale));
 				rotated = rotatedArray180(contents);
 				break;
 			case 3: // WEST
-				drawX = (c.getWidth()/2)-(height-playerY);
-				drawY = (c.getHeight()/2)-playerX;
+				drawX = (c.getWidth()/2)-((height*viewScale)-(playerY*viewScale));
+				drawY = (c.getHeight()/2)-(playerX*viewScale);
 				rotated = rotatedArrayAntiClockwise(contents);
 				break;
 			case 0: default: // DEFAULT TO NORTH
-				drawX = (c.getWidth()/2)-playerX;
-				drawY = (c.getHeight()/2)-playerY;
+				drawX = (c.getWidth()/2)-(playerX*viewScale);
+				drawY = (c.getHeight()/2)-(playerY*viewScale);
 				break;
 		}
 		
 		// Draw background Image
-		g.drawImage(images[viewDirection][0], drawX, drawY-(squareSize*3), c);
+		g.drawImage(scaledImages[viewDirection][0], drawX, drawY-(squareSize*viewScale*3), c);
 		
 		checkPlayers(viewDirection);
 		
@@ -133,9 +137,10 @@ public class Room {
 		for(int row=0; row<rotated[0].length; row++){
 			for(int col=0; col<rotated.length; col++){
 				Item item = rotated[col][row];
-				if(item != null && !(item instanceof Wall)){
-					image = rotated[col][row].getImage(viewDirection);
-					g.drawImage(image, drawX+(col*squareSize), drawY+(row*squareSize)-(item.yOffset()*squareSize), c);
+				if(!(item instanceof Floor) && !(item instanceof Wall)){
+					image = rotated[col][row].getScaledImage(viewDirection);
+					g.drawImage(image, drawX+(col*squareSize*viewScale), 
+							drawY+(row*squareSize*viewScale)-(item.yOffset()*squareSize*viewScale), c);
 				}
 				for (Player p : players){
 					if (p.getRow() == row-1){ // Ensures the player is drawn above their current row
@@ -147,25 +152,26 @@ public class Room {
 		}
 		
 		// Draw foreground Image
-		g.drawImage(images[viewDirection][1], drawX, drawY-(squareSize*3), c);
+		g.drawImage(scaledImages[viewDirection][1], drawX, drawY-(squareSize*viewScale*3), c);
 	}
 
 	private void drawPlayer(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Player p) {
 		Image playerImage = p.getImage();
+		int viewScale = c.getViewScale();
 		int playerX = p.getX();
 		int playerY = p.getY();
 		switch(viewDirection){
 			case 1:
-				g.drawImage(playerImage, drawX+playerY-16, drawY+(width-playerX)-24, c);
+				g.drawImage(playerImage, drawX+(playerY*viewScale)-(16*viewScale), drawY+((width-playerX)*viewScale)-(24*viewScale), c);
 				break;
 			case 2:
-				g.drawImage(playerImage, drawX+(width-playerX)-16, drawY+(height-playerY)-24, c);
+				g.drawImage(playerImage, drawX+((width-playerX)*viewScale)-(16*viewScale), drawY+((height-playerY)*viewScale)-(24*viewScale), c);
 				break;
 			case 3:
-				g.drawImage(playerImage, drawX+(height-playerY)-16, drawY+playerX-24, c);
+				g.drawImage(playerImage, drawX+((height-playerY)*viewScale)-(16*viewScale), drawY+(playerX*viewScale)-(24*viewScale), c);
 				break;
 			default:
-				g.drawImage(playerImage, drawX+playerX-16, drawY+playerY-24, c);
+				g.drawImage(playerImage, drawX+(playerX*viewScale)-(16*viewScale), drawY+(playerY*viewScale)-(24*viewScale), c);
 		}
 	}
 	
@@ -298,5 +304,21 @@ public class Room {
 
 	public Item itemAt(int x, int y) {
 		return contents[getCol(x)][getRow(y)];
+	}
+
+	public Image[][] getImages() {
+		return images;
+	}
+	
+	public void setScaledImages(Image[][] newImages){
+		scaledImages = newImages;
+	}
+
+	public Item[][] getContents() {
+		return contents;
+	}
+
+	public Set<Player> getPlayers() {
+		return players;
 	}
 }

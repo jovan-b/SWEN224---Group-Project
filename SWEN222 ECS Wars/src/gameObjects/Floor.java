@@ -39,4 +39,13 @@ public class Floor implements Item {
 		return 0;
 	}
 
+	@Override
+	public void setScaledImage(int viewDirection, Image scaleImage) {
+	}
+
+	@Override
+	public Image getScaledImage(int viewDirection) {
+		return null;
+	}
+
 }

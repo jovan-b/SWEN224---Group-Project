@@ -1,10 +1,14 @@
 package main;
 
+import gameObjects.Item;
 import gameObjects.Room;
 
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.BitSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import characters.Player;
 import characters.DavePlayer;
@@ -24,8 +28,7 @@ public class Controller implements KeyListener{
 	public boolean isRunning = false;
 	GUIFrame gui;
 	Player player;
-	
-	Room room;
+	Set<Room> rooms;
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
 	
@@ -122,7 +125,9 @@ public class Controller implements KeyListener{
 	 */
 	private void initialise() {
 		isRunning = true;
-		room = new Room("Classroom");
+		rooms = new HashSet<>();
+		Room room = new Room("Classroom");
+		rooms.add(room);
 		player = new DavePlayer(room, 48, 48);
 		room.addPlayer(player);
 		gui = new GUIFrame(this, player);
@@ -148,7 +153,60 @@ public class Controller implements KeyListener{
 		if(e.getKeyCode() == KeyEvent.VK_E){
 			player.rotateViewRight();
 		}
+		if(e.getKeyCode() == KeyEvent.VK_1){
+			gui.canvas.setViewScale(1);
+			scaleEverything(1);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_2){
+			gui.canvas.setViewScale(2);
+			scaleEverything(2);
+		}
 		keyBits.clear(e.getKeyCode());
+	}
+
+	private void scaleEverything(int scale) {
+		GUICanvas c = gui.canvas;
+		int viewScale = c.getViewScale();
+		Image image;
+		for (Room r : rooms){
+			Image[][] images = r.getImages();
+			Image[][] scaled = new Image[4][2];
+			for (int i = 0; i < 4; i++){
+				for (int j = 0; j < 2; j++){
+					scaled[i][j] = scaleImage(images[i][j], c, scale);
+				}
+			}
+			r.setScaledImages(scaled);
+			
+			// scale items
+			Item[][] contents = r.getContents();
+			for (int i = 0; i < contents.length; i++){
+				for (int j = 0; j < contents[0].length; j++){
+					for (int v = 0; v < 4; v++){
+						image = contents[i][j].getImage(v);
+						if (image != null){
+							contents[i][j].setScaledImage(v, scaleImage(image, c, scale));
+						}
+					}
+				}
+			}
+			
+			// scale players
+			for (Player p : r.getPlayers()){
+				images = p.getImages();
+				scaled = new Image[4][3];
+				for (int i = 0; i < 4; i++){
+					for (int j = 0; j < 3; j++){
+						scaled[i][j] = scaleImage(images[i][j], c, scale);
+					}
+				}
+				p.setScaledImages(scaled);
+			}
+		}
+	}
+	
+	public Image scaleImage(Image image, GUICanvas c, int scale){
+		return image.getScaledInstance(image.getWidth(c)*scale, image.getHeight(c)*scale, Image.SCALE_FAST);
 	}
 
 	//Don't care about this method
