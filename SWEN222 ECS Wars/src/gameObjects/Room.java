@@ -68,7 +68,7 @@ public class Room {
 		switch(code){
 		case '#' : return new Wall();
 		case 'P' : return new Pillar();
-		case '_' :
+		case '_' : return new Floor();
 		default: return null;
 		}
 	}
@@ -138,7 +138,7 @@ public class Room {
 					g.drawImage(image, drawX+(col*squareSize), drawY+(row*squareSize)-(item.yOffset()*squareSize), c);
 				}
 				for (Player p : players){
-					if (p.getRow() == row){
+					if (p.getRow() == row-1){ // Ensures the player is drawn above their current row
 						drawPlayer(g, c, viewDirection, drawX, drawY, p);
 						p.setRow(-1);
 					}
@@ -156,16 +156,16 @@ public class Room {
 		int playerY = p.getY();
 		switch(viewDirection){
 			case 1:
-				g.drawImage(playerImage, drawX+playerY-16, drawY+(width-playerX)-16, c);
+				g.drawImage(playerImage, drawX+playerY-16, drawY+(width-playerX)-24, c);
 				break;
 			case 2:
-				g.drawImage(playerImage, drawX+(width-playerX)-16, drawY+(height-playerY)-16, c);
+				g.drawImage(playerImage, drawX+(width-playerX)-16, drawY+(height-playerY)-24, c);
 				break;
 			case 3:
-				g.drawImage(playerImage, drawX+(height-playerY)-16, drawY+playerX-16, c);
+				g.drawImage(playerImage, drawX+(height-playerY)-16, drawY+playerX-24, c);
 				break;
 			default:
-				g.drawImage(playerImage, drawX+playerX-16, drawY+playerY-16, c);
+				g.drawImage(playerImage, drawX+playerX-16, drawY+playerY-24, c);
 		}
 	}
 	
@@ -174,25 +174,41 @@ public class Room {
 		switch(viewDirection){
 		case 1: // EAST
 			for (Player p : players){
-				p.setRow((width-p.getX())/24);
+				p.setRow(getRow(width-p.getX()));
 			}
 			break;
 		case 2: // SOUTH
 			for (Player p : players){
-				p.setRow((height-p.getY())/24);
+				p.setRow(getRow(height-p.getY()));
 			}
 			break;
 		case 3: // WEST
 			for (Player p : players){
-				p.setRow(p.getX()/24);
+				p.setRow(getRow(p.getX()));
 			}
 			break;
 		case 0: default: // DEFAULT TO NORTH
 			for (Player p : players){
-				p.setRow(p.getY()/24);
+				p.setRow(getRow(p.getY()));
 			}
 			break;
 		}
+	}
+	
+	public int getCol(int x){
+		double xCol = (double)x/(double)squareSize;
+		if (xCol > contents.length-1){
+			return contents.length-1;
+		}
+		return (int)xCol;
+	}
+	
+	public int getRow(int y){
+		double yRow = (double)y/(double)squareSize;
+		if (yRow > contents[0].length-1){
+			return contents[0].length-1;
+		}
+		return (int)yRow;
 	}
 
 	/** 
@@ -278,5 +294,9 @@ public class Room {
 	
 	public void removePlayer(Player player){
 		players.remove(player);
+	}
+
+	public Item itemAt(int x, int y) {
+		return contents[getCol(x)][getRow(y)];
 	}
 }

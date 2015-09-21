@@ -1,6 +1,7 @@
 package characters;
 
 import gameObjects.Compass;
+import gameObjects.Item;
 import gameObjects.Room;
 
 import java.awt.Graphics;
@@ -16,12 +17,18 @@ import javax.imageio.ImageIO;
 
 import main.GUICanvas;
 
+/**
+ * Represents the Dave playable character
+ * @author Chris Read
+ *
+ */
 public class DavePlayer implements Player {
 
 	//position describing the centre of a player object
 	private int posX;
 	private int posY;
 	private int viewDirection;
+	private int hitBox = 11;
 	
 	private Compass compass;
 	private int lastDirMoved;
@@ -122,55 +129,89 @@ public class DavePlayer implements Player {
 	}
 
 	private void moveNorth(String dir) {
+		int tempX = posX;
+		int tempY = posY;
 		switch(dir){
-		case "right": posX += speed;
+		case "right": tempX += speed;
 			break;
-		case "left": posX -= speed;
+		case "left": tempX -= speed;
 			break;
-		case "down": posY += speed;
+		case "down": tempY += speed;
 			break;
-		case "up": posY -= speed;
+		case "up": tempY -= speed;
 			break;
+		}
+		if (canMove(tempX, tempY)){
+			posX = tempX;
+			posY = tempY;
 		}
 	}
 	
 	private void moveEast(String dir) {
+		int tempX = posX;
+		int tempY = posY;
 		switch(dir){
-		case "right": posY += speed;
+		case "right": tempY += speed;
 			break;
-		case "left": posY -= speed;
+		case "left": tempY -= speed;
 			break;
-		case "down": posX -= speed;
+		case "down": tempX -= speed;
 			break;
-		case "up": posX += speed;
+		case "up": tempX += speed;
 			break;
+		}
+		if (canMove(tempX, tempY)){
+			posX = tempX;
+			posY = tempY;
 		}
 	}
 	
 	private void moveSouth(String dir) {
+		int tempX = posX;
+		int tempY = posY;
 		switch(dir){
-		case "right": posX -= speed;
+		case "right": tempX -= speed;
 			break;
-		case "left": posX += speed;
+		case "left": tempX += speed;
 			break;
-		case "down": posY -= speed;
+		case "down": tempY -= speed;
 			break;
-		case "up": posY += speed;
+		case "up": tempY += speed;
 			break;
+		}
+		if (canMove(tempX, tempY)){
+			posX = tempX;
+			posY = tempY;
 		}
 	}
 	
 	private void moveWest(String dir) {
+		int tempX = posX;
+		int tempY = posY;
 		switch(dir){
-		case "right": posY -= speed;
+		case "right": tempY -= speed;
 			break;
-		case "left": posY += speed;
+		case "left": tempY += speed;
 			break;
-		case "down": posX += speed;
+		case "down": tempX += speed;
 			break;
-		case "up": posX -= speed;
+		case "up": tempX -= speed;
 			break;
 		}
+		if (canMove(tempX, tempY)){
+			posX = tempX;
+			posY = tempY;
+		}
+	}
+	
+	public boolean canMove(int x, int y){
+		if (!currentRoom.itemAt(x+hitBox, y+hitBox).canWalk() ||
+				!currentRoom.itemAt(x+hitBox, y-hitBox).canWalk() ||
+				!currentRoom.itemAt(x-hitBox, y-hitBox).canWalk() ||
+				!currentRoom.itemAt(x-hitBox, y+hitBox).canWalk()){
+			return false;
+		}
+		return true;
 	}
 
 	public Room getCurrentRoom() {
