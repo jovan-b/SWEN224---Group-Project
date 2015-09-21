@@ -22,17 +22,26 @@ public class Room {
 	private String name;
 	private String description;
 	private Image[][] images;
+	private Image[][] scaledImages;
 	private Item[][] contents; // items in the room
 	private int cols;
 	private int rows;
+	private int squareSize = 24; //TODO get this value from player view scale
+	private int width;
+	private int height;
+	
+
 	
 	private Set<Player> players = new HashSet<>();
 	
 	public Room(String roomName){
 		name = roomName;
-		images = new Image[4][4];
+		images = new Image[4][2];
 		loadImages(roomName);
+		scaledImages = images;
 		parseFile();
+		width = cols*squareSize;
+		height = rows*squareSize;
 	}
 
 	private void parseFile() {
@@ -60,7 +69,8 @@ public class Room {
 	private Item itemFromCode(char code){
 		switch(code){
 		case '#' : return new Wall();
-		case '_' :
+		case 'P' : return new Pillar();
+		case '_' : return new Floor();
 		default: return null;
 		}
 	}
@@ -84,10 +94,10 @@ public class Room {
 	}
 
 	public void draw(Graphics g, GUICanvas c, Player player){
-		int viewDirection = 0; //TODO get from player view direction (0=North, 1=East, 2=South, 3=West)
-		int squareSize = 24; //TODO get this value from player view scale
-		int playerX = player.getX(); //TODO replace these with player coordinates in room
-		int playerY = player.getY(); //TODO replace these with player coordinates in room
+		int viewScale = c.getViewScale();
+		int viewDirection = player.getViewDirection(); 
+		int playerX = player.getX(); 
+		int playerY = player.getY(); 
 		
 		int drawX;
 		int drawY;
@@ -96,51 +106,123 @@ public class Room {
 		
 		switch(viewDirection){
 			case 1: // EAST
-				drawX = (c.getWidth()/2)-playerY;
-				drawY = (c.getHeight()/2)-((cols*24)-playerX);
+				drawX = (c.getWidth()/2)-(playerY*viewScale);
+				drawY = (c.getHeight()/2)-((width*viewScale)-(playerX*viewScale));
 				rotated = rotatedArrayClockwise(contents);
 				break;
 			case 2: // SOUTH
-				drawX = (c.getWidth()/2)-((cols*24)-playerX);
-				drawY = (c.getHeight()/2)-((rows*24)-playerY);
-				rotated = rotatedArrayClockwise(contents); // need to rotate 180degrees
-				rotated = rotatedArrayClockwise(rotated);
+				drawX = (c.getWidth()/2)-((width*viewScale)-(playerX*viewScale));
+				drawY = (c.getHeight()/2)-((height*viewScale)-(playerY*viewScale));
+				rotated = rotatedArray180(contents);
 				break;
 			case 3: // WEST
-				drawX = (c.getWidth()/2)-((rows*24)-playerY);
-				drawY = (c.getHeight()/2)-playerX;
+				drawX = (c.getWidth()/2)-((height*viewScale)-(playerY*viewScale));
+				drawY = (c.getHeight()/2)-(playerX*viewScale);
 				rotated = rotatedArrayAntiClockwise(contents);
 				break;
 			case 0: default: // DEFAULT TO NORTH
-				drawX = (c.getWidth()/2)-playerX;
-				drawY = (c.getHeight()/2)-playerY;
+				drawX = (c.getWidth()/2)-(playerX*viewScale);
+				drawY = (c.getHeight()/2)-(playerY*viewScale);
 				break;
 		}
 		
 		// Draw background Image
-		g.drawImage(images[viewDirection][0], drawX, drawY-(squareSize*3), c);
-		for(int col=0; col<rotated.length; col++){
-			for(int row=0; row<rotated[0].length; row++){
-				if(rotated[col][row] != null){
-					rotated[col][row].draw(g, c);
+		g.drawImage(scaledImages[viewDirection][0], drawX, drawY-(squareSize*viewScale*3), c);
+		
+		checkPlayers(viewDirection);
+		
+		// Draw items in room, also draw players at correct depth level
+		Image image;
+		for(int row=0; row<rotated[0].length; row++){
+			for(int col=0; col<rotated.length; col++){
+				Item item = rotated[col][row];
+				if(!(item instanceof Floor) && !(item instanceof Wall)){
+					image = rotated[col][row].getScaledImage(viewDirection);
+					g.drawImage(image, drawX+(col*squareSize*viewScale), 
+							drawY+(row*squareSize*viewScale)-(item.yOffset()*squareSize*viewScale), c);
+				}
+				for (Player p : players){
+					if (p.getRow() == row-1){ // Ensures the player is drawn above their current row
+						drawPlayer(g, c, viewDirection, drawX, drawY, p);
+						p.setRow(-1);
+					}
 				}
 			}
 		}
 		
-		g.setColor(Color.GREEN);
-		g.fillRect(drawX+playerX-5, drawY+playerY-5, 10, 10);
-		
 		// Draw foreground Image
-		g.drawImage(images[viewDirection][1], drawX, drawY-(squareSize*3), c);
+		g.drawImage(scaledImages[viewDirection][1], drawX, drawY-(squareSize*viewScale*3), c);
+	}
+
+	private void drawPlayer(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Player p) {
+		Image playerImage = p.getImage();
+		int viewScale = c.getViewScale();
+		int playerX = p.getX();
+		int playerY = p.getY();
+		switch(viewDirection){
+			case 1:
+				g.drawImage(playerImage, drawX+(playerY*viewScale)-(16*viewScale), drawY+((width-playerX)*viewScale)-(24*viewScale), c);
+				break;
+			case 2:
+				g.drawImage(playerImage, drawX+((width-playerX)*viewScale)-(16*viewScale), drawY+((height-playerY)*viewScale)-(24*viewScale), c);
+				break;
+			case 3:
+				g.drawImage(playerImage, drawX+((height-playerY)*viewScale)-(16*viewScale), drawY+(playerX*viewScale)-(24*viewScale), c);
+				break;
+			default:
+				g.drawImage(playerImage, drawX+(playerX*viewScale)-(16*viewScale), drawY+(playerY*viewScale)-(24*viewScale), c);
+		}
 	}
 	
+	// sets the current row of the players for drawing
+	private void checkPlayers(int viewDirection) {
+		switch(viewDirection){
+		case 1: // EAST
+			for (Player p : players){
+				p.setRow(getRow(width-p.getX()));
+			}
+			break;
+		case 2: // SOUTH
+			for (Player p : players){
+				p.setRow(getRow(height-p.getY()));
+			}
+			break;
+		case 3: // WEST
+			for (Player p : players){
+				p.setRow(getRow(p.getX()));
+			}
+			break;
+		case 0: default: // DEFAULT TO NORTH
+			for (Player p : players){
+				p.setRow(getRow(p.getY()));
+			}
+			break;
+		}
+	}
+	
+	public int getCol(int x){
+		double xCol = (double)x/(double)squareSize;
+		if (xCol > contents.length-1){
+			return contents.length-1;
+		}
+		return (int)xCol;
+	}
+	
+	public int getRow(int y){
+		double yRow = (double)y/(double)squareSize;
+		if (yRow > contents[0].length-1){
+			return contents[0].length-1;
+		}
+		return (int)yRow;
+	}
+
 	/** 
 	* Create a clone of the contents array which has then been
 	* rotated 90 degrees clockwise
 	* @return A clone of this.contents which has been rotated 90
 	* degrees clockwise.
 	*/
-	public Item[][] rotatedArrayClockwise(Item[][] contents){
+	private Item[][] rotatedArrayClockwise(Item[][] contents){
 		int rows = contents.length;
 		int cols = contents[0].length;
 		
@@ -167,7 +249,7 @@ public class Room {
 	* @return A clone of this.contents which has been rotated 90
 	* degrees anti-clockwise.
 	*/
-	public Item[][] rotatedArrayAntiClockwise(Item[][] contents){
+	private Item[][] rotatedArrayAntiClockwise(Item[][] contents){
 		int rows = contents.length;
 		int cols = contents[0].length;
 
@@ -194,7 +276,7 @@ public class Room {
 	* @return A clone of this.contents which has been rotated 180
 	* degrees
 	*/
-	public Item[][] rotatedArray180(Item[][] contents){
+	private Item[][] rotatedArray180(Item[][] contents){
 		int rows = contents.length;
 		int cols = contents[0].length;
 
@@ -213,5 +295,29 @@ public class Room {
 
 	public void addPlayer(Player player) {
 		players.add(player);
+	}
+	
+	public void removePlayer(Player player){
+		players.remove(player);
+	}
+
+	public Item itemAt(int x, int y) {
+		return contents[getCol(x)][getRow(y)];
+	}
+
+	public Image[][] getImages() {
+		return images;
+	}
+	
+	public void setScaledImages(Image[][] newImages){
+		scaledImages = newImages;
+	}
+
+	public Item[][] getContents() {
+		return contents;
+	}
+
+	public Set<Player> getPlayers() {
+		return players;
 	}
 }

@@ -7,13 +7,13 @@ import main.GUICanvas;
 
 
 /**
- * A blank item used for room boundaries - stops player movement
+ * A blank item used for empty squares - player can walk over
  * @author Chris Read
  *
  */
-public class Wall implements Item {
+public class Floor implements Item {
 
-	public Wall() {
+	public Floor() {
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class Wall implements Item {
 
 	@Override
 	public boolean canWalk() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class Wall implements Item {
 	}
 
 	@Override
-	public void setScaledImage(int viewDirection, Image scaledImage) {
+	public void setScaledImage(int viewDirection, Image scaleImage) {
 	}
 
 	@Override

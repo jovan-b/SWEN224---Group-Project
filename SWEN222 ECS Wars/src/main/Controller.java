@@ -1,15 +1,19 @@
 package main;
 
+import gameObjects.Item;
 import gameObjects.Room;
 
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.BitSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import characters.Player;
-import characters.TestPlayer;
+import characters.DavePlayer;
 
 /**
  * Main controller for ECS Wars
@@ -24,10 +28,16 @@ public class Controller implements KeyListener, MouseListener{
 	
 	public static final double FRAME_RATE = 1.0/60;	//a 60th of a second
 	public boolean isRunning = false;
+<<<<<<< HEAD
 	private GUIFrame gui;
 	private Player player;
 	
 	Room room;
+=======
+	GUIFrame gui;
+	Player player;
+	Set<Room> rooms;
+>>>>>>> master
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
 	private int[] mouseLocation = new int[2];	//position of mouse if it is being clicked
@@ -96,16 +106,17 @@ public class Controller implements KeyListener, MouseListener{
 	 * Updates player appropriately depending on current keys pressed
 	 */
 	private void dealWithInput() {
-		if(isKeyPressed(KeyEvent.VK_RIGHT)){
+		// Player Movement
+		if(isKeyPressed(KeyEvent.VK_RIGHT) || isKeyPressed(KeyEvent.VK_D)){
 			player.move("right");
 		}
-		if(isKeyPressed(KeyEvent.VK_LEFT)){
+		if(isKeyPressed(KeyEvent.VK_LEFT) || isKeyPressed(KeyEvent.VK_A)){
 			player.move("left");
 		}
-		if(isKeyPressed(KeyEvent.VK_UP)){
+		if(isKeyPressed(KeyEvent.VK_UP) || isKeyPressed(KeyEvent.VK_W)){
 			player.move("up");
 		}
-		if(isKeyPressed(KeyEvent.VK_DOWN)){
+		if(isKeyPressed(KeyEvent.VK_DOWN) || isKeyPressed(KeyEvent.VK_S)){
 			player.move("down");
 		}
 		if(isLeftMousePressed()){
@@ -137,8 +148,10 @@ public class Controller implements KeyListener, MouseListener{
 	 */
 	private void initialise() {
 		isRunning = true;
-		room = new Room("Classroom");
-		player = new TestPlayer(room, 24, 24);
+		rooms = new HashSet<>();
+		Room room = new Room("Classroom");
+		rooms.add(room);
+		player = new DavePlayer(room, 48, 48);
 		room.addPlayer(player);
 		gui = new GUIFrame(this, player);
 	}
@@ -156,7 +169,67 @@ public class Controller implements KeyListener, MouseListener{
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
+		// View Rotation
+		if(e.getKeyCode() == KeyEvent.VK_Q){
+			player.rotateViewLeft();
+		}
+		if(e.getKeyCode() == KeyEvent.VK_E){
+			player.rotateViewRight();
+		}
+		if(e.getKeyCode() == KeyEvent.VK_1){
+			gui.canvas.setViewScale(1);
+			scaleEverything(1);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_2){
+			gui.canvas.setViewScale(2);
+			scaleEverything(2);
+		}
 		keyBits.clear(e.getKeyCode());
+	}
+
+	private void scaleEverything(int scale) {
+		GUICanvas c = gui.canvas;
+		int viewScale = c.getViewScale();
+		Image image;
+		for (Room r : rooms){
+			Image[][] images = r.getImages();
+			Image[][] scaled = new Image[4][2];
+			for (int i = 0; i < 4; i++){
+				for (int j = 0; j < 2; j++){
+					scaled[i][j] = scaleImage(images[i][j], c, scale);
+				}
+			}
+			r.setScaledImages(scaled);
+			
+			// scale items
+			Item[][] contents = r.getContents();
+			for (int i = 0; i < contents.length; i++){
+				for (int j = 0; j < contents[0].length; j++){
+					for (int v = 0; v < 4; v++){
+						image = contents[i][j].getImage(v);
+						if (image != null){
+							contents[i][j].setScaledImage(v, scaleImage(image, c, scale));
+						}
+					}
+				}
+			}
+			
+			// scale players
+			for (Player p : r.getPlayers()){
+				images = p.getImages();
+				scaled = new Image[4][3];
+				for (int i = 0; i < 4; i++){
+					for (int j = 0; j < 3; j++){
+						scaled[i][j] = scaleImage(images[i][j], c, scale);
+					}
+				}
+				p.setScaledImages(scaled);
+			}
+		}
+	}
+	
+	public Image scaleImage(Image image, GUICanvas c, int scale){
+		return image.getScaledInstance(image.getWidth(c)*scale, image.getHeight(c)*scale, Image.SCALE_FAST);
 	}
 
 	//Don't care about this method
