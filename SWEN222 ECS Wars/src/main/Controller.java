@@ -93,9 +93,13 @@ public class Controller implements KeyListener, MouseListener{
 	 */
 	private void update() {
 		dealWithInput();//deal with user input
-		//deal with other objects
+		updateAndCollide();//deal with other objects and with collision detection
 	}
 	
+	private void updateAndCollide() {
+		player.update();
+	}
+
 	/**
 	 * Updates player appropriately depending on current keys pressed
 	 */
