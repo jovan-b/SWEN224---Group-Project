@@ -67,7 +67,7 @@ public class GUICanvas extends JComponent{
 		//paint background
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		Room r = ((DavePlayer) player).getCurrentRoom();
+		Room r = player.getCurrentRoom();
 		r.draw(g, this, player);
 		drawHUD(g, this, r);
 	}

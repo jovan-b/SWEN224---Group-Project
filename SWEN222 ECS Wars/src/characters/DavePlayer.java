@@ -8,6 +8,7 @@ import gameObjects.weapons.Weapon;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -316,6 +317,10 @@ public class DavePlayer implements Player {
 	@Override
 	public void setScaledImages(Image[][] newImages) {
 		scaledSprites = newImages;
+	}
+	
+	public Rectangle getBoundingBox(){
+		return new Rectangle(posX-hitBox, posY-hitBox, hitBox*2, hitBox*2);
 	}
 
 }
