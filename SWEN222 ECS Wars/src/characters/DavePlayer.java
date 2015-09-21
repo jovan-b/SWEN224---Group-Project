@@ -3,6 +3,7 @@ package characters;
 import gameObjects.Compass;
 import gameObjects.Item;
 import gameObjects.Room;
+import gameObjects.weapons.Weapon;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -23,6 +24,11 @@ import main.GUICanvas;
  *
  */
 public class DavePlayer implements Player {
+	
+	private final int INVENTORY_SIZE = 10;
+	
+	private Weapon currentWeapon;
+	private Item[] inventory = new Item[INVENTORY_SIZE];
 
 	//position describing the centre of a player object
 	private int posX;
@@ -45,7 +51,7 @@ public class DavePlayer implements Player {
 
 	//player's speed is this constant * Player.SPEED
 	private int speedMulti = 1;
-	private int speed = speedMulti * Player.SPEED;
+	private int speed = speedMulti * Player.BASE_SPEED;
 
 	public DavePlayer(Room room, int posX, int posY){
 		this.currentRoom = room;
@@ -75,10 +81,16 @@ public class DavePlayer implements Player {
 	public void draw(Graphics g, GUICanvas c) {
 		//Blank for now
 	}
-
+	
+	/**
+	 * 
+	 */
 	@Override
-	public void shoot() {
-		//blank for now
+	public void shoot(int x, int y) {
+		double theta = Player.angleBetweenPlayerAndMouse(this.posX, this.posY,
+				x, y);
+		
+		currentWeapon.fire(this, theta);
 	}
 
 	/**

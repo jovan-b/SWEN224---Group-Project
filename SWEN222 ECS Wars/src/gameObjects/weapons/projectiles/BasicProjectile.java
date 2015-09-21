@@ -46,7 +46,7 @@ public class BasicProjectile implements Projectile {
 	}
 
 	@Override
-	public void update(int ticks) {
+	public void update() {
 		//TODO: update projectile's x, y by it's speed
 		//needs to be in relation to angle theta
 		//update until wall it hit

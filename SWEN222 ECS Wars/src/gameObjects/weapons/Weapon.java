@@ -42,14 +42,32 @@ public class Weapon implements Item {
 	}
 
 	@Override
-	public Image getImage() {
+	public boolean canWalk() {
+		return true;
+	}
+
+	@Override
+	public Image getImage(int viewDirection) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean canWalk() {
-		return true;
+	public int yOffset() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setScaledImage(int viewDirection, Image scaledImage) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Image getScaledImage(int viewDirection) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

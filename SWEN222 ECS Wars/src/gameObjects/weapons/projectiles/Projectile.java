@@ -13,10 +13,9 @@ public interface Projectile {
 	public static final int BASE_SPEED = 5;
 
 	/**
-	 * Causes this projectile to update
-	 * @param ticks the number of ticks to update by
+	 * Causes this projectile to update it's position
 	 */
-	public abstract void update(int ticks);
+	public abstract void update();
 	
 	/**
 	 * Creates a new instance of this projectile which heads 

@@ -36,4 +36,22 @@ public interface Player extends Drawable {
 	abstract int getRow();
 	abstract Image[][] getImages();
 	abstract void setScaledImages(Image[][] newImages);
+	
+	/**
+	 * Gives the angle between the player and the mouse
+	 * 
+	 * @param point1X
+	 * @param point1Y
+	 * @param point2X
+	 * @param point2Y
+	 * @return
+	 */
+	public static double angleBetweenPlayerAndMouse(double point1X, double point1Y, 
+	        double point2X, double point2Y) {
+
+	    double angle1 = Math.atan2(point1Y - 0, point1X - 0);
+	    double angle2 = Math.atan2(point2Y - 0, point2X - 0);
+
+	    return Math.toDegrees(angle1 - angle2); 
+	}
 }
