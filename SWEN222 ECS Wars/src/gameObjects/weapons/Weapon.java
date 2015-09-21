@@ -87,6 +87,8 @@ public class Weapon implements Item {
 		private int x;
 		private int y;
 		private double theta;
+		private int speedMulti = 1;
+		private int speed = BASE_SPEED * speedMulti;	//pixels per frame
 		
 		public BasicProjectile(int x, int y, double theta){
 			this.x = x;
