@@ -18,12 +18,12 @@ import gameObjects.Drawable;
 public interface Player extends Drawable {
 	
 	public static final int FIRERATE = 4;	//projectiles per second
-	public static final int SPEED = 2;	//pixels per frame
+	public static final int BASE_SPEED = 2;	//pixels per frame
 	public static final int BASE_HEIGHT = 50;
 	public static final int BASE_WIDTH = 30;
 	
-	abstract void shoot();
 	abstract void move(String dir);
+	abstract void shoot(int x, int y);
 	
 	abstract int getX();
 	abstract int getY();
@@ -36,4 +36,22 @@ public interface Player extends Drawable {
 	abstract int getRow();
 	abstract Image[][] getImages();
 	abstract void setScaledImages(Image[][] newImages);
+	
+	/**
+	 * Gives the angle between the player and the mouse
+	 * 
+	 * @param point1X
+	 * @param point1Y
+	 * @param point2X
+	 * @param point2Y
+	 * @return
+	 */
+	public static double angleBetweenPlayerAndMouse(double point1X, double point1Y, 
+	        double point2X, double point2Y) {
+
+	    double angle1 = Math.atan2(point1Y - 0, point1X - 0);
+	    double angle2 = Math.atan2(point2Y - 0, point2X - 0);
+
+	    return angle1 - angle2; 
+	}
 }

@@ -13,6 +13,7 @@ import characters.Player;
  * @author Sarah Dobie, Chris Read
  *
  */
+@SuppressWarnings("serial")
 public class GUIFrame extends JFrame {
 	//width and height of main panel
 		public static final int INIT_WIDTH = 400;
@@ -24,6 +25,7 @@ public class GUIFrame extends JFrame {
 		public GUIFrame(Controller controller, Player player){
 			super("ECS Wars");
 			canvas = new GUICanvas(this, player);
+			canvas.addMouseListener(controller);
 			setLayout(new BorderLayout());
 			add(canvas, BorderLayout.CENTER);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

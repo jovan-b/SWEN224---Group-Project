@@ -6,6 +6,8 @@ import gameObjects.Room;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,15 +24,19 @@ import characters.DavePlayer;
  * @author Jah Seng Lee
  *
  */
-public class Controller implements KeyListener{
+public class Controller implements KeyListener, MouseListener{
 	
 	public static final double FRAME_RATE = 1.0/60;	//a 60th of a second
 	public boolean isRunning = false;
+
 	GUIFrame gui;
 	Player player;
 	Set<Room> rooms;
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
+	private int[] mouseLocation = new int[2];	//position of mouse if it is being clicked
+												//mouseLocation[0] is x
+												//mouseLocation[1] is y
 	
 	public Controller(){
 		initialise();
@@ -107,6 +113,9 @@ public class Controller implements KeyListener{
 		if(isKeyPressed(KeyEvent.VK_DOWN) || isKeyPressed(KeyEvent.VK_S)){
 			player.move("down");
 		}
+		if(isLeftMousePressed()){
+			player.shoot(mouseLocation[0], mouseLocation[1]);
+		}
 	}
 	
 	/**
@@ -118,6 +127,14 @@ public class Controller implements KeyListener{
 	 */
 	private boolean isKeyPressed(int keyCode) {
 		return keyBits.get(keyCode);
+	}
+	
+	/**
+	 * Returns true if user has pressed left mouse button and not released it
+	 * Otherwise returns false (left mouse button is not being pressed down)
+	 */
+	private boolean isLeftMousePressed(){
+		return mouseLocation[0] != 0 && mouseLocation[1] != 0;
 	}
 
 	/**
@@ -212,9 +229,44 @@ public class Controller implements KeyListener{
 	//Don't care about this method
 	@Override
 	public void keyTyped(KeyEvent e) {
+
 		
 	}
 	
+	//don't care about this method
+	@Override
+	public void mouseClicked(MouseEvent e) {	
+	}	
+	//don't care about this method
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	//don't care about this method
+	@Override
+	public void mouseExited(MouseEvent e) {	
+	}
+
+	/**
+	 * When mouse event is fired
+	 * 	clear mouselocation
+	 * 	get x, y position of mouse
+	 * 	add new xy to mouseLocation
+	 * 
+	 */
+	@Override
+	public void mousePressed(MouseEvent e) {
+		mouseLocation[0] = e.getX();
+		mouseLocation[1] = e.getY();
+	}
+
+	/**
+	 * clear mouselocation, so that nothing is being pressed
+	 */
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		mouseLocation = new int[2];
+	}
 
 	
 	public static void main(String[] args){

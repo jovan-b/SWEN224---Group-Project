@@ -93,6 +93,7 @@ public class Main {
 		Socket s = new Socket(url, port);
 		System.out.println("CLIENT CONNECTED TO " + url + ":" + port);
 		// TODO: Start the client
+		s.close();
 	}
 	
 	/**
@@ -116,12 +117,15 @@ public class Main {
 					System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
 					multiPlayer(); // TODO add arguments (connections, etc)
 					System.out.println("ALL CLIENTS DISCONNECTED --- GAME OVER");
-					return; // game over
+					break; // game over
 				}
 			}
+			
+			server.close();
 		} catch(IOException e) {
 			System.err.println("I/O error: " + e.getMessage());
-		} 
+		} finally {
+		}
 	}
 	
 	public static void singlePlayer() {
