@@ -320,4 +320,15 @@ public class Room {
 	public Set<Player> getPlayers() {
 		return players;
 	}
+
+	/**
+	 * Checks if any bullets have:
+	 * 		a. hit a wall
+	 * 		b. hit a player
+	 * If either has occurred, remove from the room
+	 * If b has occurred, deal damage to player it hit
+	 */
+	public void update() {
+		// TODO Auto-generated method stub
+	}
 }
