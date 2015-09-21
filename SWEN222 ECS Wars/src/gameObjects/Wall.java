@@ -25,7 +25,7 @@ public class Wall implements Item {
 	}
 
 	@Override
-	public Image getImage() {
+	public Image getImage(int viewDirection) {
 		return null;
 	}
 

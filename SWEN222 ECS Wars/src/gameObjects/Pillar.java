@@ -32,7 +32,7 @@ public class Pillar implements Item {
 	}
 
 	@Override
-	public Image getImage() {
+	public Image getImage(int viewDirection) {
 		return image;
 	}
 

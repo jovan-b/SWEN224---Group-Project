@@ -134,7 +134,7 @@ public class Room {
 			for(int col=0; col<rotated.length; col++){
 				Item item = rotated[col][row];
 				if(item != null && !(item instanceof Wall)){
-					image = rotated[col][row].getImage();
+					image = rotated[col][row].getImage(viewDirection);
 					g.drawImage(image, drawX+(col*squareSize), drawY+(row*squareSize)-(item.yOffset()*squareSize), c);
 				}
 				for (Player p : players){

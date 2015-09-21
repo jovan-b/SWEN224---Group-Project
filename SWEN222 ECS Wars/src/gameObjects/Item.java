@@ -10,7 +10,7 @@ import java.awt.Image;
 public interface Item extends Drawable {
 	public void use();
 
-	public Image getImage();
+	public Image getImage(int viewDirection);
 
 	public boolean canWalk();
 	
