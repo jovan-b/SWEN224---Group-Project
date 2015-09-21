@@ -46,7 +46,10 @@ public class Compass {
 	}
 
 	public void update() {
-		//double rotateAngle = ((targetRot+(Math.random()*20)-10)-rot)*0.1;
+		//double rotateAngle = ((targetRot+(Math.random()*20)-10)-rot)*0.1; // adds "wiggle" to compass
+		if (rot == targetRot){ // dont need to rotate image if the angles are the same
+			return;
+		}
 		double rotateAngle = (targetRot-rot)*0.1;
 		rot += rotateAngle;
 		rotateImage(rot);
