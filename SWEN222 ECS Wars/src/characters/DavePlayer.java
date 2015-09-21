@@ -128,6 +128,12 @@ public class DavePlayer implements Player {
 			return;
 		}
 	}
+	
+	@Override
+	public void modifyHealth(int dmg){
+		//TODO: Check that health hasn't gone above a maximum
+		health += dmg;
+	}
 
 	// TODO replace this
 	private void animate() {

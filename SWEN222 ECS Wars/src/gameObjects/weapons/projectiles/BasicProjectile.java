@@ -23,6 +23,8 @@ public abstract class BasicProjectile implements Projectile {
 	private int hitBox = 2;
 	private double theta;
 	
+	private int damage = -10;
+	
 	private int speedMulti = 1;
 	private int speed = BASE_SPEED * speedMulti;	//pixels per frame
 	
@@ -54,12 +56,7 @@ public abstract class BasicProjectile implements Projectile {
 
 	@Override
 	public void update() {
-		//TODO: May have to change all this, since we
-		// have no consistent coordinate system other than
-		// the array
-		
-		//TODO: Collision detection
-		
+				
 		x += Projectile.xDiff(theta, speed);
 		y += Projectile.yDiff(theta, speed);
 		
@@ -67,7 +64,7 @@ public abstract class BasicProjectile implements Projectile {
 		for (Player p : room.getPlayers()){
 			if (p == player){continue;} //Players can't shoot themselves
 			if (p.getBoundingBox().contains(this.getBoundingBox())){
-				//TODO: Hurt the player
+				p.modifyHealth(damage);
 				room.removeProjectile(this);
 				return;
 			}

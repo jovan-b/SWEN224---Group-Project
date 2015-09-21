@@ -27,6 +27,14 @@ public interface Player extends Drawable {
 	public void move(String dir);
 	public void shoot(int x, int y);
 	
+	/**
+	 * Adds the amount onto the player's health bar.
+	 * Negative values cause damage.
+	 * 
+	 * @param amt the amount to change health by
+	 */
+	public void modifyHealth(int amt);
+	
 	public int getX();
 	public int getY();
 	public int getViewDirection();
