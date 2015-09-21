@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import network.ClientConnection;
+
 /**
  * Main class to run the game off of.
  * Starts in single player if no cmd line arguements are specified,
@@ -92,8 +94,8 @@ public class Main {
 		//Create a new socket for the client and start the player in the game
 		Socket s = new Socket(url, port);
 		System.out.println("CLIENT CONNECTED TO " + url + ":" + port);
-		// TODO: Start the client
-		s.close();
+		ClientConnection client = new ClientConnection(s);
+		client.start();
 	}
 	
 	/**
