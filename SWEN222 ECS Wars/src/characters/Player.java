@@ -2,9 +2,11 @@ package characters;
 
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import gameObjects.Compass;
 import gameObjects.Drawable;
+import gameObjects.Room;
 
 /**
  * An interface representing a playable character
@@ -22,20 +24,23 @@ public interface Player extends Drawable {
 	public static final int BASE_HEIGHT = 50;
 	public static final int BASE_WIDTH = 30;
 	
-	abstract void move(String dir);
-	abstract void shoot(int x, int y);
+	public void move(String dir);
+	public void shoot(int x, int y);
 	
-	abstract int getX();
-	abstract int getY();
-	abstract int getViewDirection();
-	abstract Image getImage();
-	abstract void rotateViewLeft();
-	abstract void rotateViewRight();
-	abstract void setCompass(Compass compass);
-	abstract void setRow(int row);
-	abstract int getRow();
-	abstract Image[][] getImages();
-	abstract void setScaledImages(Image[][] newImages);
+	public int getX();
+	public int getY();
+	public int getViewDirection();
+	public Image getImage();
+	public void rotateViewLeft();
+	public void rotateViewRight();
+	public void setCompass(Compass compass);
+	public void setRow(int row);
+	public int getRow();
+	public Room getCurrentRoom();
+	public void setCurrentRoom(Room r);
+	public Image[][] getImages();
+	public void setScaledImages(Image[][] newImages);
+	public Rectangle getBoundingBox();
 	
 	/**
 	 * Gives the angle between the player and the mouse

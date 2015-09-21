@@ -1,5 +1,7 @@
 package gameObjects;
 
+import gameObjects.weapons.projectiles.Projectile;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -30,8 +32,7 @@ public class Room {
 	private int width;
 	private int height;
 	
-
-	
+	private Set<Projectile> projectiles = new HashSet<Projectile>();
 	private Set<Player> players = new HashSet<>();
 	
 	public Room(String roomName){
@@ -300,6 +301,14 @@ public class Room {
 	public void removePlayer(Player player){
 		players.remove(player);
 	}
+	
+	public void addProjectile(Projectile p){
+		projectiles.add(p);
+	}
+	
+	public void removeProjectile(Projectile p){
+		projectiles.remove(p);
+	}
 
 	public Item itemAt(int x, int y) {
 		return contents[getCol(x)][getRow(y)];
@@ -317,7 +326,12 @@ public class Room {
 		return contents;
 	}
 
+	//FIXME: Do we want to hand back the actual collection, or a copy?
 	public Set<Player> getPlayers() {
 		return players;
+	}
+	
+	public Set<Projectile> getProjectiles() {
+		return projectiles;
 	}
 }

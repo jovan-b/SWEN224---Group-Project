@@ -1,5 +1,7 @@
 package gameObjects.weapons.projectiles;
 
+import java.awt.Rectangle;
+
 import characters.Player;
 
 /**
@@ -15,7 +17,7 @@ public interface Projectile {
 	/**
 	 * Causes this projectile to update it's position
 	 */
-	public abstract void update();
+	public void update();
 	
 	/**
 	 * Creates a new instance of this projectile which heads 
@@ -26,7 +28,13 @@ public interface Projectile {
 	 * 
 	 * @return a new projectile object
 	 */
-	public abstract Projectile newInstance(Player p, double theta);
+	public Projectile newInstance(Player p, double theta);
+	
+	/**
+	 * Returns the bounding box for this projectile
+	 * @return
+	 */
+	public Rectangle getBoundingBox();
 	
 	public static int xDiff(double theta, int speed){
 		return (int)(Math.cos(theta)*speed);
