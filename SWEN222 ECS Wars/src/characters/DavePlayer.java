@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
 
 import main.GUICanvas;
 
-public class TestPlayer implements Player {
+public class DavePlayer implements Player {
 
 	//position describing the centre of a player object
 	private int posX;
@@ -38,7 +38,7 @@ public class TestPlayer implements Player {
 	private int speedMulti = 1;
 	private int speed = speedMulti * Player.SPEED;
 
-	public TestPlayer(Room room, int posX, int posY){
+	public DavePlayer(Room room, int posX, int posY){
 		this.currentRoom = room;
 		this.posX = posX;
 		this.posY = posY;

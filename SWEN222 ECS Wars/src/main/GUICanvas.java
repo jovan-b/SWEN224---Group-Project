@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 import characters.Player;
-import characters.TestPlayer;
+import characters.DavePlayer;
 
 /**
  * The main canvas inside the game window in which the game is drawn.
@@ -64,7 +64,7 @@ public class GUICanvas extends JComponent{
 		//paint background
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		Room r = ((TestPlayer) player).getCurrentRoom();
+		Room r = ((DavePlayer) player).getCurrentRoom();
 		r.draw(g, this, player);
 		drawHUD(g, this, r);
 	}
