@@ -1,6 +1,5 @@
 package main;
 
-import gameObjects.Room;
 
 import java.awt.BorderLayout;
 
