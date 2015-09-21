@@ -27,8 +27,11 @@ public class DavePlayer implements Player {
 	
 	private final int INVENTORY_SIZE = 10;
 	
+	//fields describing state of player
 	private Weapon currentWeapon;
 	private Item[] inventory = new Item[INVENTORY_SIZE];
+	private int health = 50;
+	
 
 	//position describing the centre of a player object
 	private int posX;
@@ -81,6 +84,14 @@ public class DavePlayer implements Player {
 	public void draw(Graphics g, GUICanvas c) {
 		//Blank for now
 	}
+	
+	@Override
+	public void update() {
+		currentRoom.update();
+		//TODO: add collision detection with other players
+		//TODO: check if dead and drop items/lose points/etc.
+	}
+
 	
 	/**
 	 * 
