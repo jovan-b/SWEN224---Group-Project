@@ -54,4 +54,5 @@ public interface Player extends Drawable {
 
 	    return angle1 - angle2; 
 	}
+	abstract void update();
 }
