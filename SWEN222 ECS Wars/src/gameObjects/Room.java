@@ -332,14 +332,13 @@ public class Room {
 	}
 
 	/**
-	 * Checks if any bullets have:
-	 * 		a. hit a wall
-	 * 		b. hit a player
-	 * If either has occurred, remove from the room
-	 * If b has occurred, deal damage to player it hit
+	 * Updates the room and all contained items
 	 */
 	public void update() {
-		// TODO Auto-generated method stub
+		//Update the projectiles
+		for (Projectile p : projectiles){
+			p.update();
+		}
 	}
 	
 	public Set<Projectile> getProjectiles() {

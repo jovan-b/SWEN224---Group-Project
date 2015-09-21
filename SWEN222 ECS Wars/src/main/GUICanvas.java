@@ -14,7 +14,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 import characters.Player;
-import characters.DavePlayer;
 
 /**
  * The main canvas inside the game window in which the game is drawn.
