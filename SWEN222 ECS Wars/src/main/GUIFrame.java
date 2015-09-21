@@ -25,6 +25,7 @@ public class GUIFrame extends JFrame {
 		public GUIFrame(Controller controller, Player player){
 			super("ECS Wars");
 			canvas = new GUICanvas(this, player);
+			canvas.addMouseListener(controller);
 			setLayout(new BorderLayout());
 			add(canvas, BorderLayout.CENTER);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
