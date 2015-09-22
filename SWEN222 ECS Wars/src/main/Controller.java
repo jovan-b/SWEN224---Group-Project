@@ -2,6 +2,7 @@ package main;
 
 import gameObjects.Item;
 import gameObjects.Room;
+import network.ClientConnection;
 
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -40,7 +41,15 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 												//mouseLocation[1] is y
 	
 	public Controller(){
-		initialise();
+		initialise(this, this);
+		run(FRAME_RATE);
+	}
+	
+	/**
+	 * Controller constructor for a multiplayer client
+	 */
+	public Controller(ClientConnection client){
+		initialise(client, client);
 		run(FRAME_RATE);
 	}
 	
@@ -145,14 +154,14 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	/**
 	 * Initialise the fields of this class
 	 */
-	private void initialise() {
+	private void initialise(KeyListener key, MouseListener mouse) {
 		isRunning = true;
 		rooms = new HashSet<>();
 		Room room = new Room("Classroom");
 		rooms.add(room);
 		player = new DavePlayer(room, 48, 48);
 		room.addPlayer(player);
-		gui = new GUIFrame(this, player);
+		gui = new GUIFrame(this, player, key, mouse);
 		player.setCanvas(gui.canvas);
 		
 		SoundManager.playSong("test.wav");
