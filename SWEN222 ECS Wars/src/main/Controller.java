@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,14 +25,14 @@ import characters.DavePlayer;
  * @author Jah Seng Lee
  *
  */
-public class Controller implements KeyListener, MouseListener{
+public class Controller implements KeyListener, MouseListener, MouseMotionListener{
 	
 	public static final double FRAME_RATE = 1.0/60;	//a 60th of a second
 	public boolean isRunning = false;
 
-	private GUIFrame gui;
-	private Player player;
-	private Set<Room> rooms;
+	GUIFrame gui;
+	Player player;
+	Set<Room> rooms;
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
 	private int[] mouseLocation = new int[2];	//position of mouse if it is being clicked
@@ -155,7 +156,6 @@ public class Controller implements KeyListener, MouseListener{
 		player.setCanvas(gui.canvas);
 		
 		SoundManager.playSong("test.wav");
-		
 	}
 
 	/**
@@ -276,16 +276,21 @@ public class Controller implements KeyListener, MouseListener{
 		mouseLocation = new int[2];
 	}
 
-	/**
-	 * Returns the player
-	 * @return
-	 */
-	public Player getPlayer(){
-		return player;
-	}
 	
 	public static void main(String[] args){
 		new Controller();
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		mouseLocation[0] = e.getX();
+		mouseLocation[1] = e.getY();
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		mouseLocation[0] = e.getX();
+		mouseLocation[1] = e.getY();
 	}
 
 }

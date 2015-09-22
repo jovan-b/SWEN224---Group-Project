@@ -131,7 +131,12 @@ public class Room {
 		// Draw background Image
 		g.drawImage(scaledImages[viewDirection][0], drawX, drawY-(squareSize*viewScale*3), c);
 		
+		Set<Projectile> toDraw = projectiles;
+		
 		checkPlayers(viewDirection);
+		try {
+			checkProjectiles(viewDirection, toDraw);
+		} catch (ConcurrentModificationException e){}
 		
 		// Draw items in room, also draw players at correct depth level
 		Image image;
@@ -143,6 +148,12 @@ public class Room {
 					g.drawImage(image, drawX+(col*squareSize*viewScale), 
 							drawY+(row*squareSize*viewScale)-(item.yOffset()*squareSize*viewScale), c);
 				}
+				for (Projectile p : toDraw){
+					if (p.getRow() == row-1){ // Ensures the projectile is drawn above their current row
+						drawProjectile(g, c, viewDirection, drawX, drawY, p);
+						p.setRow(-1);
+					}
+				}
 				for (Player p : players){
 					if (p.getRow() == row-1){ // Ensures the player is drawn above their current row
 						drawPlayer(g, c, viewDirection, drawX, drawY, p);
@@ -151,19 +162,6 @@ public class Room {
 				}
 			}
 		}
-		
-		// draw projectiles
-		int x;
-		int y;
-		g.setColor(Color.GREEN);
-		Set<Projectile> toDraw = projectiles;
-		try {
-			for (Projectile p : toDraw){
-				x = drawX+(p.getX()*viewScale);
-				y = drawY+(p.getY()*viewScale);
-				g.fillRect(x-(1*viewScale), y-(5*viewScale), 2*viewScale, 2*viewScale);
-			}
-		} catch (ConcurrentModificationException e){}
 		
 		// Draw foreground Image
 		g.drawImage(scaledImages[viewDirection][1], drawX, drawY-(squareSize*viewScale*3), c);
@@ -186,6 +184,24 @@ public class Room {
 				break;
 			default:
 				g.drawImage(playerImage, drawX+(playerX*viewScale)-(16*viewScale), drawY+(playerY*viewScale)-(24*viewScale), c);
+		}
+	}
+	
+	private void drawProjectile(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Projectile p){
+		int viewScale = c.getViewScale();
+		g.setColor(Color.GREEN);
+		switch(viewDirection){
+		case 1:
+			g.fillRect(drawX+(p.getY()*viewScale), drawY+((width-p.getX())*viewScale), 2, 2);
+			break;
+		case 2:
+			g.fillRect(drawX+((width-p.getX())*viewScale), drawY+((height-p.getY())*viewScale), 2, 2);
+			break;
+		case 3:
+			g.fillRect(drawX+((height-p.getY())*viewScale), drawY+(p.getX()*viewScale), 2, 2);
+			break;
+		default:
+			g.fillRect(drawX+(p.getX()*viewScale), drawY+(p.getY()*viewScale), 2, 2);
 		}
 	}
 	
@@ -214,6 +230,32 @@ public class Room {
 			break;
 		}
 	}
+	
+	// sets the current row of the projectiles for drawing
+		private void checkProjectiles(int viewDirection, Set<Projectile> toDraw) {
+			switch(viewDirection){
+			case 1: // EAST
+				for (Projectile p : toDraw){
+					p.setRow(getRow(width-p.getX()));
+				}
+				break;
+			case 2: // SOUTH
+				for (Projectile p : toDraw){
+					p.setRow(getRow(height-p.getY()));
+				}
+				break;
+			case 3: // WEST
+				for (Projectile p : toDraw){
+					p.setRow(getRow(p.getX()));
+				}
+				break;
+			case 0: default: // DEFAULT TO NORTH
+				for (Projectile p : toDraw){
+					p.setRow(getRow(p.getY()));
+				}
+				break;
+			}
+		}
 	
 	public int getCol(int x){
 		double xCol = (double)x/(double)squareSize;

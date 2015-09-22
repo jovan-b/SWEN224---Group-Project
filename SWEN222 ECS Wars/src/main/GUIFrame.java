@@ -15,8 +15,8 @@ import characters.Player;
 @SuppressWarnings("serial")
 public class GUIFrame extends JFrame {
 	//width and height of main panel
-		public static final int INIT_WIDTH = 400;
-		public static final int INIT_HEIGHT = 400;
+		public static final int INIT_WIDTH = 800;
+		public static final int INIT_HEIGHT = 600;
 		
 		Controller controller;
 		GUICanvas canvas;

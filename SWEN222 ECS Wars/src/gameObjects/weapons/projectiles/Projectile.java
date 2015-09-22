@@ -26,6 +26,9 @@ public interface Projectile {
 	public int getX();
 	public int getY();
 	
+	public void setRow(int x);
+	public int getRow();
+	
 	/**
 	 * Creates a new instance of this projectile which heads 
 	 * in a given direction

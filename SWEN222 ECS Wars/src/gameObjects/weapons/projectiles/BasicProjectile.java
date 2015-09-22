@@ -20,6 +20,7 @@ public abstract class BasicProjectile implements Projectile {
 	
 	private int x;
 	private int y;
+	private int row;
 	private int hitBox = 2;
 	private double theta;
 	
@@ -89,6 +90,14 @@ public abstract class BasicProjectile implements Projectile {
 	@Override
 	public int getY(){
 		return y;
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public void setRow(int row) {
+		this.row = row;
 	}
 
 }
