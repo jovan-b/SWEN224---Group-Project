@@ -8,17 +8,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-
-import characters.DavePlayer;
 import main.Controller;
-import main.GUIFrame;
 
 /**
  * The client connection handles the user input and writes it to
  * the socket for the server to update what the player does to the
  * rest of the game
  *
- * @author bogoiejova
+ * @author Jovan Bogoievski
  *
  */
 public class ClientConnection extends Thread implements KeyListener, MouseListener{
@@ -30,29 +27,38 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 
 	public ClientConnection(Socket socket){
 		this.socket = socket;
-		controller = new Controller(this);
 	}
 
 	/**
 	 * Runs the client side game and sends updates of key presses
 	 */
+	@Override
 	public void run(){
 		try{
 			//Create the socket input and output to write to for the server
 			input = new DataInputStream(socket.getInputStream());
 			output = new DataOutputStream(socket.getOutputStream());
-
+			
 			//Keep running the game until the player disconnects or loses connection to the server
-			boolean disconnect = false;
-			while(!disconnect){
-				//Run the game
-				//TODO: Show some feedback here from the input stream
-			}
-			socket.close(); //Player disconnected
+			controller = new Controller(this);
+			
+//			boolean disconnect = false;
+//			while(!disconnect){
+//				//Run the game
+//				//TODO: Show some feedback here from the input stream
+//			}
 		}
 		catch(IOException e){
 			System.err.println("I/O Error: " + e.getMessage());
 			e.printStackTrace(System.err);
+		}
+		finally{
+			try{
+				//Disconnect player
+				socket.close();
+			} catch(IOException e){
+				//Do nothing
+			}
 		}
 	}
 

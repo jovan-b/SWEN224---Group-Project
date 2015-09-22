@@ -4,6 +4,7 @@ import java.net.Socket;
 
 import main.Controller;
 import network.ClientConnection;
+import network.ServerHandler;
 
 /**
  * Main class to run the game off of.
@@ -25,7 +26,7 @@ public class Main {
 		boolean server = false; //Server mode, start as false unless specified in the cmd line arguments
 		String url = null; //The url which the client connects to
 		int clients = 0; //Number of clients for multiplayer
-		int port = 32768; //Default port TODO: Be able to change the port
+		int port = 8800; //Default port TODO: Be able to change the port
 		
 		for (int i = 0; i != args.length; ++i) {
 			if (args[i].startsWith("-")) {
@@ -65,7 +66,6 @@ public class Main {
 			}
 		} catch(IOException ioe) {			
 			//Something went wrong when connecting
-			//TODO: better error messages
 			System.out.println("I/O error: " + ioe.getMessage());
 			ioe.printStackTrace();
 			System.exit(1);
@@ -109,13 +109,22 @@ public class Main {
 		System.out.println("SERVER LISTENING ON PORT " + port);
 		System.out.println("SERVER AWAITING " + clients + " CLIENTS");
 		try {
-			// Now, we await connections.
-			ServerSocket server = new ServerSocket(port);			
+			//Create the server socket
+			ServerSocket server = new ServerSocket(port);
+			//Create an array of server handlers for every client
+			ServerHandler[] clientsConnected = new ServerHandler[clients];
+			int i = 0;
 			while (true) {
-				// 	Wait for a socket
+				//Wait for a client to connect
 				Socket s = server.accept();
+				int uid = i+1;
+				clientsConnected[i] = new ServerHandler(s, uid);
+				clientsConnected[i].start();
+				i++;
+				
 				System.out.println("ACCEPTED CONNECTION FROM: " + s.getInetAddress());				
-				clients -= 1;			
+				clients -= 1;
+				
 				if(clients == 0) {
 					System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
 					multiPlayer(); // TODO add arguments (connections, etc)
