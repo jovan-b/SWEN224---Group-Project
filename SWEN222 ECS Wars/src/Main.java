@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import main.Controller;
 import network.ClientConnection;
 
 /**
@@ -95,7 +96,7 @@ public class Main {
 		Socket s = new Socket(url, port);
 		System.out.println("CLIENT CONNECTED TO " + url + ":" + port);
 		ClientConnection client = new ClientConnection(s);
-		client.start();
+		client.run();
 	}
 	
 	/**
@@ -131,8 +132,7 @@ public class Main {
 	}
 	
 	public static void singlePlayer() {
-		// TODO Auto-generated method stub
-		
+		new Controller();
 	}
 	
 	public static void multiPlayer() {
