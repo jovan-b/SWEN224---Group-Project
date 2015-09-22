@@ -34,6 +34,11 @@ public class GUICanvas extends JComponent{
 	// Static UI Images
 	private Image compassControls;
 	
+	/**
+	 * Constructor for class GUICanvas.
+	 * @param frame The frame containing this canvas
+	 * @param player The current client's player.
+	 */
 	public GUICanvas(GUIFrame frame, Player player){
 		this.frame = frame;
 		this.player = player;
@@ -48,6 +53,7 @@ public class GUICanvas extends JComponent{
 		}
 	}
 	
+	@Override
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
 	}
@@ -57,10 +63,6 @@ public class GUICanvas extends JComponent{
 		return new Dimension(GUIFrame.INIT_WIDTH, GUIFrame.INIT_HEIGHT);
 	}
 	
-	/**
-	 * Draws all the graphics on the screen
-	 * Mainly calls each objects own draw method
-	 */
 	@Override
 	public void paint(Graphics g){
 		//paint background
@@ -68,20 +70,33 @@ public class GUICanvas extends JComponent{
 		g.fillRect(0, 0, getWidth(), getHeight());
 		Room r = player.getCurrentRoom();
 		r.draw(g, this, player);
-		drawHUD(g, this, r);
+		drawHUD(g, r);
 	}
 
-	private void drawHUD(Graphics g, GUICanvas guiCanvas, Room r) {
+	/**
+	 * Draws the heads up display, ie. UI components like health, score etc.
+	 * @param g The graphics object with which to draw
+	 * @param r The room to draw
+	 */
+	private void drawHUD(Graphics g, Room r) {
 		// Draw compass
 		compass.update();
 		g.drawImage(compass.getImage(), getWidth()-96-20, 20, this);
 		g.drawImage(compassControls, getWidth()-96-20, 20, this);
 	}
 	
+	/**
+	 * Gets the current view scale of this canvas.
+	 * @return The current view scale: either 1 or 2
+	 */
 	public int getViewScale() {
 		return viewScale;
 	}
 
+	/**
+	 * Sets the current view scale.
+	 * @param viewScale The new view scale: either 1 or 2.
+	 */
 	public void setViewScale(int viewScale) {
 		this.viewScale = viewScale;
 	}

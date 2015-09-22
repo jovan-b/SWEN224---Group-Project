@@ -36,16 +36,23 @@ public class Room {
 	private Set<Projectile> projectiles = new HashSet<Projectile>();
 	private Set<Player> players = new HashSet<>();
 	
+	/**
+	 * Constructor for class Room
+	 * @param roomName Name of room/file to parse.
+	 */
 	public Room(String roomName){
 		name = roomName;
 		images = new Image[4][2];
-		loadImages(roomName);
+		loadImages();
 		scaledImages = images;
 		parseFile();
 		width = cols*squareSize;
 		height = rows*squareSize;
 	}
 
+	/**
+	 * Read room file and convert to array of items and other room data.
+	 */
 	private void parseFile() {
 		try {
 			Scanner s = new Scanner(new File("Resources"+File.separator+name+".txt"));
@@ -54,6 +61,7 @@ public class Room {
 			rows = Integer.parseInt(s.nextLine());
 			contents = new Item[cols][rows];
 			
+			// populate item array
 			for(int r=0; r<rows; r++){
 				String line = s.nextLine();
 				for(int c=0; c<cols; c++){
@@ -68,6 +76,11 @@ public class Room {
 		}
 	}
 	
+	/**
+	 * Converts a char code into an item.
+	 * @param code The char from a room file being parsed.
+	 * @return A new Item according to the code.
+	 */
 	private Item itemFromCode(char code){
 		switch(code){
 		case '#' : return new Wall();
@@ -77,24 +90,33 @@ public class Room {
 		}
 	}
 
-	private void loadImages(String roomName) {
+	/**
+	 * Loads all background and foreground images necessary for this room.
+	 */
+	private void loadImages() {
 		try {
-			images[0][0] = ImageIO.read(new File("Resources"+File.separator+roomName+File.separator+"NorthBase.png"));
-			images[0][1] = ImageIO.read(new File("Resources"+File.separator+roomName+File.separator+"NorthTop.png"));
+			images[0][0] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"NorthBase.png"));
+			images[0][1] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"NorthTop.png"));
 			
-			images[1][0] = ImageIO.read(new File("Resources"+File.separator+roomName+File.separator+"EastBase.png"));
-			images[1][1] = ImageIO.read(new File("Resources"+File.separator+roomName+File.separator+"EastTop.png"));
+			images[1][0] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"EastBase.png"));
+			images[1][1] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"EastTop.png"));
 			
-			images[2][0] = ImageIO.read(new File("Resources"+File.separator+roomName+File.separator+"SouthBase.png"));
-			images[2][1] = ImageIO.read(new File("Resources"+File.separator+roomName+File.separator+"SouthTop.png"));
+			images[2][0] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"SouthBase.png"));
+			images[2][1] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"SouthTop.png"));
 			
-			images[3][0] = ImageIO.read(new File("Resources"+File.separator+roomName+File.separator+"WestBase.png"));
-			images[3][1] = ImageIO.read(new File("Resources"+File.separator+roomName+File.separator+"WestTop.png"));
+			images[3][0] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"WestBase.png"));
+			images[3][1] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"WestTop.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading room images: "+e.getMessage());
 		}
 	}
 
+	/**
+	 * Draws this room and its contents on the graphics pane.
+	 * @param g Graphics object with which to draw the room.
+	 * @param c The canvas on which to draw the room.
+	 * @param player The current player.
+	 */
 	public void draw(Graphics g, GUICanvas c, Player player){
 		int viewScale = c.getViewScale();
 		int viewDirection = player.getViewDirection(); 
@@ -106,6 +128,7 @@ public class Room {
 		
 		Item[][] rotated = contents;
 		
+		// calculate origin for drawing based on view direction
 		switch(viewDirection){
 			case 1: // EAST
 				drawX = (c.getWidth()/2)-(playerY*viewScale);
@@ -128,32 +151,56 @@ public class Room {
 				break;
 		}
 		
+		// Create copy of projectile set to avoid concurrent modification
+		Set<Projectile> projectilesToDraw = new HashSet<Projectile>();
+		projectilesToDraw.addAll(projectiles);
+		
+		// Set row value for projectiles and players
+		checkPlayers(viewDirection);
+		try {
+			checkProjectiles(viewDirection, projectilesToDraw);
+		} catch (ConcurrentModificationException e){}
+		
+		// draw the images
+		drawRoomContents(g, c, viewDirection, drawX, drawY, rotated, projectilesToDraw);
+	}
+
+	/**
+	 * Draws all items, players, and projectiles in this room.
+	 * @param g The Grapics object with which to draw the room
+	 * @param c The canvas on which to draw
+	 * @param viewDirection The direction the player is viewing in
+	 * @param drawX The x origin of the room
+	 * @param drawY The y origin of the room
+	 * @param rotated The rotated contents array according to the view dir
+	 * @param projectiles The projectiles to be drawn
+	 */
+	private void drawRoomContents(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY,
+			Item[][] rotated, Set<Projectile> projectiles) {
+		int viewScale = c.getViewScale();
+		
 		// Draw background Image
 		g.drawImage(scaledImages[viewDirection][0], drawX, drawY-(squareSize*viewScale*3), c);
 		
-		Set<Projectile> toDraw = projectiles;
-		
-		checkPlayers(viewDirection);
-		try {
-			checkProjectiles(viewDirection, toDraw);
-		} catch (ConcurrentModificationException e){}
-		
-		// Draw items in room, also draw players at correct depth level
+		// draw contents
 		Image image;
 		for(int row=0; row<rotated[0].length; row++){
 			for(int col=0; col<rotated.length; col++){
 				Item item = rotated[col][row];
+				// draw item at current square
 				if(!(item instanceof Floor) && !(item instanceof Wall)){
 					image = rotated[col][row].getScaledImage(viewDirection);
 					g.drawImage(image, drawX+(col*squareSize*viewScale), 
 							drawY+(row*squareSize*viewScale)-(item.yOffset()*squareSize*viewScale), c);
 				}
-				for (Projectile p : toDraw){
+				// draw projectile at this row
+				for (Projectile p : projectiles){
 					if (p.getRow() == row-1){ // Ensures the projectile is drawn above their current row
 						drawProjectile(g, c, viewDirection, drawX, drawY, p);
 						p.setRow(-1);
 					}
 				}
+				// draw player at this row
 				for (Player p : players){
 					if (p.getRow() == row-1){ // Ensures the player is drawn above their current row
 						drawPlayer(g, c, viewDirection, drawX, drawY, p);
@@ -167,29 +214,53 @@ public class Room {
 		g.drawImage(scaledImages[viewDirection][1], drawX, drawY-(squareSize*viewScale*3), c);
 	}
 
+	/**
+	 * Draws the player.
+	 * @param g The Grapics object with which to draw the room
+	 * @param c The canvas on which to draw
+	 * @param viewDirection The direction the player is viewing in
+	 * @param drawX The x origin of the room
+	 * @param drawY The y origin of the room
+	 * @param p The player to draw
+	 */
 	private void drawPlayer(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Player p) {
 		Image playerImage = p.getImage();
 		int viewScale = c.getViewScale();
 		int playerX = p.getX();
 		int playerY = p.getY();
+		// draw player relative to view direction
 		switch(viewDirection){
-			case 1:
-				g.drawImage(playerImage, drawX+(playerY*viewScale)-(16*viewScale), drawY+((width-playerX)*viewScale)-(24*viewScale), c);
-				break;
-			case 2:
-				g.drawImage(playerImage, drawX+((width-playerX)*viewScale)-(16*viewScale), drawY+((height-playerY)*viewScale)-(24*viewScale), c);
-				break;
-			case 3:
-				g.drawImage(playerImage, drawX+((height-playerY)*viewScale)-(16*viewScale), drawY+(playerX*viewScale)-(24*viewScale), c);
-				break;
-			default:
-				g.drawImage(playerImage, drawX+(playerX*viewScale)-(16*viewScale), drawY+(playerY*viewScale)-(24*viewScale), c);
+		case 1: // EAST
+			g.drawImage(playerImage, drawX+(playerY*viewScale)-(16*viewScale),
+					drawY+((width-playerX)*viewScale)-(24*viewScale), c);
+			break;
+		case 2: // SOUTH
+			g.drawImage(playerImage, drawX+((width-playerX)*viewScale)-(16*viewScale),
+					drawY+((height-playerY)*viewScale)-(24*viewScale), c);
+			break;
+		case 3: // WEST
+			g.drawImage(playerImage, drawX+((height-playerY)*viewScale)-(16*viewScale),
+					drawY+(playerX*viewScale)-(24*viewScale), c);
+			break;
+		default: // NORTH
+			g.drawImage(playerImage, drawX+(playerX*viewScale)-(16*viewScale),
+					drawY+(playerY*viewScale)-(24*viewScale), c);
 		}
 	}
 	
+	/**
+	 * Draws an individual projectile.
+	 * @param g The Grapics object with which to draw the room
+	 * @param c The canvas on which to draw
+	 * @param viewDirection The direction the player is viewing in
+	 * @param drawX The x origin of the room
+	 * @param drawY The y origin of the room
+	 * @param p The projectile to draw
+	 */
 	private void drawProjectile(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Projectile p){
 		int viewScale = c.getViewScale();
 		g.setColor(Color.GREEN);
+		// draw projectile relative to view direction
 		switch(viewDirection){
 		case 1:
 			g.fillRect(drawX+(p.getY()*viewScale), drawY+((width-p.getX())*viewScale), 2, 2);
@@ -205,59 +276,72 @@ public class Room {
 		}
 	}
 	
-	// sets the current row of the players for drawing
+	/**
+	 * Sets the current row of the players for drawing relative to
+	 * the view direction.
+	 * @param viewDirection The direction the room is being viewed in.
+	 */
 	private void checkPlayers(int viewDirection) {
 		switch(viewDirection){
 		case 1: // EAST
 			for (Player p : players){
-				p.setRow(getRow(width-p.getX()));
+				p.setRow(rowFromY(width-p.getX()));
 			}
 			break;
 		case 2: // SOUTH
 			for (Player p : players){
-				p.setRow(getRow(height-p.getY()));
+				p.setRow(rowFromY(height-p.getY()));
 			}
 			break;
 		case 3: // WEST
 			for (Player p : players){
-				p.setRow(getRow(p.getX()));
+				p.setRow(rowFromY(p.getX()));
 			}
 			break;
 		case 0: default: // DEFAULT TO NORTH
 			for (Player p : players){
-				p.setRow(getRow(p.getY()));
+				p.setRow(rowFromY(p.getY()));
 			}
 			break;
 		}
 	}
 	
-	// sets the current row of the projectiles for drawing
-		private void checkProjectiles(int viewDirection, Set<Projectile> toDraw) {
-			switch(viewDirection){
-			case 1: // EAST
-				for (Projectile p : toDraw){
-					p.setRow(getRow(width-p.getX()));
-				}
-				break;
-			case 2: // SOUTH
-				for (Projectile p : toDraw){
-					p.setRow(getRow(height-p.getY()));
-				}
-				break;
-			case 3: // WEST
-				for (Projectile p : toDraw){
-					p.setRow(getRow(p.getX()));
-				}
-				break;
-			case 0: default: // DEFAULT TO NORTH
-				for (Projectile p : toDraw){
-					p.setRow(getRow(p.getY()));
-				}
-				break;
+	/**
+	 * Sets the current row of the projectiles for drawing relative to
+	 * the view direction.
+	 * @param viewDirection The direction the room is being viewed in.
+	 */
+	private void checkProjectiles(int viewDirection, Set<Projectile> toDraw) {
+		switch(viewDirection){
+		case 1: // EAST
+			for (Projectile p : toDraw){
+				p.setRow(rowFromY(width-p.getX()));
 			}
+			break;
+		case 2: // SOUTH
+			for (Projectile p : toDraw){
+				p.setRow(rowFromY(height-p.getY()));
+			}
+			break;
+		case 3: // WEST
+			for (Projectile p : toDraw){
+				p.setRow(rowFromY(p.getX()));
+			}
+			break;
+		case 0: default: // DEFAULT TO NORTH
+			for (Projectile p : toDraw){
+				p.setRow(rowFromY(p.getY()));
+			}
+			break;
 		}
+	}
 	
-	public int getCol(int x){
+	/**
+	 * Converts an x position to a column value.
+	 * @param x The pixel x position
+	 * @return The column value of the x position.
+	 */
+	public int colFromX(int x){
 		double xCol = (double)x/(double)squareSize;
 		if (xCol > contents.length-1){
 			return contents.length-1;
@@ -265,7 +349,12 @@ public class Room {
 		return (int)xCol;
 	}
 	
-	public int getRow(int y){
+	/**
+	 * Converts a y position to a row value.
+	 * @param y The pixel y position
+	 * @return The row value of the y position.
+	 */
+	public int rowFromY(int y){
 		double yRow = (double)y/(double)squareSize;
 		if (yRow > contents[0].length-1){
 			return contents[0].length-1;
@@ -350,39 +439,77 @@ public class Room {
 		return rotate;
 	}
 
+	/**
+	 * Adds a player to this room.
+	 * @param player The player to add
+	 */
 	public void addPlayer(Player player) {
 		players.add(player);
 	}
 	
+	/**
+	 * Removes a player from the room.
+	 * @param player The player to remove
+	 */
 	public void removePlayer(Player player){
 		players.remove(player);
 	}
 	
+	/**
+	 * Adds a projectile to this room.
+	 * @param p The projectile to add
+	 */
 	public void addProjectile(Projectile p){
 		projectiles.add(p);
 	}
 	
+	/**
+	 * Removes a projectile from this room
+	 * @param p The projectile to remove
+	 */
 	public void removeProjectile(Projectile p){
 		projectiles.remove(p);
 	}
 
+	/**
+	 * Get the item at a given (x,y) co-ordinate.
+	 * @param x The x position of the item
+	 * @param y The y position of the item
+	 * @return The Item at position (x,y)
+	 */
 	public Item itemAt(int x, int y) {
-		return contents[getCol(x)][getRow(y)];
+		return contents[colFromX(x)][rowFromY(y)];
 	}
-
+	
+	/**
+	 * Gets the array of the unscaled background and foreground images for this room
+	 * @return The array of room images
+	 */
 	public Image[][] getImages() {
 		return images;
 	}
 	
+	/**
+	 * sets the array of scaled background and foregrouns images for this room
+	 * @param newImages The new array of images to set
+	 */
 	public void setScaledImages(Image[][] newImages){
 		scaledImages = newImages;
 	}
 
+	/**
+	 * Gets the array of Items contained in this room
+	 * @return the contents array
+	 */
 	public Item[][] getContents() {
 		return contents;
 	}
 
 	//FIXME: Do we want to hand back the actual collection, or a copy?
+	/**
+	 * Gets the Set of players in this room
+	 * @return The Set of players
+	 */
 	public Set<Player> getPlayers() {
 		return players;
 	}
@@ -395,15 +522,18 @@ public class Room {
 		try {
 			for (Projectile p : projectiles){
 				p.update();
+				// check if projectile is outside room bounds
 				if (p.getX() < 0 || p.getX() > width || p.getY() < 0 || p.getY() > height){
 					projectiles.remove(p);
 				}
 			}
-		} catch (ConcurrentModificationException e){
-			
-		}
+		} catch (ConcurrentModificationException e){}
 	}
 	
+	/**
+	 * Gets the Set of projectiles in this room
+	 * @return the Set of projectiles
+	 */
 	public Set<Projectile> getProjectiles() {
 		return projectiles;
 	}
