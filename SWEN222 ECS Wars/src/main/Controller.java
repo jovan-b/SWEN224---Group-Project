@@ -152,8 +152,10 @@ public class Controller implements KeyListener, MouseListener{
 		player = new DavePlayer(room, 48, 48);
 		room.addPlayer(player);
 		gui = new GUIFrame(this, player);
+		player.setCanvas(gui.canvas);
 		
 		SoundManager.playSong("test.wav");
+		
 	}
 
 	/**

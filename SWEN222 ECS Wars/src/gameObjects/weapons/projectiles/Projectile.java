@@ -20,6 +20,13 @@ public interface Projectile {
 	public void update();
 	
 	/**
+	 * getters for the x and y pos of the projectile - for drawing
+	 * @return
+	 */
+	public int getX();
+	public int getY();
+	
+	/**
 	 * Creates a new instance of this projectile which heads 
 	 * in a given direction
 	 * 

@@ -80,5 +80,15 @@ public abstract class BasicProjectile implements Projectile {
 	public Rectangle getBoundingBox(){
 		return new Rectangle(x-hitBox, y-hitBox, hitBox*2, hitBox*2);
 	}
+	
+	@Override
+	public int getX(){
+		return x;
+	}
+	
+	@Override
+	public int getY(){
+		return y;
+	}
 
 }

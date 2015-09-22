@@ -5,6 +5,7 @@ import gameObjects.weapons.projectiles.Projectile;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -150,6 +151,19 @@ public class Room {
 				}
 			}
 		}
+		
+		// draw projectiles
+		int x;
+		int y;
+		g.setColor(Color.GREEN);
+		Set<Projectile> toDraw = projectiles;
+		try {
+			for (Projectile p : toDraw){
+				x = drawX+(p.getX()*viewScale);
+				y = drawY+(p.getY()*viewScale);
+				g.fillRect(x-(1*viewScale), y-(5*viewScale), 2*viewScale, 2*viewScale);
+			}
+		} catch (ConcurrentModificationException e){}
 		
 		// Draw foreground Image
 		g.drawImage(scaledImages[viewDirection][1], drawX, drawY-(squareSize*viewScale*3), c);
@@ -336,8 +350,15 @@ public class Room {
 	 */
 	public void update() {
 		//Update the projectiles
-		for (Projectile p : projectiles){
-			p.update();
+		try {
+			for (Projectile p : projectiles){
+				p.update();
+				if (p.getX() < 0 || p.getX() > width || p.getY() < 0 || p.getY() > height){
+					projectiles.remove(p);
+				}
+			}
+		} catch (ConcurrentModificationException e){
+			
 		}
 	}
 	

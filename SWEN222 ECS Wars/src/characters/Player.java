@@ -51,6 +51,8 @@ public abstract class Player implements Drawable {
 	protected int animCounter; // counts each frame the player has moved
 	protected Room currentRoom;
 	protected int currentRow; // view dependant row - for drawing correctly
+	
+	protected GUICanvas canvas;
 
 
 	// Player sprite images
@@ -71,6 +73,10 @@ public abstract class Player implements Drawable {
 		this.animModifier = 1;
 		this.animCounter = 0;
 		this.currentWeapon = new PaintballGun();
+	}
+	
+	public void setCanvas(GUICanvas canvas){
+		this.canvas = canvas;
 	}
 	
 	/**
@@ -96,10 +102,10 @@ public abstract class Player implements Drawable {
 	 * @param y
 	 */
 	public void shoot(int x, int y) {
-		double theta = Player.angleBetweenPlayerAndMouse(this.posX, this.posY,
+		double theta = Player.angleBetweenPlayerAndMouse(canvas.getWidth()/2, canvas.getHeight()/2,
 				x, y);
 		
-		currentWeapon.fire(this, theta);
+		currentRoom.addProjectile(currentWeapon.fire(this, theta));
 	}
 
 	/**
@@ -344,9 +350,14 @@ public abstract class Player implements Drawable {
 	public static double angleBetweenPlayerAndMouse(double point1X, double point1Y, 
 	        double point2X, double point2Y) {
 
-	    double angle1 = Math.atan2(point1Y - 0, point1X - 0);
-	    double angle2 = Math.atan2(point2Y - 0, point2X - 0);
-
-	    return angle1 - angle2; 
+//	    double angle1 = Math.atan2(point1Y - 0, point1X - 0);
+//	    double angle2 = Math.atan2(point2Y - 0, point2X - 0);
+//
+//	    return angle1 - angle2; 
+		
+		double dy = point2Y-point1Y;
+		double dx = point2X-point1X;
+		double theta = Math.atan2(dy,dx);
+		return theta;
 	}
 }
