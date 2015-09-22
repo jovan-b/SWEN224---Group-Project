@@ -29,9 +29,9 @@ public class Controller implements KeyListener, MouseListener{
 	public static final double FRAME_RATE = 1.0/60;	//a 60th of a second
 	public boolean isRunning = false;
 
-	GUIFrame gui;
-	Player player;
-	Set<Room> rooms;
+	private GUIFrame gui;
+	private Player player;
+	private Set<Room> rooms;
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
 	private int[] mouseLocation = new int[2];	//position of mouse if it is being clicked
@@ -274,6 +274,13 @@ public class Controller implements KeyListener, MouseListener{
 		mouseLocation = new int[2];
 	}
 
+	/**
+	 * Returns the player
+	 * @return
+	 */
+	public Player getPlayer(){
+		return player;
+	}
 	
 	public static void main(String[] args){
 		new Controller();

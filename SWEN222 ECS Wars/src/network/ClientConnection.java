@@ -38,7 +38,9 @@ public class ClientConnection extends Thread implements KeyListener{
 			input = new DataInputStream(socket.getInputStream());
 			output = new DataOutputStream(socket.getOutputStream());
 			
-			
+			//Display the game
+			Controller controller = new Controller();
+			new GUIFrame(controller, controller.getPlayer());
 			
 			//Keep running the game until the player disconnects or loses connection to the server
 			boolean disconnect = false;
