@@ -29,6 +29,9 @@ public interface Projectile {
 	public void setRow(int x);
 	public int getRow();
 	
+	public boolean isActive();
+	public void setActive(boolean active);
+	
 	/**
 	 * Creates a new instance of this projectile which heads 
 	 * in a given direction

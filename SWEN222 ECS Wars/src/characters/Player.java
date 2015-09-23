@@ -103,7 +103,7 @@ public abstract class Player implements Drawable {
 		if(counter != 0){
 			++counter;
 		}
-		if(getFirerate() >= counter){
+		if(getFirerate() <= counter){
 			counter = 0;
 		}
 	}

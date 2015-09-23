@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -520,15 +521,23 @@ public class Room {
 	 */
 	public void update() {
 		//Update the projectiles
-		try {
-			for (Projectile p : projectiles){
-				p.update();
-				// check if projectile is outside room bounds
-				if (p.getX() < 0 || p.getX() > width || p.getY() < 0 || p.getY() > height){
-					projectiles.remove(p);
-				}
+		Iterator<Projectile> iter = projectiles.iterator();
+		
+		while(iter.hasNext()){
+			Projectile p = iter.next();
+			
+			p.update();
+			// check if projectile is outside room bounds
+			if (p.getX() < 0 || p.getX() > width || p.getY() < 0 || p.getY() > height){
+				p.setActive(false);
 			}
-		} catch (ConcurrentModificationException e){}
+			
+			//Remove the projectile if it's inactive
+			if (!p.isActive()){
+				iter.remove();
+			}
+		}
+		
 	}
 	
 	/**

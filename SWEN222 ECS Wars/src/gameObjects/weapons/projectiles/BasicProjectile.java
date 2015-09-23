@@ -17,6 +17,7 @@ public abstract class BasicProjectile implements Projectile {
 	//The owner of the projectile
 	private Player player;
 	private Room room;
+	private boolean isActive;
 	
 	private int x;
 	private int y;
@@ -38,6 +39,7 @@ public abstract class BasicProjectile implements Projectile {
 		x = -1;
 		y = -1;
 		theta = Double.NaN;
+		isActive = false;
 	}
 	
 	/**
@@ -49,10 +51,10 @@ public abstract class BasicProjectile implements Projectile {
 	protected BasicProjectile(Player p, int x, int y, double theta){
 		this.player = p;
 		this.room = p.getCurrentRoom();
-		
 		this.x = x;
 		this.y = y;
 		this.theta = theta;
+		this.isActive = true;
 	}
 
 	@Override
@@ -66,14 +68,14 @@ public abstract class BasicProjectile implements Projectile {
 			if (p == player){continue;} //Players can't shoot themselves
 			if (p.getBoundingBox().contains(this.getBoundingBox())){
 				p.modifyHealth(damage);
-				room.removeProjectile(this);
+				this.setActive(false);
 				return;
 			}
 		}
 		
 		//Check to see if we've collided with an object
 		if (!room.itemAt(x, y).canWalk()){
-			room.removeProjectile(this);
+			this.setActive(false);
 		}
 	}
 	
@@ -98,6 +100,14 @@ public abstract class BasicProjectile implements Projectile {
 
 	public void setRow(int row) {
 		this.row = row;
+	}
+	
+	public boolean isActive(){
+		return isActive;
+	}
+	
+	public void setActive(boolean active){
+		this.isActive = active;
 	}
 
 }
