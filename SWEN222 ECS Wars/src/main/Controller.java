@@ -29,7 +29,7 @@ import characters.DavePlayer;
 public class Controller implements KeyListener, MouseListener, MouseMotionListener{
 	
 	public static final double FRAME_RATE = 1.0/60;	//a 60th of a second
-	public boolean isRunning = false;
+	private boolean isRunning = false;
 
 	GUIFrame gui;
 	Player player;
@@ -128,7 +128,9 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 			player.move("down");
 		}
 		if(isLeftMousePressed()){
-			player.shoot(mouseLocation[0], mouseLocation[1]);
+			if(player.canShoot()){
+				player.shoot(mouseLocation[0], mouseLocation[1]);
+			}
 		}
 	}
 	
