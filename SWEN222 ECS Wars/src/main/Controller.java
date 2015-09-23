@@ -166,7 +166,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		gui = new GUIFrame(this, player, key, mouse);
 		player.setCanvas(gui.canvas);
 		
-		SoundManager.playSong("test.wav");
+		SoundManager.playSong("battle_1.wav");
 	}
 
 	/**
