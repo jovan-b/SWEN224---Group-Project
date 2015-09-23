@@ -36,6 +36,8 @@ public abstract class Player implements Drawable {
 	protected Weapon currentWeapon;
 	protected Item[] inventory = new Item[INVENTORY_SIZE];
 	protected int health = 50;
+	protected int counter = 0;	//used to keep track of when player can fire
+								//is 0 when player can fire
 	
 
 	//position describing the centre of a player object
@@ -92,9 +94,21 @@ public abstract class Player implements Drawable {
 	 */
 	public void update() {
 		currentRoom.update();
+		updateCounter();
 		//TODO: add collision detection with other players
 		//TODO: check if dead and drop items/lose points/etc.
 	}
+
+	private void updateCounter() {
+		if(counter != 0){
+			++counter;
+		}
+		if(getFirerate() >= counter){
+			counter = 0;
+		}
+	}
+
+	abstract int getFirerate();
 
 	/**
 	 * Shoots the player's current weapon
@@ -104,7 +118,7 @@ public abstract class Player implements Drawable {
 	public void shoot(int x, int y) {
 		double theta = Player.angleBetweenPlayerAndMouse(canvas.getWidth()/2, canvas.getHeight()/2,
 				x, y);
-		
+		++counter;
 		currentRoom.addProjectile(currentWeapon.fire(this, theta));
 	}
 
@@ -359,5 +373,12 @@ public abstract class Player implements Drawable {
 		double dx = point2X-point1X;
 		double theta = Math.atan2(dy,dx);
 		return theta;
+	}
+
+	public boolean canShoot() {
+		if(counter  == 0){
+			return true;
+		}
+		return false;
 	}
 }
