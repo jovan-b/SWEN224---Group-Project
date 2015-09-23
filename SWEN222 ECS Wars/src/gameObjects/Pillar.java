@@ -17,7 +17,7 @@ public class Pillar implements Item {
 	
 	public Pillar() {
 		try {
-			image = ImageIO.read(new File("Resources"+File.separator+"Pillar.png"));
+			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Pillar.png"));
 			scaledImage = image;
 		} catch (IOException e) {
 			System.out.println("Failed to read Pillar image file: " + e.getMessage());

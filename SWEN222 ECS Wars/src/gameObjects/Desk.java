@@ -20,9 +20,9 @@ public class Desk implements Item {
 	public Desk(boolean horizontal) {
 		this.horizontal = horizontal;
 		try {
-			imageHz = ImageIO.read(new File("Resources"+File.separator+"DeskHor.png"));
+			imageHz = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"DeskHor.png"));
 			scaledImageHz = imageHz;
-			imageVt = ImageIO.read(new File("Resources"+File.separator+"DeskVer.png"));
+			imageVt = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"DeskVer.png"));
 			scaledImageVt = imageVt;
 		} catch (IOException e) {
 			System.out.println("Failed to read Desk image file: " + e.getMessage());

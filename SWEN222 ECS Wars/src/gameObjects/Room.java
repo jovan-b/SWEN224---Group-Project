@@ -69,7 +69,6 @@ public class Room {
 				int fileCol = 0;
 				for(int c=0; c<cols; c++){
 					String code = line.substring(fileCol, fileCol+2);
-					System.out.println(code);
 					contents[c][r] = itemFromCode(code);
 					fileCol+=2;
 				}

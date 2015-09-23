@@ -26,9 +26,9 @@ public class Photocopier implements Item {
 	public Photocopier(boolean horizontal) {
 		this.horizontal = horizontal;
 		try {
-			imageHz = ImageIO.read(new File("Resources"+File.separator+"PhotocopierHor.png"));
+			imageHz = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"PhotocopierHor.png"));
 			scaledImageHz = imageHz;
-			imageVt = ImageIO.read(new File("Resources"+File.separator+"PhotocopierVer.png"));
+			imageVt = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"PhotocopierVer.png"));
 			scaledImageVt = imageVt;
 		} catch (IOException e) {
 			System.out.println("Failed to read Photocopier image file: " + e.getMessage());
