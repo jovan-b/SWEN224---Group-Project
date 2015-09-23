@@ -57,7 +57,7 @@ public class Room {
 	 */
 	private void parseFile() {
 		try {
-			Scanner s = new Scanner(new File("Resources"+File.separator+name+".txt"));
+			Scanner s = new Scanner(new File("Resources"+File.separator+"Rooms"+File.separator+name+".txt"));
 			description = s.nextLine();
 			cols = Integer.parseInt(s.nextLine());
 			rows = Integer.parseInt(s.nextLine());
@@ -99,17 +99,17 @@ public class Room {
 	 */
 	private void loadImages() {
 		try {
-			images[0][0] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"NorthBase.png"));
-			images[0][1] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"NorthTop.png"));
+			images[0][0] = ImageIO.read(new File("Resources"+File.separator+"Rooms"+File.separator+name+File.separator+"NorthBase.png"));
+			images[0][1] = ImageIO.read(new File("Resources"+File.separator+"Rooms"+File.separator+name+File.separator+"NorthTop.png"));
 			
-			images[1][0] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"EastBase.png"));
-			images[1][1] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"EastTop.png"));
+			images[1][0] = ImageIO.read(new File("Resources"+File.separator+"Rooms"+File.separator+name+File.separator+"EastBase.png"));
+			images[1][1] = ImageIO.read(new File("Resources"+File.separator+"Rooms"+File.separator+name+File.separator+"EastTop.png"));
 			
-			images[2][0] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"SouthBase.png"));
-			images[2][1] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"SouthTop.png"));
+			images[2][0] = ImageIO.read(new File("Resources"+File.separator+"Rooms"+File.separator+name+File.separator+"SouthBase.png"));
+			images[2][1] = ImageIO.read(new File("Resources"+File.separator+"Rooms"+File.separator+name+File.separator+"SouthTop.png"));
 			
-			images[3][0] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"WestBase.png"));
-			images[3][1] = ImageIO.read(new File("Resources"+File.separator+name+File.separator+"WestTop.png"));
+			images[3][0] = ImageIO.read(new File("Resources"+File.separator+"Rooms"+File.separator+name+File.separator+"WestBase.png"));
+			images[3][1] = ImageIO.read(new File("Resources"+File.separator+"Rooms"+File.separator+name+File.separator+"WestTop.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading room images: "+e.getMessage());
 		}
