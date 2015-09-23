@@ -14,7 +14,9 @@ public interface Item extends Drawable {
 
 	public boolean canWalk();
 	
-	public int yOffset();
+	public int yOffset(int viewDirection);
+
+	public int xOffset(int viewDirection);
 
 	public void setScaledImage(int viewDirection, Image scaledImage);
 	public Image getScaledImage(int viewDirection);

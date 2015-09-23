@@ -35,7 +35,12 @@ public class Floor implements Item {
 	}
 
 	@Override
-	public int yOffset() {
+	public int xOffset(int viewDirection) {
+		return 0;
+	}
+
+	@Override
+	public int yOffset(int viewDirection) {
 		return 0;
 	}
 

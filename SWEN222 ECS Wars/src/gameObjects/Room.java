@@ -85,10 +85,12 @@ public class Room {
 	 */
 	private Item itemFromCode(char code){
 		switch(code){
+		case '_' : return new Floor();
 		case '#' : return new Wall();
 		case 'P' : return new Pillar();
-		case '_' : return new Floor();
-		default: return null;
+		case 'T' : return new Desk(true);
+		case 't' : return new Desk(false);
+		default: return new Floor(); // if no match, safely return a floor
 		}
 	}
 
@@ -192,8 +194,8 @@ public class Room {
 				// draw item at current square
 				if(!(item instanceof Floor) && !(item instanceof Wall)){
 					image = rotated[col][row].getScaledImage(viewDirection);
-					g.drawImage(image, drawX+(col*squareSize*viewScale), 
-							drawY+(row*squareSize*viewScale)-(item.yOffset()*squareSize*viewScale), c);
+					g.drawImage(image, drawX+(col*squareSize*viewScale)-(item.xOffset(viewDirection)*squareSize*viewScale), 
+							drawY+(row*squareSize*viewScale)-(item.yOffset(viewDirection)*squareSize*viewScale), c);
 				}
 				// draw projectile at this row
 				for (Projectile p : projectiles){

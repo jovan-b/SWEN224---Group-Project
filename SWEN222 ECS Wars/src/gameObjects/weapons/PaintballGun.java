@@ -26,7 +26,13 @@ public class PaintballGun extends Weapon {
 	}
 
 	@Override
-	public int yOffset() {
+	public int xOffset(int viewDirection) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int yOffset(int viewDirection) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
