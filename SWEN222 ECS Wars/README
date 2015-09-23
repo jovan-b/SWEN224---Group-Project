@@ -1,0 +1,13 @@
+Setting up the Project Workspace for JavaFX:
+
+Eclipse has some problems with the JavaFX library (which is a default part of Java 8)
+so in order to correctly set up our work environment, we need to change some things.
+
+Step 1: Disable Errors with restricted access
+	Go to Project > Properties > Java Compiler > Errors/Warnings
+	You may either check "Project specific settings", or click "Configure Workspace Settings"
+	Scroll down until you find "Deprecated and Restricted API"
+	Change Forbidden Reference (Access Rules) to anything other than "Error", preferably "Ignore"
+	
+Step 2: Include the Resources folder into Build Path
+	Right Click Resources folder > Build Path > Add to Build Path

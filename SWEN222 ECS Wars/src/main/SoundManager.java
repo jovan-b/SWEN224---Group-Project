@@ -2,6 +2,15 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+
+import javafx.animation.Transition;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.embed.swing.JFXPanel;
+import javafx.util.Duration;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -10,139 +19,190 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+/**
+ * A class that manages the playing of music tracks, and sound files.
+ * 
+ * @author Carl
+ *
+ */
 public final class SoundManager {
-	public static final String SONG_DIR = "Resources"+File.separator+"Sounds"+File.separator;
-	public static final float FADE_INCR = 0.05f;
-	public static final float MAX_VOLUME = -0f;
-	public static final float NO_VOLUME = -50f;
+	public static final String SONG_DIR = "/Sounds/";
 	
-	private static float volume = MAX_VOLUME;
-	private static Clip track = null;
+	public static final double MAX_VOLUME = 1;
+	public static final double NO_VOLUME = 0;
+	
+	public static final long TRANSITION_DURATION = 1000; //Time in between songs, with no sound playing
+	public static final long FADE_IN_DURATION = 3000; //in ms
+	public static final long FADE_OUT_DURATION = 1500;
+	
+	private static MediaPlayer player;
+	private static double volume = MAX_VOLUME;
+	//private static Clip track = null;
+	
+	//We use this to set up the JavaFX environment
+	private static JFXPanel _init = null;
 	
 	private SoundManager(){
 		//prevent instantiation
 	}
 	
+	/**
+	 * Continuously play a provided song, stopping the current song if
+	 * there is one
+	 * 
+	 * @param name file name
+	 */
 	public static void playSong(String name){
-		boolean doDelay = track != null;
-		if (track != null){
-			//Fade the current song out
-			new FadeThread(track, volume, NO_VOLUME).start();
+		//Set up the JavaFX environment, if it hasn't already been set up
+		if (_init == null){
+			_init = new JFXPanel();
 		}
 		
-		try {
-			//Open the file
-			AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(SONG_DIR+name));
-			track = AudioSystem.getClip();
-			track.open(audioIn);
+		//If there's already a song playing, fade it out before starting the
+		//next song, otherwise just start the song
+		boolean playing = player != null;
+		if (playing){
+			player.setOnStopped(new Runnable(){
+				public void run(){
+					startSong(name, playing);
+				}
+			});
+			new FadeThread(player, FADE_OUT_DURATION, volume, NO_VOLUME).start();
 			
-			//Start the song, and fade it in if we need to
-			((FloatControl)track.getControl(FloatControl.Type.MASTER_GAIN)).setValue(doDelay ? NO_VOLUME : volume);
-			track.start();
-			track.loop(Clip.LOOP_CONTINUOUSLY);
-
-			if (doDelay){
-				new FadeThread(track, volume, MAX_VOLUME, (int)((volume-NO_VOLUME)/FADE_INCR*5)).start();
-			}
-		} catch (UnsupportedAudioFileException | IOException e) {
-			System.err.println("Could not find audio file "+name);
-			//e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			System.err.println("Error reading from audio stream");
-			e.printStackTrace();
+		} else {
+			startSong(name, playing);
 		}
 	}
 	
-	public static void playSound(String name){
-		try {
-			//open the file
-			AudioInputStream audioIn = AudioSystem.getAudioInputStream(SoundManager.class.getResource(name));
-			Clip clip = AudioSystem.getClip();
-			clip.open(audioIn);
-			
-			//start the clip
-			clip.start();
-		} catch (UnsupportedAudioFileException | IOException e) {
-			System.err.println("Could not find audio file "+name);
-			//e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			System.err.println("Error reading from audio stream");
-			e.printStackTrace();
-		}		
+	/**
+	 * Start the new song
+	 * 
+	 * This is in a separate method so we can time it with
+	 * stopping the previous song, if necessary
+	 * 
+	 * @param name filename
+	 * @param playing whether a previous song had been playing
+	 */
+	private static void startSong(String name, boolean playing){
+		//Find the sound file
+		URL dir = SoundManager.class.getResource(SONG_DIR+name);
+		if (dir == null){
+			System.err.println("Could not find resource "+name);
+			return;
+		}
+				
+		//Create the media components
+		Media media = new Media(dir.toString());
+		player = new MediaPlayer(media);
+		player.setCycleCount(MediaPlayer.INDEFINITE);
+				
+		//Fade the new song in
+		FadeThread ft = new FadeThread(player, FADE_IN_DURATION, NO_VOLUME, volume);
+		if (playing){ft.setDelay(TRANSITION_DURATION);}
+		player.setOnReady(ft);
 	}
 	
-	public static void test(){
-		new Thread(){
-			public void run(){
-				try{
-					Thread.sleep(10000);
-				} catch(Exception e){
-					
-				}
-				
-				SoundManager.playSong("happpy.wav");
-			}
-		}.start();
+	/**
+	 * Play the provided sound once
+	 * 
+	 * @param name file name
+	 */
+	public static void playSound(String name){
+		//Set up the JavaFX environment if it hasn't already been set up
+		if (_init == null){
+			_init = new JFXPanel();
+		}
+		
+		//Find the sound file
+		URL dir = SoundManager.class.getResource(SONG_DIR+name);
+		if (dir == null){
+			System.err.println("Could not find resource "+name);
+			return;
+		}
+		
+		//Create the media components, and start them
+		Media media = new Media(dir.toString());
+		MediaPlayer player = new MediaPlayer(media);
+		player.setVolume(volume);
+		player.play();
 	}
 	
 	
 	/**
-	 * Private class to slowly fade in and fade out songs
+	 * A class to slowly fade in and fade out songs
 	 * @author Carl
 	 *
 	 */
 	private static class FadeThread extends Thread {
-		private FloatControl volume;
-		private Clip clip;
-		private float start;
-		private float finish;
+		private long wait = 0;
 		
-		private int delay = -1;
+		private MediaPlayer player;
+		private long duration;
+		private double start;
+		private double finish;
 		
-		public FadeThread(Clip clip, float start, float finish){
-			this.clip = clip;
+		public FadeThread(MediaPlayer player, long duration, double start, double finish){
+			this.player = player;
+			this.duration = duration;
 			this.start = start;
 			this.finish = finish;
-			
-			this.volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 		}
 		
-		public FadeThread(Clip clip, float start, float finish, int delay){
-			this(clip, start, finish);
-			
-			this.delay = delay;
-		}
-		
-		@Override
 		public void run(){
-			//Cause this thread to wait if a delay has been provided
-			if (delay > 0){
-				try {Thread.sleep(delay);} 
-				catch (InterruptedException e) {}
+			if (duration > 0){
+				player.setVolume(start);
 			}
 			
-			//if start is less than finish
-			while (start < finish){
-				start += FADE_INCR;
-				volume.setValue(start);
+			//Wait, if a duration is present
+			if (wait > 0){
+				try {
+					Thread.sleep(wait);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			double diff = Math.abs(finish - start);
+			double modifier = start > finish ? diff : 0;
+			
+			//If the player hasn't started, start it
+			if (start == NO_VOLUME){
+				player.play();
+			}
+			
+			//Define the transition
+			Transition t = new Transition(){
+				{
+					setCycleDuration(Duration.millis(duration));
+				}
+
+				@Override
+				protected void interpolate(double arg0) {
+					player.setVolume(Math.abs(modifier-arg0*diff));
+				}
 				
-				try {Thread.sleep(10);} 
-				catch (InterruptedException e) {}
-			}
+			};
 			
-			//if finish is less than start
-			while (start > finish){
-				start -= FADE_INCR;
-				volume.setValue(start);
+			//Handle cleanup if this is a complete fade-out
+			t.setOnFinished(new EventHandler<ActionEvent>(){
+
+				@Override
+				public void handle(ActionEvent arg0) {
+					if (finish == NO_VOLUME){
+						player.stop();
+					}
+				}
 				
-				try {Thread.sleep(10);} 
-				catch (InterruptedException e) {}
-			}
+			});
 			
-			// if the finish is quiet enough, just stop it
-			if (finish <= NO_VOLUME){
-				clip.stop();
-			}
+			//Start the transition
+			t.play();
+		}
+		
+		public void setDelay(long ms){
+			this.wait = ms;
 		}
 	}
+	
+	
 }
