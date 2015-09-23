@@ -39,9 +39,9 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	private int[] mouseLocation = new int[2];	//position of mouse if it is being clicked
 												//mouseLocation[0] is x
 												//mouseLocation[1] is y
-	
+		
 	public Controller(){
-		initialise(this, this);
+		initialise(this, this, this);
 		run(FRAME_RATE);
 	}
 	
@@ -49,7 +49,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	 * Controller constructor for a multiplayer client
 	 */
 	public Controller(ClientConnection client){
-		initialise(client, client);
+		initialise(client, client, client);
 		run(FRAME_RATE);
 	}
 	
@@ -156,14 +156,14 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	/**
 	 * Initialise the fields of this class
 	 */
-	private void initialise(KeyListener key, MouseListener mouse) {
+	private void initialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2) {
 		isRunning = true;
 		rooms = new HashSet<>();
 		Room room = new Room("Classroom");
 		rooms.add(room);
 		player = new DavePlayer(room, 2*24, 2*24);
 		room.addPlayer(player);
-		gui = new GUIFrame(this, player, key, mouse);
+		gui = new GUIFrame(this, player, key, mouse, mouse2);
 		player.setCanvas(gui.canvas);
 		
 		SoundManager.playSong("battle_1.mp3");
@@ -300,8 +300,6 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		mouseLocation[0] = e.getX();
-		mouseLocation[1] = e.getY();
 	}
 
 }

@@ -4,10 +4,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+
 import main.Controller;
 
 /**
@@ -18,7 +20,7 @@ import main.Controller;
  * @author Jovan Bogoievski
  *
  */
-public class ClientConnection extends Thread implements KeyListener, MouseListener{
+public class ClientConnection extends Thread implements KeyListener, MouseListener, MouseMotionListener{
 
 	private Socket socket;
 	private DataInputStream input;
@@ -117,6 +119,18 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

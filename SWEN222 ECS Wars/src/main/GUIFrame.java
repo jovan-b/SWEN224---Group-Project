@@ -4,6 +4,7 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.*;
 
@@ -28,10 +29,11 @@ public class GUIFrame extends JFrame {
 	 * @param controller The game controller for this frame
 	 * @param player The current client's player
 	 */
-	public GUIFrame(Controller controller, Player player, KeyListener key, MouseListener mouse){
+	public GUIFrame(Controller controller, Player player, KeyListener key, MouseListener mouse, MouseMotionListener mouse2){
 		super("ECS Wars");
 		canvas = new GUICanvas(this, player);
 		canvas.addMouseListener(mouse);
+		canvas.addMouseMotionListener(mouse2);
 		setLayout(new BorderLayout());
 		add(canvas, BorderLayout.CENTER);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
