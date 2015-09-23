@@ -49,11 +49,11 @@ public interface Projectile {
 	 */
 	public Rectangle getBoundingBox();
 	
-	public static int xDiff(double theta, int speed){
-		return (int)(Math.cos(theta)*speed);
+	public static double xDiff(double theta, int speed){
+		return Math.cos(theta)*speed;
 	}
 	
-	public static int yDiff(double theta, int speed){
-		return (int)(Math.sin(theta)*speed);
+	public static double yDiff(double theta, int speed){
+		return Math.sin(theta)*speed;
 	}
 }

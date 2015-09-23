@@ -118,6 +118,9 @@ public abstract class Player implements Drawable {
 	public void shoot(int x, int y) {
 		double theta = Player.angleBetweenPlayerAndMouse(canvas.getWidth()/2, canvas.getHeight()/2,
 				x, y);
+		
+		//Correct theta based on view direction
+		theta += Math.toRadians(90)*viewDirection;
 		++counter;
 		currentRoom.addProjectile(currentWeapon.fire(this, theta));
 	}
@@ -372,6 +375,7 @@ public abstract class Player implements Drawable {
 		double dy = point2Y-point1Y;
 		double dx = point2X-point1X;
 		double theta = Math.atan2(dy,dx);
+
 		return theta;
 	}
 

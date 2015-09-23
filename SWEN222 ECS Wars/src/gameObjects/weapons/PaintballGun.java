@@ -1,16 +1,25 @@
 package gameObjects.weapons;
 
 import gameObjects.weapons.projectiles.PaintBall;
+import gameObjects.weapons.projectiles.Projectile;
 
 import java.awt.Graphics;
 import java.awt.Image;
 
+import characters.Player;
 import main.GUICanvas;
 
 public class PaintballGun extends Weapon {
+	public static final double BULLET_SPREAD = 10;
 	
 	public PaintballGun(){
-		super(1, new PaintBall());
+		super(4, new PaintBall());
+	}
+	
+	@Override
+	public Projectile fire(Player p, double theta){
+		double spread = Math.toRadians((Math.random()*BULLET_SPREAD)-BULLET_SPREAD/2);
+		return super.fire(p, theta+spread);
 	}
 
 	@Override

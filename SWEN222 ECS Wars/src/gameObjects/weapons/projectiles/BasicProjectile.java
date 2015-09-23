@@ -19,8 +19,8 @@ public abstract class BasicProjectile implements Projectile {
 	private Room room;
 	private boolean isActive;
 	
-	private int x;
-	private int y;
+	private double x;
+	private double y;
 	private int row;
 	private int hitBox = 2;
 	private double theta;
@@ -59,9 +59,11 @@ public abstract class BasicProjectile implements Projectile {
 
 	@Override
 	public void update() {
-				
-		x += Projectile.xDiff(theta, speed);
-		y += Projectile.yDiff(theta, speed);
+		
+		double dx = Projectile.xDiff(theta, speed);
+		double dy = Projectile.yDiff(theta, speed);
+		x += dx;
+		y += dy;
 		
 		//Check to see if we've hit a player
 		for (Player p : room.getPlayers()){
@@ -74,24 +76,24 @@ public abstract class BasicProjectile implements Projectile {
 		}
 		
 		//Check to see if we've collided with an object
-		if (!room.itemAt(x, y).canWalk()){
+		if (!room.itemAt((int)x, (int)y).canWalk()){
 			this.setActive(false);
 		}
 	}
 	
 	@Override
 	public Rectangle getBoundingBox(){
-		return new Rectangle(x-hitBox, y-hitBox, hitBox*2, hitBox*2);
+		return new Rectangle((int)x-hitBox, (int)y-hitBox, hitBox*2, hitBox*2);
 	}
 	
 	@Override
 	public int getX(){
-		return x;
+		return (int)x;
 	}
 	
 	@Override
 	public int getY(){
-		return y;
+		return (int)y;
 	}
 
 	public int getRow() {
