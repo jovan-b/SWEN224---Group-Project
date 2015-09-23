@@ -106,7 +106,19 @@ public class Desk implements Item {
 
 	@Override
 	public void setScaledImage(int viewDirection, Image scaledImage) {
-		this.scaledImageHz = scaledImage;
+		if(this.horizontal){
+			// the desk is horizontal when facing north/south
+			switch(viewDirection){
+			case 0: case 2: this.scaledImageHz = scaledImage; return; // north/south
+			case 1: case 3: this.scaledImageVt = scaledImage; return; // east/west
+			}
+		} else {
+			// the desk is vertical when facing north/south
+			switch(viewDirection){
+			case 0: case 2: this.scaledImageVt = scaledImage; return; // north/south
+			case 1: case 3: this.scaledImageHz = scaledImage; return; // east/west
+			}
+		}
 	}
 
 	@Override

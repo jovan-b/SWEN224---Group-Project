@@ -161,7 +161,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		rooms = new HashSet<>();
 		Room room = new Room("Classroom");
 		rooms.add(room);
-		player = new DavePlayer(room, 48, 48);
+		player = new DavePlayer(room, 2*24, 2*24);
 		room.addPlayer(player);
 		gui = new GUIFrame(this, player, key, mouse);
 		player.setCanvas(gui.canvas);
