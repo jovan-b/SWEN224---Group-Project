@@ -9,23 +9,29 @@ import javax.imageio.ImageIO;
 
 import main.GUICanvas;
 
-public class Desk implements Item {
-	
+/**
+ * A photocopier item which can be interacted with.
+ * 2x1 image, 1x1 grid space.
+ * @author Sarah Dobie
+ *
+ */
+public class Photocopier implements Item {
+
 	private Image imageHz;
 	private Image imageVt;
 	private Image scaledImageHz;
 	private Image scaledImageVt;
 	private boolean horizontal; // true if the desk is horizontal when looking North
-	
-	public Desk(boolean horizontal) {
+
+	public Photocopier(boolean horizontal) {
 		this.horizontal = horizontal;
 		try {
-			imageHz = ImageIO.read(new File("Resources"+File.separator+"DeskHor.png"));
+			imageHz = ImageIO.read(new File("Resources"+File.separator+"PhotocopierHor.png"));
 			scaledImageHz = imageHz;
-			imageVt = ImageIO.read(new File("Resources"+File.separator+"DeskVer.png"));
+			imageVt = ImageIO.read(new File("Resources"+File.separator+"PhotocopierVer.png"));
 			scaledImageVt = imageVt;
 		} catch (IOException e) {
-			System.out.println("Failed to read Desk image file: " + e.getMessage());
+			System.out.println("Failed to read Photocopier image file: " + e.getMessage());
 		}
 	}
 
@@ -64,7 +70,7 @@ public class Desk implements Item {
 	@Override
 	public int xOffset(int viewDirection) {
 		if(this.horizontal){
-			// the desk is horizontal when facing north/south
+			// the item is horizontal when facing north/south
 			switch(viewDirection){
 			case 1: return 0; // EAST
 			case 2: return 1; // SOUTH
@@ -72,7 +78,7 @@ public class Desk implements Item {
 			default: return 0; // NORTH
 			}
 		} else {
-			// the desk is vertical when facing north/south
+			// the item is vertical when facing north/south
 			switch(viewDirection){
 			case 1: return 0; // EAST
 			case 2: return 0; // SOUTH
@@ -85,7 +91,7 @@ public class Desk implements Item {
 	@Override
 	public int yOffset(int viewDirection) {
 		if(this.horizontal){
-			// the desk is horizontal when facing north/south
+			// the item is horizontal when facing north/south
 			switch(viewDirection){
 			case 1: return 2; // EAST
 			case 2: return 1; // SOUTH
@@ -93,7 +99,7 @@ public class Desk implements Item {
 			default: return 1; // NORTH
 			}
 		} else {
-			// the desk is vertical when facing north/south
+			// the item is vertical when facing north/south
 			switch(viewDirection){
 			case 1: return 1; // EAST
 			case 2: return 2; // SOUTH
@@ -106,13 +112,13 @@ public class Desk implements Item {
 	@Override
 	public void setScaledImage(int viewDirection, Image scaledImage) {
 		if(this.horizontal){
-			// the desk is horizontal when facing north/south
+			// the item is horizontal when facing north/south
 			switch(viewDirection){
 			case 0: case 2: this.scaledImageHz = scaledImage; return; // north/south
 			case 1: case 3: this.scaledImageVt = scaledImage; return; // east/west
 			}
 		} else {
-			// the desk is vertical when facing north/south
+			// the item is vertical when facing north/south
 			switch(viewDirection){
 			case 0: case 2: this.scaledImageVt = scaledImage; return; // north/south
 			case 1: case 3: this.scaledImageHz = scaledImage; return; // east/west
@@ -123,13 +129,13 @@ public class Desk implements Item {
 	@Override
 	public Image getScaledImage(int viewDirection) {
 		if(this.horizontal){
-			// the desk is horizontal when facing north/south
+			// the item is horizontal when facing north/south
 			switch(viewDirection){
 			case 0: case 2: return scaledImageHz; // north/south
 			case 1: case 3: return scaledImageVt; // east/west
 			}
 		} else {
-			// the desk is vertical when facing north/south
+			// the item is vertical when facing north/south
 			switch(viewDirection){
 			case 0: case 2: return scaledImageVt; // north/south
 			case 1: case 3: return scaledImageHz; // east/west
@@ -137,6 +143,8 @@ public class Desk implements Item {
 		}
 		return scaledImageHz;
 	}
-	
-	
+
+
 }
+
+

@@ -66,9 +66,12 @@ public class Room {
 			// populate item array
 			for(int r=0; r<rows; r++){
 				String line = s.nextLine();
+				int fileCol = 0;
 				for(int c=0; c<cols; c++){
-					char code = line.charAt(c);
+					String code = line.substring(fileCol, fileCol+2);
+					System.out.println(code);
 					contents[c][r] = itemFromCode(code);
+					fileCol+=2;
 				}
 			}
 			s.close();
@@ -80,16 +83,16 @@ public class Room {
 	
 	/**
 	 * Converts a char code into an item.
-	 * @param code The char from a room file being parsed.
+	 * @param code The 2 char String from a room file being parsed.
 	 * @return A new Item according to the code.
 	 */
-	private Item itemFromCode(char code){
+	private Item itemFromCode(String code){
 		switch(code){
-		case '_' : return new Floor();
-		case '#' : return new Wall();
-		case 'P' : return new Pillar();
-		case 'T' : return new Desk(true);
-		case 't' : return new Desk(false);
+		case "__" : return new Floor();
+		case "##" : return new Wall();
+		case "PP" : return new Pillar();
+		case "Dh" : return new Desk(true);
+		case "Dv" : return new Desk(false);
 		default: return new Floor(); // if no match, safely return a floor
 		}
 	}
