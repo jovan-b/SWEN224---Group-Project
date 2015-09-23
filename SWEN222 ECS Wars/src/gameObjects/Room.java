@@ -5,6 +5,7 @@ import gameObjects.weapons.projectiles.Projectile;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -33,7 +34,7 @@ public class Room {
 	private int width;
 	private int height;
 	
-	private Set<Projectile> projectiles = new HashSet<Projectile>();
+	private Set<Projectile> projectiles = Collections.synchronizedSet(new HashSet<Projectile>());
 	private Set<Player> players = new HashSet<>();
 	
 	/**
