@@ -2,7 +2,6 @@ package characters;
 
 
 import gameObjects.Room;
-import main.GUICanvas;
 
 import java.awt.Image;
 import java.io.File;
