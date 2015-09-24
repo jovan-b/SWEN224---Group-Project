@@ -128,9 +128,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 			player.move("down");
 		}
 		if(isLeftMousePressed()){
-			if(player.canShoot()){
-				player.shoot(mouseLocation[0], mouseLocation[1]);
-			}
+			player.shoot(mouseLocation[0], mouseLocation[1]);
 		}
 	}
 	
