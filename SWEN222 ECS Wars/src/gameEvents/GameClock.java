@@ -47,7 +47,7 @@ public final class GameClock {
 				}
 			}
 			
-		}, 0, CLOCK_TICK);
+		}, CLOCK_TICK, CLOCK_TICK);
 	}
 	
 	/**
@@ -74,8 +74,23 @@ public final class GameClock {
 		}, delay);
 	}
 	
+	/**
+	 * Stops the clock timer
+	 */
+	public void stop(){
+		clockTimer.cancel();
+	}
+	
+	public void reset(){
+		time = 0;
+	}
+	
 	public int getTime(){
 		return time;
+	}
+	
+	public void setTime(int time){
+		this.time = time;
 	}
 	
 	/**

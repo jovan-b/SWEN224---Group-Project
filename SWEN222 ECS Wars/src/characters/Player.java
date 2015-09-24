@@ -5,6 +5,9 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 import main.GUICanvas;
+import gameEvents.Event;
+import gameEvents.GameClock;
+import gameEvents.RespawnEvent;
 import gameObjects.Compass;
 import gameObjects.Door;
 import gameObjects.Item;
@@ -23,8 +26,7 @@ import gameObjects.weapons.Weapon;
  *
  */
 public abstract class Player {
-	
-	public static final int FIRERATE = 4;	//projectiles per second
+	public static final int RESPAWN_TIME = 3000; //3 seconds
 	public static final int BASE_SPEED = 2;	//pixels per frame
 	public static final int BASE_HEIGHT = 50;
 	public static final int BASE_WIDTH = 30;
@@ -160,6 +162,16 @@ public abstract class Player {
 	public void modifyHealth(int amt){
 		//TODO: Check that health hasn't gone above a maximum
 		health += amt;
+		
+		//Player is dead
+		if (health < 0){
+			currentRoom.removePlayer(this); //Make the player invisible
+			
+			//Schedule a respawn event
+			//TODO: Change this to respawn somewhere that isn't the tile they died on
+			Event respawn = new RespawnEvent(this, currentRoom, posX, posY);
+			GameClock.getInstance().scheduleEvent(respawn , RESPAWN_TIME);
+		}
 	}
 
 	// TODO replace this

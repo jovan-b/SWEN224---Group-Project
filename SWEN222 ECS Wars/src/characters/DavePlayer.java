@@ -17,9 +17,6 @@ import javax.imageio.ImageIO;
  *
  */
 public class DavePlayer extends Player {
-	
-	private int firerateMulti = 1;
-	private int firerate = FIRERATE * firerateMulti;	//projectiles per second
 
 	public DavePlayer(Room room, int posX, int posY){
 		super(room, posX, posY);
