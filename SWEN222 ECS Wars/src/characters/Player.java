@@ -51,7 +51,6 @@ public abstract class Player {
 	
 	protected Compass compass;
 	protected int lastDirPressed;
-	protected int moveDir;
 	protected int animState; // the current animation frame
 	protected int animModifier; // flicks between 1 and -1 to loop animation
 	protected int animCounter; // counts each frame the player has moved
@@ -75,7 +74,6 @@ public abstract class Player {
 		this.posY = posY;
 		this.viewDirection = 0;
 		this.lastDirPressed = 2;
-		this.moveDir = 0;
 		this.animState = 0;
 		this.animModifier = 1;
 		this.animCounter = 0;
@@ -125,19 +123,31 @@ public abstract class Player {
 	public void move(String dir) {
 		moved(dir);
 		animate();
-		switch(viewDirection){
-		case 1:
-			moveEast(dir);
-			return;
-		case 2:
-			moveSouth(dir);
-			return;
-		case 3:
-			moveWest(dir);
-			return;
-		default :
-			moveNorth(dir);
-			return;
+		// Convert movement direction to global coordinates
+		int moveDir = convertDirection(lastDirPressed);
+		movePlayer(moveDir);
+	}
+	
+	/**
+	 * Moves the player relative to the global coordinates
+	 * @param dir Global direction to move
+	 */
+	private void movePlayer(int dir) {
+		tempX = posX;
+		tempY = posY;
+		switch(dir){
+		case 1: tempX += speed;
+			break;
+		case 3: tempX -= speed;
+			break;
+		case 2: tempY += speed;
+			break;
+		default: tempY -= speed;
+			break;
+		}
+		if (canMove(tempX, tempY)){
+			posX = tempX;
+			posY = tempY;
 		}
 	}
 	
@@ -178,82 +188,6 @@ public abstract class Player {
 		}
 		//System.out.println("Position: " + this.posX + " " + this.posY);
 	}
-
-	private void moveNorth(String dir) {
-		tempX = posX;
-		tempY = posY;
-		switch(dir){
-		case "right": tempX += speed;
-			break;
-		case "left": tempX -= speed;
-			break;
-		case "down": tempY += speed;
-			break;
-		case "up": tempY -= speed;
-			break;
-		}
-		if (canMove(tempX, tempY)){
-			posX = tempX;
-			posY = tempY;
-		}
-	}
-	
-	private void moveEast(String dir) {
-		tempX = posX;
-		tempY = posY;
-		switch(dir){
-		case "right": tempY += speed;
-			break;
-		case "left": tempY -= speed;
-			break;
-		case "down": tempX -= speed;
-			break;
-		case "up": tempX += speed;
-			break;
-		}
-		if (canMove(tempX, tempY)){
-			posX = tempX;
-			posY = tempY;
-		}
-	}
-	
-	private void moveSouth(String dir) {
-		tempX = posX;
-		tempY = posY;
-		switch(dir){
-		case "right": tempX -= speed;
-			break;
-		case "left": tempX += speed;
-			break;
-		case "down": tempY -= speed;
-			break;
-		case "up": tempY += speed;
-			break;
-		}
-		if (canMove(tempX, tempY)){
-			posX = tempX;
-			posY = tempY;
-		}
-	}
-	
-	private void moveWest(String dir) {
-		tempX = posX;
-		tempY = posY;
-		switch(dir){
-		case "right": tempY -= speed;
-			break;
-		case "left": tempY += speed;
-			break;
-		case "down": tempX += speed;
-			break;
-		case "up": tempX -= speed;
-			break;
-		}
-		if (canMove(tempX, tempY)){
-			posX = tempX;
-			posY = tempY;
-		}
-	}
 	
 	/**
 	 * Returns whether the player can move to a square
@@ -287,12 +221,6 @@ public abstract class Player {
 		} else {
 			if (!(item instanceof Door)){inDoor = false;}
 		}
-//		if (!currentRoom.itemAt(x+hitBox, y+hitBox).canWalk() ||
-//				!currentRoom.itemAt(x+hitBox, y-hitBox).canWalk() ||
-//				!currentRoom.itemAt(x-hitBox, y-hitBox).canWalk() ||
-//				!currentRoom.itemAt(x-hitBox, y+hitBox).canWalk()){
-//			return false;
-//		}
 		if (inDoor){
 			item.use(this);
 		}
@@ -316,16 +244,8 @@ public abstract class Player {
 		this.tempY = newY;
 		
 		// Move player out of doorway - to prevent being stuck in the door
-		// TODO fix for other movement directions - moveDir set when moving?
-		// Lastpressed-viewdirection or something?
-		moveDir = lastDirPressed;
-		for (int i = 1; i <= viewDirection; i++){
-			moveDir++;
-			if (moveDir > 3){
-				moveDir = 0;
-			}
-		}
-		switch(moveDir){
+		int dir = convertDirection(lastDirPressed);
+		switch(dir){
 		case 1:
 			this.posX += 12;
 			this.tempX += 12;
@@ -343,6 +263,23 @@ public abstract class Player {
 			this.tempY -= 12;
 			break;
 		}
+	}
+
+	/**
+	 * Utility method to convert a direction relative to the view direction
+	 * back to the direction of the global coordinates
+	 * @param toConvert the input value to convert
+	 * @return the converted direction value
+	 */
+	private int convertDirection(int toConvert) {
+		int temp = toConvert;
+		for (int i = 1; i <= viewDirection; i++){
+			temp++;
+			if (temp > 3){
+				temp = 0;
+			}
+		}
+		return temp;
 	}
 
 	public int getX() {
