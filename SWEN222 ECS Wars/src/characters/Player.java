@@ -46,6 +46,9 @@ public abstract class Player {
 	protected int viewDirection;
 	protected int hitBox = 11;
 	
+	private int tempX;
+	private int tempY;
+	
 	protected Compass compass;
 	protected int lastDirMoved;
 	protected int animState; // the current animation frame
@@ -175,8 +178,8 @@ public abstract class Player {
 	}
 
 	private void moveNorth(String dir) {
-		int tempX = posX;
-		int tempY = posY;
+		tempX = posX;
+		tempY = posY;
 		switch(dir){
 		case "right": tempX += speed;
 			break;
@@ -194,8 +197,8 @@ public abstract class Player {
 	}
 	
 	private void moveEast(String dir) {
-		int tempX = posX;
-		int tempY = posY;
+		tempX = posX;
+		tempY = posY;
 		switch(dir){
 		case "right": tempY += speed;
 			break;
@@ -213,8 +216,8 @@ public abstract class Player {
 	}
 	
 	private void moveSouth(String dir) {
-		int tempX = posX;
-		int tempY = posY;
+		tempX = posX;
+		tempY = posY;
 		switch(dir){
 		case "right": tempX -= speed;
 			break;
@@ -232,8 +235,8 @@ public abstract class Player {
 	}
 	
 	private void moveWest(String dir) {
-		int tempX = posX;
-		int tempY = posY;
+		tempX = posX;
+		tempY = posY;
 		switch(dir){
 		case "right": tempY -= speed;
 			break;
@@ -305,6 +308,10 @@ public abstract class Player {
 		System.out.println("old position: " + this.posX + " " + this.posY);
 		this.posX = newX;
 		this.posY = newY;
+		
+		//Prevent the pesky move updates from overwriting the pos change
+		this.tempX = newX;
+		this.tempY = newY;
 		System.out.println("new position: " + this.posX + " " + this.posY);
 		System.out.println("passed position: " + newX + " " + newY);
 	}
