@@ -33,7 +33,7 @@ public class Door implements Item {
 		this.room2 = room2;
 		this.room2Col = room2Col;
 		this.room2Row = room2Row;
-		System.out.println("Adding to Door: " + parseCode + " " + room2.getName());
+		System.out.println("Connecting to Door: " + parseCode + " " + room2.getName());
 	}
 	
 	@Override

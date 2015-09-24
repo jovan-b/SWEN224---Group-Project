@@ -50,7 +50,8 @@ public abstract class Player {
 	private int tempY;
 	
 	protected Compass compass;
-	protected int lastDirMoved;
+	protected int lastDirPressed;
+	protected int moveDir;
 	protected int animState; // the current animation frame
 	protected int animModifier; // flicks between 1 and -1 to loop animation
 	protected int animCounter; // counts each frame the player has moved
@@ -73,7 +74,8 @@ public abstract class Player {
 		this.posX = posX;
 		this.posY = posY;
 		this.viewDirection = 0;
-		this.lastDirMoved = 2;
+		this.lastDirPressed = 2;
+		this.moveDir = 0;
 		this.animState = 0;
 		this.animModifier = 1;
 		this.animCounter = 0;
@@ -165,16 +167,16 @@ public abstract class Player {
 	// Sets the lastDirMoved variable according to the button pressed
 	private void moved(String dir) {
 		switch(dir){
-		case "up": lastDirMoved = 0;
+		case "up": lastDirPressed = 0;
 			break;
-		case "right": lastDirMoved = 1;
+		case "right": lastDirPressed = 1;
 			break;
-		case "down": lastDirMoved = 2;
+		case "down": lastDirPressed = 2;
 			break;
-		case "left": lastDirMoved = 3;
+		case "left": lastDirPressed = 3;
 			break;
 		}
-		System.out.println("Position: " + this.posX + " " + this.posY);
+		//System.out.println("Position: " + this.posX + " " + this.posY);
 	}
 
 	private void moveNorth(String dir) {
@@ -312,6 +314,29 @@ public abstract class Player {
 		//Prevent the pesky move updates from overwriting the pos change
 		this.tempX = newX;
 		this.tempY = newY;
+		
+		// Move player out of doorway - to prevent being stuck in the door
+		// TODO fix for other movement directions - moveDir set when moving?
+		moveDir = lastDirPressed;
+		switch(moveDir){
+		case 1:
+			this.posX += 12;
+			this.tempX += 12;
+			break;
+		case 2:
+			this.posY += 12;
+			this.tempY += 12;
+			break;
+		case 3:
+			this.posX -= 12;
+			this.tempX -= 12;
+			break;
+		default:
+			this.posY -= 12;
+			this.tempY -= 12;
+			break;
+		}
+		
 		System.out.println("new position: " + this.posX + " " + this.posY);
 		System.out.println("passed position: " + newX + " " + newY);
 	}
@@ -333,12 +358,12 @@ public abstract class Player {
 	 */
 	public void rotateViewRight() {
 		viewDirection--;
-		lastDirMoved++;
+		lastDirPressed++;
 		if (viewDirection < 0){
 			viewDirection = 3;
 		}
-		if (lastDirMoved > 3){
-			lastDirMoved = 0;
+		if (lastDirPressed > 3){
+			lastDirPressed = 0;
 		}
 		compass.rotate(90);
 	}
@@ -348,12 +373,12 @@ public abstract class Player {
 	 */
 	public void rotateViewLeft() {
 		viewDirection++;
-		lastDirMoved--;
+		lastDirPressed--;
 		if (viewDirection > 3){
 			viewDirection = 0;
 		}
-		if (lastDirMoved < 0){
-			lastDirMoved = 3;
+		if (lastDirPressed < 0){
+			lastDirPressed = 3;
 		}
 		compass.rotate(-90);
 	}
@@ -363,7 +388,7 @@ public abstract class Player {
 	}
 
 	public Image getImage() {		
-		return scaledSprites[lastDirMoved][animState];
+		return scaledSprites[lastDirPressed][animState];
 	}
 	
 	public void setRow(int row) {

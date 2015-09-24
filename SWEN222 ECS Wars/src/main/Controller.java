@@ -11,10 +11,13 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 import characters.Player;
@@ -174,8 +177,16 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	}
 	
 	private void setupRooms(){
-		rooms.add(new Room("Classroom", this));
-		rooms.add(new Room("SW Hallway", this));
+		try {
+			Scanner s = new Scanner(new File("Resources"+File.separator+"RoomIndex.txt"));
+			String roomName;
+			while (s.hasNextLine()){
+				roomName = s.nextLine();
+				rooms.add(new Room(roomName, this));
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("Error loading RoomIndex file: " + e.getMessage());
+		}
 	}
 
 	/**
