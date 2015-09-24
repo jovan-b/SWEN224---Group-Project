@@ -39,7 +39,7 @@ public final class GameClock {
 				
 				while(iter.hasNext()){
 					Event e = iter.next();
-					e.notify();
+					e.notify(time);
 					
 					if (e.isComplete()){
 						iter.remove();
