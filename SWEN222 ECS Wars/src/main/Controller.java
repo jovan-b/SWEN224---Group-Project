@@ -1,5 +1,6 @@
 package main;
 
+import gameObjects.Door;
 import gameObjects.Item;
 import gameObjects.Room;
 import network.ClientConnection;
@@ -10,8 +11,10 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import characters.Player;
@@ -33,7 +36,8 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 
 	GUIFrame gui;
 	Player player;
-	Set<Room> rooms;
+	List<Room> rooms;
+	Set<Door> doors;
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
 	private int[] mouseLocation = new int[2];	//position of mouse if it is being clicked
@@ -156,9 +160,10 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	 */
 	private void initialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2) {
 		isRunning = true;
-		rooms = new HashSet<>();
-		Room room = new Room("Classroom");
-		rooms.add(room);
+		rooms = new ArrayList<>();
+		doors = new HashSet<>();
+		setupRooms();
+		Room room = rooms.get(0); //FIXME
 		player = new DavePlayer(room, 2*24, 2*24);
 		room.addPlayer(player);
 		gui = new GUIFrame(this, player, key, mouse, mouse2);
@@ -166,6 +171,11 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		
 		SoundManager.playSong("battle_1.mp3");
 		SaveManager.saveGame(this, "test_save.xml");
+	}
+	
+	private void setupRooms(){
+		rooms.add(new Room("Classroom", this));
+		rooms.add(new Room("SW Hallway", this));
 	}
 
 	/**
@@ -299,6 +309,10 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+	}
+
+	public Set<Door> getDoors() {
+		return doors;
 	}
 
 }

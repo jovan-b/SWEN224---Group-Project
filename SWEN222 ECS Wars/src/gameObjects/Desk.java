@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import characters.Player;
 import main.GUICanvas;
 
 public class Desk implements Item {
@@ -30,7 +31,7 @@ public class Desk implements Item {
 	}
 
 	@Override
-	public void use() {
+	public void use(Player p) {
 		return;
 	}
 

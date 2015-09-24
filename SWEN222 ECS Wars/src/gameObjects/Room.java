@@ -15,6 +15,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 
 import characters.Player;
+import main.Controller;
 import main.GUICanvas;
 
 /**
@@ -37,17 +38,18 @@ public class Room {
 	
 	private Set<Projectile> projectiles = Collections.synchronizedSet(new HashSet<Projectile>());
 	private Set<Player> players = new HashSet<>();
+	private Set<Door> doors = new HashSet<>();
 	
 	/**
 	 * Constructor for class Room
 	 * @param roomName Name of room/file to parse.
 	 */
-	public Room(String roomName){
+	public Room(String roomName, Controller ctrl){
 		name = roomName;
 		images = new Image[4][2];
 		loadImages();
 		scaledImages = images;
-		parseFile();
+		parseFile(ctrl);
 		width = cols*squareSize;
 		height = rows*squareSize;
 	}
@@ -55,7 +57,7 @@ public class Room {
 	/**
 	 * Read room file and convert to array of items and other room data.
 	 */
-	private void parseFile() {
+	private void parseFile(Controller ctrl) {
 		try {
 			Scanner s = new Scanner(new File("Resources"+File.separator+"Rooms"+File.separator+name+".txt"));
 			description = s.nextLine();
@@ -69,7 +71,7 @@ public class Room {
 				int fileCol = 0;
 				for(int c=0; c<cols; c++){
 					String code = line.substring(fileCol, fileCol+2);
-					contents[c][r] = itemFromCode(code);
+					contents[c][r] = itemFromCode(code, ctrl, c, r);
 					fileCol+=2;
 				}
 			}
@@ -85,7 +87,14 @@ public class Room {
 	 * @param code The 2 char String from a room file being parsed.
 	 * @return A new Item according to the code.
 	 */
-	private Item itemFromCode(String code){
+	private Item itemFromCode(String code, Controller ctrl, int col, int row){
+		// test to see if the code is an integer: codes for a door
+		try{
+			Integer.parseInt(code);
+			return parseDoor(code, ctrl, col, row);
+		} catch(NumberFormatException e){}
+		
+		// code isn't an integer
 		switch(code){
 		case "__" : return new Floor();
 		case "##" : return new Wall();
@@ -98,6 +107,27 @@ public class Room {
 		case "CR" : return new Photocopier('R');
 		default: return new Floor(); // if no match, safely return a floor
 		}
+	}
+
+	private Item parseDoor(String doorCode, Controller ctrl, int col, int row) {
+		// Check if door object already exists in current room
+		for(Door d : doors){
+			if(d.getParseCode().equals(doorCode)){
+				return d;
+			}
+		}
+		// Check if door object exists in another room
+		for (Door d : ctrl.getDoors()){
+			if (d.getParseCode().equals(doorCode)){
+				d.addRoom2(this, col, row);
+				doors.add(d);
+				return d;
+			}
+		}
+		Door door = new Door(doorCode, true, this, col, row);
+		ctrl.getDoors().add(door);
+		doors.add(door);
+		return door;
 	}
 
 	/**

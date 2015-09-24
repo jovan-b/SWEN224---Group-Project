@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import main.GUICanvas;
 import gameObjects.Compass;
+import gameObjects.Door;
 import gameObjects.Item;
 import gameObjects.Room;
 import gameObjects.weapons.PaintballGun;
@@ -170,6 +171,7 @@ public abstract class Player {
 		case "left": lastDirMoved = 3;
 			break;
 		}
+		System.out.println("Position: " + this.posX + " " + this.posY);
 	}
 
 	private void moveNorth(String dir) {
@@ -255,11 +257,39 @@ public abstract class Player {
 	 * @return
 	 */
 	public boolean canMove(int x, int y){
-		if (!currentRoom.itemAt(x+hitBox, y+hitBox).canWalk() ||
-				!currentRoom.itemAt(x+hitBox, y-hitBox).canWalk() ||
-				!currentRoom.itemAt(x-hitBox, y-hitBox).canWalk() ||
-				!currentRoom.itemAt(x-hitBox, y+hitBox).canWalk()){
-			return false;
+		boolean inDoor = true;
+		// Checks top right corner
+		Item item = currentRoom.itemAt(x+hitBox, y+hitBox);
+		if (!item.canWalk()){return false;
+		} else {
+			if (!(item instanceof Door)){inDoor = false;}
+		}
+		// Checks bottom right corner
+		item = currentRoom.itemAt(x+hitBox, y-hitBox);
+		if (!item.canWalk()){return false;
+		} else {
+			if (!(item instanceof Door)){inDoor = false;}
+		}
+		// Checks bottom left corner
+		item = currentRoom.itemAt(x-hitBox, y-hitBox);
+		if (!item.canWalk()){return false;
+		} else {
+			if (!(item instanceof Door)){inDoor = false;}
+		}
+		// Checks top left corner
+		item = currentRoom.itemAt(x-hitBox, y+hitBox);
+		if (!item.canWalk()){return false;
+		} else {
+			if (!(item instanceof Door)){inDoor = false;}
+		}
+//		if (!currentRoom.itemAt(x+hitBox, y+hitBox).canWalk() ||
+//				!currentRoom.itemAt(x+hitBox, y-hitBox).canWalk() ||
+//				!currentRoom.itemAt(x-hitBox, y-hitBox).canWalk() ||
+//				!currentRoom.itemAt(x-hitBox, y+hitBox).canWalk()){
+//			return false;
+//		}
+		if (inDoor){
+			item.use(this);
 		}
 		return true;
 	}
@@ -268,8 +298,15 @@ public abstract class Player {
 		return currentRoom;
 	}
 
-	public void setCurrentRoom(Room currentRoom) {
-		this.currentRoom = currentRoom;
+	public void setCurrentRoom(Room newRoom, int newX, int newY) {
+		currentRoom.removePlayer(this);
+		newRoom.addPlayer(this);
+		this.currentRoom = newRoom;
+		System.out.println("old position: " + this.posX + " " + this.posY);
+		this.posX = newX;
+		this.posY = newY;
+		System.out.println("new position: " + this.posX + " " + this.posY);
+		System.out.println("passed position: " + newX + " " + newY);
 	}
 
 	public int getX() {

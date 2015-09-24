@@ -3,6 +3,7 @@ package gameObjects;
 import java.awt.Graphics;
 import java.awt.Image;
 
+import characters.Player;
 import main.GUICanvas;
 
 
@@ -17,7 +18,7 @@ public class Wall implements Item {
 	}
 
 	@Override
-	public void use() {
+	public void use(Player p) {
 	}
 
 	@Override

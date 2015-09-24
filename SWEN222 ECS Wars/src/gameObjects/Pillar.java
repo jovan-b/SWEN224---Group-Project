@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import characters.Player;
 import main.GUICanvas;
 
 public class Pillar implements Item {
@@ -25,7 +26,7 @@ public class Pillar implements Item {
 	}
 
 	@Override
-	public void use() {
+	public void use(Player p) {
 		return;
 	}
 

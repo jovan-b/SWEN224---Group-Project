@@ -2,13 +2,15 @@ package gameObjects;
 
 import java.awt.Image;
 
+import characters.Player;
+
 /**
  * Represents all in-game items eg. desks, weapons, books etc
  * @author 
  *
  */
 public interface Item {
-	public void use();
+	public void use(Player p);
 
 	public Image getImage(int viewDirection);
 

@@ -23,7 +23,7 @@ public class PaintballGun extends Weapon {
 	}
 
 	@Override
-	public void use() {
+	public void use(Player p) {
 		// TODO Auto-generated method stub
 
 	}
