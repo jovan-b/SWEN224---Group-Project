@@ -59,10 +59,4 @@ public class Backpack extends Container {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public void draw(Graphics g, GUICanvas c) {
-		// TODO Auto-generated method stub
-		
-	}
 }

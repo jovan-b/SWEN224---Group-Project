@@ -58,10 +58,4 @@ public class PaintballGun extends Weapon {
 		return null;
 	}
 
-	@Override
-	public void draw(Graphics g, GUICanvas c) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

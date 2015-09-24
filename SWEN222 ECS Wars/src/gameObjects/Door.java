@@ -5,48 +5,48 @@ import java.awt.Image;
 
 import main.GUICanvas;
 
-
-/**
- * A blank item used for room boundaries - stops player movement
- * @author Chris Read
- *
- */
-public class Wall implements Item {
-
-	public Wall() {
-	}
+public class Door implements Item {
 
 	@Override
 	public void use() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public Image getImage(int viewDirection) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean canWalk() {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public int xOffset(int viewDirection) {
+	public int yOffset(int viewDirection) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int yOffset(int viewDirection) {
+	public int xOffset(int viewDirection) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void setScaledImage(int viewDirection, Image scaledImage) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public Image getScaledImage(int viewDirection) {
+		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 }

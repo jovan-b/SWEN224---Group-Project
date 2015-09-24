@@ -7,7 +7,7 @@ import java.awt.Image;
  * @author 
  *
  */
-public interface Item extends Drawable {
+public interface Item {
 	public void use();
 
 	public Image getImage(int viewDirection);

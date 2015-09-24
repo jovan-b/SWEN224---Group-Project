@@ -6,7 +6,6 @@ import java.awt.Rectangle;
 
 import main.GUICanvas;
 import gameObjects.Compass;
-import gameObjects.Drawable;
 import gameObjects.Item;
 import gameObjects.Room;
 import gameObjects.weapons.PaintballGun;
@@ -22,7 +21,7 @@ import gameObjects.weapons.Weapon;
  * @author Chris Read
  *
  */
-public abstract class Player implements Drawable {
+public abstract class Player {
 	
 	public static final int FIRERATE = 4;	//projectiles per second
 	public static final int BASE_SPEED = 2;	//pixels per frame

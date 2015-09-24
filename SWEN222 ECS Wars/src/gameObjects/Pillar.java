@@ -25,10 +25,6 @@ public class Pillar implements Item {
 	}
 
 	@Override
-	public void draw(Graphics g, GUICanvas c) {
-	}
-
-	@Override
 	public void use() {
 		return;
 	}

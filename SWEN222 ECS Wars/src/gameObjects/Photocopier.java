@@ -109,10 +109,6 @@ public class Photocopier implements Item {
 	}
 
 	@Override
-	public void draw(Graphics g, GUICanvas c) {
-	}
-
-	@Override
 	public void use() {
 		return;
 	}
