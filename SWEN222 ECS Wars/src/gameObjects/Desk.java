@@ -66,18 +66,14 @@ public class Desk implements Item {
 		if(this.horizontal){
 			// the desk is horizontal when facing north/south
 			switch(viewDirection){
-			case 1: return 0; // EAST
 			case 2: return 1; // SOUTH
-			case 3: return 0; // WEST
-			default: return 0; // NORTH
+			default: return 0;
 			}
 		} else {
 			// the desk is vertical when facing north/south
 			switch(viewDirection){
-			case 1: return 0; // EAST
-			case 2: return 0; // SOUTH
 			case 3: return 1; // WEST
-			default: return 0; // NORTH
+			default: return 0;
 			}
 		}
 	}
@@ -88,17 +84,13 @@ public class Desk implements Item {
 			// the desk is horizontal when facing north/south
 			switch(viewDirection){
 			case 1: return 2; // EAST
-			case 2: return 1; // SOUTH
-			case 3: return 1; // WEST
-			default: return 1; // NORTH
+			default: return 1;
 			}
 		} else {
 			// the desk is vertical when facing north/south
 			switch(viewDirection){
-			case 1: return 1; // EAST
 			case 2: return 2; // SOUTH
-			case 3: return 1; // WEST
-			default: return 1; // NORTH
+			default: return 1;
 			}
 		}
 	}

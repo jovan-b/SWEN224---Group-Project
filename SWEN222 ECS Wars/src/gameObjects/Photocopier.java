@@ -17,21 +17,94 @@ import main.GUICanvas;
  */
 public class Photocopier implements Item {
 
-	private Image imageHz;
-	private Image imageVt;
-	private Image scaledImageHz;
-	private Image scaledImageVt;
-	private boolean horizontal; // true if the desk is horizontal when looking North
+	private Image imageNorth;
+	private Image imageSouth;
+	private Image imageWest;
+	private Image imageEast;
+	private Image scaledImageNorth;
+	private Image scaledImageSouth;
+	private Image scaledImageWest;
+	private Image scaledImageEast;
+	private int[] xoffset; // x offset for the index view direction
+	private char dir; // the dir of the item when looking North
 
-	public Photocopier(boolean horizontal) {
-		this.horizontal = horizontal;
+	/**
+	 * Constructor for class Photocopier
+	 * @param dir The view of the photocopier when facing North.
+	 * 'F' = front
+	 * 'B' = back
+	 * 'L' = left
+	 * 'R' = right
+	 */
+	public Photocopier(char dir) {
+		this.dir = dir;
+		loadImages(dir);
+		scaledImageNorth = imageNorth;
+		scaledImageSouth = imageSouth;
+		scaledImageWest = imageWest;
+		scaledImageEast = imageEast;
+		setupOffset(dir);
+	}
+
+	private void setupOffset(char dir) {
+		xoffset = new int[4];
+		xoffset[0] = 0;
+		xoffset[1] = 0;
+		xoffset[2] = 0;
+		xoffset[3] = 0;
+		switch(dir){
+		case 'L' : // EAST
+			xoffset[1] = 1;
+			break;
+		case 'B' : // SOUTH
+			xoffset[2] = 1;
+			break;
+		case 'R' : // WEST
+			xoffset[3] = 1;
+			break;
+		default : // NORTH
+			xoffset[0] = 1;
+			break;
+		}
+	}
+
+	private void loadImages(char dir) {
+		// initialise vars
+		Image f = null;
+		Image b = null;
+		Image l = null;
+		Image r = null;
+		// read image files
 		try {
-			imageHz = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"PhotocopierHor.png"));
-			scaledImageHz = imageHz;
-			imageVt = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"PhotocopierVer.png"));
-			scaledImageVt = imageVt;
+			f = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CopierF.png"));
+			b = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CopierB.png"));
+			l = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CopierL.png"));
+			r = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CopierR.png"));
 		} catch (IOException e) {
 			System.out.println("Failed to read Photocopier image file: " + e.getMessage());
+		}
+		// set directional images
+		switch(dir){
+		case 'B' : imageNorth = b;
+				   imageSouth = f;
+				   imageEast = r;
+				   imageWest = l;
+				   break;
+		case 'L' : imageNorth = l;
+		   		   imageSouth = r;
+		   		   imageEast = f;
+		   		   imageWest = b;
+		   		   break;
+		case 'R' : imageNorth = r;
+				   imageSouth = l;
+				   imageEast = b;
+				   imageWest = f;
+				   break;
+		default :  imageNorth = f;
+		   		   imageSouth = b;
+		   		   imageEast = l;
+		   		   imageWest = r;
+		   		   break;
 		}
 	}
 
@@ -46,20 +119,12 @@ public class Photocopier implements Item {
 
 	@Override
 	public Image getImage(int viewDirection) {
-		if(this.horizontal){
-			// the desk is horizontal when facing north/south
-			switch(viewDirection){
-			case 0: case 2: return imageHz; // north/south
-			case 1: case 3: return imageVt; // east/west
-			}
-		} else {
-			// the desk is vertical when facing north/south
-			switch(viewDirection){
-			case 0: case 2: return imageVt; // north/south
-			case 1: case 3: return imageHz; // east/west
-			}
+		switch(viewDirection){
+		case 1 : return imageEast; // EAST
+		case 2 : return imageSouth; // SOUTH
+		case 3 : return imageWest; // WEST
+		default : return imageNorth; // NORTH
 		}
-		return imageHz;
 	}
 
 	@Override
@@ -69,79 +134,32 @@ public class Photocopier implements Item {
 
 	@Override
 	public int xOffset(int viewDirection) {
-		if(this.horizontal){
-			// the item is horizontal when facing north/south
-			switch(viewDirection){
-			case 1: return 0; // EAST
-			case 2: return 1; // SOUTH
-			case 3: return 0; // WEST
-			default: return 0; // NORTH
-			}
-		} else {
-			// the item is vertical when facing north/south
-			switch(viewDirection){
-			case 1: return 0; // EAST
-			case 2: return 0; // SOUTH
-			case 3: return 1; // WEST
-			default: return 0; // NORTH
-			}
-		}
+		return xoffset[viewDirection];
 	}
 
 	@Override
 	public int yOffset(int viewDirection) {
-		if(this.horizontal){
-			// the item is horizontal when facing north/south
-			switch(viewDirection){
-			case 1: return 2; // EAST
-			case 2: return 1; // SOUTH
-			case 3: return 1; // WEST
-			default: return 1; // NORTH
-			}
-		} else {
-			// the item is vertical when facing north/south
-			switch(viewDirection){
-			case 1: return 1; // EAST
-			case 2: return 2; // SOUTH
-			case 3: return 1; // WEST
-			default: return 1; // NORTH
-			}
-		}
+		return 1;
 	}
 
 	@Override
 	public void setScaledImage(int viewDirection, Image scaledImage) {
-		if(this.horizontal){
-			// the item is horizontal when facing north/south
-			switch(viewDirection){
-			case 0: case 2: this.scaledImageHz = scaledImage; return; // north/south
-			case 1: case 3: this.scaledImageVt = scaledImage; return; // east/west
-			}
-		} else {
-			// the item is vertical when facing north/south
-			switch(viewDirection){
-			case 0: case 2: this.scaledImageVt = scaledImage; return; // north/south
-			case 1: case 3: this.scaledImageHz = scaledImage; return; // east/west
-			}
+		switch(viewDirection){
+		case 1 : scaledImageEast = scaledImage; return; // EAST
+		case 2 : scaledImageSouth = scaledImage; return; // SOUTH
+		case 3 : scaledImageWest = scaledImage; return; // WEST
+		default : scaledImageNorth = scaledImage; return; // NORTH
 		}
 	}
 
 	@Override
 	public Image getScaledImage(int viewDirection) {
-		if(this.horizontal){
-			// the item is horizontal when facing north/south
-			switch(viewDirection){
-			case 0: case 2: return scaledImageHz; // north/south
-			case 1: case 3: return scaledImageVt; // east/west
-			}
-		} else {
-			// the item is vertical when facing north/south
-			switch(viewDirection){
-			case 0: case 2: return scaledImageVt; // north/south
-			case 1: case 3: return scaledImageHz; // east/west
-			}
+		switch(viewDirection){
+		case 1 : return scaledImageEast; // EAST
+		case 2 : return scaledImageSouth; // SOUTH
+		case 3 : return scaledImageWest; // WEST
+		default : return scaledImageNorth; // NORTH
 		}
-		return scaledImageHz;
 	}
 
 

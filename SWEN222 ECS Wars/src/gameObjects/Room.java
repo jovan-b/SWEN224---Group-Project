@@ -92,6 +92,10 @@ public class Room {
 		case "PP" : return new Pillar();
 		case "Dh" : return new Desk(true);
 		case "Dv" : return new Desk(false);
+		case "CF" : return new Photocopier('F');
+		case "CB" : return new Photocopier('B');
+		case "CL" : return new Photocopier('L');
+		case "CR" : return new Photocopier('R');
 		default: return new Floor(); // if no match, safely return a floor
 		}
 	}
