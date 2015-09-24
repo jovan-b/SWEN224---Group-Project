@@ -94,22 +94,10 @@ public abstract class Player implements Drawable {
 	 */
 	public void update() {
 		currentRoom.update();
-		updateCounter();
 		//TODO: add collision detection with other players
 		//TODO: check if dead and drop items/lose points/etc.
 	}
-
-	private void updateCounter() {
-		if(counter != 0){
-			++counter;
-		}
-		if(getFirerate() <= counter){
-			counter = 0;
-		}
-	}
-
-	abstract int getFirerate();
-
+	
 	/**
 	 * Shoots the player's current weapon
 	 * @param x
@@ -377,12 +365,5 @@ public abstract class Player implements Drawable {
 		double theta = Math.atan2(dy,dx);
 
 		return theta;
-	}
-
-	public boolean canShoot() {
-		if(counter  == 0){
-			return true;
-		}
-		return false;
 	}
 }

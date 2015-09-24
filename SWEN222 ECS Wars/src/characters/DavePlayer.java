@@ -20,7 +20,6 @@ public class DavePlayer extends Player {
 	
 	private int firerateMulti = 1;
 	private int firerate = FIRERATE * firerateMulti;	//projectiles per second
-	private int counter = 0;
 
 	public DavePlayer(Room room, int posX, int posY){
 		super(room, posX, posY);
@@ -38,10 +37,4 @@ public class DavePlayer extends Player {
 		}
 		scaledSprites = sprites;
 	}
-
-	@Override
-	public int getFirerate() {
-		return firerate;
-	}
-
 }
