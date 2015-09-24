@@ -1,6 +1,7 @@
 package main;
 
 import java.io.File;
+import java.io.IOException;
 
 import gameObjects.Room;
 
@@ -18,6 +19,11 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import characters.Player;
 
 /**
  * A save manager to store or load the state of a game controller from file
@@ -46,13 +52,20 @@ public final class SaveManager {
 			Element root = doc.createElement("Controller");
 			doc.appendChild(root);
 			
-			//Create children elements
-			Element roomParent = doc.createElement("Rooms");
-			root.appendChild(roomParent);
-			
 			//Write rooms to file
 			for(Room r : controller.rooms){
-				roomParent.setAttribute("id", r.getName());
+				Element room = doc.createElement("Room");
+				root.appendChild(room);
+				room.setAttribute("id", r.getName());
+				
+				//Write players in room
+				for (Player p : r.getPlayers()){
+					Element player = doc.createElement("player");
+					room.appendChild(player);
+					
+					player.setAttribute("x", Integer.toString(p.getX()));
+					player.setAttribute("y", Integer.toString(p.getY()));
+				}
 			}
 			
 			//Save the file to disk
@@ -69,6 +82,35 @@ public final class SaveManager {
 	}
 	
 	public static Controller loadGame(String name){
+		Controller controller;
+		try {
+			File file = new File(SAVE_DIR+name);
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			Document doc = builder.parse(file);
+			
+			doc.getDocumentElement().normalize();
+			
+			//Load rooms
+			NodeList list = doc.getElementsByTagName("Room");
+			
+			for (int i = 0; i < list.getLength(); i++){
+				Node node = (Node) list.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE){
+					Element e = (Element) node;
+					
+					
+				}
+			}
+
+		} catch (ParserConfigurationException | SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		return null;
 	}
 }
