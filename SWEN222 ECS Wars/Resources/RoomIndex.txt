@@ -1,3 +1,5 @@
 Classroom
 SW Hallway
 NW Hallway
+SE Hallway
+NE Hallway
