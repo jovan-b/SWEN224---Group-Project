@@ -307,7 +307,7 @@ public abstract class Player {
 		currentRoom.removePlayer(this);
 		newRoom.addPlayer(this);
 		this.currentRoom = newRoom;
-		System.out.println("old position: " + this.posX + " " + this.posY);
+
 		this.posX = newX;
 		this.posY = newY;
 		
@@ -317,7 +317,14 @@ public abstract class Player {
 		
 		// Move player out of doorway - to prevent being stuck in the door
 		// TODO fix for other movement directions - moveDir set when moving?
+		// Lastpressed-viewdirection or something?
 		moveDir = lastDirPressed;
+		for (int i = 1; i <= viewDirection; i++){
+			moveDir++;
+			if (moveDir > 3){
+				moveDir = 0;
+			}
+		}
 		switch(moveDir){
 		case 1:
 			this.posX += 12;
@@ -336,9 +343,6 @@ public abstract class Player {
 			this.tempY -= 12;
 			break;
 		}
-		
-		System.out.println("new position: " + this.posX + " " + this.posY);
-		System.out.println("passed position: " + newX + " " + newY);
 	}
 
 	public int getX() {
