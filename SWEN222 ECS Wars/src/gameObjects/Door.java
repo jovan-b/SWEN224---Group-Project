@@ -1,9 +1,6 @@
 package gameObjects;
 
-import java.awt.Graphics;
 import java.awt.Image;
-
-import main.GUICanvas;
 
 public class Door implements Item {
 

@@ -1,9 +1,6 @@
 package gameObjects.containers;
 
-import java.awt.Graphics;
 import java.awt.Image;
-
-import main.GUICanvas;
 
 /**
  * A backpack which represents the player's inventory
