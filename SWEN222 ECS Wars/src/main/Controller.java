@@ -167,6 +167,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		player.setCanvas(gui.canvas);
 		
 		SoundManager.playSong("battle_1.mp3");
+		SaveManager.saveGame(this, "test_save.xml");
 	}
 
 	/**

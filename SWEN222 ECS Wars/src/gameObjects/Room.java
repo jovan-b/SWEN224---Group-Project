@@ -555,4 +555,8 @@ public class Room {
 	public Set<Projectile> getProjectiles() {
 		return projectiles;
 	}
+	
+	public String getName(){
+		return name;
+	}
 }
