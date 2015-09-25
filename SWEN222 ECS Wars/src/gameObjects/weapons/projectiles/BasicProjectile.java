@@ -15,20 +15,20 @@ import characters.Player;
  */
 public abstract class BasicProjectile implements Projectile {
 	//The owner of the projectile
-	private Player player;
-	private Room room;
-	private boolean isActive;
+	protected Player player;
+	protected Room room;
+	protected boolean isActive;
 	
-	private double x;
-	private double y;
-	private int row;
-	private int hitBox = 2;
-	private double theta;
+	protected double x;
+	protected double y;
+	protected int row;
+	protected int hitBox = 2;
+	protected double theta;
 	
-	private int damage = -10;
+	protected int damage = -10;
 	
-	private int speedMulti = 1;
-	private int speed = BASE_SPEED * speedMulti;	//pixels per frame
+	protected int speedMulti = 1;
+	protected int speed = BASE_SPEED * speedMulti;	//pixels per frame
 	
 	/**
 	 * A basic constructor for producing new projectiles

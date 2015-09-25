@@ -1,19 +1,17 @@
 package gameObjects.weapons;
 
-import gameObjects.weapons.projectiles.PaintBall;
 import gameObjects.weapons.projectiles.Projectile;
+import gameObjects.weapons.projectiles.RubberBullet;
 
-import java.awt.Graphics;
 import java.awt.Image;
 
 import characters.Player;
-import main.GUICanvas;
 
 public class PaintballGun extends Weapon {
 	public static final double BULLET_SPREAD = 10;
 	
 	public PaintballGun(){
-		super(4, new PaintBall());
+		super(4, new RubberBullet());
 	}
 	
 	@Override

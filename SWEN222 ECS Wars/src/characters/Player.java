@@ -364,6 +364,14 @@ public abstract class Player {
 		return new Rectangle(posX-hitBox, posY-hitBox, hitBox*2, hitBox*2);
 	}
 	
+	public void setHealth(int health){
+		this.health = health;
+	}
+	
+	public int getHealth(){
+		return health;
+	}
+	
 	/**
 	 * Gives the angle between the player and the mouse
 	 * 
