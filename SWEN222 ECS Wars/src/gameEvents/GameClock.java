@@ -104,4 +104,8 @@ public final class GameClock {
 		
 		return _instance;
 	}
+	
+	public static int secondsToTicks(int seconds){
+		return seconds*1000/CLOCK_TICK;
+	}
 }
