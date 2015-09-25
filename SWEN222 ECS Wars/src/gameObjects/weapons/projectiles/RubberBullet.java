@@ -17,5 +17,15 @@ public class RubberBullet extends ReflectingProjectile {
 	public Projectile newInstance(Player p, double theta) {
 		return new RubberBullet(p, p.getX(), p.getY(), theta);
 	}
+	
+	@Override
+	protected void playerCollision(Player p){
+		if (p == this.player && bounces == MAX_BOUNCES){
+			return;
+		}
+		
+		p.modifyHealth(damage);
+		this.setActive(false);
+	}
 
 }

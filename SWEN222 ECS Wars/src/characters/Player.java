@@ -99,6 +99,7 @@ public abstract class Player {
 	 */
 	public void update() {
 		currentRoom.update();
+
 		//TODO: add collision detection with other players
 		//TODO: check if dead and drop items/lose points/etc.
 	}
@@ -163,15 +164,6 @@ public abstract class Player {
 		//TODO: Check that health hasn't gone above a maximum
 		health += amt;
 		
-		//Player is dead
-		if (health < 0){
-			currentRoom.removePlayer(this); //Make the player invisible
-			
-			//Schedule a respawn event
-			//TODO: Change this to respawn somewhere that isn't the tile they died on
-			Event respawn = new RespawnEvent(this, currentRoom, posX, posY);
-			GameClock.getInstance().scheduleEvent(respawn , RESPAWN_TIME);
-		}
 	}
 
 	// TODO replace this

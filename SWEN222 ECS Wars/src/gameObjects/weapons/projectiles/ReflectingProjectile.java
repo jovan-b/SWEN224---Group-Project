@@ -10,7 +10,7 @@ import characters.Player;
  */
 public abstract class ReflectingProjectile extends BasicProjectile {
 	
-	private int bounces;
+	protected int bounces;
 	
 	protected ReflectingProjectile(int bounces){
 		super();
@@ -33,11 +33,8 @@ public abstract class ReflectingProjectile extends BasicProjectile {
 		
 		//Check to see if we've hit a player
 		for (Player p : room.getPlayers()){
-			if (p == player){continue;} //Players can't shoot themselves
 			if (p.getBoundingBox().contains(this.getBoundingBox())){
-				p.modifyHealth(damage);
-				this.setActive(false);
-				return;
+				this.playerCollision(p);
 			}
 		}
 		
@@ -60,4 +57,14 @@ public abstract class ReflectingProjectile extends BasicProjectile {
 		}
 	}
 	
+	/**
+	 * A hook method which gets called when this projectile collides with a player
+	 * @param p
+	 */
+	protected void playerCollision(Player p){
+		if (p == player){return;} //Players can't shoot themselves
+		p.modifyHealth(damage);
+		this.setActive(false);
+	}
+
 }

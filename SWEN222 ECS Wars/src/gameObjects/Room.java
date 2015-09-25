@@ -1,5 +1,8 @@
 package gameObjects;
 
+import gameEvents.Event;
+import gameEvents.GameClock;
+import gameEvents.RespawnEvent;
 import gameObjects.weapons.projectiles.Projectile;
 
 import java.awt.*;
@@ -576,10 +579,11 @@ public class Room {
 	 */
 	public void update() {
 		//Update the projectiles
-		Iterator<Projectile> iter = projectiles.iterator();
+		Iterator<Projectile> projectileIter = projectiles.iterator();
+		Iterator<Player> playerIter = players.iterator();
 		
-		while(iter.hasNext()){
-			Projectile p = iter.next();
+		while(projectileIter.hasNext()){
+			Projectile p = projectileIter.next();
 			
 			p.update();
 			// check if projectile is outside room bounds
@@ -589,7 +593,21 @@ public class Room {
 			
 			//Remove the projectile if it's inactive
 			if (!p.isActive()){
-				iter.remove();
+				projectileIter.remove();
+			}
+		}
+		
+		while(playerIter.hasNext()){
+			Player p = playerIter.next();
+			
+			//Player is dead
+			if (p.getHealth() < 0){
+				playerIter.remove(); //Make the player invisible
+				
+				//Schedule a respawn event
+				//TODO: Change this to respawn somewhere that isn't the tile they died on
+				Event respawn = new RespawnEvent(p, this, p.getX(), p.getY());
+				GameClock.getInstance().scheduleEvent(respawn , Player.RESPAWN_TIME);
 			}
 		}
 		
