@@ -38,8 +38,6 @@ public abstract class Player {
 	protected Weapon currentWeapon;
 	protected Item[] inventory = new Item[INVENTORY_SIZE];
 	protected int health = 50;
-	protected int counter = 0;	//used to keep track of when player can fire
-								//is 0 when player can fire
 	
 
 	//position describing the centre of a player object
@@ -115,7 +113,6 @@ public abstract class Player {
 		
 		//Correct theta based on view direction
 		theta += Math.toRadians(90)*viewDirection;
-		++counter;
 		currentRoom.addProjectile(currentWeapon.fire(this, theta));
 	}
 
