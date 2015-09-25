@@ -49,6 +49,12 @@ public interface Projectile {
 	 */
 	public Rectangle getBoundingBox();
 	
+	/**
+	 * Returns the player that fired this projectile
+	 * @return
+	 */
+	public Player getPlayer();
+	
 	public static double xDiff(double theta, int speed){
 		return Math.cos(theta)*speed;
 	}

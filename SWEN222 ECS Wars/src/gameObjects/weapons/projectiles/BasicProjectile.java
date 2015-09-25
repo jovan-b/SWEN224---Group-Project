@@ -111,5 +111,9 @@ public abstract class BasicProjectile implements Projectile {
 	public void setActive(boolean active){
 		this.isActive = active;
 	}
+	
+	public Player getPlayer(){
+		return this.player;
+	}
 
 }

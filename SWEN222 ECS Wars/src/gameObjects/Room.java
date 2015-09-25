@@ -493,6 +493,12 @@ public class Room {
 	 */
 	public void removePlayer(Player player){
 		players.remove(player);
+		
+		//If there aren't any players in the room,
+		//clean up projectiles
+		if (players.size() == 0){
+			projectiles.removeAll(projectiles);
+		}
 	}
 	
 	/**
@@ -500,7 +506,9 @@ public class Room {
 	 * @param p The projectile to add
 	 */
 	public void addProjectile(Projectile p){
-		projectiles.add(p);
+		if (players.contains(p.getPlayer())){
+			projectiles.add(p);
+		}
 	}
 	
 	/**
@@ -518,7 +526,16 @@ public class Room {
 	 * @return The Item at position (x,y)
 	 */
 	public Item itemAt(int x, int y) {
-		return contents[colFromX(x)][rowFromY(y)];
+		//Bounds check
+		int colX = colFromX(x);
+		int colY = rowFromY(y);
+		
+		//If it's outside of the room's contents, treat it as a wall
+		if (colX < 0 || colY < 0 || colX >= cols || colY >= rows){
+			return new Wall();
+		};
+		
+		return contents[colX][colY];
 	}
 	
 	/**
@@ -542,7 +559,7 @@ public class Room {
 	 * @return the contents array
 	 */
 	public Item[][] getContents() {
-		return contents;
+		return contents.clone();
 	}
 
 	//FIXME: Do we want to hand back the actual collection, or a copy?
