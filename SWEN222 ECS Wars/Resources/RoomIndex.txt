@@ -1,7 +1,11 @@
-Classroom
+Classroom 103
 SW Hallway
 NW Hallway
 SE Hallway
 NE Hallway
 Courtyard
 Courtyard Shed
+Entrance Hall
+Classroom 102
+Classroom 101
+Server Room
