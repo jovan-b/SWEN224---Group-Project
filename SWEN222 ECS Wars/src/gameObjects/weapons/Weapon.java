@@ -14,12 +14,12 @@ import gameObjects.weapons.projectiles.Projectile;
  *
  */
 public abstract class Weapon implements Item {
-	private int fireRate = 0;
-	private Projectile projectile;
+	protected double fireRate = 0;
+	protected Projectile projectile;
 	
-	boolean canFire;
+	protected boolean canFire;
 	
-	public Weapon(int fireRate, Projectile projectile){
+	public Weapon(double fireRate, Projectile projectile){
 		this.fireRate = fireRate;
 		this.projectile = projectile;
 		canFire = true;
@@ -39,7 +39,7 @@ public abstract class Weapon implements Item {
 			proj.setActive(false);
 		} else {
 			canFire = false;
-			startFireDelay(1000/fireRate);
+			startFireDelay((long)(1000/fireRate));
 		}
 		
 		return proj;

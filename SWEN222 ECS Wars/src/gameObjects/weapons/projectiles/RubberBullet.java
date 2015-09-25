@@ -20,6 +20,7 @@ public class RubberBullet extends ReflectingProjectile {
 	
 	@Override
 	protected void playerCollision(Player p){
+		//if (p == this.player){return;} //Uncomment this to stop damaging owner player
 		if (p == this.player && bounces == MAX_BOUNCES){
 			return;
 		}

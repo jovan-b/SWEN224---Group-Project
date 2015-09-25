@@ -13,6 +13,7 @@ import gameObjects.Door;
 import gameObjects.Item;
 import gameObjects.Room;
 import gameObjects.weapons.PaintballGun;
+import gameObjects.weapons.ScatterGun;
 import gameObjects.weapons.Weapon;
 
 /**
@@ -77,7 +78,7 @@ public abstract class Player {
 		this.animState = 0;
 		this.animModifier = 1;
 		this.animCounter = 0;
-		this.currentWeapon = new PaintballGun();
+		this.currentWeapon = new ScatterGun();
 	}
 	
 	public void setCanvas(GUICanvas canvas){
