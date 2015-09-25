@@ -3,3 +3,5 @@ SW Hallway
 NW Hallway
 SE Hallway
 NE Hallway
+Courtyard
+Courtyard Shed
