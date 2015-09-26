@@ -32,7 +32,7 @@ public abstract class ReflectingProjectile extends BasicProjectile {
 		y += dy;
 		
 		//Check to see if we've hit a player
-		for (Player p : room.getPlayers()){
+		for (Player p : room.getAllCharacters()){
 			if (p.getBoundingBox().contains(this.getBoundingBox())){
 				this.playerCollision(p);
 			}

@@ -62,8 +62,8 @@ public abstract class Player {
 
 
 	// Player sprite images
-	Image[][] sprites;
-	Image[][] scaledSprites;
+	protected Image[][] sprites;
+	protected Image[][] scaledSprites;
 
 	//player's speed is this constant * Player.SPEED
 	protected int speedMulti = 1;

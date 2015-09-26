@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 
 import characters.Player;
+import characters.nonplayer.NonPlayer;
 import main.Controller;
 import main.GUICanvas;
 
@@ -41,6 +42,7 @@ public class Room {
 	
 	private Set<Projectile> projectiles = Collections.synchronizedSet(new HashSet<Projectile>());
 	private Set<Player> players = new HashSet<>();
+	private Set<NonPlayer> npcs = new HashSet<>();
 	private Set<Door> doors = new HashSet<>();
 	
 	/**
@@ -252,6 +254,13 @@ public class Room {
 					if (p.getRow() == row-1){ // Ensures the player is drawn above their current row
 						drawPlayer(g, c, viewDirection, drawX, drawY, p);
 						p.setRow(-1);
+					}
+				}
+				
+				for (NonPlayer npc : npcs){
+					if (npc.getRow() == row-1){ // Ensures the player is drawn above their current row
+						drawPlayer(g, c, viewDirection, drawX, drawY, npc);
+						npc.setRow(-1);
 					}
 				}
 			}
@@ -501,11 +510,27 @@ public class Room {
 	public void removePlayer(Player player){
 		players.remove(player);
 		
-		//If there aren't any players in the room,
+		//If this is the last player in the room,
 		//clean up projectiles
-		if (players.size() == 0){
+		if (players.size() == 1){
 			projectiles.removeAll(projectiles);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param npc
+	 */
+	public void addNPC(NonPlayer npc){
+		npcs.add(npc);
+	}
+	
+	/**
+	 * 
+	 * @param npc
+	 */
+	public void removeNPC(NonPlayer npc){
+		npcs.remove(npc);
 	}
 	
 	/**
@@ -513,7 +538,7 @@ public class Room {
 	 * @param p The projectile to add
 	 */
 	public void addProjectile(Projectile p){
-		if (players.contains(p.getPlayer())){
+		if (players.contains(p.getPlayer()) || npcs.contains(p.getPlayer())){
 			projectiles.add(p);
 		}
 	}
@@ -577,6 +602,19 @@ public class Room {
 	public Set<Player> getPlayers() {
 		return players;
 	}
+	
+	/**
+	 * Gets all players and non-player characters
+	 * in this room
+	 * @return
+	 */
+	public Set<Player> getAllCharacters() {
+		Set<Player> rtn = new HashSet<Player>();
+		rtn.addAll(players);
+		rtn.addAll(npcs);
+		
+		return rtn;
+	}
 
 	/**
 	 * Updates the room and all contained items
@@ -585,6 +623,7 @@ public class Room {
 		//Update the projectiles
 		Iterator<Projectile> projectileIter = projectiles.iterator();
 		Iterator<Player> playerIter = players.iterator();
+		Iterator<NonPlayer> npcIter = npcs.iterator();
 		
 		while(projectileIter.hasNext()){
 			Projectile p = projectileIter.next();
@@ -615,6 +654,14 @@ public class Room {
 			}
 		}
 		
+		while(npcIter.hasNext()){
+			NonPlayer npc = npcIter.next();
+			npc.update();
+			
+			if (npc.getHealth() < 0){
+				npcIter.remove();
+			}
+		}
 	}
 	
 	/**

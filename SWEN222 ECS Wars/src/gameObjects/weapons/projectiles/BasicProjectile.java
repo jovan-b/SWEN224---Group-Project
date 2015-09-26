@@ -66,7 +66,7 @@ public abstract class BasicProjectile implements Projectile {
 		y += dy;
 		
 		//Check to see if we've hit a player
-		for (Player p : room.getPlayers()){
+		for (Player p : room.getAllCharacters()){
 			if (p == player){continue;} //Players can't shoot themselves
 			if (p.getBoundingBox().contains(this.getBoundingBox())){
 				p.modifyHealth(damage);
