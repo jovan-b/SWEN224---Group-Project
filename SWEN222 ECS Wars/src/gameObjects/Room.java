@@ -104,10 +104,14 @@ public class Room {
 		case "PP" : return new Pillar();
 		case "Dh" : return new Desk(true);
 		case "Dv" : return new Desk(false);
-		case "CF" : return new Photocopier('F');
-		case "CB" : return new Photocopier('B');
-		case "CL" : return new Photocopier('L');
-		case "CR" : return new Photocopier('R');
+		case "PF" : return new Photocopier('F');
+		case "PB" : return new Photocopier('B');
+		case "PL" : return new Photocopier('L');
+		case "PR" : return new Photocopier('R');
+		case "cF" : return new SmallChest('F');
+		case "cB" : return new SmallChest('B');
+		case "cL" : return new SmallChest('L');
+		case "cR" : return new SmallChest('R');
 		default: return new Floor(); // if no match, safely return a floor
 		}
 	}
