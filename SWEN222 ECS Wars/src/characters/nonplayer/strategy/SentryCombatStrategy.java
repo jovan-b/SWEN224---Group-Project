@@ -39,7 +39,11 @@ public class SentryCombatStrategy extends WaitStrategy {
 			}
 		}
 		
+		//we didn't find a target, so give up
+		if (target == null){return; }
+		
 		//Cause the sentry to face the target
+		//FIXME: This doesn't properly work with view rotation
 		int dx = Math.abs(npc.getX() - target.getX());
 		int dy = Math.abs(npc.getY() - target.getY());
 		
