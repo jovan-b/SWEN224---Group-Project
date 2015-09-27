@@ -100,4 +100,12 @@ public class GUICanvas extends JComponent{
 	public void setViewScale(int viewScale) {
 		this.viewScale = viewScale;
 	}
+	
+//	/**
+//	 * Gets the current player.
+//	 * @return the current player
+//	 */
+//	public Player getCurrentPlayer(){
+//		return player;
+//	}
 }

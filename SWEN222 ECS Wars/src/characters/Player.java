@@ -51,7 +51,7 @@ public abstract class Player {
 	private int tempY;
 	
 	protected Compass compass;
-	protected int lastDirPressed;
+	protected int lastDirMoved;
 	protected int animState; // the current animation frame
 	protected int animModifier; // flicks between 1 and -1 to loop animation
 	protected int animCounter; // counts each frame the player has moved
@@ -74,7 +74,7 @@ public abstract class Player {
 		this.posX = posX;
 		this.posY = posY;
 		this.viewDirection = 0;
-		this.lastDirPressed = 2;
+		this.lastDirMoved = 2;
 		this.animState = 0;
 		this.animModifier = 1;
 		this.animCounter = 0;
@@ -122,10 +122,9 @@ public abstract class Player {
 	 * Direction is specified by dir (up, down, left, right)
 	 */
 	public void move(String dir) {
-		moved(dir);
 		animate();
 		// Convert movement direction to global coordinates
-		int moveDir = convertDirection(lastDirPressed);
+		int moveDir = convertFromViewDir(moved(dir));
 		movePlayer(moveDir);
 	}
 	
@@ -136,6 +135,7 @@ public abstract class Player {
 	private void movePlayer(int dir) {
 		tempX = posX;
 		tempY = posY;
+		lastDirMoved = dir;
 		switch(dir){
 		case 1: tempX += speed;
 			break;
@@ -177,16 +177,13 @@ public abstract class Player {
 	}
 
 	// Sets the lastDirMoved variable according to the button pressed
-	private void moved(String dir) {
+	private int moved(String dir) {
 		switch(dir){
-		case "up": lastDirPressed = 0;
-			break;
-		case "right": lastDirPressed = 1;
-			break;
-		case "down": lastDirPressed = 2;
-			break;
-		case "left": lastDirPressed = 3;
-			break;
+		case "up": return 0;
+		case "right": return 1;
+		case "down": return 2;
+		case "left": return 3;
+		default: return 0;
 		}
 		//System.out.println("Position: " + this.posX + " " + this.posY);
 	}
@@ -246,7 +243,7 @@ public abstract class Player {
 		this.tempY = newY;
 		
 		// Move player out of doorway - to prevent being stuck in the door
-		int dir = convertDirection(lastDirPressed);
+		int dir = convertFromViewDir(lastDirMoved);
 		switch(dir){
 		case 1:
 			this.posX += 12;
@@ -273,12 +270,30 @@ public abstract class Player {
 	 * @param toConvert the input value to convert
 	 * @return the converted direction value
 	 */
-	private int convertDirection(int toConvert) {
+	private int convertFromViewDir(int toConvert) {
 		int temp = toConvert;
 		for (int i = 1; i <= viewDirection; i++){
 			temp++;
 			if (temp > 3){
 				temp = 0;
+			}
+		}
+		return temp;
+	}
+	
+	/**
+	 * Utility method to convert a global direction
+	 * to a direction relative to the view
+	 * @param toConvert the input value to convert
+	 * @param viewDirection2 
+	 * @return the converted direction value
+	 */
+	private int convertToViewDir(int toConvert, int viewDir) {
+		int temp = toConvert;
+		for (int i = 1; i <= viewDir; i++){
+			temp--;
+			if (temp < 0){
+				temp = 3;
 			}
 		}
 		return temp;
@@ -306,12 +321,8 @@ public abstract class Player {
 	 */
 	public void rotateViewRight() {
 		viewDirection--;
-		lastDirPressed++;
 		if (viewDirection < 0){
 			viewDirection = 3;
-		}
-		if (lastDirPressed > 3){
-			lastDirPressed = 0;
 		}
 		compass.rotate(90);
 	}
@@ -321,12 +332,8 @@ public abstract class Player {
 	 */
 	public void rotateViewLeft() {
 		viewDirection++;
-		lastDirPressed--;
 		if (viewDirection > 3){
 			viewDirection = 0;
-		}
-		if (lastDirPressed < 0){
-			lastDirPressed = 3;
 		}
 		compass.rotate(-90);
 	}
@@ -335,8 +342,14 @@ public abstract class Player {
 		this.compass = c;
 	}
 
-	public Image getImage() {		
-		return scaledSprites[lastDirPressed][animState];
+//	public Image getImage() {	
+//		int spriteDir = convertToViewDir(lastDirMoved, viewDirection);
+//		return scaledSprites[spriteDir][animState];
+//	}
+	
+	public Image getImage(int viewDir) {	
+		int spriteDir = convertToViewDir(lastDirMoved, viewDir);
+		return scaledSprites[spriteDir][animState];
 	}
 	
 	public void setRow(int row) {
@@ -369,7 +382,7 @@ public abstract class Player {
 	
 	public void setFacing(int dir){
 		if (dir < 0 || dir > 3){ return; }
-		lastDirPressed = dir;
+		lastDirMoved = dir;
 	}
 	
 	/**

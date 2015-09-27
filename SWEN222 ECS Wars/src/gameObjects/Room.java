@@ -280,7 +280,7 @@ public class Room {
 	 * @param p The player to draw
 	 */
 	private void drawPlayer(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Player p) {
-		Image playerImage = p.getImage();
+		Image playerImage = p.getImage(viewDirection);
 		int viewScale = c.getViewScale();
 		int playerX = p.getX();
 		int playerY = p.getY();
