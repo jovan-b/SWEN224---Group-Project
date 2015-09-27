@@ -295,6 +295,11 @@ public abstract class Player {
 	public int getViewDirection() {
 		return viewDirection;
 	}
+	
+	public void setViewDirection(int dir){
+		if (dir < 0 || dir > 3){return;}
+		viewDirection = dir;
+	}
 
 	/**
 	 * Rotates the player's view clockwise
@@ -360,6 +365,11 @@ public abstract class Player {
 	
 	public int getHealth(){
 		return health;
+	}
+	
+	public void setFacing(int dir){
+		if (dir < 0 || dir > 3){ return; }
+		lastDirPressed = dir;
 	}
 	
 	/**
