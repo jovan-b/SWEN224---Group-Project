@@ -60,4 +60,9 @@ public class Backpack extends Container {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String getDescription() {
+		return null;
+	}
 }

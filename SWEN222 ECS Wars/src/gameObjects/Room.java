@@ -102,6 +102,7 @@ public class Room {
 		// code isn't an integer
 		switch(code){
 		case "__" : return new Floor();
+		case "_k" : return new Floor(new KeyCard());
 		case "##" : return new Wall();
 		case "PP" : return new Pillar();
 		case "Dh" : return new Desk(true);
@@ -237,8 +238,8 @@ public class Room {
 			for(int col=0; col<rotated.length; col++){
 				Item item = rotated[col][row];
 				// draw item at current square
-				if(!(item instanceof Floor) && !(item instanceof Wall)){
-					image = rotated[col][row].getScaledImage(viewDirection);
+				if(item.getScaledImage(viewDirection) != null){
+					image = item.getScaledImage(viewDirection);
 					g.drawImage(image, drawX+(col*squareSize*viewScale)-(item.xOffset(viewDirection)*squareSize*viewScale), 
 							drawY+(row*squareSize*viewScale)-(item.yOffset(viewDirection)*squareSize*viewScale), c);
 				}

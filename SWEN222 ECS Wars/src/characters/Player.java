@@ -33,7 +33,7 @@ public abstract class Player {
 	public static final int BASE_WIDTH = 30;
 	
 	
-	protected final int INVENTORY_SIZE = 10;
+	protected final int INVENTORY_SIZE = 2;
 	
 	//fields describing state of player
 	protected Weapon currentWeapon;

@@ -116,5 +116,10 @@ public class Door implements Item {
 	public boolean isUnlocked() {
 		return unlocked;
 	}
+
+	@Override
+	public String getDescription() {
+		return null;
+	}
 	
 }

@@ -28,6 +28,7 @@ public class Photocopier implements Item {
 	private Image scaledImageEast;
 	private int[] xoffset; // x offset for the index view direction
 	private char dir; // the dir of the item when looking North
+	private String description;
 
 	/**
 	 * Constructor for class Photocopier
@@ -45,6 +46,7 @@ public class Photocopier implements Item {
 		scaledImageWest = imageWest;
 		scaledImageEast = imageEast;
 		setupOffset(dir);
+		this.description = "A photocopier. What does it do?";
 	}
 
 	private void setupOffset(char dir) {
@@ -157,6 +159,11 @@ public class Photocopier implements Item {
 		case 3 : return scaledImageWest; // WEST
 		default : return scaledImageNorth; // NORTH
 		}
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
 	}
 
 

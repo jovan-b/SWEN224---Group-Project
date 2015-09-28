@@ -60,4 +60,9 @@ public class Pillar implements Item {
 		return scaledImage;
 	}
 
+	@Override
+	public String getDescription() {
+		return null;
+	}
+
 }

@@ -58,4 +58,11 @@ public interface Item {
 	 * @return An appropriately scaled copy of this item's image.
 	 */
 	public Image getScaledImage(int viewDirection);
+	
+	/**
+	 * If this object can be picked up or used, return a brief description
+	 * of it.
+	 * @return A brief description of this object, or null if it is not interactive.
+	 */
+	public String getDescription();
 }

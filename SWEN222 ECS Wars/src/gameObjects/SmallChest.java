@@ -24,6 +24,7 @@ public class SmallChest extends Container {
 	private Image scaledImageSouth;
 	private Image scaledImageWest;
 	private Image scaledImageEast;
+	private String description;
 	
 	public SmallChest(char dir) {
 		super(CAPACITY);
@@ -33,6 +34,7 @@ public class SmallChest extends Container {
 		scaledImageSouth = imageSouth;
 		scaledImageWest = imageWest;
 		scaledImageEast = imageEast;
+		this.description = "A small chest, may contain items.";
 	}
 	
 	private void loadImages(char dir) {
@@ -123,6 +125,11 @@ public class SmallChest extends Container {
 		case 3 : return scaledImageWest; // WEST
 		default : return scaledImageNorth; // NORTH
 		}
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
 	}
 	
 }

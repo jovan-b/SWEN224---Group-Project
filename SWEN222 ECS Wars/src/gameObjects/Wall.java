@@ -50,4 +50,9 @@ public class Wall implements Item {
 		return null;
 	}
 
+	@Override
+	public String getDescription() {
+		return null;
+	}
+
 }

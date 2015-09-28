@@ -9,9 +9,11 @@ import characters.Player;
 
 public class PaintballGun extends Weapon {
 	public static final double BULLET_SPREAD = 10;
+	private String description;
 	
 	public PaintballGun(){
 		super(4, new RubberBullet());
+		this.description = "A basic paintball gun";
 	}
 	
 	@Override
@@ -54,6 +56,11 @@ public class PaintballGun extends Weapon {
 	public Image getScaledImage(int viewDirection) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
 	}
 
 }

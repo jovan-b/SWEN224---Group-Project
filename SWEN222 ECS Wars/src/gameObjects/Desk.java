@@ -10,6 +10,11 @@ import javax.imageio.ImageIO;
 import characters.Player;
 import main.GUICanvas;
 
+/**
+ * A decorative 2x1 desk object which cannot be walked on.
+ * @author Sarah Dobie, Chris Read
+ *
+ */
 public class Desk implements Item {
 	
 	private Image imageHz;
@@ -18,6 +23,10 @@ public class Desk implements Item {
 	private Image scaledImageVt;
 	private boolean horizontal; // true if the desk is horizontal when looking North
 	
+	/**
+	 * Constructor for class Desk.
+	 * @param horizontal True if the desk is horizontal when view is North
+	 */
 	public Desk(boolean horizontal) {
 		this.horizontal = horizontal;
 		try {
@@ -125,6 +134,11 @@ public class Desk implements Item {
 			}
 		}
 		return scaledImageHz;
+	}
+
+	@Override
+	public String getDescription() {
+		return null;
 	}
 	
 	

@@ -9,10 +9,11 @@ import gameObjects.weapons.projectiles.RubberBullet;
 public class ScatterGun extends Weapon{
 	public final int MAX_SHOTS = 5;
 	public final double MAX_SPREAD = Math.toRadians(30); //Maximum spread in degrees 
+	private String description;
 
 	public ScatterGun() {
 		super(10, new RubberBullet());
-		// TODO Auto-generated constructor stub
+		this.description = "A scatter gun";
 	}
 	
 	@Override
@@ -62,6 +63,11 @@ public class ScatterGun extends Weapon{
 	public Image getScaledImage(int viewDirection) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
 	}
 
 }
