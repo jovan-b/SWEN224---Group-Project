@@ -25,6 +25,7 @@ import characters.DavePlayer;
 import characters.nonplayer.NonPlayer;
 import characters.nonplayer.strategy.RespawnStrategy;
 import characters.nonplayer.strategy.SentryCombatStrategy;
+import characters.nonplayer.strategy.WanderStrategy;
 
 /**
  * Main controller for ECS Wars
@@ -175,10 +176,10 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		gui = new GUIFrame(this, player, key, mouse, mouse2);
 		player.setCanvas(gui.canvas);
 		
-//		room = rooms.get(0);
-//		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new SentryCombatStrategy(100));
-//		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
-//		room.addNPC(npc);
+		room = rooms.get(0);
+		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new WanderStrategy());
+		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
+		room.addNPC(npc);
 		
 		SoundManager.playSong("battle_1.mp3");
 		SaveManager.saveGame(this, "test_save.xml");
