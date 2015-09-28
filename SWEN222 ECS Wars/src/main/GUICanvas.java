@@ -29,6 +29,10 @@ public class GUICanvas extends JComponent{
 	private Player player;
 	private Compass compass;
 	
+	private String toolTip;
+	private int toolTipX;
+	private int toolTipY;
+	
 	private int viewScale = 1; // view drawing scale
 	
 	// Static UI Images
@@ -43,6 +47,7 @@ public class GUICanvas extends JComponent{
 		this.frame = frame;
 		this.player = player;
 		this.compass = new Compass();
+		this.toolTip = null;
 		
 		this.player.setCompass(compass);
 		
@@ -83,6 +88,9 @@ public class GUICanvas extends JComponent{
 		compass.update();
 		g.drawImage(compass.getImage(), getWidth()-96-20, 20, this);
 		g.drawImage(compassControls, getWidth()-96-20, 20, this);
+		if (toolTip != null){
+			showToolTip(g);
+		}
 	}
 	
 	/**
@@ -100,12 +108,45 @@ public class GUICanvas extends JComponent{
 	public void setViewScale(int viewScale) {
 		this.viewScale = viewScale;
 	}
+
+	public void setToolTip(String toolTip, int x, int y) {
+		this.toolTip = toolTip;
+		this.toolTipX = x;
+		this.toolTipY = y;
+	}
 	
-//	/**
-//	 * Gets the current player.
-//	 * @return the current player
-//	 */
-//	public Player getCurrentPlayer(){
-//		return player;
-//	}
+	private void showToolTip(Graphics g){
+		// determine which of line1 and line2 is shorter in pixels
+		int lineWidth = g.getFontMetrics().stringWidth(toolTip);
+		// set up variables for drawing
+		int boxX = toolTipX+20;
+		int boxY = toolTipY+5;
+		int boxWidth = lineWidth+10;
+		int lineX = boxX+5;
+		int lineY = boxY+15;
+		// check if box is too far to right to draw
+		if(toolTipX > frame.getWidth() - lineWidth){ // mouse is too far to the right
+			boxX -= lineWidth;
+			lineX -= lineWidth;
+		}
+		// check if box is too close to the bottom to draw
+		if(toolTipY > frame.getHeight() - 20){ // mouse too far down
+			boxY -= 20;
+			lineY -= 20;
+		}
+		// draw the tooltip
+		g.setColor(Color.WHITE);
+		g.fillRect(boxX, boxY, boxWidth, 20);
+		g.setColor(Color.BLACK);
+		g.drawRect(boxX, boxY, boxWidth, 20);
+		g.drawString(toolTip, lineX, lineY);
+	}
+	
+	/**
+	 * Gets the current player.
+	 * @return the current player
+	 */
+	public Player getCurrentPlayer(){
+		return player;
+	}
 }

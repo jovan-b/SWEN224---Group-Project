@@ -175,10 +175,10 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		gui = new GUIFrame(this, player, key, mouse, mouse2);
 		player.setCanvas(gui.canvas);
 		
-		room = rooms.get(0);
-		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new SentryCombatStrategy(100));
-		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
-		room.addNPC(npc);
+//		room = rooms.get(0);
+//		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new SentryCombatStrategy(100));
+//		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
+//		room.addNPC(npc);
 		
 		SoundManager.playSong("battle_1.mp3");
 		SaveManager.saveGame(this, "test_save.xml");
@@ -256,7 +256,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 			}
 			
 			// scale players
-			for (Player p : r.getPlayers()){
+			for (Player p : r.getAllCharacters()){
 				images = p.getImages();
 				scaled = new Image[4][3];
 				for (int i = 0; i < 4; i++){
@@ -303,8 +303,15 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
-		mouseLocation[0] = e.getX();
-		mouseLocation[1] = e.getY();
+		if (e.getButton() == 1){
+			mouseLocation[0] = e.getX();
+			mouseLocation[1] = e.getY();
+		} else if (e.getButton() == 3){
+			int viewScale = gui.canvas.getViewScale();
+			Room room = player.getCurrentRoom();
+			Item item = room.itemAtMouse(e.getX(), e.getY(), viewScale, player);
+			item.use(player);
+		}
 	}
 
 	/**
@@ -322,12 +329,17 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		mouseLocation[0] = e.getX();
-		mouseLocation[1] = e.getY();
+		if (e.getButton() == 1){
+			mouseLocation[0] = e.getX();
+			mouseLocation[1] = e.getY();
+		}
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		int viewScale = gui.canvas.getViewScale();
+		String desc = player.getCurrentRoom().itemAtMouse(e.getX(), e.getY(), viewScale, player).getDescription();
+		gui.canvas.setToolTip(desc, e.getX(), e.getY());
 	}
 
 	public Set<Door> getDoors() {

@@ -31,6 +31,9 @@ public class Floor implements Item {
 
 	@Override
 	public void use(Player p) {
+		if (item != null){
+			item.use(p);
+		}
 	}
 
 	@Override

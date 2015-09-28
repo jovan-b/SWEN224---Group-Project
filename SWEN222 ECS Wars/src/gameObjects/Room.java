@@ -39,6 +39,8 @@ public class Room {
 	private int squareSize = 24; //TODO get this value from player view scale
 	private int width;
 	private int height;
+	private int xOrigin;
+	private int yOrigin;
 	
 	private Set<Projectile> projectiles = Collections.synchronizedSet(new HashSet<Projectile>());
 	private Set<Player> players = new HashSet<>();
@@ -57,6 +59,8 @@ public class Room {
 		parseFile(ctrl);
 		width = cols*squareSize;
 		height = rows*squareSize;
+		xOrigin = 0;
+		yOrigin = 0;
 	}
 
 	/**
@@ -173,31 +177,28 @@ public class Room {
 		int playerX = player.getX(); 
 		int playerY = player.getY(); 
 		
-		int drawX;
-		int drawY;
-		
 		Item[][] rotated = contents;
 		
 		// calculate origin for drawing based on view direction
 		switch(viewDirection){
 			case 1: // EAST
-				drawX = (c.getWidth()/2)-(playerY*viewScale);
-				drawY = (c.getHeight()/2)-((width*viewScale)-(playerX*viewScale));
+				xOrigin = (c.getWidth()/2)-(playerY*viewScale);
+				yOrigin = (c.getHeight()/2)-((width*viewScale)-(playerX*viewScale));
 				rotated = rotatedArrayClockwise(contents);
 				break;
 			case 2: // SOUTH
-				drawX = (c.getWidth()/2)-((width*viewScale)-(playerX*viewScale));
-				drawY = (c.getHeight()/2)-((height*viewScale)-(playerY*viewScale));
+				xOrigin = (c.getWidth()/2)-((width*viewScale)-(playerX*viewScale));
+				yOrigin = (c.getHeight()/2)-((height*viewScale)-(playerY*viewScale));
 				rotated = rotatedArray180(contents);
 				break;
 			case 3: // WEST
-				drawX = (c.getWidth()/2)-((height*viewScale)-(playerY*viewScale));
-				drawY = (c.getHeight()/2)-(playerX*viewScale);
+				xOrigin = (c.getWidth()/2)-((height*viewScale)-(playerY*viewScale));
+				yOrigin = (c.getHeight()/2)-(playerX*viewScale);
 				rotated = rotatedArrayAntiClockwise(contents);
 				break;
 			case 0: default: // DEFAULT TO NORTH
-				drawX = (c.getWidth()/2)-(playerX*viewScale);
-				drawY = (c.getHeight()/2)-(playerY*viewScale);
+				xOrigin = (c.getWidth()/2)-(playerX*viewScale);
+				yOrigin = (c.getHeight()/2)-(playerY*viewScale);
 				break;
 		}
 		
@@ -212,7 +213,7 @@ public class Room {
 		} catch (ConcurrentModificationException e){}
 		
 		// draw the images
-		drawRoomContents(g, c, viewDirection, drawX, drawY, rotated, projectilesToDraw);
+		drawRoomContents(g, c, viewDirection, xOrigin, yOrigin, rotated, projectilesToDraw);
 	}
 
 	/**
@@ -569,6 +570,43 @@ public class Room {
 		};
 		
 		return contents[colX][colY];
+	}
+	
+	/**
+	 * Get the item at the given x,y mouse coordinates
+	 * converts mouse x,y to room x,y. 
+	 * then returns the item at those coordinates
+	 * @param x the X position relative to the player
+	 * @param y The Y position relative to the player
+	 * @param p the current player
+	 * @return the item
+	 */
+	public Item itemAtMouse(int x, int y, int viewScale, Player p){
+		int newX;
+		int newY;
+		switch(p.getViewDirection()){
+		case 1:
+			newX = (int)((double)((yOrigin+(width*viewScale))-y)/(double)viewScale);
+			newY = (int)((double)(x-xOrigin)/(double)viewScale);
+			break;
+		case 2:
+			newX = (int)((double)((xOrigin+(width*viewScale))-x)/(double)viewScale);
+			newY = (int)((double)((yOrigin+(height*viewScale))-y)/(double)viewScale);
+			break;
+		case 3:
+			newX = (int)((double)(y-yOrigin)/(double)viewScale);
+			newY = (int)((double)((xOrigin+(height*viewScale))-x)/(double)viewScale);
+			break;
+		default: 
+			newX = (int)((double)(x-xOrigin)/(double)viewScale);
+			newY = (int)((double)(y-yOrigin)/(double)viewScale);
+		}
+		int xDiff = newX-p.getX();
+		int yDiff = newY-p.getY();
+		if (Math.abs(xDiff) < 48 && Math.abs(yDiff) < 48){
+			return itemAt(newX, newY);
+		}
+		return new Wall();
 	}
 	
 	/**

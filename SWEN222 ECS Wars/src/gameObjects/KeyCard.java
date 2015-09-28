@@ -34,8 +34,7 @@ public class KeyCard implements Item {
 	
 	@Override
 	public void use(Player p) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Player used the keycard!!");
 	}
 
 	@Override
