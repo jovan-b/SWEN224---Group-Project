@@ -27,8 +27,8 @@ public abstract class BasicProjectile implements Projectile {
 	
 	protected int damage = -10;
 	
-	protected int speedMulti = 1;
-	protected int speed = BASE_SPEED * speedMulti;	//pixels per frame
+	protected double speedMulti = 1;
+	protected double speed = BASE_SPEED * speedMulti;	//pixels per frame
 	
 	/**
 	 * A basic constructor for producing new projectiles
@@ -114,6 +114,11 @@ public abstract class BasicProjectile implements Projectile {
 	
 	public Player getPlayer(){
 		return this.player;
+	}
+	
+	public void setSpeedMultiplier(double multi){
+		this.speedMulti = multi;
+		this.speed = BASE_SPEED * multi;
 	}
 
 }

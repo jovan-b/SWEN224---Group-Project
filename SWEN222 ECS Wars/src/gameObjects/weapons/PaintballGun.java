@@ -1,7 +1,7 @@
 package gameObjects.weapons;
 
+import gameObjects.weapons.projectiles.PaintBall;
 import gameObjects.weapons.projectiles.Projectile;
-import gameObjects.weapons.projectiles.RubberBullet;
 
 import java.awt.Image;
 
@@ -12,7 +12,7 @@ public class PaintballGun extends Weapon {
 	private String description;
 	
 	public PaintballGun(){
-		super(4, new RubberBullet());
+		super(4, new PaintBall());
 		this.description = "A basic paintball gun";
 	}
 	

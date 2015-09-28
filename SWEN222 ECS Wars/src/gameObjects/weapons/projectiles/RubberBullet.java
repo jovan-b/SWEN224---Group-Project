@@ -11,6 +11,7 @@ public class RubberBullet extends ReflectingProjectile {
 	
 	private RubberBullet(Player p, int x, int y, double theta){
 		super(p, x, y, theta, MAX_BOUNCES);
+		this.setSpeedMultiplier(0.8);
 	}
 	
 	@Override

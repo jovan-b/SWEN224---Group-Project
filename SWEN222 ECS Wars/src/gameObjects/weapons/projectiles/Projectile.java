@@ -55,11 +55,18 @@ public interface Projectile {
 	 */
 	public Player getPlayer();
 	
-	public static double xDiff(double theta, int speed){
+	/**
+	 * Sets the speed multiplier for this projectile
+	 * @param multi
+	 */
+	public void setSpeedMultiplier(double multi);
+	
+	
+	public static double xDiff(double theta, double speed){
 		return Math.cos(theta)*speed;
 	}
 	
-	public static double yDiff(double theta, int speed){
+	public static double yDiff(double theta, double speed){
 		return Math.sin(theta)*speed;
 	}
 }

@@ -514,7 +514,7 @@ public class Room {
 		
 		//If this is the last player in the room,
 		//clean up projectiles
-		if (players.size() == 1){
+		if (players.size() == 0){
 			projectiles.removeAll(projectiles);
 		}
 	}
@@ -664,20 +664,28 @@ public class Room {
 		Iterator<Player> playerIter = players.iterator();
 		Iterator<NonPlayer> npcIter = npcs.iterator();
 		
-		while(projectileIter.hasNext()){
-			Projectile p = projectileIter.next();
-			
-			p.update();
-			// check if projectile is outside room bounds
-			if (p.getX() < 0 || p.getX() > width || p.getY() < 0 || p.getY() > height){
-				p.setActive(false);
+		try{
+			while(projectileIter.hasNext()){
+				Projectile p = projectileIter.next();
+				
+				p.update();
+				// check if projectile is outside room bounds
+				if (p.getX() < 0 || p.getX() > width || p.getY() < 0 || p.getY() > height){
+					p.setActive(false);
+				}
+				
+				//Remove the projectile if it's inactive
+				if (!p.isActive()){
+					projectileIter.remove();
+				}
 			}
-			
-			//Remove the projectile if it's inactive
-			if (!p.isActive()){
-				projectileIter.remove();
-			}
+		} catch (ConcurrentModificationException e){
+			//If we get an exception, try again
+			//FIXME: Dirty as fuck. 
+			update();
+			return;
 		}
+		
 		
 		while(playerIter.hasNext()){
 			Player p = playerIter.next();
