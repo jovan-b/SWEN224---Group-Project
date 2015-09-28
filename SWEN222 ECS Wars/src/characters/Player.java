@@ -243,8 +243,8 @@ public abstract class Player {
 		this.tempY = newY;
 		
 		// Move player out of doorway - to prevent being stuck in the door
-		int dir = convertFromViewDir(lastDirMoved);
-		switch(dir){
+//		int dir = convertFromViewDir(lastDirMoved);
+		switch(lastDirMoved){
 		case 1:
 			this.posX += 12;
 			this.tempX += 12;
