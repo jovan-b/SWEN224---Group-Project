@@ -35,6 +35,9 @@ public class GUICanvas extends JComponent{
 	
 	private int viewScale = 1; // view drawing scale
 	
+	private boolean mainMenuView; // true if we are looking at main menu
+	private MainMenu mainMenu;
+	
 	// Static UI Images
 	private Image compassControls;
 	
@@ -54,8 +57,11 @@ public class GUICanvas extends JComponent{
 		try {
 			compassControls = ImageIO.read(new File("Resources"+File.separator+"CompassControls.png"));
 		} catch (IOException e) {
-			System.out.println("Error loading UI Images: " + e.getMessage());;
+			System.out.println("Error loading UI Images: " + e.getMessage());
 		}
+		
+		this.mainMenu = new MainMenu(this);
+		setMainMenu(true);
 	}
 	
 	@Override
@@ -70,6 +76,10 @@ public class GUICanvas extends JComponent{
 	
 	@Override
 	public void paint(Graphics g){
+		if(mainMenuView){
+			mainMenu.paint(g);
+			return;
+		}
 		//paint background
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
@@ -148,5 +158,20 @@ public class GUICanvas extends JComponent{
 	 */
 	public Player getCurrentPlayer(){
 		return player;
+	}
+
+	/**
+	 * Opens or hides the main menu.
+	 * @param isMainMenu true to show the main menu, false otherwise
+	 */
+	public void setMainMenu(boolean isMainMenu) {
+		this.mainMenuView = isMainMenu;
+		if(isMainMenu){
+			addMouseListener(mainMenu);
+			addMouseMotionListener(mainMenu);
+		} else {
+			removeMouseListener(mainMenu);
+			removeMouseMotionListener(mainMenu);
+		}
 	}
 }

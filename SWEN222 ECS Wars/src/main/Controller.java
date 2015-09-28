@@ -329,7 +329,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if (e.getButton() == 1){
+		if (e.getButton() != 3){
 			mouseLocation[0] = e.getX();
 			mouseLocation[1] = e.getY();
 		}
