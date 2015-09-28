@@ -41,7 +41,28 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	 */
 	public MainMenu(GUICanvas canvas) {
 		this.canvas = canvas;
-//		addMouseListener(this);
+		loadImages();
+		loadFonts();
+		buttonLabels = new String[]{"New Game", "Load Game", "New Server", "Connect", "Quit"};
+	}
+
+	/**
+	 * Loads all required fonts.
+	 */
+	private void loadFonts() {
+		try {
+		     GraphicsEnvironment ge = 
+		         GraphicsEnvironment.getLocalGraphicsEnvironment();
+		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Resources"+File.separator+"pixelmix.ttf")));
+		} catch (IOException|FontFormatException e) {
+		     System.out.println("Error loading fonts : "+e.getMessage());
+		}
+	}
+
+	/**
+	 * Loads all necessary images.
+	 */
+	private void loadImages() {
 		// Load sprites
 		sprites = new Image[3];
 		try {
@@ -54,28 +75,30 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		} catch (IOException e) {
 			System.out.println("Error loading player images: " + e.getMessage());
 		}
-		try {
-		     GraphicsEnvironment ge = 
-		         GraphicsEnvironment.getLocalGraphicsEnvironment();
-		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Resources"+File.separator+"pixelmix.ttf")));
-		} catch (IOException|FontFormatException e) {
-		     System.out.println("Error loading fonts : "+e.getMessage());
-		}
-		buttonLabels = new String[]{"New Game", "Load Game", "New Server", "Connect", "Quit"};
 	}
 	
+	/**
+	 * Displays the main menu.
+	 * @param g The Graphics object with which to draw the menu
+	 */
 	public void paint(Graphics g){
 		// calculate canvas centre
 		int midX = canvas.getWidth()/2;
 		int midY = canvas.getHeight()/2;
-		//paint background
+		// paint background
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		// draw little dave
 		g.drawImage(getCurrentImage(), midX+100, midY-150, canvas);
 		animate();
+		// draw the buttons
 		drawButtons(g);
 	}
 	
+	/**
+	 * Draws all buttons on the canvas.
+	 * @param g The Graphics object with which to draw
+	 */
 	private void drawButtons(Graphics g){
 		// calculate canvas centre
 		int midX = canvas.getWidth()/2;
@@ -89,6 +112,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		int buttonY = midY - (BUTTON_HEIGHT*4);
 		int gap = 20 + BUTTON_HEIGHT;
 		int buttonX = midX-(BUTTON_WIDTH/2)-100;
+		
 		// draw title
 		g.setFont(new Font("pixelmix", Font.PLAIN, textSize+10));
 		g.drawString("The ECS Games", buttonX, buttonY-gap);
@@ -114,10 +138,17 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		g2.setStroke(new BasicStroke(1));
 	}
 	
+	/**
+	 * Get the next image in the animation.
+	 * @return The next image to draw
+	 */
 	private Image getCurrentImage() {	
 		return sprites[animState];
 	}
 	
+	/**
+	 * Increments the animation state.
+	 */
 	private void animate() {
 		animCounter++;
 		if (animCounter > 10){
@@ -143,7 +174,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// calculate canvas centre
+		// calculate positional values
 		int midX = canvas.getWidth()/2;
 		int midY = canvas.getHeight()/2;
 		int x = e.getX();
@@ -151,13 +182,16 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		int buttonY = midY - (BUTTON_HEIGHT*4);
 		int gap = 20 + BUTTON_HEIGHT;
 		int buttonLeft = midX-(BUTTON_WIDTH/2)-100;
+		
 		Graphics g = canvas.getGraphics();
 		
 		// check if x is within button bounds
 		if(buttonLeft <= x && x < buttonLeft+BUTTON_WIDTH){
 			// check which y it is on
 			for(int i=0; i<buttonLabels.length; i++){
+				// check if we are on a button
 				if(buttonY <= y && y < buttonY + BUTTON_HEIGHT){
+					// figure out the button we're on
 					switch(i){
 					case 0 : newGame(); break;
 					case 1 : loadGame(); break;
@@ -166,6 +200,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 					case 4 : quit(); break;
 					}
 				}
+				// increment y
 				buttonY += gap;
 			}
 		}
@@ -222,7 +257,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 				buttonY += gap;
 			}
 		}
-		// unselect buttons
+		// deselect buttons
 		this.selectedButton = Integer.MAX_VALUE;
 	}
 	
