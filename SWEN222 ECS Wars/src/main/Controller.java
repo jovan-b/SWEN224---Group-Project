@@ -328,10 +328,9 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 			int y = e.getY();
 			int viewScale = gui.canvas.getViewScale();
 			if (24*2*viewScale < y && y < 24*3*viewScale){
-				if (24*viewScale < x && x < 24*2*viewScale){
-					player.dropItem(0);
-				} else if (24*2*viewScale < x && x < 24*3*viewScale){
-					player.dropItem(1);
+				if (24*viewScale < x && x < 24*(Player.INVENTORY_SIZE+1)*viewScale){
+					int index = (x-(24*viewScale))/(24*viewScale);
+					player.dropItem(index);
 				} else {
 					Room room = player.getCurrentRoom();
 					Item item = room.itemAtMouse(x, y, viewScale, player);
@@ -374,10 +373,9 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		int y = e.getY();
 		String desc = "";
 		if (24*2*viewScale < y && y < 24*3*viewScale){
-			if (24*viewScale < x && x < 24*2*viewScale){
-				desc = player.inventoryItem(0).getDescription();
-			} else if (24*2*viewScale < x && x < 24*3*viewScale){
-				desc = player.inventoryItem(1).getDescription();
+			if (24*viewScale < x && x < 24*(Player.INVENTORY_SIZE+1)*viewScale){
+				int index = (x-(24*viewScale))/(24*viewScale);
+				desc = player.inventoryItem(index).getDescription();
 			} else {
 				desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
 			}

@@ -36,7 +36,7 @@ public abstract class Player {
 	public static final int HEALTH_MAX = 200;
 	
 	
-	protected final int INVENTORY_SIZE = 2;
+	public static final int INVENTORY_SIZE = 3;
 	
 	//fields describing state of player
 	protected Weapon currentWeapon;
@@ -440,6 +440,9 @@ public abstract class Player {
 	}
 
 	public void dropItem(int index) {
+		if (index < 0 || INVENTORY_SIZE <= index){
+			return;
+		}
 		Item square = currentRoom.itemAt(posX, posY);
 		if (square instanceof Floor){
 			if (((Floor) square).getItem() == null){

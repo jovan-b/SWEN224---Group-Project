@@ -121,7 +121,7 @@ public class GUICanvas extends JComponent{
 	
 	private void drawInventory(Graphics g) {
 		Item[] inventory = player.getInventory();
-		for (int i = 0; i < inventory.length; i++){
+		for (int i = 0; i < Player.INVENTORY_SIZE; i++){
 			if (inventory[i] != null){
 				Image itemImage = inventory[i].getScaledImage(0);
 				g.drawImage(itemImage, (24*viewScale)*(1+i), (24*viewScale)*2, this);
