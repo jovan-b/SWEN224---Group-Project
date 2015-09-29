@@ -5,7 +5,7 @@ SE Hallway
 NE Hallway
 Courtyard
 Courtyard Shed
-Entrance Hall
+Room 4
 Classroom 102
 Classroom 101
 Server Room
