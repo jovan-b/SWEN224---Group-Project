@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import characters.Player;
 import main.Controller;
 
 /**
@@ -26,6 +27,7 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 	private DataInputStream input;
 	private DataOutputStream output;
 	private Controller controller;
+	private int uid;
 
 	public ClientConnection(Socket socket){
 		this.socket = socket;
@@ -40,15 +42,37 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 			//Create the socket input and output to write to for the server
 			input = new DataInputStream(socket.getInputStream());
 			output = new DataOutputStream(socket.getOutputStream());
-			
+
+			//Waits for the server to send an amount of players in the game
+			int numberOfPlayers = input.readInt();
+			uid = input.readInt();
+
 			//Keep running the game until the player disconnects or loses connection to the server
-			controller = new Controller(this);
-			
-//			boolean disconnect = false;
-//			while(!disconnect){
-//				//Run the game
-//				//TODO: Show some feedback here from the input stream
-//			}
+			controller = new Controller(this, numberOfPlayers, uid);
+
+			while(true){
+				int user = input.readInt();
+				Player player = controller.getPlayer(user);
+				int action = input.readInt();
+				switch(action){
+					//Move up
+					case 1:
+						player.move("up");
+						break;
+					//Move down
+					case 2:
+						player.move("down");
+						break;
+					//Move left
+					case 3:
+						player.move("left");
+						break;
+					//Move right
+					case 4:
+						player.move("right");
+						break;
+				}
+			}
 		}
 		catch(IOException e){
 			System.err.println("I/O Error: " + e.getMessage());
@@ -70,18 +94,22 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 			int keyCode = e.getKeyCode();
 			if(keyCode == KeyEvent.VK_W){
 				//Indicates player move up
-				output.writeInt(1); 
+				output.writeInt(1);
+				output.writeInt(1);
 			}
 			else if(keyCode == KeyEvent.VK_S){
 				//Indicates player move down
+				output.writeInt(1);
 				output.writeInt(2);
 			}
 			else if(keyCode == KeyEvent.VK_A){
 				//Indicates player move left
+				output.writeInt(1);
 				output.writeInt(3);
 			}
 			else if(keyCode == KeyEvent.VK_D){
 				//Indicates player move right
+				output.writeInt(1);
 				output.writeInt(4);
 			}
 		}
@@ -91,46 +119,72 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 	}
 
 	public void keyTyped(KeyEvent e) {}
-	public void keyReleased(KeyEvent e) {}
+	
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_Q){
+			controller.getPlayer(uid).rotateViewLeft();
+		}
+		if(e.getKeyCode() == KeyEvent.VK_E){
+			controller.getPlayer(uid).rotateViewRight();
+		}
+		if(e.getKeyCode() == KeyEvent.VK_1){
+			controller.getPlayer(uid).inventoryItem(0).use(controller.getPlayer(uid));
+		}
+		if(e.getKeyCode() == KeyEvent.VK_2){
+			controller.getPlayer(uid).inventoryItem(1).use(controller.getPlayer(uid));
+		}
+		if(e.getKeyCode() == KeyEvent.VK_3){
+			controller.getPlayer(uid).inventoryItem(2).use(controller.getPlayer(uid));
+		}
+		if (e.getKeyCode() == KeyEvent.VK_MINUS){
+			controller.getGUI().getCanvas().setViewScale(1);
+			controller.scaleEverything(1);
+		}
+		if (e.getKeyCode() == KeyEvent.VK_EQUALS){
+			controller.getGUI().getCanvas().setViewScale(2);
+			controller.scaleEverything(2);
+		}
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
+	public void mouseDragged(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
+	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}

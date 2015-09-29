@@ -21,8 +21,8 @@ public class GUIFrame extends JFrame {
 	public static final int INIT_WIDTH = 800;
 	public static final int INIT_HEIGHT = 600;
 
-	Controller controller;
-	GUICanvas canvas;
+	private Controller controller;
+	private GUICanvas canvas;
 
 	/**
 	 * Constructor for class GUIFrame.
@@ -42,7 +42,11 @@ public class GUIFrame extends JFrame {
 		setVisible(true);
 		addKeyListener(key);
 	}
-
+	
+	public GUICanvas getCanvas(){
+		return canvas;
+	}
+	
 	/**
 	 * Draws everything within this window.
 	 */

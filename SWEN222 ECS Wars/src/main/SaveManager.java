@@ -51,7 +51,7 @@ public final class SaveManager {
 			doc.appendChild(root);
 			
 			//Write rooms to file
-			for(Room r : controller.rooms){
+			for(Room r : controller.getRooms()){
 				Element room = doc.createElement("Room");
 				root.appendChild(room);
 				room.setAttribute("id", r.getName());

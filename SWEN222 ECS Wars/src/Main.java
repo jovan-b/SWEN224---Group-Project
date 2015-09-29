@@ -1,3 +1,5 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,7 +12,7 @@ import network.ServerHandler;
  * Main class to run the game off of.
  * Starts in single player if no cmd line arguements are specified,
  * or starts the starts the server for clients to join.
- * 
+ *
  * @author Jovan Bogoievski
  *
  */
@@ -18,7 +20,7 @@ public class Main {
 
 	/**
 	 * Parses the command line arguments to choose which mode to start the game in
-	 * 
+	 *
 	 * Design will probably change after more parts of the program are functional
 	 * @param args
 	 */
@@ -26,8 +28,8 @@ public class Main {
 		boolean server = false; //Server mode, start as false unless specified in the cmd line arguments
 		String url = null; //The url which the client connects to
 		int clients = 0; //Number of clients for multiplayer
-		int port = 8800; //Default port TODO: Be able to change the port
-		
+		int port = 8777; //Default port TODO: Be able to change the port
+
 		for (int i = 0; i != args.length; ++i) {
 			if (args[i].startsWith("-")) {
 				String arg = args[i];
@@ -46,33 +48,33 @@ public class Main {
 			}
 			//Else nothing yet, no flags change so start the game in single player mode
 		}
-		
+
 		//Check if the user tried to connect to a url while in server mode
 		if(url != null && server) {
 			System.out.println("Cannot be a server and connect to another server!");
 			System.exit(1);
 		}
-		
+
 		try {
 			if(server) {
 				// Run in Server mode
-				runServer(port, clients);			
+				runServer(port, clients);
 			} else if(url != null) {
 				// Run in client mode
 				runClient(url,port);
-			} else {			
+			} else {
 				// single user game
-				singlePlayer();							
+				singlePlayer();
 			}
-		} catch(IOException ioe) {			
+		} catch(IOException ioe) {
 			//Something went wrong when connecting
 			System.out.println("I/O error: " + ioe.getMessage());
 			ioe.printStackTrace();
 			System.exit(1);
 		}
-		
+
 		System.exit(0);
-		
+
 	}
 
 	/**
@@ -84,7 +86,7 @@ public class Main {
 				+ "-connect <url> : connects to the server with the given url.\n"
 				+ "					use localhost as the url to connect to connect to the server on your own machine\n");
 	}
-	
+
 	/**
 	 * Connects the client to the server and initialises them as a player
 	 * @param url
@@ -98,7 +100,7 @@ public class Main {
 		ClientConnection client = new ClientConnection(s);
 		client.run();
 	}
-	
+
 	/**
 	 * Starts the server and waits for client connections, then starts the game
 	 * in multiplayer mode
@@ -117,37 +119,60 @@ public class Main {
 			while (true) {
 				//Wait for a client to connect
 				Socket s = server.accept();
-				int uid = i+1;
+				int uid = i;
 				clientsConnected[i] = new ServerHandler(s, uid);
-				clientsConnected[i].start();
+				//clientsConnected[i].start();
 				i++;
-				
-				System.out.println("ACCEPTED CONNECTION FROM: " + s.getInetAddress());				
+
+				System.out.println("ACCEPTED CONNECTION FROM: " + s.getInetAddress());
 				clients -= 1;
-				
+
 				if(clients == 0) {
 					System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
-					multiPlayer(); // TODO add arguments (connections, etc)
+					multiPlayer(clientsConnected);
 					System.out.println("ALL CLIENTS DISCONNECTED --- GAME OVER");
 					break; // game over
 				}
 			}
-			
+
 			server.close();
 		} catch(IOException e) {
 			System.err.println("I/O error: " + e.getMessage());
 		} finally {
 		}
 	}
-	
+
 	public static void singlePlayer() {
 		new Controller();
 	}
-	
-	public static void multiPlayer() {
-		// TODO Auto-generated method stub
-		
+
+	/**
+	 * Sets up a multiplayer game for each client
+	 * @param clientsConnected
+	 */
+	public static void multiPlayer(ServerHandler[] clientsConnected) {
+		Socket socket;
+		DataOutputStream output;
+
+		//Go through the server handlers for each client to start their game
+		for(int i = 0; i<clientsConnected.length; i++){
+			clientsConnected[i].setServerHandlers(clientsConnected);
+			clientsConnected[i].start();
+			socket = clientsConnected[i].getSocket();
+			try{
+				output = new DataOutputStream(socket.getOutputStream());
+				//Tells the player how many players are in the game and their user ID
+				output.writeInt(clientsConnected.length);
+				output.writeInt(i);
+			}
+			catch(IOException e){
+				System.err.println("I/O error: " + e.getMessage());
+			}
+		}
+		while(true){
+			//do some stuff to run the game here
+		}
 	}
 
-	
+
 }

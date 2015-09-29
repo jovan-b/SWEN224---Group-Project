@@ -36,15 +36,18 @@ import characters.nonplayer.strategy.WanderStrategy;
  * @author Jah Seng Lee
  *
  */
-public class Controller implements KeyListener, MouseListener, MouseMotionListener{
+public class Controller extends Thread implements KeyListener, MouseListener, MouseMotionListener{
 	
 	public static final double FRAME_RATE = 1.0/60;	//a 60th of a second
 	private boolean isRunning = false;
-
-	GUIFrame gui;
-	Player player;
-	List<Room> rooms;
-	Set<Door> doors;
+	
+	private GUIFrame gui;
+	private Player player;
+	private List<Player> players;
+	private int uid;
+	private ArrayList<Room> rooms;
+	private Set<Door> doors;
+	
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
 	private int[] mouseLocation = new int[2];	//position of mouse if it is being clicked
@@ -53,15 +56,79 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		
 	public Controller(){
 		initialise(this, this, this);
-		run(FRAME_RATE);
+		run();
 	}
 	
 	/**
 	 * Controller constructor for a multiplayer client
 	 */
-	public Controller(ClientConnection client){
-		initialise(client, client, client);
-		run(FRAME_RATE);
+	public Controller(ClientConnection client, int numberOfClients, int uid){
+		MPInitialise(client, client, client, numberOfClients, uid);
+		start();
+	}
+
+	/**
+	 * Initialises a multiplayer game
+	 * @param key
+	 * @param mouse
+	 * @param mouse2
+	 * @param numberOfClients
+	 * @param uid
+	 */
+	public void MPInitialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2,
+			int numberOfClients, int uid) {
+		isRunning = true;
+		rooms = new ArrayList<>();
+		doors = new HashSet<>();
+		setupRooms();
+		Room room = rooms.get(0);
+		rooms.add(room);
+		players = new ArrayList<Player>();
+		for(int i = 0; i<numberOfClients; i++){
+			players.add(new DavePlayer(room, (i+2)*24, 2*24));
+			room.addPlayer(players.get(i));
+		}
+		gui = new GUIFrame(this, players.get(uid), key, mouse, mouse2);
+		players.get(uid).setCanvas(gui.getCanvas());
+		
+		gui.getCanvas().setMainMenu(false);
+		
+		SoundManager.playSong("battle_1.mp3");
+	}
+	
+	/**
+	 * Initialise the fields of this class
+	 */
+	private void initialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2) {
+		isRunning = true;
+		rooms = new ArrayList<>();
+		doors = new HashSet<>();
+		setupRooms();
+		Room room = rooms.get(0); //FIXME
+		player = new DavePlayer(room, 2*24, 2*24);
+		players = new ArrayList<Player>();
+		players.add(player);
+		uid = 0;
+		gui = new GUIFrame(this, player, key, mouse, mouse2);
+		player.setCanvas(gui.getCanvas());
+		
+		SoundManager.playSong("battle_1.mp3");
+	}
+	
+	/**
+	 * Initialise the fields of this class
+	 */
+	public void initialiseGame() {
+		isRunning = true;
+		Room room = rooms.get(0); //FIXME
+		room.addPlayer(player);
+		player.setCanvas(gui.getCanvas());
+		
+		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new WanderStrategy());
+		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
+		room.addNPC(npc);
+		
+		SaveManager.saveGame(this, "test_save.xml");
 	}
 	
 	/**
@@ -75,7 +142,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	 * 
 	 * @param frameRate seconds per frame
 	 */
-	private void run(double frameRate) {
+	public void run() {
 
 		//convert time to seconds
 		double nextTime = (double)System.nanoTime()/1000000000.0;
@@ -86,7 +153,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 			
 			if(currentTime >= nextTime){
 				//assign time for the next update
-				nextTime += frameRate;
+				nextTime += FRAME_RATE;
 				update();
 				if(currentTime < nextTime) gui.draw();
 			}
@@ -118,7 +185,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	}
 	
 	private void updateAndCollide() {
-		player.update();
+		players.get(uid).update();
 	}
 
 	/**
@@ -160,38 +227,6 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	 */
 	private boolean isLeftMousePressed(){
 		return mouseLocation[0] != 0 && mouseLocation[1] != 0;
-	}
-
-	/**
-	 * Initialise the fields of this class
-	 */
-	private void initialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2) {
-		isRunning = true;
-		rooms = new ArrayList<>();
-		doors = new HashSet<>();
-		setupRooms();
-		Room room = rooms.get(0); //FIXME
-		player = new DavePlayer(room, 2*24, 2*24);
-		gui = new GUIFrame(this, player, key, mouse, mouse2);
-		player.setCanvas(gui.canvas);
-		
-		SoundManager.playSong("battle_1.mp3");
-	}
-	
-	/**
-	 * Initialise the fields of this class
-	 */
-	public void initialiseGame() {
-		isRunning = true;
-		Room room = rooms.get(0); //FIXME
-		room.addPlayer(player);
-		player.setCanvas(gui.canvas);
-		
-		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new WanderStrategy());
-		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
-		room.addNPC(npc);
-		
-		SaveManager.saveGame(this, "test_save.xml");
 	}
 	
 	private void setupRooms(){
@@ -237,18 +272,18 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 			player.inventoryItem(2).use(player);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_MINUS){
-			gui.canvas.setViewScale(1);
+			gui.getCanvas().setViewScale(1);
 			scaleEverything(1);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_EQUALS){
-			gui.canvas.setViewScale(2);
+			gui.getCanvas().setViewScale(2);
 			scaleEverything(2);
 		}
 		keyBits.clear(e.getKeyCode());
 	}
 
-	private void scaleEverything(int scale) {
-		GUICanvas c = gui.canvas;
+	public void scaleEverything(int scale) {
+		GUICanvas c = gui.getCanvas();
 		int viewScale = c.getViewScale();
 		c.scaleUI();
 		Image image;
@@ -335,7 +370,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		} else if (e.getButton() == 3){
 			int x = e.getX();
 			int y = e.getY();
-			int viewScale = gui.canvas.getViewScale();
+			int viewScale = gui.getCanvas().getViewScale();
 			if (24*2*viewScale < y && y < 24*3*viewScale){
 				if (24*viewScale < x && x < 24*(Player.INVENTORY_SIZE+1)*viewScale){
 					int index = (x-(24*viewScale))/(24*viewScale);
@@ -377,7 +412,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		int viewScale = gui.canvas.getViewScale();
+		int viewScale = gui.getCanvas().getViewScale();
 		int x = e.getX();
 		int y = e.getY();
 		String desc = "";
@@ -391,11 +426,29 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		} else {
 			desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
 		}
-		gui.canvas.setToolTip(desc, x, y);
+		gui.getCanvas().setToolTip(desc, x, y);
 	}
 
 	public Set<Door> getDoors() {
 		return doors;
 	}
+	
+	/**
+	 * Returns the specified player in the player list
+	 * @param i
+	 * @return
+	 */
+	public Player getPlayer(int uid){
+		return players.get(uid);
+	}
+	
+	public GUIFrame getGUI(){
+		return gui;
+	}
+
+	public ArrayList<Room> getRooms(){
+		return rooms;
+	}
+
 
 }
