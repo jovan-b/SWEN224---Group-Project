@@ -172,16 +172,25 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		setupRooms();
 		Room room = rooms.get(0); //FIXME
 		player = new DavePlayer(room, 2*24, 2*24);
-		room.addPlayer(player);
 		gui = new GUIFrame(this, player, key, mouse, mouse2);
 		player.setCanvas(gui.canvas);
 		
-		room = rooms.get(0);
+		SoundManager.playSong("battle_1.mp3");
+	}
+	
+	/**
+	 * Initialise the fields of this class
+	 */
+	public void initialiseGame() {
+		isRunning = true;
+		Room room = rooms.get(0); //FIXME
+		room.addPlayer(player);
+		player.setCanvas(gui.canvas);
+		
 		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new WanderStrategy());
 		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
 		room.addNPC(npc);
 		
-		SoundManager.playSong("battle_1.mp3");
 		SaveManager.saveGame(this, "test_save.xml");
 	}
 	
@@ -266,10 +275,6 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 					}
 				}
 				p.setScaledImages(scaled);
-				for (Item i : p.getInventory()){
-					image = i.getImage(0);
-					i.setScaledImage(0, scaleImage(image, c, scale));
-				}
 			}
 		}
 	}

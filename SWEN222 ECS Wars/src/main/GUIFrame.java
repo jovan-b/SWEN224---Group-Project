@@ -31,7 +31,7 @@ public class GUIFrame extends JFrame {
 	 */
 	public GUIFrame(Controller controller, Player player, KeyListener key, MouseListener mouse, MouseMotionListener mouse2){
 		super("ECS Wars");
-		canvas = new GUICanvas(this, player);
+		canvas = new GUICanvas(this, controller, player);
 		canvas.addMouseListener(mouse);
 		canvas.addMouseMotionListener(mouse2);
 		setLayout(new BorderLayout());

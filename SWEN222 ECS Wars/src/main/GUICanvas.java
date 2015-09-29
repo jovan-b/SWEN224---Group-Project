@@ -49,7 +49,7 @@ public class GUICanvas extends JComponent{
 	 * @param frame The frame containing this canvas
 	 * @param player The current client's player.
 	 */
-	public GUICanvas(GUIFrame frame, Player player){
+	public GUICanvas(GUIFrame frame, Controller controller, Player player){
 		this.frame = frame;
 		this.player = player;
 		this.compass = new Compass();
@@ -65,7 +65,7 @@ public class GUICanvas extends JComponent{
 			System.out.println("Error loading UI Images: " + e.getMessage());
 		}
 		
-		this.mainMenu = new MainMenu(this);
+		this.mainMenu = new MainMenu(this, controller);
 		setMainMenu(true);
 	}
 	

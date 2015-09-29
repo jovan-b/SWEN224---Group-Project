@@ -28,6 +28,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	private static final int BUTTON_HEIGHT = 40;
 	
 	private GUICanvas canvas;
+	private Controller controller;
 	private Image[] sprites;
 	private int animState = 0; // the current animation frame
 	private int animModifier = 1; // flicks between 1 and -1 to loop animation
@@ -39,8 +40,9 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	 * Constructor for class MainMenu.
 	 * @param canvas The GUICanvas the menu will be drawn on
 	 */
-	public MainMenu(GUICanvas canvas) {
+	public MainMenu(GUICanvas canvas, Controller controller) {
 		this.canvas = canvas;
+		this.controller = controller;
 		loadImages();
 		loadFonts();
 		buttonLabels = new String[]{"New Game", "Load Game", "New Server", "Connect", "Quit"};
@@ -208,6 +210,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 
 	
 	private void newGame() { // FIXME actually make a new game
+		controller.initialiseGame();
 		canvas.setMainMenu(false);
 	}
 
