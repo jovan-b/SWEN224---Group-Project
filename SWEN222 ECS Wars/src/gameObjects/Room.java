@@ -107,6 +107,7 @@ public class Room {
 		switch(code){
 		case "__" : return new Floor();
 		case "_k" : return new Floor(new KeyCard());
+		case "_t" : return new Floor(new Torch());
 		case "##" : return new Wall();
 		case "PP" : return new Pillar();
 		case "Dh" : return new Desk(true);
