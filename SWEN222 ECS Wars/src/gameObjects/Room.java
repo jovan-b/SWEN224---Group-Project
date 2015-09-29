@@ -342,22 +342,22 @@ public class Room {
 	private void checkPlayers(int viewDirection) {
 		switch(viewDirection){
 		case 1: // EAST
-			for (Player p : players){
+			for (Player p : getAllCharacters()){
 				p.setRow(rowFromY(width-p.getX()));
 			}
 			break;
 		case 2: // SOUTH
-			for (Player p : players){
+			for (Player p : getAllCharacters()){
 				p.setRow(rowFromY(height-p.getY()));
 			}
 			break;
 		case 3: // WEST
-			for (Player p : players){
+			for (Player p : getAllCharacters()){
 				p.setRow(rowFromY(p.getX()));
 			}
 			break;
 		case 0: default: // DEFAULT TO NORTH
-			for (Player p : players){
+			for (Player p : getAllCharacters()){
 				p.setRow(rowFromY(p.getY()));
 			}
 			break;
