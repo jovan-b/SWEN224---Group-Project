@@ -60,6 +60,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	public Controller(){
 		initialise(this, this, this);
 		run();
+		
 	}
 	
 	/**
@@ -210,6 +211,11 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		}
 		if(isKeyPressed(KeyEvent.VK_DOWN) || isKeyPressed(KeyEvent.VK_S)){
 			player.move("down");
+		}
+		if(isKeyPressed(KeyEvent.VK_SHIFT)){
+			player.setSpeedMulti(2);
+		} else {
+			player.setSpeedMulti(1);
 		}
 		if(isLeftMousePressed()){
 			player.shoot(mouseLocation[0], mouseLocation[1]);

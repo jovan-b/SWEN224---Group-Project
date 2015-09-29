@@ -30,7 +30,7 @@ import gameObjects.weapons.Weapon;
  */
 public abstract class Player {
 	public static final int RESPAWN_TIME = 3000; //3 seconds
-	public static final int BASE_SPEED = 2;	//pixels per frame
+	public static final double BASE_SPEED = 1.5;	//pixels per frame
 	public static final int BASE_HEIGHT = 50;
 	public static final int BASE_WIDTH = 30;
 	public static final int HEALTH_MAX = 200;
@@ -45,13 +45,13 @@ public abstract class Player {
 	
 
 	//position describing the centre of a player object
-	protected int posX;
-	protected int posY;
+	protected double posX;
+	protected double posY;
 	protected int viewDirection;
 	protected int hitBox = 11;
 	
-	private int tempX;
-	private int tempY;
+	private double tempX;
+	private double tempY;
 	
 	protected Compass compass;
 	protected int lastDirMoved;
@@ -69,8 +69,8 @@ public abstract class Player {
 	protected Image[][] scaledSprites;
 
 	//player's speed is this constant * Player.SPEED
-	protected int speedMulti = 1;
-	protected int speed = speedMulti * Player.BASE_SPEED;
+	protected double speedMulti = 1;
+	protected double speed = speedMulti * Player.BASE_SPEED;
 	
 	public Player(Room room, int posX, int posY){
 		this.currentRoom = room;
@@ -149,7 +149,7 @@ public abstract class Player {
 		default: tempY -= speed;
 			break;
 		}
-		if (canMove(tempX, tempY)){
+		if (canMove((int)tempX, (int)tempY)){
 			posX = tempX;
 			posY = tempY;
 		}
@@ -303,11 +303,11 @@ public abstract class Player {
 	}
 
 	public int getX() {
-		return posX;
+		return (int)posX;
 	}
 
 	public int getY() {
-		return posY;
+		return (int)posY;
 	}
 
 	public int getViewDirection() {
@@ -372,7 +372,7 @@ public abstract class Player {
 	}
 	
 	public Rectangle getBoundingBox(){
-		return new Rectangle(posX-hitBox, posY-hitBox, hitBox*2, hitBox*2);
+		return new Rectangle((int)posX-hitBox, (int)posY-hitBox, hitBox*2, hitBox*2);
 	}
 	
 	public void setHealth(int health){
@@ -386,6 +386,11 @@ public abstract class Player {
 	public void setFacing(int dir){
 		if (dir < 0 || dir > 3){ return; }
 		lastDirMoved = dir;
+	}
+	
+	public void setSpeedMulti(double multi){
+		speedMulti = multi;
+		speed = Player.BASE_SPEED*multi;
 	}
 	
 	/**
@@ -452,7 +457,7 @@ public abstract class Player {
 		if (index < 0 || INVENTORY_SIZE <= index){
 			return;
 		}
-		Item square = currentRoom.itemAt(posX, posY);
+		Item square = currentRoom.itemAt((int)posX, (int)posY);
 		if (square instanceof Floor){
 			if (((Floor) square).getItem() == null){
 				((Floor) square).setItem(inventory[index]);
