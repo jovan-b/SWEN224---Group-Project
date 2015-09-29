@@ -41,11 +41,14 @@ public class ServerHandler extends Thread{
 
 			//Continue to run the game reading the clients actions
 			while(running){
+				//Reads what action the player is trying to do
 				int action = input.readInt();
 				switch(action){
-					//Move up
+					//If 1 is the action, it means the player is trying to move
 					case 1:
+						//Read which direction
 						int direction = input.readInt();
+						//Go through each client updating them of the players new position
 						for(int i = 0; i<serverHandlers.length; i++){
 							Socket socket = serverHandlers[i].getSocket();
 							DataOutputStream socketOut = new DataOutputStream(socket.getOutputStream());
@@ -67,7 +70,7 @@ public class ServerHandler extends Thread{
 				socket.close();
 			}
 			catch(IOException e){
-				//Do nothing
+				e.printStackTrace(System.err);
 			}
 		}
 	}

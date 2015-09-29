@@ -54,6 +54,9 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 												//mouseLocation[0] is x
 												//mouseLocation[1] is y
 		
+	/**
+	 * Controller constructor for a singeplayer game
+	 */
 	public Controller(){
 		initialise(this, this, this);
 		run();
@@ -68,7 +71,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	}
 
 	/**
-	 * Initialises a multiplayer game
+	 * Initialises the fields of a multiplayer game
 	 * @param key
 	 * @param mouse
 	 * @param mouse2
@@ -78,19 +81,22 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	public void MPInitialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2,
 			int numberOfClients, int uid) {
 		isRunning = true;
+		
 		rooms = new ArrayList<>();
 		doors = new HashSet<>();
 		setupRooms();
+		
 		Room room = rooms.get(0);
 		rooms.add(room);
+		
 		players = new ArrayList<Player>();
 		for(int i = 0; i<numberOfClients; i++){
 			players.add(new DavePlayer(room, (i+2)*24, 2*24));
 			room.addPlayer(players.get(i));
 		}
+		
 		gui = new GUIFrame(this, players.get(uid), key, mouse, mouse2);
 		players.get(uid).setCanvas(gui.getCanvas());
-		
 		gui.getCanvas().setMainMenu(false);
 		
 		SoundManager.playSong("battle_1.mp3");

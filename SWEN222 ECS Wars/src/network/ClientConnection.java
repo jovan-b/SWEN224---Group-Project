@@ -50,7 +50,9 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 			//Keep running the game until the player disconnects or loses connection to the server
 			controller = new Controller(this, numberOfPlayers, uid);
 
+			//While the game is running, take incoming updates of other clients
 			while(true){
+				//Read which player is trying to perform an action
 				int user = input.readInt();
 				Player player = controller.getPlayer(user);
 				int action = input.readInt();

@@ -142,6 +142,9 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Set up a single player game
+	 */
 	public static void singlePlayer() {
 		new Controller();
 	}
