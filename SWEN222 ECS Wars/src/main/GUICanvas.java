@@ -44,6 +44,10 @@ public class GUICanvas extends JComponent{
 	private Image healthInventBack;
 	private Image healthInventFront;
 	
+	private Image scaledCompassCont;
+	private Image scaledHealthBack;
+	private Image scaledHealthFront;
+	
 	/**
 	 * Constructor for class GUICanvas.
 	 * @param frame The frame containing this canvas
@@ -64,6 +68,9 @@ public class GUICanvas extends JComponent{
 		} catch (IOException e) {
 			System.out.println("Error loading UI Images: " + e.getMessage());
 		}
+		scaledCompassCont = compassControls;
+		scaledHealthBack = healthInventBack;
+		scaledHealthFront = healthInventFront;
 		
 		this.mainMenu = new MainMenu(this);
 		setMainMenu(true);
@@ -101,12 +108,12 @@ public class GUICanvas extends JComponent{
 	private void drawHUD(Graphics g, Room r) {
 		// Draw compass
 		compass.update();
-		g.drawImage(compass.getImage(), getWidth()-96-20, 20, this);
-		g.drawImage(compassControls, getWidth()-96-20, 20, this);
-		g.drawImage(healthInventBack, 0, 24, this);
+		g.drawImage(compass.getImage(), getWidth()-(96*viewScale)-20, 20, this);
+		g.drawImage(scaledCompassCont, getWidth()-(96*viewScale)-20, 20, this);
+		g.drawImage(scaledHealthBack, 0, 24*viewScale, this);
 		drawHealth(g);
 		drawInventory(g);
-		g.drawImage(healthInventFront, 0, 24, this);
+		g.drawImage(scaledHealthFront, 0, 24*viewScale, this);
 		if (toolTip != null){
 			showToolTip(g);
 		}
@@ -117,7 +124,7 @@ public class GUICanvas extends JComponent{
 		for (int i = 0; i < inventory.length; i++){
 			if (inventory[i] != null){
 				Image itemImage = inventory[i].getScaledImage(0);
-				g.drawImage(itemImage, 24*(1+i), 24*2, this);
+				g.drawImage(itemImage, (24*viewScale)*(1+i), (24*viewScale)*2, this);
 			}
 		}
 	}
@@ -128,7 +135,7 @@ public class GUICanvas extends JComponent{
 	 */
 	private void drawHealth(Graphics g) {
 		g.setColor(Color.RED);
-		g.fillRect(24, 32, player.getHealth(), 8);
+		g.fillRect(24*viewScale, 32*viewScale, player.getHealth()*viewScale, 8*viewScale);
 	}
 
 	/**
@@ -186,6 +193,16 @@ public class GUICanvas extends JComponent{
 	 */
 	public Player getCurrentPlayer(){
 		return player;
+	}
+	
+	public void scaleUI(){
+		scaledCompassCont = compassControls.getScaledInstance(compassControls.getWidth(this)*viewScale, 
+				compassControls.getHeight(this)*viewScale, Image.SCALE_FAST);
+		scaledHealthBack = healthInventBack.getScaledInstance(healthInventBack.getWidth(this)*viewScale, 
+				healthInventBack.getHeight(this)*viewScale, Image.SCALE_FAST);
+		scaledHealthFront = healthInventFront.getScaledInstance(healthInventFront.getWidth(this)*viewScale, 
+				healthInventFront.getHeight(this)*viewScale, Image.SCALE_FAST);
+		compass.scaleImage(viewScale, this);
 	}
 
 	/**

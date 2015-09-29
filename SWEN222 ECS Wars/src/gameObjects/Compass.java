@@ -9,9 +9,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import main.GUICanvas;
+
 public class Compass {
 	
 	BufferedImage compassImage;
+	BufferedImage scaledCompass;
 	BufferedImage rotated;
 	double rot;
 	double targetRot;
@@ -21,7 +24,8 @@ public class Compass {
 		targetRot = 0;
 		try {
 			compassImage = ImageIO.read(new File("Resources"+File.separator+"Compass.png"));
-			rotated = compassImage;
+			scaledCompass = compassImage;
+			rotated = scaledCompass;
 		} catch (IOException e) {
 			System.out.println("Error reading Compass image: " + e.getMessage());
 		}
@@ -33,16 +37,34 @@ public class Compass {
 	
 	private void rotateImage(double angle) {
 		double rotate = Math.toRadians(angle);
-		double locationX = compassImage.getWidth(null) / 2;
-		double locationY = compassImage.getHeight(null) / 2;
+		double locationX = scaledCompass.getWidth(null) / 2;
+		double locationY = scaledCompass.getHeight(null) / 2;
 		AffineTransform tx = AffineTransform.getRotateInstance(rotate, locationX, locationY);
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 		
-		rotated = op.filter(compassImage, null);
+		rotated = op.filter(scaledCompass, null);
 	}
 	
 	public Image getImage(){
 		return rotated;
+	}
+	
+	public void scaleImage(int scale, GUICanvas c){
+		if (scale == 1){
+			scaledCompass = compassImage;
+			rotated = scaledCompass;
+			return;
+		}
+		BufferedImage before = compassImage;
+		int w = before.getWidth();
+		int h = before.getHeight();
+		BufferedImage after = new BufferedImage(w*2, h*2, BufferedImage.TYPE_INT_ARGB);
+		AffineTransform at = new AffineTransform();
+		at.scale(2.0, 2.0);
+		AffineTransformOp scaleOp = 
+		   new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+		scaledCompass = scaleOp.filter(before, after);
+		rotated = scaledCompass;
 	}
 
 	public void update() {
