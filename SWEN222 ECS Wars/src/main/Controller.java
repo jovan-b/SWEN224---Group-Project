@@ -266,6 +266,10 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 					}
 				}
 				p.setScaledImages(scaled);
+				for (Item i : p.getInventory()){
+					image = i.getImage(0);
+					i.setScaledImage(0, scaleImage(image, c, scale));
+				}
 			}
 		}
 	}

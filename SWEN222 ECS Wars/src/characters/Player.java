@@ -409,4 +409,20 @@ public abstract class Player {
 
 		return theta;
 	}
+
+	public boolean pickUp(Item item) {
+		int index = 0;
+		while(index < INVENTORY_SIZE){
+			if (inventory[index] == null){
+				inventory[index] = item;
+				return true;
+			}
+			index++;
+		}
+		return false;
+	}
+	
+	public Item[] getInventory(){
+		return inventory;
+	}
 }

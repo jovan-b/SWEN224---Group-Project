@@ -1,6 +1,7 @@
 package main;
 
 import gameObjects.Compass;
+import gameObjects.Item;
 import gameObjects.Room;
 
 import java.awt.Color;
@@ -104,12 +105,27 @@ public class GUICanvas extends JComponent{
 		g.drawImage(compassControls, getWidth()-96-20, 20, this);
 		g.drawImage(healthInventBack, 0, 24, this);
 		drawHealth(g);
+		drawInventory(g);
 		g.drawImage(healthInventFront, 0, 24, this);
 		if (toolTip != null){
 			showToolTip(g);
 		}
 	}
 	
+	private void drawInventory(Graphics g) {
+		Item[] inventory = player.getInventory();
+		for (int i = 0; i < inventory.length; i++){
+			if (inventory[i] != null){
+				Image itemImage = inventory[i].getScaledImage(0);
+				g.drawImage(itemImage, 24*(1+i), 24*2, this);
+			}
+		}
+	}
+
+	/**
+	 * Draws the player's current health
+	 * @param g The Graphics object to draw with
+	 */
 	private void drawHealth(Graphics g) {
 		g.setColor(Color.RED);
 		g.fillRect(24, 32, player.getHealth(), 8);

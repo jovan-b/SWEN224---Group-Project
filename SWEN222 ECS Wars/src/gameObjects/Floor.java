@@ -32,7 +32,10 @@ public class Floor implements Item {
 	@Override
 	public void use(Player p) {
 		if (item != null){
-			item.use(p);
+			if (p.pickUp(item)){
+				System.out.println("Player picked up the item");
+				setItem(null);
+			}
 		}
 	}
 
