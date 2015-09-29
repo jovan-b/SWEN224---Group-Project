@@ -241,6 +241,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	private void scaleEverything(int scale) {
 		GUICanvas c = gui.canvas;
 		int viewScale = c.getViewScale();
+		c.scaleUI();
 		Image image;
 		for (Room r : rooms){
 			Image[][] images = r.getImages();
@@ -275,6 +276,12 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 					}
 				}
 				p.setScaledImages(scaled);
+				for (Item i : p.getInventory()){
+					if (i != null){
+						image = i.getImage(0);
+						i.setScaledImage(0, scaleImage(image, c, scale));
+					}
+				}
 			}
 		}
 	}
