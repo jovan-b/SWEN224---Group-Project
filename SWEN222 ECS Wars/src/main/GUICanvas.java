@@ -3,6 +3,7 @@ package main;
 import gameObjects.Compass;
 import gameObjects.Item;
 import gameObjects.Room;
+import gameObjects.Torch;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -106,19 +107,43 @@ public class GUICanvas extends JComponent{
 	 * @param r The room to draw
 	 */
 	private void drawHUD(Graphics g, Room r) {
+		// draw server room overlays
+		if (r.getName().equals("Server Room")){
+			drawServerRoomOverlay(r, g);
+		}
+		
 		// Draw compass
 		compass.update();
 		g.drawImage(compass.getImage(), getWidth()-(96*viewScale)-20, 20, this);
 		g.drawImage(scaledCompassCont, getWidth()-(96*viewScale)-20, 20, this);
+		
+		// draw health and inventory displays
 		g.drawImage(scaledHealthBack, 0, 24*viewScale, this);
 		drawHealth(g);
 		drawInventory(g);
 		g.drawImage(scaledHealthFront, 0, 24*viewScale, this);
+		
+		// draw tooltip
 		if (toolTip != null){
 			showToolTip(g);
 		}
 	}
 	
+	private void drawServerRoomOverlay(Room r, Graphics g) {
+		g.setColor(Color.BLACK);
+		int playerX = player.getX();
+		int playerY = player.getY();
+		int xOrigin = (this.getWidth()/2)-(playerX*viewScale);
+		int yOrigin = (this.getHeight()/2)-(playerY*viewScale)-(24*3*viewScale);
+		int width = r.getCols()*(24*viewScale);
+		int height = r.getRows()*(24*viewScale);
+		if (player.inventoryContains(new Torch())){
+			
+		} else {
+			
+		}
+	}
+
 	private void drawInventory(Graphics g) {
 		Item[] inventory = player.getInventory();
 		for (int i = 0; i < Player.INVENTORY_SIZE; i++){

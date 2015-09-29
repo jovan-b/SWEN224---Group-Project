@@ -438,6 +438,15 @@ public abstract class Player {
 		}
 		return item;
 	}
+	
+	public boolean inventoryContains(Item item){
+		for (Item i : inventory){
+			if (i != null && i.getDescription().equals(item.getDescription())){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public void dropItem(int index) {
 		if (index < 0 || INVENTORY_SIZE <= index){
