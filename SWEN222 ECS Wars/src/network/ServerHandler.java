@@ -52,7 +52,6 @@ public class ServerHandler extends Thread{
 							socketOut.writeInt(uid);
 							socketOut.writeInt(direction);
 						}
-						System.out.println(uid + " move right");
 						break;
 				}
 			}
