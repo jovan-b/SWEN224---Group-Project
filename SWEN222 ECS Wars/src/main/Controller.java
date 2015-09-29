@@ -228,10 +228,19 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 			player.rotateViewRight();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_1){
+			player.inventoryItem(0).use(player);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_2){
+			player.inventoryItem(1).use(player);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_3){
+			player.inventoryItem(2).use(player);
+		}
+		if (e.getKeyCode() == KeyEvent.VK_MINUS){
 			gui.canvas.setViewScale(1);
 			scaleEverything(1);
 		}
-		if(e.getKeyCode() == KeyEvent.VK_2){
+		if (e.getKeyCode() == KeyEvent.VK_EQUALS){
 			gui.canvas.setViewScale(2);
 			scaleEverything(2);
 		}
