@@ -355,8 +355,21 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		int viewScale = gui.canvas.getViewScale();
-		String desc = player.getCurrentRoom().itemAtMouse(e.getX(), e.getY(), viewScale, player).getDescription();
-		gui.canvas.setToolTip(desc, e.getX(), e.getY());
+		int x = e.getX();
+		int y = e.getY();
+		String desc = "";
+		if (24*2*viewScale < y && y < 24*3*viewScale){
+			if (24*viewScale < x && x < 24*2*viewScale){
+				desc = player.inventoryItem(0).getDescription();
+			} else if (24*2*viewScale < x && x < 24*3*viewScale){
+				desc = player.inventoryItem(1).getDescription();
+			} else {
+				desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
+			}
+		} else {
+			desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
+		}
+		gui.canvas.setToolTip(desc, x, y);
 	}
 
 	public Set<Door> getDoors() {

@@ -12,6 +12,7 @@ import gameObjects.Compass;
 import gameObjects.Door;
 import gameObjects.Item;
 import gameObjects.Room;
+import gameObjects.Wall;
 import gameObjects.weapons.PaintballGun;
 import gameObjects.weapons.ScatterGun;
 import gameObjects.weapons.Weapon;
@@ -424,5 +425,16 @@ public abstract class Player {
 	
 	public Item[] getInventory(){
 		return inventory;
+	}
+	
+	public Item inventoryItem(int index){
+		if (index < 0 || INVENTORY_SIZE <= index){
+			return new Wall();
+		}
+		Item item = inventory[index];
+		if (item == null){
+			return new Wall();
+		}
+		return item;
 	}
 }

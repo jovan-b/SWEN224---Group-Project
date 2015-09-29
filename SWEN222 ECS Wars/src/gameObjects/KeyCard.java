@@ -34,7 +34,7 @@ public class KeyCard implements Item {
 	
 	@Override
 	public void use(Player p) {
-		System.out.println("Player picked up the keycard!!");
+		System.out.println("Player used the keycard!!");
 	}
 
 	@Override

@@ -33,7 +33,6 @@ public class Floor implements Item {
 	public void use(Player p) {
 		if (item != null){
 			if (p.pickUp(item)){
-				System.out.println("Player picked up the item");
 				setItem(null);
 			}
 		}
