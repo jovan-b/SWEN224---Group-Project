@@ -16,7 +16,7 @@ public class ScatterGun extends Weapon{
 	private String description;
 
 	public ScatterGun() {
-		super(FIRE_RATE, new PaintBall());
+		super(FIRE_RATE, new RubberBullet());
 		this.description = "A scatter gun";
 	}
 	

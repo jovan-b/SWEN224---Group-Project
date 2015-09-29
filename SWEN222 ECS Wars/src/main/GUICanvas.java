@@ -40,6 +40,8 @@ public class GUICanvas extends JComponent{
 	
 	// Static UI Images
 	private Image compassControls;
+	private Image healthInventBack;
+	private Image healthInventFront;
 	
 	/**
 	 * Constructor for class GUICanvas.
@@ -56,6 +58,8 @@ public class GUICanvas extends JComponent{
 		
 		try {
 			compassControls = ImageIO.read(new File("Resources"+File.separator+"CompassControls.png"));
+			healthInventBack = ImageIO.read(new File("Resources"+File.separator+"HUDBackground.png"));
+			healthInventFront = ImageIO.read(new File("Resources"+File.separator+"HUDForeground.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading UI Images: " + e.getMessage());
 		}
@@ -98,11 +102,19 @@ public class GUICanvas extends JComponent{
 		compass.update();
 		g.drawImage(compass.getImage(), getWidth()-96-20, 20, this);
 		g.drawImage(compassControls, getWidth()-96-20, 20, this);
+		g.drawImage(healthInventBack, 0, 24, this);
+		drawHealth(g);
+		g.drawImage(healthInventFront, 0, 24, this);
 		if (toolTip != null){
 			showToolTip(g);
 		}
 	}
 	
+	private void drawHealth(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(24, 32, player.getHealth(), 8);
+	}
+
 	/**
 	 * Gets the current view scale of this canvas.
 	 * @return The current view scale: either 1 or 2

@@ -31,6 +31,7 @@ public abstract class Player {
 	public static final int BASE_SPEED = 2;	//pixels per frame
 	public static final int BASE_HEIGHT = 50;
 	public static final int BASE_WIDTH = 30;
+	public static final int HEALTH_MAX = 200;
 	
 	
 	protected final int INVENTORY_SIZE = 2;
@@ -38,7 +39,7 @@ public abstract class Player {
 	//fields describing state of player
 	protected Weapon currentWeapon;
 	protected Item[] inventory = new Item[INVENTORY_SIZE];
-	protected int health = 50;
+	protected int health = 200;
 	
 
 	//position describing the centre of a player object
