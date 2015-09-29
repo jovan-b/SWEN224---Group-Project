@@ -324,10 +324,25 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 			mouseLocation[0] = e.getX();
 			mouseLocation[1] = e.getY();
 		} else if (e.getButton() == 3){
+			int x = e.getX();
+			int y = e.getY();
 			int viewScale = gui.canvas.getViewScale();
-			Room room = player.getCurrentRoom();
-			Item item = room.itemAtMouse(e.getX(), e.getY(), viewScale, player);
-			item.use(player);
+			if (24*2*viewScale < y && y < 24*3*viewScale){
+				if (24*viewScale < x && x < 24*2*viewScale){
+					player.dropItem(0);
+				} else if (24*2*viewScale < x && x < 24*3*viewScale){
+					player.dropItem(1);
+				} else {
+					Room room = player.getCurrentRoom();
+					Item item = room.itemAtMouse(x, y, viewScale, player);
+					item.use(player);
+				}
+			} else {
+				Room room = player.getCurrentRoom();
+				Item item = room.itemAtMouse(x, y, viewScale, player);
+				item.use(player);
+			}
+			
 		}
 	}
 
@@ -346,7 +361,7 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if (e.getButton() != 3){
+		if (e.getButton() == 1){
 			mouseLocation[0] = e.getX();
 			mouseLocation[1] = e.getY();
 		}

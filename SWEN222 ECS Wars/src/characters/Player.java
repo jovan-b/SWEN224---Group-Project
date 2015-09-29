@@ -10,6 +10,7 @@ import gameEvents.GameClock;
 import gameEvents.RespawnEvent;
 import gameObjects.Compass;
 import gameObjects.Door;
+import gameObjects.Floor;
 import gameObjects.Item;
 import gameObjects.Room;
 import gameObjects.Wall;
@@ -436,5 +437,15 @@ public abstract class Player {
 			return new Wall();
 		}
 		return item;
+	}
+
+	public void dropItem(int index) {
+		Item square = currentRoom.itemAt(posX, posY);
+		if (square instanceof Floor){
+			if (((Floor) square).getItem() == null){
+				((Floor) square).setItem(inventory[index]);
+				inventory[index] = null;
+			}
+		}
 	}
 }
