@@ -40,6 +40,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	
 	public static final double FRAME_RATE = 1.0/60;	//a 60th of a second
 	private boolean isRunning = false;
+	private boolean shooting = false;
 	
 	private GUIFrame gui;
 	private Player player;
@@ -241,7 +242,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 * Otherwise returns false (left mouse button is not being pressed down)
 	 */
 	private boolean isLeftMousePressed(){
-		return mouseLocation[0] != 0 && mouseLocation[1] != 0;
+		return shooting;
 	}
 	
 	private void setupRooms(){
@@ -380,6 +381,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == 1){
+			shooting = true;
 			mouseLocation[0] = e.getX();
 			mouseLocation[1] = e.getY();
 		} else if (e.getButton() == 3){
@@ -409,7 +411,10 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		mouseLocation = new int[2];
+		if (e.getButton() == 1){
+			shooting = false;
+			mouseLocation = new int[2];
+		}
 	}
 
 	
@@ -419,7 +424,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if (e.getButton() != 3){
+		if (shooting){
 			mouseLocation[0] = e.getX();
 			mouseLocation[1] = e.getY();
 		}
