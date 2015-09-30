@@ -339,4 +339,9 @@ public class GUICanvas extends JComponent{
 			removeMouseMotionListener(mainMenu);
 		}
 	}
+
+
+	public Compass getCompass() {
+		return compass;
+	}
 }

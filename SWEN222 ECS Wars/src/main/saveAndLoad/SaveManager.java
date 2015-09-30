@@ -26,6 +26,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import characters.*;
+import characters.nonplayer.NonPlayer;
 
 /**
  * A save manager to store or load the state of a game controller from file
@@ -84,10 +85,9 @@ public final class SaveManager {
 		}
 	}
 	
-	public static void loadGame(Controller controller, String name){
-		//TODO: refactor this method into something readable
+	public static void loadGame(Controller controller, File saveFile){
 		try {
-			File file = new File(SAVE_DIR+name);
+			File file = saveFile;
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = builder.parse(file);
 			
@@ -96,29 +96,29 @@ public final class SaveManager {
 			//Read rooms
 			NodeList list = doc.getElementsByTagName("Room");
 			
-			List<Room> rooms = new ArrayList<>();
-			List<Player> players = new ArrayList<>();
+			ArrayList<Room> rooms = new ArrayList<>();
+			ArrayList<Player> players = new ArrayList<>();
 			
 			for (int i = 0; i < list.getLength(); i++){
 				Node node = (Node) list.item(i);
 				if (node.getNodeType() == Node.ELEMENT_NODE){
 					Element e = (Element) node;
 					
-					//read players
-					NodeList playerlist = doc.getElementsByTagName("Player");
+					//read players in the room
+					NodeList playerlist = e.getChildNodes();
 					
 					//create a room object from the node
 					Room r = new Room(e.getAttribute("id"), controller);
 					
-					for (int j = 0; j < list.getLength(); j++){
-						Node pnode = (Node) list.item(j);
-						if(node.getNodeType() == Node.ELEMENT_NODE){
+					for (int j = 0; j < playerlist.getLength(); j++){
+						Node pnode = (Node) playerlist.item(j);
+						if(pnode.getNodeType() == Node.ELEMENT_NODE){
 							Element pelement = (Element) pnode;	//player element
 							Player p;
 							
 							//create a player object from the node
-							switch(Integer.parseInt(pelement.getAttribute("Type"))){
-							case(1):	//PondyPlayer
+							switch(pelement.getAttribute("type")){
+							case("PondyPlayer"):	//PondyPlayer
 								p = new PondyPlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
 										Integer.parseInt(pelement.getAttribute("y")));
 								break;
@@ -140,8 +140,11 @@ public final class SaveManager {
 				}
 			}
 			
-			//TODO: add list of rooms to controller
-			//TODO: add list of players to the controller
+			//add list of rooms to controller
+			controller.setRooms(rooms);
+			
+			//add list of players to the controller
+			controller.setPlayers(players);
 
 		} catch (ParserConfigurationException | SAXException e) {
 			// TODO Auto-generated catch block

@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.w3c.dom.Document;
+
 import characters.Player;
 import characters.DavePlayer;
 import characters.nonplayer.NonPlayer;
@@ -64,7 +66,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 * Controller constructor for a singeplayer game
 	 */
 	public Controller(){
-		initialise(this, this, this);	//TODO: Remove the (this, this, this)
+		initialise();
 		run();
 		
 	}
@@ -116,7 +118,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	/**
 	 * Initialise the pre-game fields of this class
 	 */
-	private void initialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2) {
+	private void initialise() {
 		isRunning = true;
 		rooms = new ArrayList<>();
 		doors = new HashSet<>();
@@ -126,7 +128,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		players = new ArrayList<Player>();
 		players.add(player);
 		uid = 0;
-		gui = new GUIFrame(this, player, key, mouse, mouse2);
+		gui = new GUIFrame(this, player, this, this, this);
 		player.setCanvas(gui.getCanvas());
 		
 		SoundManager.playSong("battle_1.mp3");
@@ -519,5 +521,21 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		return rooms;
 	}
 
+	public void setRooms(ArrayList<Room> rooms) {
+		this.rooms = rooms;
+	}
+
+	public void setPlayers(ArrayList<Player> players) {
+		this.players = players;
+	}
+	
+	public Player getCurrentPlayer(){
+		return player;
+	}
+
+	public void setCurrentPlayer(Player player) {
+		player.setCompass(gui.getCanvas().getCompass());
+		this.player = player;
+	}
 
 }

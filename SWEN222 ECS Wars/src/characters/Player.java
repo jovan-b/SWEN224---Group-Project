@@ -40,7 +40,8 @@ public abstract class Player {
 	
 	public enum Type{
 		DavePlayer,
-		PondyPlayer
+		PondyPlayer,
+		NonPlayer
 	}
 	
 	//fields describing state of player

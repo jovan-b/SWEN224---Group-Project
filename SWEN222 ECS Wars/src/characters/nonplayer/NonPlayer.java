@@ -16,6 +16,7 @@ import characters.nonplayer.strategy.WaitStrategy;
 
 public class NonPlayer extends Player {
 	public static final NonPlayerStrategy GLOBAL_DEFAULT = new WaitStrategy();
+	public static final Type type = Player.Type.NonPlayer;
 	
 	/**
 	 * An enum to describe what events non-players respond to
@@ -106,5 +107,9 @@ public class NonPlayer extends Player {
 		strategies.put(event, strategy);
 		strategy.setNPCReference(this);
 	}
-	
+
+	@Override
+	public Type getType() {
+		return type;
+	}
 }
