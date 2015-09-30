@@ -15,18 +15,26 @@ public class Door implements Item {
 	private int room1Row;
 	private int room2Col;
 	private int room2Row;
-//	private boolean horizontal;
 	private boolean unlocked;
+	private boolean tempUnlocked; // true if locked door is currently being used
 	
-	public Door(String parseCode, /*boolean hz,*/ boolean unlocked,
-			Room room1, int room1Col, int room1Row){
+	public Door(String parseCode, Room room1, int room1Col, int room1Row){
 		this.parseCode = parseCode;
-//		this.horizontal = hz;
-		this.unlocked = unlocked;
+		determineLocked();
 		this.room1 = room1;
 		this.room1Col = room1Col;
 		this.room1Row = room1Row;
-		System.out.println("New Door: " + parseCode + " " + room1.getName());
+//		System.out.println("New Door: " + parseCode + " " + room1.getName());
+	}
+
+	private void determineLocked() {
+		int intCode = Integer.parseInt(parseCode);
+		if(intCode >= 50){
+			unlocked = false;
+		} else {
+			unlocked = true;
+		}
+		tempUnlocked = unlocked;
 	}
 	
 	public void addRoom2(Room room2, int room2Col, int room2Row){
@@ -38,22 +46,28 @@ public class Door implements Item {
 	
 	@Override
 	public void use(Player p) {
-		int x;
-		int y;
-		if(unlocked){
-			if(room1 == p.getCurrentRoom()){
-				x = p.getX()-(room1Col*24);
-				y = p.getY()-(room1Row*24);
-				p.setCurrentRoom(room2, (room2Col*24)+x, (room2Row*24)+y);
-			} else if(room2 == p.getCurrentRoom()){
-				x = p.getX()-(room2Col*24);
-				y = p.getY()-(room2Row*24);
-				p.setCurrentRoom(room1, (room1Col*24)+x, (room1Row*24)+y);
-			}
-		} else {
-			// TODO locked door case
+		if(p.inventoryContains(new KeyCard())){
+			tempUnlocked = true;
+			System.out.println("Unlocked the door");
 		}
 		
+	}
+
+	public void walkThrough(Player p) {
+		int x;
+		int y;
+		if(room1 == p.getCurrentRoom()){
+			x = p.getX()-(room1Col*24);
+			y = p.getY()-(room1Row*24);
+			p.setCurrentRoom(room2, (room2Col*24)+x, (room2Row*24)+y);
+		} else if(room2 == p.getCurrentRoom()){
+			x = p.getX()-(room2Col*24);
+			y = p.getY()-(room2Row*24);
+			p.setCurrentRoom(room1, (room1Col*24)+x, (room1Row*24)+y);
+		}
+		if(!unlocked){
+			tempUnlocked = false;
+		}
 	}
 
 	@Override
@@ -63,7 +77,7 @@ public class Door implements Item {
 
 	@Override
 	public boolean canWalk() {
-		return unlocked;
+		return tempUnlocked;
 	}
 
 	@Override

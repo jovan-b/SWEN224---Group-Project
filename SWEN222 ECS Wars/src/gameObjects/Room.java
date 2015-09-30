@@ -139,7 +139,7 @@ public class Room {
 				return d;
 			}
 		}
-		Door door = new Door(doorCode, true, this, col, row);
+		Door door = new Door(doorCode, this, col, row);
 		ctrl.getDoors().add(door);
 		doors.add(door);
 		return door;

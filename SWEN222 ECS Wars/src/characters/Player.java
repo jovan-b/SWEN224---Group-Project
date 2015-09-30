@@ -224,7 +224,7 @@ public abstract class Player {
 			if (!(item instanceof Door)){inDoor = false;}
 		}
 		if (inDoor){
-			item.use(this);
+			((Door)item).walkThrough(this);
 		}
 		return true;
 	}
@@ -249,20 +249,20 @@ public abstract class Player {
 //		int dir = convertFromViewDir(lastDirMoved);
 		switch(lastDirMoved){
 		case 1:
-			this.posX += 12;
-			this.tempX += 12;
+			this.posX += 24;
+			this.tempX += 24;
 			break;
 		case 2:
-			this.posY += 12;
-			this.tempY += 12;
+			this.posY += 24;
+			this.tempY += 24;
 			break;
 		case 3:
-			this.posX -= 12;
-			this.tempX -= 12;
+			this.posX -= 24;
+			this.tempX -= 24;
 			break;
 		default:
-			this.posY -= 12;
-			this.tempY -= 12;
+			this.posY -= 24;
+			this.tempY -= 24;
 			break;
 		}
 	}
