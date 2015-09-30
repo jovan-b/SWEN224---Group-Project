@@ -1,4 +1,0 @@
-Room description
-# cols
-# rows
-cols * rows grid of item codes
