@@ -20,6 +20,7 @@ import main.GUICanvas;
 public class Compass {
 	
 	BufferedImage compassImage;
+	BufferedImage largeImage;
 	BufferedImage scaledCompass;
 	BufferedImage rotated;
 	double rot; // the current rotation angle
@@ -40,6 +41,7 @@ public class Compass {
 	private void loadImages() {
 		try {
 			compassImage = ImageIO.read(new File("Resources"+File.separator+"Compass.png"));
+			largeImage = ImageIO.read(new File("Resources"+File.separator+"CompassLarge.png"));
 			scaledCompass = compassImage;
 			rotated = scaledCompass;
 		} catch (IOException e) {
@@ -88,20 +90,23 @@ public class Compass {
 			scaledCompass = compassImage;
 			rotated = scaledCompass;
 			return;
+		} else {
+			scaledCompass = largeImage;
+			rotated = scaledCompass;
 		}
-		// scale is 2, scale the image
-		BufferedImage before = compassImage; // original image
-		int w = before.getWidth();
-		int h = before.getHeight();
-		BufferedImage after = new BufferedImage(w*2, h*2, BufferedImage.TYPE_INT_ARGB); // image to scale
-		AffineTransform at = new AffineTransform();
-		// perform scale
-		at.scale(2.0, 2.0);
-		AffineTransformOp scaleOp = 
-		   new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-		// update fields
-		scaledCompass = scaleOp.filter(before, after);
-		rotated = scaledCompass;
+//		// scale is 2, scale the image
+//		BufferedImage before = compassImage; // original image
+//		int w = before.getWidth();
+//		int h = before.getHeight();
+//		BufferedImage after = new BufferedImage(w*2, h*2, BufferedImage.TYPE_INT_ARGB); // image to scale
+//		AffineTransform at = new AffineTransform();
+//		// perform scale
+//		at.scale(2.0, 2.0);
+//		AffineTransformOp scaleOp = 
+//		   new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+//		// update fields
+//		scaledCompass = scaleOp.filter(before, after);
+//		rotated = scaledCompass;
 	}
 
 	/**
