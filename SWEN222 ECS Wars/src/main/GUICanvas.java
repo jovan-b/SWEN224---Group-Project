@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -41,10 +42,14 @@ public class GUICanvas extends JComponent{
 	private MainMenu mainMenu;
 	
 	// Static UI Images
+	private Image[] torchLight;
+	private Image noTorch;
 	private Image compassControls;
 	private Image healthInventBack;
 	private Image healthInventFront;
 	
+	private Image[] scaledTorchLight;
+	private Image scaledNoTorch;
 	private Image scaledCompassCont;
 	private Image scaledHealthBack;
 	private Image scaledHealthFront;
@@ -62,16 +67,25 @@ public class GUICanvas extends JComponent{
 		
 		this.player.setCompass(compass);
 		
+		this.torchLight = new Image[4];
+		
 		try {
 			compassControls = ImageIO.read(new File("Resources"+File.separator+"CompassControls.png"));
 			healthInventBack = ImageIO.read(new File("Resources"+File.separator+"HUDBackground.png"));
 			healthInventFront = ImageIO.read(new File("Resources"+File.separator+"HUDForeground.png"));
+			noTorch = ImageIO.read(new File("Resources"+File.separator+"noTorch.png"));
+			for (int dir = 0; dir < 4; dir++){
+				torchLight[dir] = ImageIO.read(new File("Resources"+File.separator+"torchLightDirectional"
+								+File.separator+"torchLight"+dir+".png"));
+			}
 		} catch (IOException e) {
 			System.out.println("Error loading UI Images: " + e.getMessage());
 		}
 		scaledCompassCont = compassControls;
 		scaledHealthBack = healthInventBack;
 		scaledHealthFront = healthInventFront;
+		scaledNoTorch = noTorch;
+		scaledTorchLight = Arrays.copyOf(torchLight, 4);
 		
 		this.mainMenu = new MainMenu(this, controller);
 		setMainMenu(true);
@@ -131,17 +145,23 @@ public class GUICanvas extends JComponent{
 	
 	private void drawServerRoomOverlay(Room r, Graphics g) {
 		g.setColor(Color.BLACK);
-		int playerX = player.getX();
-		int playerY = player.getY();
-		int xOrigin = (this.getWidth()/2)-(playerX*viewScale);
-		int yOrigin = (this.getHeight()/2)-(playerY*viewScale)-(24*3*viewScale);
-		int width = r.getCols()*(24*viewScale);
-		int height = r.getRows()*(24*viewScale);
+		Image image = scaledNoTorch;
+		int width = this.getWidth();
+		int height = this.getHeight();
+		int xMid = width/2;
+		int yMid = height/2;
+		int xView = 40*viewScale;
+		int yView = 40*viewScale;
 		if (player.inventoryContains(new Torch())){
-			
-		} else {
-			
-		}
+			xView = 80*viewScale;
+			yView = 80*viewScale;
+			image = scaledTorchLight[player.getFacing()];
+		} 
+		g.fillRect(0, 0, width, yMid-yView);
+		g.fillRect(0, yMid+yView, width, yMid-yView);
+		g.fillRect(0, yMid-yView, xMid-xView, yView*2);
+		g.fillRect(xMid+xView, yMid-yView, xMid-xView, yView*2);
+		g.drawImage(image, xMid-xView, yMid-yView, this);
 	}
 
 	private void drawInventory(Graphics g) {
@@ -227,6 +247,13 @@ public class GUICanvas extends JComponent{
 				healthInventBack.getHeight(this)*viewScale, Image.SCALE_FAST);
 		scaledHealthFront = healthInventFront.getScaledInstance(healthInventFront.getWidth(this)*viewScale, 
 				healthInventFront.getHeight(this)*viewScale, Image.SCALE_FAST);
+		scaledNoTorch = noTorch.getScaledInstance(noTorch.getWidth(this)*viewScale, 
+				noTorch.getHeight(this)*viewScale, Image.SCALE_FAST);
+		Image temp[] = torchLight;
+		for (int dir = 0; dir < 4; dir++){
+			scaledTorchLight[dir] = temp[dir].getScaledInstance(temp[dir].getWidth(this)*viewScale, 
+					temp[dir].getHeight(this)*viewScale, Image.SCALE_FAST);
+		}
 		compass.scaleImage(viewScale, this);
 	}
 

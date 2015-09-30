@@ -388,6 +388,10 @@ public abstract class Player {
 		lastDirMoved = dir;
 	}
 	
+	public int getFacing(){
+		return convertToViewDir(lastDirMoved, viewDirection);
+	}
+	
 	public void setSpeedMulti(double multi){
 		speedMulti = multi;
 		speed = Player.BASE_SPEED*multi;
