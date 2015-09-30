@@ -78,11 +78,11 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 
 	/**
 	 * Initialises the fields of a multiplayer game
-	 * @param key
-	 * @param mouse
-	 * @param mouse2
-	 * @param numberOfClients
-	 * @param uid
+	 * @param key The KeyListener for the game
+	 * @param mouse The MouseListener for the game
+	 * @param mouse2 The MouseMotionListener for the game
+	 * @param numberOfClients The number of clients in the game
+	 * @param uid The user id
 	 */
 	public void MPInitialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2,
 			int numberOfClients, int uid) {
@@ -109,7 +109,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	}
 	
 	/**
-	 * Initialise the fields of this class
+	 * Initialise the pre-game fields of this class
 	 */
 	private void initialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2) {
 		isRunning = true;
@@ -128,7 +128,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	}
 	
 	/**
-	 * Initialise the fields of this class
+	 * Initialise the fields of the game
 	 */
 	public void initialiseGame() {
 		isRunning = true;
@@ -197,6 +197,9 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		checkTooltip(); // check if a tooltip should be displayed
 	}
 	
+	/**
+	 * Updates the game state and detects collision.
+	 */
 	private void updateAndCollide() {
 		players.get(uid).update();
 	}
@@ -232,8 +235,8 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 * Returns true if key 'keycode' is being pressed 
 	 * Otherwise returns false
 	 * 
-	 * @param keyCode
-	 * @return
+	 * @param keyCode The key to check
+	 * @return true if the given keycode is being pressed
 	 */
 	private boolean isKeyPressed(int keyCode) {
 		return keyBits.get(keyCode);
@@ -247,6 +250,9 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		return shooting;
 	}
 	
+	/**
+	 * Parses all the room objects in the game.
+	 */
 	private void setupRooms(){
 		try {
 			Scanner s = new Scanner(new File("Resources"+File.separator+"RoomIndex.txt"));
@@ -300,6 +306,10 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		keyBits.clear(e.getKeyCode());
 	}
 
+	/**
+	 * Scales all drawn objects based on the current view scale.
+	 * @param scale The scale (1 or 2) to update the game to.
+	 */
 	public void scaleEverything(int scale) {
 		GUICanvas c = gui.getCanvas();
 		c.scaleUI();
@@ -347,6 +357,13 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		}
 	}
 	
+	/**
+	 * Resizes an image based on the given scale.
+	 * @param image The image to resize
+	 * @param c The canvas the image will be drawn on
+	 * @param scale The scale (1 or 2) to resize by
+	 * @return The resized image
+	 */
 	public Image scaleImage(Image image, GUICanvas c, int scale){
 		return image.getScaledInstance(image.getWidth(c)*scale, image.getHeight(c)*scale, Image.SCALE_FAST);
 	}
@@ -418,7 +435,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		}
 	}
 
-	
+	// TODO replace with method in Main class
 	public static void main(String[] args){
 		new Controller();
 	}
@@ -437,41 +454,62 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		mouseY = e.getY();
 	}
 
+	/**
+	 * Checks the mouse position to see if it is hovering over an item
+	 * which should display a tooltip.
+	 */
 	private void checkTooltip() {
+		// get 
 		int viewScale = gui.getCanvas().getViewScale();
 		int x = mouseX;
 		int y = mouseY;
 		String desc = "";
+		// checks if the player is currently mousing over their inventory
 		if (24*2*viewScale < y && y < 24*3*viewScale){
 			if (24*viewScale < x && x < 24*(Player.INVENTORY_SIZE+1)*viewScale){
+				// hovering over inventory
 				int index = (x-(24*viewScale))/(24*viewScale);
 				desc = player.inventoryItem(index).getDescription();
 			} else {
+				// not hovering over inventory - check for items on floor
 				desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
 			}
 		} else {
+			// not hovering over inventory - check for items on floor
 			desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
 		}
 		gui.getCanvas().setToolTip(desc, x, y);
 	}
 
+	/**
+	 * Gets all the doors in the game.
+	 * @return A Set of all doors in the game
+	 */
 	public Set<Door> getDoors() {
 		return doors;
 	}
 	
 	/**
-	 * Returns the specified player in the player list
-	 * @param i
-	 * @return
+	 * Returns the player with the specified user id.
+	 * @param uid The user id of the player
+	 * @return The player with the given uid
 	 */
 	public Player getPlayer(int uid){
 		return players.get(uid);
 	}
 	
+	/**
+	 * Returns the GUIFrame this game is using.
+	 * @return The current GUIFrame
+	 */
 	public GUIFrame getGUI(){
 		return gui;
 	}
 
+	/**
+	 * Returns all the rooms in the game.
+	 * @return An ArrayList containing every room in the game
+	 */
 	public ArrayList<Room> getRooms(){
 		return rooms;
 	}

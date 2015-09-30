@@ -10,7 +10,9 @@ import characters.Player;
 
 /**
  * A key card that allows the player to open certain in-game doors.
- * @author Sarah Dobie, Chris Read
+ * 
+ * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
  *
  */
 public class KeyCard implements Item {
@@ -24,9 +26,16 @@ public class KeyCard implements Item {
 	 */
 	public KeyCard(){
 		description = "Key Card: Allows access to locked rooms.";
+		loadImages();
+	}
+
+	/**
+	 * Parse and store all required images.
+	 */
+	private void loadImages() {
 		try{
-		image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"IDCard.png"));
-		scaledImage = image;
+			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"IDCard.png"));
+			scaledImage = image;
 		} catch(IOException e){
 			System.out.println("Error loading KeyCard file: "+e.getMessage());
 		}

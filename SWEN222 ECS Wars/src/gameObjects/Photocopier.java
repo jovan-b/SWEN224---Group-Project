@@ -13,19 +13,23 @@ import main.GUICanvas;
 /**
  * A photocopier item which can be interacted with.
  * 2x1 image, 1x1 grid space.
- * @author Sarah Dobie
+ * 
+ * @author Sarah Dobie 300315033
  *
  */
 public class Photocopier implements Item {
 
+	// original images
 	private Image imageNorth;
 	private Image imageSouth;
 	private Image imageWest;
 	private Image imageEast;
+	// scaled images
 	private Image scaledImageNorth;
 	private Image scaledImageSouth;
 	private Image scaledImageWest;
 	private Image scaledImageEast;
+	
 	private int[] xoffset; // x offset for the index view direction
 	private char dir; // the dir of the item when looking North
 	private String description;
@@ -49,6 +53,10 @@ public class Photocopier implements Item {
 		this.description = "A photocopier. What does it do?";
 	}
 
+	/**
+	 * Determine the x offset for the given start direction.
+	 * @param dir The base direction of the photocopier
+	 */
 	private void setupOffset(char dir) {
 		xoffset = new int[4];
 		xoffset[0] = 0;
@@ -71,6 +79,10 @@ public class Photocopier implements Item {
 		}
 	}
 
+	/**
+	 * Loads all required images for this item.
+	 * @param dir The base direction of the photocopier
+	 */
 	private void loadImages(char dir) {
 		// initialise vars
 		Image f = null;

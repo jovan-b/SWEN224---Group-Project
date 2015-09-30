@@ -5,7 +5,8 @@ import java.util.List;
 
 /**
  * Represents an Item which can contain several other Items.
- * @author Sarah Dobie
+ * 
+ * @author Sarah Dobie 300315033
  *
  */
 public abstract class Container implements Item {

@@ -6,7 +6,9 @@ import characters.Player;
 
 /**
  * Represents all in-game items eg. desks, weapons, books etc
- * @author 
+ * 
+ * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
  *
  */
 public interface Item {

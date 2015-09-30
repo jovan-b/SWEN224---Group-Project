@@ -8,8 +8,10 @@ import main.GUICanvas;
 
 
 /**
- * A blank item used for empty squares - player can walk over
- * @author Chris Read
+ * A blank item used for empty squares which player can walk over.
+ * 
+ * @author Chris Read 300254724
+ * @author Sarah Dobie 300315033
  *
  */
 public class Floor implements Item {

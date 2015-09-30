@@ -10,13 +10,31 @@ import javax.imageio.ImageIO;
 import characters.Player;
 import main.GUICanvas;
 
+/**
+ * A decorative pillar item which takes up 1x1 grid space that can't
+ * be walked on, and has a 1x3 image.
+ * 
+ * @author Chris Read 300254724
+ * @author Sarah Dobie 300315033
+ *
+ */
 public class Pillar implements Item {
 
 	private Image image;
 	private Image scaledImage;
 	private int yOffset = 3;
 	
+	/**
+	 * Constructor for class Pillar.
+	 */
 	public Pillar() {
+		loadImages();
+	}
+
+	/**
+	 * Loads all images required by this object.
+	 */
+	private void loadImages() {
 		try {
 			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Pillar.png"));
 			scaledImage = image;

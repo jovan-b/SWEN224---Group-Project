@@ -9,13 +9,11 @@ import main.GUICanvas;
 
 /**
  * A blank item used for room boundaries - stops player movement
- * @author Chris Read
+ * 
+ * @author Chris Read 300254724
  *
  */
 public class Wall implements Item {
-
-	public Wall() {
-	}
 
 	@Override
 	public void use(Player p) {

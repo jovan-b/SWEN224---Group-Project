@@ -10,33 +10,43 @@ import characters.Player;
 
 /**
  * A 1x1 container which can store 5 items.
- * @author Sarah Dobie
+ * @author Sarah Dobie 300315033
  *
  */
 public class SmallChest extends Container {
 	private static final int CAPACITY = 5;
 
+	// base images
 	private Image imageNorth;
 	private Image imageSouth;
 	private Image imageWest;
 	private Image imageEast;
+	// scaled images
 	private Image scaledImageNorth;
 	private Image scaledImageSouth;
 	private Image scaledImageWest;
 	private Image scaledImageEast;
-	private String description;
 	
+	private String description = "A small chest, may contain items.";
+	
+	/**
+	 * Constructor for class SmallChest.
+	 * @param dir The direction (F, B, L, R) that the chest
+	 * is facing when the view direction is North.
+	 */
 	public SmallChest(char dir) {
 		super(CAPACITY);
-		System.out.println("new small chest");
 		loadImages(dir);
 		scaledImageNorth = imageNorth;
 		scaledImageSouth = imageSouth;
 		scaledImageWest = imageWest;
 		scaledImageEast = imageEast;
-		this.description = "A small chest, may contain items.";
 	}
 	
+	/**
+	 * Loads all images required for this object.
+	 * @param dir The base direction of this item
+	 */
 	private void loadImages(char dir) {
 		// initialise vars
 		Image f = null;
@@ -53,23 +63,36 @@ public class SmallChest extends Container {
 			System.out.println("Failed to read Photocopier image file: " + e.getMessage());
 		}
 		// set directional images
+		assignImages(dir, f, b, l, r);
+	}
+
+	/**
+	 * Assigns images to the appropriate directional fields, depending on
+	 * the base direction of the item.
+	 * @param dir The base direction (F, B, L, R) of the item
+	 * @param f Image showing front of item
+	 * @param b Image showing back of item
+	 * @param l Image showing left side of item
+	 * @param r Image showing right side of item
+	 */
+	private void assignImages(char dir, Image f, Image b, Image l, Image r) {
 		switch(dir){
-		case 'B' : imageNorth = b;
+		case 'B' : imageNorth = b; // BACK
 				   imageSouth = f;
 				   imageEast = r;
 				   imageWest = l;
 				   break;
-		case 'L' : imageNorth = l;
+		case 'L' : imageNorth = l; // LEFT
 		   		   imageSouth = r;
 		   		   imageEast = f;
 		   		   imageWest = b;
 		   		   break;
-		case 'R' : imageNorth = r;
+		case 'R' : imageNorth = r; // RIGHT
 				   imageSouth = l;
 				   imageEast = b;
 				   imageWest = f;
 				   break;
-		default :  imageNorth = f;
+		default :  imageNorth = f; // FRONT
 		   		   imageSouth = b;
 		   		   imageEast = l;
 		   		   imageWest = r;

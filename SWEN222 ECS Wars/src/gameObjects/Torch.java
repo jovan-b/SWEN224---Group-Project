@@ -10,7 +10,9 @@ import characters.Player;
 
 /**
  * A torch item that allows the player to see in dark environments
- * @author Chris Read, Sarah Dobie
+ * 
+ * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
  *
  */
 public class Torch implements Item {
@@ -19,8 +21,18 @@ public class Torch implements Item {
 	private Image scaledImage;
 	private String description;
 
+	/**
+	 * Constructor for class Torch.
+	 */
 	public Torch() {
 		description = "Torch: May it be a light for you in dark places.";
+		loadImages();
+	}
+
+	/**
+	 * Loads all images required for this object.
+	 */
+	private void loadImages() {
 		try{
 		image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Torch.png"));
 		scaledImage = image;

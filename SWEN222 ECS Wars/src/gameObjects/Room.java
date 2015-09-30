@@ -25,23 +25,26 @@ import main.GUICanvas;
 /**
  * Represents an area in the game. Holds contents relevant to that area and
  * is responsible for drawing itself and everything in it.
- * @author Sarah Dobie, Chris Read
+ * 
+ * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
  *
  */
 public class Room {
-	private String name;
-	private String description;
+	private String name; // name of the room
+	private String description; // description of room
 	private Image[][] images;
 	private Image[][] scaledImages;
 	private Item[][] contents; // items in the room
-	private int cols;
-	private int rows;
+	private int cols; // # of cols
+	private int rows; // # of rows
 	private int squareSize = 24; //TODO get this value from player view scale
 	private int width;
 	private int height;
 	private int xOrigin;
 	private int yOrigin;
 	
+	// non-item contents of room
 	private Set<Projectile> projectiles = Collections.synchronizedSet(new HashSet<Projectile>());
 	private Set<Player> players = new HashSet<>();
 	private Set<NonPlayer> npcs = new HashSet<>();
@@ -50,6 +53,7 @@ public class Room {
 	/**
 	 * Constructor for class Room
 	 * @param roomName Name of room/file to parse.
+	 * @param ctrl The controller running this room
 	 */
 	public Room(String roomName, Controller ctrl){
 		name = roomName;
@@ -120,20 +124,28 @@ public class Room {
 		case "cB" : return new SmallChest('B');
 		case "cL" : return new SmallChest('L');
 		case "cR" : return new SmallChest('R');
-		default: return new Floor(); // if no match, safely return a floor
+		default: return new Floor(); // no match, safely return a floor
 		}
 	}
 
+	/**
+	 * Generate or connect to an appropriate Door object.
+	 * @param doorCode The door's id
+	 * @param ctrl The controller running this game
+	 * @param col The door's column
+	 * @param row The door's row
+	 * @return
+	 */
 	private Item parseDoor(String doorCode, Controller ctrl, int col, int row) {
 		// Check if door object already exists in current room
 		for(Door d : doors){
-			if(d.getParseCode().equals(doorCode)){
+			if(d.getId().equals(doorCode)){
 				return d;
 			}
 		}
 		// Check if door object exists in another room
 		for (Door d : ctrl.getDoors()){
-			if (d.getParseCode().equals(doorCode)){
+			if (d.getId().equals(doorCode)){
 				d.addRoom2(this, col, row);
 				doors.add(d);
 				return d;
@@ -260,6 +272,7 @@ public class Room {
 					}
 				}
 				
+				// draw npc characters
 				for (NonPlayer npc : npcs){
 					if (npc.getRow() == row-1){ // Ensures the player is drawn above their current row
 						drawPlayer(g, c, viewDirection, drawX, drawY, npc);
@@ -319,20 +332,31 @@ public class Room {
 	private void drawProjectile(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Projectile p){
 		int viewScale = c.getViewScale();
 		g.setColor(Color.GREEN);
+		int x;
+		int y;
 		// draw projectile relative to view direction
 		switch(viewDirection){
 		case 1:
-			g.fillRect(drawX+(p.getY()*viewScale), drawY+((width-p.getX())*viewScale), 2, 2);
+			x = drawX+(p.getY()*viewScale);
+			y = drawY+((width-p.getX())*viewScale);
+//			g.fillRect(drawX+(p.getY()*viewScale), drawY+((width-p.getX())*viewScale), 2, 2);
 			break;
 		case 2:
-			g.fillRect(drawX+((width-p.getX())*viewScale), drawY+((height-p.getY())*viewScale), 2, 2);
+			x = drawX+((width-p.getX())*viewScale);
+			y = drawY+((height-p.getY())*viewScale);
+//			g.fillRect(drawX+((width-p.getX())*viewScale), drawY+((height-p.getY())*viewScale), 2, 2);
 			break;
 		case 3:
-			g.fillRect(drawX+((height-p.getY())*viewScale), drawY+(p.getX()*viewScale), 2, 2);
+			x = drawX+((height-p.getY())*viewScale);
+			y = drawY+(p.getX()*viewScale);
+//			g.fillRect(drawX+((height-p.getY())*viewScale), drawY+(p.getX()*viewScale), 2, 2);
 			break;
 		default:
-			g.fillRect(drawX+(p.getX()*viewScale), drawY+(p.getY()*viewScale), 2, 2);
+			x = drawX+(p.getX()*viewScale);
+			y = drawY+(p.getY()*viewScale);
+//			g.fillRect(drawX+(p.getX()*viewScale), drawY+(p.getY()*viewScale), 2, 2);
 		}
+		g.fillRect(x, y, 2, 2);
 	}
 	
 	/**
@@ -521,16 +545,16 @@ public class Room {
 	}
 	
 	/**
-	 * 
-	 * @param npc
+	 * Adds an NPC to this room.
+	 * @param npc The NPC to add
 	 */
 	public void addNPC(NonPlayer npc){
 		npcs.add(npc);
 	}
 	
 	/**
-	 * 
-	 * @param npc
+	 * Removes an NPC from this room.
+	 * @param npc The NPC to remove
 	 */
 	public void removeNPC(NonPlayer npc){
 		npcs.remove(npc);
@@ -645,8 +669,8 @@ public class Room {
 	
 	/**
 	 * Gets all players and non-player characters
-	 * in this room
-	 * @return
+	 * in this room.
+	 * @return A Set of all characters in this room
 	 */
 	public Set<Player> getAllCharacters() {
 		Set<Player> rtn = new HashSet<Player>();
@@ -657,14 +681,56 @@ public class Room {
 	}
 
 	/**
-	 * Updates the room and all contained items
+	 * Updates the room and all contained objects for the next frame.
 	 */
 	public void update() {
-		//Update the projectiles
-		Iterator<Projectile> projectileIter = projectiles.iterator();
-		Iterator<Player> playerIter = players.iterator();
+		updateProjectiles();
+		updatePlayer();
+		updateNPCs();
+	}
+
+	/**
+	 * Updates all NPCs in the room for the next frame
+	 */
+	private void updateNPCs() {
 		Iterator<NonPlayer> npcIter = npcs.iterator();
 		
+		while(npcIter.hasNext()){
+			NonPlayer npc = npcIter.next();
+			npc.update();
+			
+			if (npc.getHealth() < 0){
+				npcIter.remove();
+			}
+		}
+	}
+
+	/**
+	 * Updates they current player for the next frame.
+	 */
+	private void updatePlayer() {
+		Iterator<Player> playerIter = players.iterator();
+		
+		while(playerIter.hasNext()){
+			Player p = playerIter.next();
+			
+			//Player is dead
+			if (p.getHealth() < 0){
+				playerIter.remove(); //Make the player invisible
+				
+				//Schedule a respawn event
+				//TODO: Change this to respawn somewhere that isn't the tile they died on
+				Event respawn = new RespawnEvent(p, this, p.getX(), p.getY());
+				GameClock.getInstance().scheduleEvent(respawn , Player.RESPAWN_TIME);
+			}
+		}
+	}
+
+	/**
+	 * Updates all projectiles for the next frame.
+	 */
+	private void updateProjectiles() {
+		Iterator<Projectile> projectileIter = projectiles.iterator();
 		try{
 			while(projectileIter.hasNext()){
 				Projectile p = projectileIter.next();
@@ -686,30 +752,6 @@ public class Room {
 			update();
 			return;
 		}
-		
-		
-		while(playerIter.hasNext()){
-			Player p = playerIter.next();
-			
-			//Player is dead
-			if (p.getHealth() < 0){
-				playerIter.remove(); //Make the player invisible
-				
-				//Schedule a respawn event
-				//TODO: Change this to respawn somewhere that isn't the tile they died on
-				Event respawn = new RespawnEvent(p, this, p.getX(), p.getY());
-				GameClock.getInstance().scheduleEvent(respawn , Player.RESPAWN_TIME);
-			}
-		}
-		
-		while(npcIter.hasNext()){
-			NonPlayer npc = npcIter.next();
-			npc.update();
-			
-			if (npc.getHealth() < 0){
-				npcIter.remove();
-			}
-		}
 	}
 	
 	/**
@@ -720,18 +762,34 @@ public class Room {
 		return projectiles;
 	}
 	
+	/**
+	 * Gets the name of this room.
+	 * @return The name of this room
+	 */
 	public String getName(){
 		return name;
 	}
 	
+	/**
+	 * Gets a brief description of this room.
+	 * @return A description of this room
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Gets the number of columns in this room.
+	 * @return The number of columns in this room
+	 */
 	public int getCols(){
 		return cols;
 	}
 	
+	/**
+	 * Gets the number of rows in this room.
+	 * @return The number of rows in this room
+	 */
 	public int getRows(){
 		return rows;
 	}

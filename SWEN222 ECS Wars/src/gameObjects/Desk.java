@@ -12,7 +12,8 @@ import main.GUICanvas;
 
 /**
  * A decorative 2x1 desk object which cannot be walked on.
- * @author Sarah Dobie, Chris Read
+ * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
  *
  */
 public class Desk implements Item {
@@ -29,6 +30,13 @@ public class Desk implements Item {
 	 */
 	public Desk(boolean horizontal) {
 		this.horizontal = horizontal;
+		loadImages();
+	}
+
+	/**
+	 * Parses and stores all required images.
+	 */
+	private void loadImages() {
 		try {
 			imageHz = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"DeskHor.png"));
 			scaledImageHz = imageHz;
