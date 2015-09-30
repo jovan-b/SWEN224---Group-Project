@@ -2,6 +2,7 @@ package main;
 
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -20,6 +21,8 @@ public class GUIFrame extends JFrame {
 	//width and height of main panel
 	public static final int INIT_WIDTH = 800;
 	public static final int INIT_HEIGHT = 600;
+	public static final int MIN_WIDTH = 400;
+	public static final int MIN_HEIGHT = 300;
 
 	private Controller controller;
 	private GUICanvas canvas;
@@ -34,6 +37,7 @@ public class GUIFrame extends JFrame {
 		canvas = new GUICanvas(this, controller, player);
 		canvas.addMouseListener(mouse);
 		canvas.addMouseMotionListener(mouse2);
+		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
 		setLayout(new BorderLayout());
 		add(canvas, BorderLayout.CENTER);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
