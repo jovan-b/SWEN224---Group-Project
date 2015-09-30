@@ -77,7 +77,7 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 					case 5:
 						int x = input.readInt();
 						int y = input.readInt();
-						//player.shoot(x, y);
+						player.shoot(x, y);
 						System.out.println(x + ":"+ y);
 				}
 			}

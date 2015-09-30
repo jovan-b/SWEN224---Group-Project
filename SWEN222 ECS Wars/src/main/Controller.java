@@ -102,7 +102,11 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		}
 		
 		gui = new GUIFrame(this, players.get(uid), key, mouse, mouse2);
-		players.get(uid).setCanvas(gui.getCanvas());
+		
+		for(Player p: players){
+			p.setCanvas(gui.getCanvas());
+		}
+		
 		gui.getCanvas().setMainMenu(false);
 		
 		SoundManager.playSong("battle_1.mp3");
