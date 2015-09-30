@@ -63,7 +63,7 @@ public class NonPlayer extends Player {
 	public void modifyHealth(int amt){
 		if (amt < 0){this.respond(Events.COMBAT);}
 		super.modifyHealth(amt);
-		if (health < 0){this.respond(Events.DEATH);}
+		if (health <= 0){this.respond(Events.DEATH);}
 	}
 	
 	@Override

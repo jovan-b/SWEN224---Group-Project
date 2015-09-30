@@ -235,7 +235,7 @@ public class Room {
 		} catch (ConcurrentModificationException e){}
 		
 		// draw the images
-		drawRoomContents(g, c, viewDirection, xOrigin, yOrigin, rotated, projectilesToDraw);
+		drawRoomContents(g, c, viewDirection, xOrigin, yOrigin, rotated, projectilesToDraw, player);
 	}
 
 	/**
@@ -247,9 +247,10 @@ public class Room {
 	 * @param drawY The y origin of the room
 	 * @param rotated The rotated contents array according to the view dir
 	 * @param projectiles The projectiles to be drawn
+	 * @param player 
 	 */
 	private void drawRoomContents(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY,
-			Item[][] rotated, Set<Projectile> projectiles) {
+			Item[][] rotated, Set<Projectile> projectiles, Player player) {
 		int viewScale = c.getViewScale();
 		
 		// Draw background Image
@@ -276,7 +277,7 @@ public class Room {
 				// draw player at this row
 				for (Player p : players){
 					if (p.getRow() == row-1){ // Ensures the player is drawn above their current row
-						drawPlayer(g, c, viewDirection, drawX, drawY, p);
+						drawPlayer(g, c, viewDirection, drawX, drawY, p, player);
 						p.setRow(-1);
 					}
 				}
@@ -284,7 +285,7 @@ public class Room {
 				// draw npc characters
 				for (NonPlayer npc : npcs){
 					if (npc.getRow() == row-1){ // Ensures the player is drawn above their current row
-						drawPlayer(g, c, viewDirection, drawX, drawY, npc);
+						drawPlayer(g, c, viewDirection, drawX, drawY, npc, player);
 						npc.setRow(-1);
 					}
 				}
@@ -303,8 +304,10 @@ public class Room {
 	 * @param drawX The x origin of the room
 	 * @param drawY The y origin of the room
 	 * @param p The player to draw
+	 * @param clientPlayer 
 	 */
-	private void drawPlayer(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Player p) {
+	private void drawPlayer(Graphics g, GUICanvas c, int viewDirection,
+			int drawX, int drawY, Player p, Player clientPlayer) {
 		Image playerImage = p.getImage(viewDirection);
 		int viewScale = c.getViewScale();
 		int playerX = p.getX();
@@ -326,6 +329,16 @@ public class Room {
 		default: // NORTH
 			g.drawImage(playerImage, drawX+(playerX*viewScale)-(16*viewScale),
 					drawY+(playerY*viewScale)-(24*viewScale), c);
+		}
+		if (p != clientPlayer){
+			// draw remaining health
+			g.setColor(Color.RED);
+			int playerHealth = p.getHealth();
+			int healthWd = (int)((double)playerHealth/(6.0+(1.0/3.0)))*viewScale;
+			int healthHt = 2*viewScale;
+			int healthX = drawX+(playerX-(healthWd/2))*viewScale;
+			int healthY =  drawY+(playerY+16)*viewScale;
+			g.fillRect(healthX, healthY, healthWd, healthHt);
 		}
 	}
 	
