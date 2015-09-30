@@ -73,6 +73,12 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 					case 4:
 						player.move("right");
 						break;
+					//Player shoots
+					case 5:
+						int x = input.readInt();
+						int y = input.readInt();
+						//player.shoot(x, y);
+						System.out.println(x + ":"+ y);
 				}
 			}
 		}
@@ -168,9 +174,17 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 	}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void mousePressed(MouseEvent e) {
+		try{
+			if (e.getButton() == 1){
+				//Tell the server they sent a mouse click
+				output.writeInt(2);
+				output.writeInt(e.getX());
+				output.writeInt(e.getY());
+			}
+		} catch(IOException ex){
+			//Couldn't read mouse press, ignore
+		}
 	}
 
 	@Override
@@ -180,9 +194,17 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseDragged(MouseEvent e) {
+		try{
+			if (e.getButton() == 1){
+				//Tell the server they sent a mouse click
+				output.writeInt(2);
+				output.writeInt(e.getX());
+				output.writeInt(e.getY());
+			}
+		} catch(IOException ex){
+			//Couldn't read mouse press, ignore
+		}
 	}
 
 	@Override

@@ -56,6 +56,20 @@ public class ServerHandler extends Thread{
 							socketOut.writeInt(direction);
 						}
 						break;
+					//If 2 is the action, it means a mouse clicked on the game
+					case 2:
+						int x = input.readInt();
+						int y = input.readInt();
+						System.out.println(x + " : " +y);
+						for(int i = 0; i<serverHandlers.length; i++){
+							Socket socket = serverHandlers[i].getSocket();
+							DataOutputStream socketOut = new DataOutputStream(socket.getOutputStream());
+							socketOut.writeInt(uid);
+							//5 is the code that a player shoots for the ClientConnection
+							socketOut.writeInt(5);
+							socketOut.writeInt(x);
+							socketOut.writeInt(y);
+						}
 				}
 			}
 			socket.close();
