@@ -14,7 +14,7 @@ import main.GUICanvas;
  * @author Sarah Dobie 300315033
  *
  */
-public class Floor implements Item {
+public class Floor implements Item, ItemSpawner {
 
 	private Item item;
 	
@@ -100,6 +100,24 @@ public class Floor implements Item {
 			return item.getDescription();
 		}
 		return null;
+	}
+
+	@Override
+	public boolean addSpawnItem(Item item) {
+		if(this.item == null){
+			this.item = item;
+			return true;
+		}
+		return false;
+		
+	}
+
+	@Override
+	public int remainingCapacity() {
+		if(item == null){
+			return 1;
+		}
+		return 0;
 	}
 
 }

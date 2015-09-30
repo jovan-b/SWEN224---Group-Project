@@ -13,7 +13,7 @@ import characters.Player;
  * @author Sarah Dobie 300315033
  *
  */
-public class SmallChest extends Container {
+public class SmallChest extends Container implements ItemSpawner {
 	private static final int CAPACITY = 5;
 
 	// base images
@@ -153,6 +153,16 @@ public class SmallChest extends Container {
 	@Override
 	public String getDescription() {
 		return description;
+	}
+
+	@Override
+	public boolean addSpawnItem(Item item) {
+		return super.addItem(item);
+	}
+
+	@Override
+	public int remainingCapacity() {
+		return super.capacity - contents.size();
 	}
 	
 }

@@ -1,8 +1,6 @@
 package main;
 
-import gameObjects.Door;
-import gameObjects.Item;
-import gameObjects.Room;
+import gameObjects.*;
 import network.ClientConnection;
 
 import java.awt.Image;
@@ -13,8 +11,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -50,6 +50,8 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	private int uid;
 	private ArrayList<Room> rooms;
 	private Set<Door> doors;
+	private List<ItemSpawner> itemSpawners;
+	private List<Item> itemsToSpawn;
 	
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
@@ -119,7 +121,11 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		isRunning = true;
 		rooms = new ArrayList<>();
 		doors = new HashSet<>();
+		itemSpawners = new ArrayList<>();
+		itemsToSpawn = new ArrayList<>();
 		setupRooms();
+		loadItemsToSpawn();
+		setupSpawnItems();
 		Room room = rooms.get(0); //FIXME
 		player = new DavePlayer(room, 2*24, 2*24);
 		players = new ArrayList<Player>();
@@ -130,7 +136,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		
 		SoundManager.playSong("battle_1.mp3");
 	}
-	
+
 	/**
 	 * Initialise the fields of the game
 	 */
@@ -483,6 +489,63 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
 		}
 		gui.getCanvas().setToolTip(desc, x, y);
+	}
+
+	/**
+	 * Loads all items that will be spawned and stores them in
+	 * the itemsToSpawn List.
+	 */
+	private void loadItemsToSpawn() {
+		try	{
+			Scanner s = new Scanner(new File("Resources"+File.separator+"ItemsToSpawn.txt"));
+			// iterate over file
+			while(s.hasNextLine()){
+				String nextLine = s.nextLine();
+				Item toAdd = null;
+				// create item to spawn
+				switch(nextLine){
+				case "KeyCard" : toAdd = new KeyCard(); break;
+				case "Torch" : toAdd = new Torch(); break;
+				}
+				// add the item if it's not null, otherwise print error message
+				if(toAdd != null){
+					itemsToSpawn.add(toAdd);
+				} else {
+					System.out.println("Parse error: could not parse spawn item - "+ nextLine);
+				}
+				
+			}
+		} catch(IOException e){
+			System.out.println("Error loading spawn items: "+e.getMessage());
+		}
+	}
+	
+	/**
+	 * Randomly distributes spawned items.
+	 */
+	private void setupSpawnItems() {
+		// shuffle spawn item lists
+		Collections.shuffle(itemSpawners);
+		Collections.shuffle(itemsToSpawn);
+		// while there is an item or container left, add item to container
+		while(itemSpawners.size() > 0 && itemsToSpawn.size() > 0){
+			// get random container and item
+			ItemSpawner holder = itemSpawners.remove(0);
+			Item toSpawn = itemsToSpawn.remove(0);
+			// add item if there's room
+			if(holder.remainingCapacity() > 0){
+				holder.addSpawnItem(toSpawn);
+			}
+		}
+	}
+	
+	/**
+	 * Adds an ItemSpawner to the list of all such types in
+	 * the game.
+	 * @param spawner The ItemSpawner to add.
+	 */
+	public void addItemSpawner(ItemSpawner spawner){
+		itemSpawners.add(spawner);
 	}
 
 	/**
