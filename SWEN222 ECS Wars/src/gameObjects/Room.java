@@ -331,6 +331,8 @@ public class Room {
 	 */
 	private void drawProjectile(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Projectile p){
 		int viewScale = c.getViewScale();
+		Image bulletImage = p.getImage(viewScale);
+		int bulletSize = (p.getSize()*viewScale)/2;
 		g.setColor(Color.GREEN);
 		int x;
 		int y;
@@ -339,24 +341,21 @@ public class Room {
 		case 1:
 			x = drawX+(p.getY()*viewScale);
 			y = drawY+((width-p.getX())*viewScale);
-//			g.fillRect(drawX+(p.getY()*viewScale), drawY+((width-p.getX())*viewScale), 2, 2);
 			break;
 		case 2:
 			x = drawX+((width-p.getX())*viewScale);
 			y = drawY+((height-p.getY())*viewScale);
-//			g.fillRect(drawX+((width-p.getX())*viewScale), drawY+((height-p.getY())*viewScale), 2, 2);
 			break;
 		case 3:
 			x = drawX+((height-p.getY())*viewScale);
 			y = drawY+(p.getX()*viewScale);
-//			g.fillRect(drawX+((height-p.getY())*viewScale), drawY+(p.getX()*viewScale), 2, 2);
 			break;
 		default:
 			x = drawX+(p.getX()*viewScale);
 			y = drawY+(p.getY()*viewScale);
-//			g.fillRect(drawX+(p.getX()*viewScale), drawY+(p.getY()*viewScale), 2, 2);
 		}
-		g.fillRect(x, y, 2, 2);
+		//g.fillRect(x, y, 2, 2);
+		g.drawImage(bulletImage, x-bulletSize, y-bulletSize, c);
 	}
 	
 	/**

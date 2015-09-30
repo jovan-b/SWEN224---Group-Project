@@ -230,8 +230,13 @@ public class GUICanvas extends JComponent{
 	 * @param g The Graphics object to draw with
 	 */
 	private void drawHealth(Graphics g) {
-		g.setColor(Color.RED);
-		g.fillRect(24*viewScale, 32*viewScale, player.getHealth()*viewScale, 8*viewScale);
+		int health = player.getHealth();
+		if (health <= 50){
+			g.setColor(Color.RED);
+		} else {
+			g.setColor(Color.GREEN);
+		}
+		g.fillRect(24*viewScale, 32*viewScale, health*viewScale, 8*viewScale);
 	}
 
 	/**
