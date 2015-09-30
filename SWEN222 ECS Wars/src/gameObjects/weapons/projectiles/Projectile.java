@@ -1,5 +1,6 @@
 package gameObjects.weapons.projectiles;
 
+import java.awt.Image;
 import java.awt.Rectangle;
 
 import characters.Player;
@@ -69,4 +70,8 @@ public interface Projectile {
 	public static double yDiff(double theta, double speed){
 		return Math.sin(theta)*speed;
 	}
+	
+	public Image getImage(int scale);
+
+	public int getSize();
 }

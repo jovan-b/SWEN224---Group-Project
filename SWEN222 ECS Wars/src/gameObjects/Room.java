@@ -318,20 +318,26 @@ public class Room {
 	 */
 	private void drawProjectile(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Projectile p){
 		int viewScale = c.getViewScale();
+		int pSize = p.getSize()/2;
+		Image image = p.getImage(viewScale);
 		g.setColor(Color.GREEN);
 		// draw projectile relative to view direction
 		switch(viewDirection){
 		case 1:
-			g.fillRect(drawX+(p.getY()*viewScale), drawY+((width-p.getX())*viewScale), 2, 2);
+			g.drawImage(image, drawX+(p.getY()*viewScale)-(viewScale*pSize), 
+					drawY+((width-p.getX())*viewScale)-(viewScale*pSize), c);
 			break;
 		case 2:
-			g.fillRect(drawX+((width-p.getX())*viewScale), drawY+((height-p.getY())*viewScale), 2, 2);
+			g.drawImage(image, drawX+((width-p.getX())*viewScale)-(viewScale*pSize), 
+					drawY+((height-p.getY())*viewScale)-(viewScale*pSize), c);
 			break;
 		case 3:
-			g.fillRect(drawX+((height-p.getY())*viewScale), drawY+(p.getX()*viewScale), 2, 2);
+			g.drawImage(image, drawX+((height-p.getY())*viewScale)-(viewScale*pSize), 
+					drawY+(p.getX()*viewScale)-(viewScale*pSize), c);
 			break;
 		default:
-			g.fillRect(drawX+(p.getX()*viewScale), drawY+(p.getY()*viewScale), 2, 2);
+			g.drawImage(image, drawX+(p.getX()*viewScale)-(viewScale*pSize), 
+					drawY+(p.getY()*viewScale)-(viewScale*pSize), c);
 		}
 	}
 	
