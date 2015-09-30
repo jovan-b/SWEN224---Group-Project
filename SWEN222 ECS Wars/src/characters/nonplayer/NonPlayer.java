@@ -45,7 +45,7 @@ public class NonPlayer extends Player {
 		try {
 			for (int dir = 0; dir < 4; dir++){
 				for (int ani = 0; ani < 3; ani++){
-					sprites[dir][ani] = ImageIO.read(new File("Resources"+File.separator+"Players"+File.separator+"Dave"+dir+ani+".png"));
+					sprites[dir][ani] = ImageIO.read(new File("Resources"+File.separator+"NPC"+File.separator+"npc"+dir+ani+".png"));
 				}
 			}
 		} catch (IOException e) {

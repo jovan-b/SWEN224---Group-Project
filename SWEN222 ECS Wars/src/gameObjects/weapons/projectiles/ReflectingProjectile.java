@@ -28,8 +28,8 @@ public abstract class ReflectingProjectile extends BasicProjectile {
 		double dy = Projectile.yDiff(theta, speed);
 		double oldX = x;
 		double oldY = y;
-		x += dx;
-		y += dy;
+		double newX = x + dx;
+		double newY = y + dy;
 		
 		//Check to see if we've hit a player
 		for (Player p : room.getAllCharacters()){
@@ -39,21 +39,24 @@ public abstract class ReflectingProjectile extends BasicProjectile {
 		}
 		
 		//Check to see if we've collided with an object
-		if (!room.itemAt((int)x, (int)y).canWalk()){
+		if (!room.itemAt((int)newX, (int)newY).canWalk()){
 			if (bounces == 0){ //If we can't bounce anymore, stop firing
 				this.setActive(false);
 			} else {
 				//calculate our angle of reflection, and update our direction
 				//check if we hit on the horizontal
 				
-				if (!room.itemAt((int)oldX, (int)y).canWalk()) { //Otherwise we must have hit vertical
-					theta = Player.angleBetweenPlayerAndMouse(oldX, oldY, x, oldY-dy);
+				if (!room.itemAt((int)oldX, (int)newY).canWalk()) { //Otherwise we must have hit vertical
+					theta = Player.angleBetweenPlayerAndMouse(oldX, oldY, newX, oldY-dy);
 				} else {
-					theta = Player.angleBetweenPlayerAndMouse(oldX, oldY, oldX-dx, y);
+					theta = Player.angleBetweenPlayerAndMouse(oldX, oldY, oldX-dx, newY);
 				}
 
 				bounces--;
 			}
+		} else {
+			x = newX;
+			y = newY;
 		}
 	}
 	

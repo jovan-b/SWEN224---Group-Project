@@ -199,8 +199,8 @@ public class GUICanvas extends JComponent{
 		int yView = 40*viewScale;
 		// check if the player has a torch in their inventory
 		if (player.inventoryContains(new Torch())){
-			xView = 80*viewScale;
-			yView = 80*viewScale;
+			xView = 160*viewScale;
+			yView = 160*viewScale;
 			image = scaledTorchLight[player.getFacing()];
 		} 
 		// draw the overlay
