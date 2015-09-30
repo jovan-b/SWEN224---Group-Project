@@ -34,6 +34,8 @@ import characters.nonplayer.strategy.WanderStrategy;
  * 		updates the game logic
  * 
  * @author Jah Seng Lee
+ * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
  *
  */
 public class Controller extends Thread implements KeyListener, MouseListener, MouseMotionListener{
@@ -300,7 +302,6 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 
 	public void scaleEverything(int scale) {
 		GUICanvas c = gui.getCanvas();
-		int viewScale = c.getViewScale();
 		c.scaleUI();
 		Image image;
 		for (Room r : rooms){

@@ -18,7 +18,7 @@ import javax.imageio.ImageIO;
 
 /**
  * Displays the main menu for the game.
- * @author Sarah Dobie
+ * @author Sarah Dobie 300315033
  *
  */
 public class MainMenu implements MouseListener, MouseMotionListener {
@@ -27,18 +27,19 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	private static final int BUTTON_WIDTH = 300;
 	private static final int BUTTON_HEIGHT = 40;
 	
-	private GUICanvas canvas;
-	private Controller controller;
-	private Image[] sprites;
+	private GUICanvas canvas; // the canvas this draws on
+	private Controller controller; // the controller running this
+	private Image[] sprites; // the sprite images to animate
 	private int animState = 0; // the current animation frame
 	private int animModifier = 1; // flicks between 1 and -1 to loop animation
 	private int animCounter = 0; // counts each frame the player has moved
-	private String[] buttonLabels;
-	private int selectedButton = Integer.MAX_VALUE;
+	private String[] buttonLabels; // the button text
+	private int selectedButton = Integer.MAX_VALUE; // the button currently highlighted
 
 	/**
 	 * Constructor for class MainMenu.
 	 * @param canvas The GUICanvas the menu will be drawn on
+	 * @param controller The controller running this
 	 */
 	public MainMenu(GUICanvas canvas, Controller controller) {
 		this.canvas = canvas;
@@ -94,14 +95,14 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		g.drawImage(getCurrentImage(), midX+100, midY-150, canvas);
 		animate();
 		// draw the buttons
-		drawButtons(g);
+		drawMenuItems(g);
 	}
 	
 	/**
-	 * Draws all buttons on the canvas.
+	 * Draws the title and buttons.
 	 * @param g The Graphics object with which to draw
 	 */
-	private void drawButtons(Graphics g){
+	private void drawMenuItems(Graphics g){
 		// calculate canvas centre
 		int midX = canvas.getWidth()/2;
 		int midY = canvas.getHeight()/2;
@@ -110,16 +111,42 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		Graphics2D g2 = ((Graphics2D)g);
 		g2.setStroke(new BasicStroke(5));
 		int textSize = BUTTON_HEIGHT-10;
-		// set up loop values
+		// draw title
+		drawTitle(g, textSize, midX, midY);
+		// draw buttons
+		drawButtons(g, textSize, midX, midY);
+		// return stroke to default
+		g2.setStroke(new BasicStroke(1));
+	}
+
+	/**
+	 * Draws the title 'The ECS Games' at the top of the menu.
+	 * @param g The graphics object with which to draw
+	 * @param textSize The button text size
+	 * @param midX The horizontal centre of the screen
+	 * @param midY The vertical centre of the screen
+	 */
+	private void drawTitle(Graphics g, int textSize, int midX, int midY) {
+		int buttonX = midX-(BUTTON_WIDTH/2)-100;
 		int buttonY = midY - (BUTTON_HEIGHT*4);
 		int gap = 20 + BUTTON_HEIGHT;
-		int buttonX = midX-(BUTTON_WIDTH/2)-100;
-		
 		// draw title
 		g.setFont(new Font("pixelmix", Font.PLAIN, textSize+10));
 		g.drawString("The ECS Games", buttonX, buttonY-gap);
 		g.setFont(new Font("pixelmix", Font.PLAIN, textSize));
-		
+	}
+
+	/**
+	 * Draws the menu buttons.
+	 * @param g The graphics object with which to draw
+	 * @param textSize The button text size
+	 * @param midX The horizontal centre of the screen
+	 * @param midY The vertical centre of the screen
+	 */
+	private void drawButtons(Graphics g, int textSize, int midX, int midY) {
+		int buttonX = midX-(BUTTON_WIDTH/2)-100;
+		int buttonY = midY - (BUTTON_HEIGHT*4);
+		int gap = 20 + BUTTON_HEIGHT;
 		// draw buttons
 		for(int i=0; i<buttonLabels.length; i++){
 			g.drawRect(buttonX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -136,8 +163,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			// increment y
 			buttonY += gap;
 		}
-		// return stroke to default
-		g2.setStroke(new BasicStroke(1));
 	}
 	
 	/**

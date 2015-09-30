@@ -22,25 +22,26 @@ import characters.Player;
 /**
  * The main canvas inside the game window in which the game is drawn.
  * 
- * @author Sarah Dobie, Chris Read
+ * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
  *
  */
 @SuppressWarnings("serial")
 public class GUICanvas extends JComponent{
 	
-	private GUIFrame frame;
+	private GUIFrame frame; // the frame containing this
 	
-	private Player player;
-	private Compass compass;
+	private Player player; // the current player
+	private Compass compass; // the compass being displayed
 	
-	private String toolTip;
-	private int toolTipX;
-	private int toolTipY;
+	private String toolTip; // current tooltip text
+	private int toolTipX; // current tooltip position
+	private int toolTipY; //
 	
 	private int viewScale = 1; // view drawing scale
 	
 	private boolean mainMenuView; // true if we are looking at main menu
-	private MainMenu mainMenu;
+	private MainMenu mainMenu; // the main menu to display
 	
 	// Static UI Images
 	private Image[] torchLight;
@@ -70,6 +71,17 @@ public class GUICanvas extends JComponent{
 		
 		this.torchLight = new Image[4];
 		
+		loadImages();
+		
+		this.mainMenu = new MainMenu(this, controller);
+		setMainMenu(true);
+	}
+
+	
+	/**
+	 * Parses and stores all images used in the UI.
+	 */
+	private void loadImages() {
 		try {
 			compassControls = ImageIO.read(new File("Resources"+File.separator+"CompassControls.png"));
 			healthInventBack = ImageIO.read(new File("Resources"+File.separator+"HUDBackground.png"));
@@ -87,9 +99,6 @@ public class GUICanvas extends JComponent{
 		scaledHealthFront = healthInventFront;
 		scaledNoTorch = noTorch;
 		scaledTorchLight = Arrays.copyOf(torchLight, 4);
-		
-		this.mainMenu = new MainMenu(this, controller);
-		setMainMenu(true);
 	}
 	
 	@Override
@@ -147,6 +156,12 @@ public class GUICanvas extends JComponent{
 		}
 	}
 	
+	/**
+	 * Draws the name and rescription of the current room in the
+	 * bottom-left corner.
+	 * @param g The graphics object with which to draw
+	 * @param r The room whose details to display
+	 */
 	private void drawRoomInfo(Graphics g, Room r) {
 		g.setColor(Color.WHITE);
 		// show name
@@ -165,7 +180,15 @@ public class GUICanvas extends JComponent{
 		
 	}
 
+	/**
+	 * Draw a black overlay over the server room to make it appear dark.
+	 * If the player is carrying a torch, there is a directional 'hole'
+	 * in the overlay to simulate light.
+	 * @param r The server room
+	 * @param g The graphics object with which to draw
+	 */
 	private void drawServerRoomOverlay(Room r, Graphics g) {
+		// calculate drawing variables
 		g.setColor(Color.BLACK);
 		Image image = scaledNoTorch;
 		int width = this.getWidth();
@@ -174,11 +197,13 @@ public class GUICanvas extends JComponent{
 		int yMid = height/2;
 		int xView = 40*viewScale;
 		int yView = 40*viewScale;
+		// check if the player has a torch in their inventory
 		if (player.inventoryContains(new Torch())){
 			xView = 80*viewScale;
 			yView = 80*viewScale;
 			image = scaledTorchLight[player.getFacing()];
 		} 
+		// draw the overlay
 		g.fillRect(0, 0, width, yMid-yView);
 		g.fillRect(0, yMid+yView, width, yMid-yView);
 		g.fillRect(0, yMid-yView, xMid-xView, yView*2);
@@ -186,6 +211,10 @@ public class GUICanvas extends JComponent{
 		g.drawImage(image, xMid-xView, yMid-yView, this);
 	}
 
+	/**
+	 * Draw the player's inventory in the top-left corner.
+	 * @param g The graphics object with which to draw
+	 */
 	private void drawInventory(Graphics g) {
 		Item[] inventory = player.getInventory();
 		for (int i = 0; i < Player.INVENTORY_SIZE; i++){
@@ -221,12 +250,22 @@ public class GUICanvas extends JComponent{
 		this.viewScale = viewScale;
 	}
 
+	/**
+	 * Update the tooltip info
+	 * @param toolTip The tooltip text
+	 * @param x The tooltip's x position
+	 * @param y The tooltip's y position
+	 */
 	public void setToolTip(String toolTip, int x, int y) {
 		this.toolTip = toolTip;
 		this.toolTipX = x;
 		this.toolTipY = y;
 	}
 	
+	/**
+	 * Display the current tooltip.
+	 * @param g The graphics object with which to draw
+	 */
 	private void showToolTip(Graphics g){
 		g.setFont(new Font("pixelmix", Font.PLAIN, 10));
 		// determine which of line1 and line2 is shorter in pixels
@@ -263,13 +302,20 @@ public class GUICanvas extends JComponent{
 		return player;
 	}
 	
+	/**
+	 * Sets UI image sizes based on the current view scale.
+	 */
 	public void scaleUI(){
+		// scale compass
 		scaledCompassCont = compassControls.getScaledInstance(compassControls.getWidth(this)*viewScale, 
 				compassControls.getHeight(this)*viewScale, Image.SCALE_FAST);
+		compass.scaleImage(viewScale, this);
+		// scale health bar
 		scaledHealthBack = healthInventBack.getScaledInstance(healthInventBack.getWidth(this)*viewScale, 
 				healthInventBack.getHeight(this)*viewScale, Image.SCALE_FAST);
 		scaledHealthFront = healthInventFront.getScaledInstance(healthInventFront.getWidth(this)*viewScale, 
 				healthInventFront.getHeight(this)*viewScale, Image.SCALE_FAST);
+		// scale torch light
 		scaledNoTorch = noTorch.getScaledInstance(noTorch.getWidth(this)*viewScale, 
 				noTorch.getHeight(this)*viewScale, Image.SCALE_FAST);
 		Image temp[] = torchLight;
@@ -277,7 +323,6 @@ public class GUICanvas extends JComponent{
 			scaledTorchLight[dir] = temp[dir].getScaledInstance(temp[dir].getWidth(this)*viewScale, 
 					temp[dir].getHeight(this)*viewScale, Image.SCALE_FAST);
 		}
-		compass.scaleImage(viewScale, this);
 	}
 
 	/**
