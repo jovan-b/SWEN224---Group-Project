@@ -53,6 +53,8 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	private int[] mouseLocation = new int[2];	//position of mouse if it is being clicked
 												//mouseLocation[0] is x
 												//mouseLocation[1] is y
+	private int mouseX = 0;
+	private int mouseY = 0;
 		
 	/**
 	 * Controller constructor for a singeplayer game
@@ -189,6 +191,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	private void update() {
 		dealWithInput();//deal with user input
 		updateAndCollide();//deal with other objects and with collision detection
+		checkTooltip(); // check if a tooltip should be displayed
 	}
 	
 	private void updateAndCollide() {
@@ -424,9 +427,14 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
+	}
+
+	private void checkTooltip() {
 		int viewScale = gui.getCanvas().getViewScale();
-		int x = e.getX();
-		int y = e.getY();
+		int x = mouseX;
+		int y = mouseY;
 		String desc = "";
 		if (24*2*viewScale < y && y < 24*3*viewScale){
 			if (24*viewScale < x && x < 24*(Player.INVENTORY_SIZE+1)*viewScale){
