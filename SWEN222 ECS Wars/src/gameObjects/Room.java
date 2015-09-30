@@ -134,7 +134,7 @@ public class Room {
 	 * @param ctrl The controller running this game
 	 * @param col The door's column
 	 * @param row The door's row
-	 * @return
+	 * @return The Door connected to or created
 	 */
 	private Item parseDoor(String doorCode, Controller ctrl, int col, int row) {
 		// Check if door object already exists in current room
