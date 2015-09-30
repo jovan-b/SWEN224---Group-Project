@@ -121,16 +121,16 @@ public class Room {
 		case "PB" : return new Photocopier('B');
 		case "PL" : return new Photocopier('L');
 		case "PR" : return new Photocopier('R');
-		case "cF" : SmallChest cF = new SmallChest('F');
+		case "cF" : Cabinet cF = new Cabinet('F');
 					ctrl.addItemSpawner(cF);
 					return cF;
-		case "cB" : SmallChest cB = new SmallChest('B');
+		case "cB" : Cabinet cB = new Cabinet('B');
 					ctrl.addItemSpawner(cB);
 					return cB;
-		case "cL" : SmallChest cL = new SmallChest('L');
+		case "cL" : Cabinet cL = new Cabinet('L');
 					ctrl.addItemSpawner(cL);
 					return cL;
-		case "cR" : SmallChest cR = new SmallChest('R');
+		case "cR" : Cabinet cR = new Cabinet('R');
 					ctrl.addItemSpawner(cR);
 					return cR;
 		default: return new Floor(); // no match, safely return a floor
