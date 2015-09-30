@@ -7,6 +7,7 @@ import gameObjects.Torch;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -137,12 +138,33 @@ public class GUICanvas extends JComponent{
 		drawInventory(g);
 		g.drawImage(scaledHealthFront, 0, 24*viewScale, this);
 		
+		// draw room information
+		drawRoomInfo(g, r);
+		
 		// draw tooltip
 		if (toolTip != null){
 			showToolTip(g);
 		}
 	}
 	
+	private void drawRoomInfo(Graphics g, Room r) {
+		g.setColor(Color.WHITE);
+		// show name
+		String name = r.getName();
+		int textSize = 15;
+		g.setFont(new Font("pixelmix", Font.PLAIN, textSize));
+		int baseX = 10;
+		int baseY = this.getHeight() - textSize*2;
+		g.drawString(name, baseX, baseY);
+		
+		// show description
+		textSize -= 4;
+		String desc = r.getDescription();
+		g.setFont(new Font("pixelmix", Font.PLAIN, textSize));
+		g.drawString(desc, baseX, baseY + textSize + 2);
+		
+	}
+
 	private void drawServerRoomOverlay(Room r, Graphics g) {
 		g.setColor(Color.BLACK);
 		Image image = scaledNoTorch;
@@ -206,6 +228,7 @@ public class GUICanvas extends JComponent{
 	}
 	
 	private void showToolTip(Graphics g){
+		g.setFont(new Font("pixelmix", Font.PLAIN, 10));
 		// determine which of line1 and line2 is shorter in pixels
 		int lineWidth = g.getFontMetrics().stringWidth(toolTip);
 		// set up variables for drawing

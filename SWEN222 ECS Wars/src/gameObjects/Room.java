@@ -724,6 +724,10 @@ public class Room {
 		return name;
 	}
 	
+	public String getDescription() {
+		return description;
+	}
+
 	public int getCols(){
 		return cols;
 	}

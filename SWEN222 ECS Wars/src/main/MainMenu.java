@@ -209,7 +209,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	}
 
 	
-	private void newGame() { // FIXME actually make a new game
+	private void newGame() {
 		controller.initialiseGame();
 		canvas.setMainMenu(false);
 	}
