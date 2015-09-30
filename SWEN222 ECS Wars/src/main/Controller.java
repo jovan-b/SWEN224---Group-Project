@@ -3,6 +3,7 @@ package main;
 import gameObjects.Door;
 import gameObjects.Item;
 import gameObjects.Room;
+import main.saveAndLoad.SaveManager;
 import network.ClientConnection;
 
 import java.awt.Image;
@@ -63,10 +64,14 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 * Controller constructor for a singeplayer game
 	 */
 	public Controller(){
-		initialise(this, this, this);
+		initialise(this, this, this);	//TODO: Remove the (this, this, this)
 		run();
 		
 	}
+	
+	/**
+	 * Controller constructor from a load game
+	 */
 	
 	/**
 	 * Controller constructor for a multiplayer client

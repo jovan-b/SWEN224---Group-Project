@@ -38,6 +38,11 @@ public abstract class Player {
 	
 	public static final int INVENTORY_SIZE = 3;
 	
+	public enum Type{
+		DavePlayer,
+		PondyPlayer
+	}
+	
 	//fields describing state of player
 	protected Weapon currentWeapon;
 	protected Item[] inventory = new Item[INVENTORY_SIZE];
@@ -469,4 +474,6 @@ public abstract class Player {
 			}
 		}
 	}
+	
+	public abstract Type getType();
 }
