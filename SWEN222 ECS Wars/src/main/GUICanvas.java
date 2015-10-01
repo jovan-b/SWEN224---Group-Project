@@ -14,6 +14,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -179,8 +180,19 @@ public class GUICanvas extends JComponent{
 	private void drawContainer(Graphics g) {
 		int x = (this.getWidth()/2)-(24*3*viewScale);
 		int y = (this.getHeight()/2)-(24*3*viewScale);
+		List<Item> contents = currentContainer.getContents();
+		Item item;
+		Image itemImage;
 		g.drawImage(scaledContainerBg, x, y, this);
+		
 		// draw contents of container
+		for (int index = 0; index < contents.size(); index++){
+			item = contents.get(index);
+			if (item != null){
+				itemImage = item.getImage(0);
+				g.drawImage(itemImage, x+(24*viewScale*(index+1)), y+(24*viewScale), this);
+			}
+		}
 		
 		g.drawImage(scaledContainerFg, x, y, this);
 	}
@@ -385,7 +397,11 @@ public class GUICanvas extends JComponent{
 	 * Null = display nothing.
 	 * @param currentContainer The container to show
 	 */
-	public void setCurrentContainer(Container currentContainer) {
-		this.currentContainer = currentContainer;
+	public void setCurrentContainer(Container container) {
+		if (currentContainer == container){
+			currentContainer = null;
+		} else {
+			this.currentContainer = container;
+		}
 	}
 }
