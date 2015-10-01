@@ -318,6 +318,12 @@ public abstract class Player {
 	public int getY() {
 		return (int)posY;
 	}
+	
+	public void setXY(int x, int y){
+		posX = x;
+		posY = y;
+		animate();
+	}
 
 	public int getViewDirection() {
 		return viewDirection;

@@ -31,7 +31,7 @@ public class ServerHandler extends Thread{
 	 * to update the main game
 	 */
 	@Override
-	public void run(){
+	synchronized public void run(){
 		try{
 			//Create the socket input and output to write to the client
 			input = new DataInputStream(socket.getInputStream());
@@ -46,14 +46,21 @@ public class ServerHandler extends Thread{
 				switch(action){
 					//If 1 is the action, it means the player is trying to move
 					case 1:
-						//Read which direction
-						int direction = input.readInt();
+						//Read players x and y positions
+						int playerX = input.readInt();
+						int playerY = input.readInt();
 						//Go through each client updating them of the players new position
 						for(int i = 0; i<serverHandlers.length; i++){
-							Socket socket = serverHandlers[i].getSocket();
-							DataOutputStream socketOut = new DataOutputStream(socket.getOutputStream());
-							socketOut.writeInt(uid);
-							socketOut.writeInt(direction);
+							if(serverHandlers[i] == this){
+								continue; // don't need to broadcast to yourself
+							} else{
+								Socket socket = serverHandlers[i].getSocket();
+								DataOutputStream socketOut = new DataOutputStream(socket.getOutputStream());
+								socketOut.writeInt(uid);
+								socketOut.writeInt(1);
+								socketOut.writeInt(playerX);
+								socketOut.writeInt(playerY);
+							}
 						}
 						break;
 					//If 2 is the action, it means a mouse clicked on the game

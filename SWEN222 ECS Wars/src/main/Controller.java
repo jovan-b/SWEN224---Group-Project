@@ -53,6 +53,8 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	private Set<Door> doors;
 	private List<ItemSpawner> itemSpawners;
 	private List<Item> itemsToSpawn;
+	private boolean multiplayer;
+	private ClientConnection client;
 	
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
@@ -75,6 +77,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 * Controller constructor for a multiplayer client
 	 */
 	public Controller(ClientConnection client, int numberOfClients, int uid){
+		this.client = client;
 		MPInitialise(client, client, client, numberOfClients, uid);
 		start();
 	}
@@ -90,10 +93,16 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	public void MPInitialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2,
 			int numberOfClients, int uid) {
 		isRunning = true;
+		multiplayer = true;
 		
 		rooms = new ArrayList<>();
 		doors = new HashSet<>();
+		itemSpawners = new ArrayList<>();
+		itemsToSpawn = new ArrayList<>();
+		
 		setupRooms();
+		loadItemsToSpawn();
+		setupSpawnItems();
 		
 		Room room = rooms.get(0);
 		rooms.add(room);
@@ -177,7 +186,13 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			if(currentTime >= nextTime){
 				//assign time for the next update
 				nextTime += FRAME_RATE;
-				update();
+				if(multiplayer){
+					client.dealWithInput();
+					updateAndCollide();
+				}
+				else{
+					update();
+				}
 				if(currentTime < nextTime) gui.draw();
 			}
 			else{

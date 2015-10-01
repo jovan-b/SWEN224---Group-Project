@@ -28,7 +28,7 @@ public class Main {
 		boolean server = false; //Server mode, start as false unless specified in the cmd line arguments
 		String url = null; //The url which the client connects to
 		int clients = 0; //Number of clients for multiplayer
-		int port = 7777; //Default port TODO: Be able to change the port
+		int port = 8777; //Default port TODO: Be able to change the port
 
 		for (int i = 0; i != args.length; ++i) {
 			if (args[i].startsWith("-")) {

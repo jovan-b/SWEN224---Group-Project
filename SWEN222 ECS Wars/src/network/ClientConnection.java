@@ -9,6 +9,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.BitSet;
 
 import characters.Player;
 import main.Controller;
@@ -28,6 +29,7 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 	private DataOutputStream output;
 	private Controller controller;
 	private int uid;
+	private BitSet keyBits = new BitSet(256);
 
 	public ClientConnection(Socket socket){
 		this.socket = socket;
@@ -57,28 +59,16 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 				Player player = controller.getPlayer(user);
 				int action = input.readInt();
 				switch(action){
-					//Move up
+					//Move
 					case 1:
-						player.move("up");
-						break;
-					//Move down
-					case 2:
-						player.move("down");
-						break;
-					//Move left
-					case 3:
-						player.move("left");
-						break;
-					//Move right
-					case 4:
-						player.move("right");
-						break;
-					//Player shoots
-					case 5:
 						int x = input.readInt();
 						int y = input.readInt();
-						player.shoot(x, y);
-						System.out.println(x + ":"+ y);
+						player.setXY(x, y);
+						break;
+					case 5:
+						int mouseX = input.readInt();
+						int mouseY = input.readInt();
+						player.shoot(mouseX, mouseY);
 				}
 			}
 		}
@@ -98,36 +88,57 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		keyBits.set(e.getKeyCode());
+	}
+
+	public void dealWithInput() {
 		try{
-			int keyCode = e.getKeyCode();
-			if(keyCode == KeyEvent.VK_W){
-				//Indicates player move up
-				output.writeInt(1);
-				output.writeInt(1);
+			boolean posChanged = false;
+			// Player Movement
+			if(isKeyPressed(KeyEvent.VK_RIGHT) || isKeyPressed(KeyEvent.VK_D)){
+				controller.getPlayer(uid).move("right");
+				posChanged = true;
 			}
-			else if(keyCode == KeyEvent.VK_S){
-				//Indicates player move down
-				output.writeInt(1);
-				output.writeInt(2);
+			if(isKeyPressed(KeyEvent.VK_LEFT) || isKeyPressed(KeyEvent.VK_A)){
+				controller.getPlayer(uid).move("left");
+				posChanged = true;
 			}
-			else if(keyCode == KeyEvent.VK_A){
-				//Indicates player move left
-				output.writeInt(1);
-				output.writeInt(3);
+			if(isKeyPressed(KeyEvent.VK_UP) || isKeyPressed(KeyEvent.VK_W)){
+				controller.getPlayer(uid).move("up");
+				posChanged = true;
 			}
-			else if(keyCode == KeyEvent.VK_D){
-				//Indicates player move right
-				output.writeInt(1);
-				output.writeInt(4);
+			if(isKeyPressed(KeyEvent.VK_DOWN) || isKeyPressed(KeyEvent.VK_S)){
+				controller.getPlayer(uid).move("down");
+				posChanged = true;
 			}
-		}
-		catch(IOException ex){
-			//Couldn't read button press, ignore
+			if(isKeyPressed(KeyEvent.VK_SHIFT)){
+				controller.getPlayer(uid).setSpeedModifier(2);
+			} else {
+				controller.getPlayer(uid).setSpeedModifier(1);
+			}
+	//		if(isLeftMousePressed()){
+	//			player.shoot(mouseLocation[0], mouseLocation[1]);
+	//		}
+
+			if(posChanged){
+				int x = controller.getPlayer(uid).getX();
+				int y = controller.getPlayer(uid).getY();
+				output.writeInt(1);
+				output.writeInt(x);
+				output.writeInt(y);
+			}
+
+		} catch(IOException e){
+			e.printStackTrace();
 		}
 	}
 
+	private boolean isKeyPressed(int keyCode) {
+		return keyBits.get(keyCode);
+	}
+
 	public void keyTyped(KeyEvent e) {}
-	
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_Q){
@@ -153,6 +164,7 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 			controller.getGUI().getCanvas().setViewScale(2);
 			controller.scaleEverything(2);
 		}
+		keyBits.clear(e.getKeyCode());
 	}
 
 	@Override
@@ -210,6 +222,6 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
