@@ -18,9 +18,13 @@ import main.Controller;
  */
 public class Torch implements Item {
 	
-	private Image image;
-	private Image scaledImage;
+	private Image torchImage;
+	private Image torchImageOn;
+	private Image scaledTorchImage;
+	private Image scaledTorchImageOn;
 	private String description;
+	
+	private boolean isOn;
 
 	/**
 	 * Constructor for class Torch.
@@ -28,6 +32,7 @@ public class Torch implements Item {
 	public Torch() {
 		description = "Torch: May it be a light for you in dark places.";
 		loadImages();
+		isOn = false;
 	}
 
 	/**
@@ -35,8 +40,10 @@ public class Torch implements Item {
 	 */
 	private void loadImages() {
 		try{
-		image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Torch.png"));
-		scaledImage = image;
+		torchImage = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Torch.png"));
+		torchImageOn = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"TorchOn.png"));
+		scaledTorchImage = torchImage;
+		scaledTorchImageOn = torchImageOn;
 		} catch(IOException e){
 			System.out.println("Error loading Torch file: "+e.getMessage());
 		}
@@ -45,11 +52,15 @@ public class Torch implements Item {
 	@Override
 	public void use(Player p, Controller ctrl) {
 		System.out.println("Player used the torch!!");
+		isOn = !isOn;
 	}
 
 	@Override
 	public Image getImage(int viewDirection) {
-		return image;
+		if (viewDirection == 0){
+			return torchImage;
+		}
+		return torchImageOn;
 	}
 
 	@Override
@@ -69,17 +80,27 @@ public class Torch implements Item {
 
 	@Override
 	public void setScaledImage(int viewDirection, Image scaledImage) {
-		this.scaledImage = scaledImage;
+		if (viewDirection == 0){
+			this.scaledTorchImage = scaledImage;
+		}
+		this.scaledTorchImageOn = scaledImage;
 	}
 
 	@Override
 	public Image getScaledImage(int viewDirection) {
-		return scaledImage;
+		if (isOn){
+			return scaledTorchImageOn;
+		}
+		return scaledTorchImage;
 	}
 
 	@Override
 	public String getDescription() {
 		return description;
+	}
+
+	public boolean isOn() {
+		return isOn;
 	}
 
 }

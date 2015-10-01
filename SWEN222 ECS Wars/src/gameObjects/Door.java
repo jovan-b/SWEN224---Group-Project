@@ -74,7 +74,8 @@ public class Door implements Item {
 	
 	@Override
 	public void use(Player p, Controller ctrl) {
-		if(p.inventoryContains(new KeyCard())){
+		Item keyCard = p.inventoryContains(new KeyCard());
+		if(keyCard != null){
 			tempUnlocked = true;
 			System.out.println("Unlocked the door"); // TODO implement properly
 		}

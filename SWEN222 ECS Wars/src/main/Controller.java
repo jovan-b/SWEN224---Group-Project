@@ -103,7 +103,6 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		setupRooms();
 		loadItemsToSpawn();
 		setupSpawnItems();
-		
 		Room room = rooms.get(0);
 		rooms.add(room);
 		
@@ -351,13 +350,25 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			r.setScaledImages(scaled);
 			
 			// scale items
+			Item item;
 			Item[][] contents = r.getContents();
 			for (int i = 0; i < contents.length; i++){
 				for (int j = 0; j < contents[0].length; j++){
 					for (int v = 0; v < 4; v++){
-						image = contents[i][j].getImage(v);
+						item = contents[i][j];
+						image = item.getImage(v);
 						if (image != null){
 							contents[i][j].setScaledImage(v, scaleImage(image, c, scale));
+						}
+						if (item instanceof Container){
+							for (Item contentsItem : ((Container)item).getContents()){
+								if (contentsItem != null){
+									image = contentsItem.getImage(0);
+									contentsItem.setScaledImage(0, scaleImage(image, c, scale));
+									image = contentsItem.getImage(1);
+									contentsItem.setScaledImage(1, scaleImage(image, c, scale));
+								}
+							}
 						}
 					}
 				}
@@ -377,6 +388,18 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 					if (i != null){
 						image = i.getImage(0);
 						i.setScaledImage(0, scaleImage(image, c, scale));
+						image = i.getImage(1);
+						i.setScaledImage(1, scaleImage(image, c, scale));
+						if (i instanceof Container){
+							for (Item contentsItem : ((Container)i).getContents()){
+								if (contentsItem != null){
+									image = contentsItem.getImage(0);
+									contentsItem.setScaledImage(0, scaleImage(image, c, scale));
+									image = contentsItem.getImage(1);
+									contentsItem.setScaledImage(1, scaleImage(image, c, scale));
+								}
+							}
+						}
 					}
 				}
 			}
@@ -572,6 +595,25 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		return doors;
 	}
 	
+	public Room getRoom(String roomName) {
+		for(Room r: rooms){
+			if(r.getName().equals(roomName)){
+				return r;
+			}
+		}
+		
+		return null;
+	}
+
+
+	public void setPlayers(ArrayList<Player> players) {
+		this.players = players;
+	}
+
+	public void setCurrentPlayer(Player player) {
+		this.player = player;
+	}
+	
 	/**
 	 * Returns the player with the specified user id.
 	 * @param uid The user id of the player
@@ -596,25 +638,8 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	public ArrayList<Room> getRooms(){
 		return rooms;
 	}
-
-	public Room getRoom(String roomName) {
-		for(Room r: rooms){
-			if(r.getName().equals(roomName)){
-				return r;
-			}
-		}
-		
-		return null;
-	}
-
-
-	public void setPlayers(ArrayList<Player> players) {
-		this.players = players;
-	}
-
-	public void setCurrentPlayer(Player player) {
-		this.player = player;
-	}
+	
+	
 
 
 }

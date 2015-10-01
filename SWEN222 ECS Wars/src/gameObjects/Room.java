@@ -152,7 +152,6 @@ public class Room {
 				return d;
 			}
 		}
-		
 		// Check if door object exists in another room
 		for (Door d : ctrl.getDoors()){
 			if (d.getId().equals(doorCode)){
@@ -313,32 +312,43 @@ public class Room {
 		int viewScale = c.getViewScale();
 		int playerX = p.getX();
 		int playerY = p.getY();
+		int x;
+		int y;
 		// draw player relative to view direction
 		switch(viewDirection){
 		case 1: // EAST
-			g.drawImage(playerImage, drawX+(playerY*viewScale)-(16*viewScale),
-					drawY+((width-playerX)*viewScale)-(24*viewScale), c);
+			x = drawX+(playerY*viewScale);
+			y = drawY+((width-playerX)*viewScale);
+			//g.drawImage(playerImage, drawX+(playerY*viewScale)-(16*viewScale),
+			//		drawY+((width-playerX)*viewScale)-(24*viewScale), c);
 			break;
 		case 2: // SOUTH
-			g.drawImage(playerImage, drawX+((width-playerX)*viewScale)-(16*viewScale),
-					drawY+((height-playerY)*viewScale)-(24*viewScale), c);
+			x = drawX+((width-playerX)*viewScale);
+			y = drawY+((height-playerY)*viewScale);
+			//g.drawImage(playerImage, drawX+((width-playerX)*viewScale)-(16*viewScale),
+			//		drawY+((height-playerY)*viewScale)-(24*viewScale), c);
 			break;
 		case 3: // WEST
-			g.drawImage(playerImage, drawX+((height-playerY)*viewScale)-(16*viewScale),
-					drawY+(playerX*viewScale)-(24*viewScale), c);
+			x = drawX+((height-playerY)*viewScale);
+			y = drawY+(playerX*viewScale);
+			//g.drawImage(playerImage, drawX+((height-playerY)*viewScale)-(16*viewScale),
+			//		drawY+(playerX*viewScale)-(24*viewScale), c);
 			break;
 		default: // NORTH
-			g.drawImage(playerImage, drawX+(playerX*viewScale)-(16*viewScale),
-					drawY+(playerY*viewScale)-(24*viewScale), c);
+			x = drawX+(playerX*viewScale);
+			y = drawY+(playerY*viewScale);
+			//g.drawImage(playerImage, drawX+(playerX*viewScale)-(16*viewScale),
+			//		drawY+(playerY*viewScale)-(24*viewScale), c);
 		}
+		g.drawImage(playerImage, x-(16*viewScale), y-(24*viewScale), c);
 		if (p != clientPlayer){
 			// draw remaining health
 			g.setColor(Color.RED);
 			int playerHealth = p.getHealth();
 			int healthWd = (int)((double)playerHealth/(6.0+(1.0/3.0)))*viewScale;
 			int healthHt = 2*viewScale;
-			int healthX = drawX+(playerX-(healthWd/2))*viewScale;
-			int healthY =  drawY+(playerY+16)*viewScale;
+			int healthX = x-(healthWd/2);
+			int healthY = y+(16*viewScale);
 			g.fillRect(healthX, healthY, healthWd, healthHt);
 		}
 	}

@@ -189,7 +189,7 @@ public class GUICanvas extends JComponent{
 		for (int index = 0; index < contents.size(); index++){
 			item = contents.get(index);
 			if (item != null){
-				itemImage = item.getImage(0);
+				itemImage = item.getScaledImage(0);
 				g.drawImage(itemImage, x+(24*viewScale*(index+1)), y+(24*viewScale), this);
 			}
 		}
@@ -240,7 +240,8 @@ public class GUICanvas extends JComponent{
 		int xView = 40*viewScale;
 		int yView = 40*viewScale;
 		// check if the player has a torch in their inventory
-		if (player.inventoryContains(new Torch())){
+		Torch torch = (Torch)player.inventoryContains(new Torch());
+		if (torch != null && torch.isOn()){
 			xView = 160*viewScale;
 			yView = 160*viewScale;
 			image = scaledTorchLight[player.getFacing()];
