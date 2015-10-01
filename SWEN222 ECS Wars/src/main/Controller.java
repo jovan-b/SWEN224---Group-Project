@@ -1,6 +1,9 @@
 package main;
 
-import gameObjects.*;
+import gameObjects.Door;
+import gameObjects.Item;
+import gameObjects.Room;
+import main.saveAndLoad.SaveManager;
 import network.ClientConnection;
 
 import java.awt.Image;
@@ -11,14 +14,14 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+
+import org.w3c.dom.Document;
 
 import characters.Player;
 import characters.DavePlayer;
@@ -50,8 +53,6 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	private int uid;
 	private ArrayList<Room> rooms;
 	private Set<Door> doors;
-	private List<ItemSpawner> itemSpawners;
-	private List<Item> itemsToSpawn;
 	
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
@@ -65,10 +66,14 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 * Controller constructor for a singeplayer game
 	 */
 	public Controller(){
-		initialise(this, this, this);
+		initialise();
 		run();
 		
 	}
+	
+	/**
+	 * Controller constructor from a load game
+	 */
 	
 	/**
 	 * Controller constructor for a multiplayer client
@@ -104,11 +109,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		}
 		
 		gui = new GUIFrame(this, players.get(uid), key, mouse, mouse2);
-		
-		for(Player p: players){
-			p.setCanvas(gui.getCanvas());
-		}
-		
+		players.get(uid).setCanvas(gui.getCanvas());
 		gui.getCanvas().setMainMenu(false);
 		
 		SoundManager.playSong("battle_1.mp3");
@@ -117,26 +118,22 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	/**
 	 * Initialise the pre-game fields of this class
 	 */
-	private void initialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2) {
+	private void initialise() {
 		isRunning = true;
 		rooms = new ArrayList<>();
 		doors = new HashSet<>();
-		itemSpawners = new ArrayList<>();
-		itemsToSpawn = new ArrayList<>();
 		setupRooms();
-		loadItemsToSpawn();
-		setupSpawnItems();
 		Room room = rooms.get(0); //FIXME
 		player = new DavePlayer(room, 2*24, 2*24);
 		players = new ArrayList<Player>();
 		players.add(player);
 		uid = 0;
-		gui = new GUIFrame(this, player, key, mouse, mouse2);
+		gui = new GUIFrame(this, player, this, this, this);
 		player.setCanvas(gui.getCanvas());
 		
 		SoundManager.playSong("battle_1.mp3");
 	}
-
+	
 	/**
 	 * Initialise the fields of the game
 	 */
@@ -297,13 +294,13 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			player.rotateViewRight();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_1){
-			player.inventoryItem(0).use(player, this);
+			player.inventoryItem(0).use(player);
 		}
 		if(e.getKeyCode() == KeyEvent.VK_2){
-			player.inventoryItem(1).use(player, this);
+			player.inventoryItem(1).use(player);
 		}
 		if(e.getKeyCode() == KeyEvent.VK_3){
-			player.inventoryItem(2).use(player, this);
+			player.inventoryItem(2).use(player);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_MINUS){
 			gui.getCanvas().setViewScale(1);
@@ -423,12 +420,12 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 				} else {
 					Room room = player.getCurrentRoom();
 					Item item = room.itemAtMouse(x, y, viewScale, player);
-					item.use(player, this);
+					item.use(player);
 				}
 			} else {
 				Room room = player.getCurrentRoom();
 				Item item = room.itemAtMouse(x, y, viewScale, player);
-				item.use(player, this);
+				item.use(player);
 			}
 			
 		}
@@ -492,63 +489,6 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	}
 
 	/**
-	 * Loads all items that will be spawned and stores them in
-	 * the itemsToSpawn List.
-	 */
-	private void loadItemsToSpawn() {
-		try	{
-			Scanner s = new Scanner(new File("Resources"+File.separator+"ItemsToSpawn.txt"));
-			// iterate over file
-			while(s.hasNextLine()){
-				String nextLine = s.nextLine();
-				Item toAdd = null;
-				// create item to spawn
-				switch(nextLine){
-				case "KeyCard" : toAdd = new KeyCard(); break;
-				case "Torch" : toAdd = new Torch(); break;
-				}
-				// add the item if it's not null, otherwise print error message
-				if(toAdd != null){
-					itemsToSpawn.add(toAdd);
-				} else {
-					System.out.println("Parse error: could not parse spawn item - "+ nextLine);
-				}
-				
-			}
-		} catch(IOException e){
-			System.out.println("Error loading spawn items: "+e.getMessage());
-		}
-	}
-	
-	/**
-	 * Randomly distributes spawned items.
-	 */
-	private void setupSpawnItems() {
-		// shuffle spawn item lists
-		Collections.shuffle(itemSpawners);
-		Collections.shuffle(itemsToSpawn);
-		// while there is an item or container left, add item to container
-		while(itemSpawners.size() > 0 && itemsToSpawn.size() > 0){
-			// get random container and item
-			ItemSpawner holder = itemSpawners.remove(0);
-			Item toSpawn = itemsToSpawn.remove(0);
-			// add item if there's room
-			if(holder.remainingCapacity() > 0){
-				holder.addSpawnItem(toSpawn);
-			}
-		}
-	}
-	
-	/**
-	 * Adds an ItemSpawner to the list of all such types in
-	 * the game.
-	 * @param spawner The ItemSpawner to add.
-	 */
-	public void addItemSpawner(ItemSpawner spawner){
-		itemSpawners.add(spawner);
-	}
-
-	/**
 	 * Gets all the doors in the game.
 	 * @return A Set of all doors in the game
 	 */
@@ -580,6 +520,38 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	public ArrayList<Room> getRooms(){
 		return rooms;
 	}
+	
+	/**
+	 * Get room based on the room ID
+	 * If specified room does not exist, return null
+	 * 
+	 * @param rooms
+	 */
+	public Room getRoom(String roomID){	//TODO: returns null
+		for(Room r: rooms){
+			if(r.getName().equals(roomID)){
+				return r;
+			}
+		}
+		
+		return null;
+	}
 
+	public void setRooms(ArrayList<Room> rooms) {
+		this.rooms = rooms;
+	}
+
+	public void setPlayers(ArrayList<Player> players) {
+		this.players = players;
+	}
+	
+	public Player getCurrentPlayer(){
+		return player;
+	}
+
+	public void setCurrentPlayer(Player player) {
+		player.setCompass(gui.getCanvas().getCompass());
+		this.player = player;
+	}
 
 }

@@ -152,6 +152,7 @@ public class Room {
 				return d;
 			}
 		}
+		
 		// Check if door object exists in another room
 		for (Door d : ctrl.getDoors()){
 			if (d.getId().equals(doorCode)){

@@ -15,6 +15,10 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import main.saveAndLoad.SaveManager;
 
 /**
  * Displays the main menu for the game.
@@ -240,7 +244,18 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	}
 
 	private void loadGame() {
-		// TODO Auto-generated method stub
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		        "XML Files", "xml");
+		chooser.setFileFilter(filter);
+		int returnVal = chooser.showOpenDialog(canvas);
+		
+		if(chooser.getSelectedFile() == null || 
+				returnVal != JFileChooser.APPROVE_OPTION){	//Player hasn't choosen a file
+			return;
+		}
+		canvas.setMainMenu(false);
+		SaveManager.loadGame(controller, chooser.getSelectedFile());
 		
 	}
 
