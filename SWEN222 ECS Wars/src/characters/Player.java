@@ -33,7 +33,7 @@ public abstract class Player {
 	public static final int BASE_SPEED = 2;	//pixels per frame
 	public static final int BASE_HEIGHT = 50;
 	public static final int BASE_WIDTH = 30;
-	public static final int HEALTH_MAX = 200;
+	public final int HEALTH_MAX = 200;
 	
 	
 	public static final int INVENTORY_SIZE = 3;
@@ -471,5 +471,9 @@ public abstract class Player {
 				inventory[index] = null;
 			}
 		}
+	}
+	
+	public boolean isDead(){
+		return health == 0;
 	}
 }
