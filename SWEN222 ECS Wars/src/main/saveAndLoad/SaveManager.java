@@ -149,8 +149,6 @@ public final class SaveManager {
 				}
 			}
 			
-			//add list of rooms to controller
-			controller.setRooms(rooms);
 			
 			//add list of players to the controller
 			controller.setPlayers(players);

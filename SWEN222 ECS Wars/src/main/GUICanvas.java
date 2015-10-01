@@ -1,6 +1,7 @@
 package main;
 
 import gameObjects.Compass;
+import gameObjects.Container;
 import gameObjects.Item;
 import gameObjects.Room;
 import gameObjects.Torch;
@@ -13,6 +14,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -33,6 +35,7 @@ public class GUICanvas extends JComponent{
 	
 	private Player player; // the current player
 	private Compass compass; // the compass being displayed
+	private Container currentContainer;
 	
 	private String toolTip; // current tooltip text
 	private int toolTipX; // current tooltip position
@@ -56,6 +59,11 @@ public class GUICanvas extends JComponent{
 	private Image scaledHealthBack;
 	private Image scaledHealthFront;
 	
+	private Image containerBg;
+	private Image containerFg;
+	private Image scaledContainerBg;
+	private Image scaledContainerFg;
+	
 	/**
 	 * Constructor for class GUICanvas.
 	 * @param frame The frame containing this canvas
@@ -77,7 +85,7 @@ public class GUICanvas extends JComponent{
 		setMainMenu(true);
 	}
 
-	
+
 	/**
 	 * Parses and stores all images used in the UI.
 	 */
@@ -87,6 +95,8 @@ public class GUICanvas extends JComponent{
 			healthInventBack = ImageIO.read(new File("Resources"+File.separator+"HUDBackground.png"));
 			healthInventFront = ImageIO.read(new File("Resources"+File.separator+"HUDForeground.png"));
 			noTorch = ImageIO.read(new File("Resources"+File.separator+"noTorch.png"));
+			containerBg = ImageIO.read(new File("Resources"+File.separator+"ContainerBackground.png"));
+			containerFg = ImageIO.read(new File("Resources"+File.separator+"ContainerForeground.png"));
 			for (int dir = 0; dir < 4; dir++){
 				torchLight[dir] = ImageIO.read(new File("Resources"+File.separator+"torchLightDirectional"
 								+File.separator+"torchLight"+dir+".png"));
@@ -99,6 +109,8 @@ public class GUICanvas extends JComponent{
 		scaledHealthFront = healthInventFront;
 		scaledNoTorch = noTorch;
 		scaledTorchLight = Arrays.copyOf(torchLight, 4);
+		scaledContainerBg = containerBg;
+		scaledContainerFg = containerFg;
 	}
 	
 	@Override
@@ -154,8 +166,38 @@ public class GUICanvas extends JComponent{
 		if (toolTip != null){
 			showToolTip(g);
 		}
+		
+		// draw container inventory if one is selected
+		if(currentContainer != null){
+			drawContainer(g);
+		}
 	}
 	
+	/**
+	 * Draws the contents of the selected container.
+	 * @param g The graphics object with which to draw
+	 */
+	private void drawContainer(Graphics g) {
+		int x = (this.getWidth()/2)-(24*3*viewScale);
+		int y = (this.getHeight()/2)-(24*3*viewScale);
+		List<Item> contents = currentContainer.getContents();
+		Item item;
+		Image itemImage;
+		g.drawImage(scaledContainerBg, x, y, this);
+		
+		// draw contents of container
+		for (int index = 0; index < contents.size(); index++){
+			item = contents.get(index);
+			if (item != null){
+				itemImage = item.getImage(0);
+				g.drawImage(itemImage, x+(24*viewScale*(index+1)), y+(24*viewScale), this);
+			}
+		}
+		
+		g.drawImage(scaledContainerFg, x, y, this);
+	}
+
+
 	/**
 	 * Draws the name and rescription of the current room in the
 	 * bottom-left corner.
@@ -230,8 +272,13 @@ public class GUICanvas extends JComponent{
 	 * @param g The Graphics object to draw with
 	 */
 	private void drawHealth(Graphics g) {
-		g.setColor(Color.RED);
-		g.fillRect(24*viewScale, 32*viewScale, player.getHealth()*viewScale, 8*viewScale);
+		int health = player.getHealth();
+		if (health <= 50){
+			g.setColor(Color.RED);
+		} else {
+			g.setColor(Color.GREEN);
+		}
+		g.fillRect(24*viewScale, 32*viewScale, health*viewScale, 8*viewScale);
 	}
 
 	/**
@@ -315,6 +362,11 @@ public class GUICanvas extends JComponent{
 				healthInventBack.getHeight(this)*viewScale, Image.SCALE_FAST);
 		scaledHealthFront = healthInventFront.getScaledInstance(healthInventFront.getWidth(this)*viewScale, 
 				healthInventFront.getHeight(this)*viewScale, Image.SCALE_FAST);
+		// scale container inventory
+		scaledContainerBg = containerBg.getScaledInstance(containerBg.getWidth(this)*viewScale, 
+				containerBg.getHeight(this)*viewScale, Image.SCALE_FAST);
+		scaledContainerFg = containerFg.getScaledInstance(containerFg.getWidth(this)*viewScale, 
+				containerFg.getHeight(this)*viewScale, Image.SCALE_FAST);
 		// scale torch light
 		scaledNoTorch = noTorch.getScaledInstance(noTorch.getWidth(this)*viewScale, 
 				noTorch.getHeight(this)*viewScale, Image.SCALE_FAST);
@@ -340,8 +392,16 @@ public class GUICanvas extends JComponent{
 		}
 	}
 
-
-	public Compass getCompass() {
-		return compass;
+	/**
+	 * Sets the container inventory to display.
+	 * Null = display nothing.
+	 * @param currentContainer The container to show
+	 */
+	public void setCurrentContainer(Container container) {
+		if (currentContainer == container){
+			currentContainer = null;
+		} else {
+			this.currentContainer = container;
+		}
 	}
 }
