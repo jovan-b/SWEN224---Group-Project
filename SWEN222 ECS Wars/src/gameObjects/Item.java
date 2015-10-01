@@ -3,6 +3,7 @@ package gameObjects;
 import java.awt.Image;
 
 import characters.Player;
+import main.Controller;
 
 /**
  * Represents all in-game items eg. desks, weapons, books etc
@@ -16,7 +17,7 @@ public interface Item {
 	 * Allows the player to interact with this item if possible.
 	 * @param p The player using this item.
 	 */
-	public void use(Player p);
+	public void use(Player p, Controller ctrl);
 
 	/**
 	 * Returns the image representing this item.

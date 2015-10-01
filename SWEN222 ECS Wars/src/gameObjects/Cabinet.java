@@ -7,6 +7,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import characters.Player;
+import main.Controller;
+import main.GUICanvas;
 
 /**
  * A 1x1 container which can store 4 items.
@@ -101,8 +103,8 @@ public class Cabinet extends Container implements ItemSpawner {
 	}
 
 	@Override
-	public void use(Player p) {
-		// TODO display items, let player pick some up
+	public void use(Player p, Controller ctrl) {
+		ctrl.getGUI().getCanvas().setCurrentContainer(this);
 	}
 
 	@Override

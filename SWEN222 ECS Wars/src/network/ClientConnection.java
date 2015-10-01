@@ -137,13 +137,13 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 			controller.getPlayer(uid).rotateViewRight();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_1){
-			controller.getPlayer(uid).inventoryItem(0).use(controller.getPlayer(uid));
+			controller.getPlayer(uid).inventoryItem(0).use(controller.getPlayer(uid), controller);
 		}
 		if(e.getKeyCode() == KeyEvent.VK_2){
-			controller.getPlayer(uid).inventoryItem(1).use(controller.getPlayer(uid));
+			controller.getPlayer(uid).inventoryItem(1).use(controller.getPlayer(uid), controller);
 		}
 		if(e.getKeyCode() == KeyEvent.VK_3){
-			controller.getPlayer(uid).inventoryItem(2).use(controller.getPlayer(uid));
+			controller.getPlayer(uid).inventoryItem(2).use(controller.getPlayer(uid), controller);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_MINUS){
 			controller.getGUI().getCanvas().setViewScale(1);

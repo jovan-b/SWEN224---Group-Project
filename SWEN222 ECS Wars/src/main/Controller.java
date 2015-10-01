@@ -297,13 +297,13 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			player.rotateViewRight();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_1){
-			player.inventoryItem(0).use(player);
+			player.inventoryItem(0).use(player, this);
 		}
 		if(e.getKeyCode() == KeyEvent.VK_2){
-			player.inventoryItem(1).use(player);
+			player.inventoryItem(1).use(player, this);
 		}
 		if(e.getKeyCode() == KeyEvent.VK_3){
-			player.inventoryItem(2).use(player);
+			player.inventoryItem(2).use(player, this);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_MINUS){
 			gui.getCanvas().setViewScale(1);
@@ -423,12 +423,12 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 				} else {
 					Room room = player.getCurrentRoom();
 					Item item = room.itemAtMouse(x, y, viewScale, player);
-					item.use(player);
+					item.use(player, this);
 				}
 			} else {
 				Room room = player.getCurrentRoom();
 				Item item = room.itemAtMouse(x, y, viewScale, player);
-				item.use(player);
+				item.use(player, this);
 			}
 			
 		}

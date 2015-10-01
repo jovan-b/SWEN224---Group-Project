@@ -1,5 +1,6 @@
 package gameObjects.weapons;
 
+import main.Controller;
 import gameObjects.weapons.projectiles.PaintBall;
 import gameObjects.weapons.projectiles.Projectile;
 
@@ -23,7 +24,7 @@ public class PaintballGun extends Weapon {
 	}
 
 	@Override
-	public void use(Player p) {
+	public void use(Player p, Controller ctrl) {
 		// TODO Auto-generated method stub
 
 	}

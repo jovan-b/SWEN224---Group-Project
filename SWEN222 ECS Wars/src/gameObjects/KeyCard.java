@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import characters.Player;
+import main.Controller;
 
 /**
  * A key card that allows the player to open certain in-game doors.
@@ -42,7 +43,7 @@ public class KeyCard implements Item {
 	}
 	
 	@Override
-	public void use(Player p) {
+	public void use(Player p, Controller ctrl) {
 		System.out.println("Player used the keycard!!");
 	}
 

@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import characters.Player;
+import main.Controller;
 import main.GUICanvas;
 
 
@@ -32,7 +33,7 @@ public class Floor implements Item, ItemSpawner {
 	}
 
 	@Override
-	public void use(Player p) {
+	public void use(Player p, Controller ctrl) {
 		if (item != null){
 			if (p.pickUp(item)){
 				setItem(null);

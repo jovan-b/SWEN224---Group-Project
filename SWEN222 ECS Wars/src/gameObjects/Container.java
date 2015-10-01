@@ -3,6 +3,8 @@ package gameObjects;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.GUICanvas;
+
 /**
  * Represents an Item which can contain several other Items.
  * 
