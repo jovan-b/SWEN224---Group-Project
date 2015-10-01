@@ -85,6 +85,15 @@ public final class SaveManager {
 		}
 	}
 	
+	/**
+	 * Load game based on specified saveFile
+	 * Get's room based on ID and adds items/players to them
+	 * 
+	 * Throws I/O exception and Parser exception if error occur
+	 * 
+	 * @param controller
+	 * @param saveFile
+	 */
 	public static void loadGame(Controller controller, File saveFile){
 		try {
 			File file = saveFile;
@@ -107,8 +116,9 @@ public final class SaveManager {
 					//read players in the room
 					NodeList playerlist = e.getChildNodes();
 					
-					//create a room object from the node
-					Room r = new Room(e.getAttribute("id"), controller);
+					//get the room object from player
+					Room r = controller.getRoom((e.getAttribute("id")));
+					System.out.println(e.getAttributeNode("id"));
 					
 					for (int j = 0; j < playerlist.getLength(); j++){
 						Node pnode = (Node) playerlist.item(j);
@@ -145,6 +155,7 @@ public final class SaveManager {
 			
 			//add list of players to the controller
 			controller.setPlayers(players);
+			controller.setCurrentPlayer(players.get(0));
 
 		} catch (ParserConfigurationException | SAXException e) {
 			// TODO Auto-generated catch block

@@ -520,6 +520,23 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	public ArrayList<Room> getRooms(){
 		return rooms;
 	}
+	
+	/**
+	 * Get room based on the room ID
+	 * If specified room does not exist, return null
+	 * 
+	 * @param rooms
+	 */
+	public Room getRoom(String roomID){	//TODO: returns null
+		for(Room r: rooms){
+			System.out.println(r.getName());
+			if(r.getName().equals(roomID)){
+				return r;
+			}
+		}
+		
+		return null;
+	}
 
 	public void setRooms(ArrayList<Room> rooms) {
 		this.rooms = rooms;
