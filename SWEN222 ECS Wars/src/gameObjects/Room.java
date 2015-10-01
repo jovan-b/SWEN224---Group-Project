@@ -721,7 +721,7 @@ public class Room {
 			NonPlayer npc = npcIter.next();
 			npc.update();
 			
-			if (npc.getHealth() < 0){
+			if (npc.isDead()){
 				npcIter.remove();
 			}
 		}
@@ -737,7 +737,7 @@ public class Room {
 			Player p = playerIter.next();
 			
 			//Player is dead
-			if (p.getHealth() <= 0){
+			if (p.isDead()){
 				playerIter.remove(); //Make the player invisible
 				
 				//Schedule a respawn event
