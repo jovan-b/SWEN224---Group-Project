@@ -6,10 +6,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import characters.Player.Type;
 import gameObjects.Room;
 
 public class PondyPlayer extends Player {
 
+	public static final Type type = Type.PondyPlayer;
+	
 	public PondyPlayer(Room room, int posX, int posY) {
 		super(room, posX, posY);
 
@@ -28,6 +31,11 @@ public class PondyPlayer extends Player {
 					.println("Error loading player images: " + e.getMessage());
 		}
 		scaledSprites = sprites;
+	}
+
+	@Override
+	public Type getType() {
+		return type;
 	}
 
 }

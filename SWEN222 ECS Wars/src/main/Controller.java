@@ -1,6 +1,7 @@
 package main;
 
 import gameObjects.*;
+import main.saveAndLoad.SaveManager;
 import network.ClientConnection;
 
 import java.awt.Image;
@@ -579,6 +580,25 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 */
 	public ArrayList<Room> getRooms(){
 		return rooms;
+	}
+
+	public Room getRoom(String roomName) {
+		for(Room r: rooms){
+			if(r.getName().equals(roomName)){
+				return r;
+			}
+		}
+		
+		return null;
+	}
+
+
+	public void setPlayers(ArrayList<Player> players) {
+		this.players = players;
+	}
+
+	public void setCurrentPlayer(Player player) {
+		this.player = player;
 	}
 
 
