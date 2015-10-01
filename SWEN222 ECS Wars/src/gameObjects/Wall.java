@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import characters.Player;
+import main.Controller;
 import main.GUICanvas;
 
 
@@ -16,7 +17,7 @@ import main.GUICanvas;
 public class Wall implements Item {
 
 	@Override
-	public void use(Player p) {
+	public void use(Player p, Controller ctrl) {
 	}
 
 	@Override

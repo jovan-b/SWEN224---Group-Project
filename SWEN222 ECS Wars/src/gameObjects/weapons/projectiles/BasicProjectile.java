@@ -62,8 +62,8 @@ public abstract class BasicProjectile implements Projectile {
 		
 		double dx = Projectile.xDiff(theta, speed);
 		double dy = Projectile.yDiff(theta, speed);
-		x += dx;
-		y += dy;
+		double newX = x + dx;
+		double newY = y + dy;
 		
 		//Check to see if we've hit a player
 		for (Player p : room.getAllCharacters()){
@@ -76,8 +76,11 @@ public abstract class BasicProjectile implements Projectile {
 		}
 		
 		//Check to see if we've collided with an object
-		if (!room.itemAt((int)x, (int)y).canWalk()){
+		if (!room.itemAt((int)newX, (int)newY).canWalk()){
 			this.setActive(false);
+		} else {
+			x = newX;
+			y = newY;
 		}
 	}
 	

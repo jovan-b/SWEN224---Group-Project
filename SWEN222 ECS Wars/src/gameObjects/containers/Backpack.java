@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import characters.Player;
+import main.Controller;
 import main.GUICanvas;
 
 /**
@@ -19,11 +20,6 @@ public class Backpack extends Container {
 	
 	public Backpack(){
 		super(SIZE);
-	}
-	
-	@Override
-	public void use(Player p) {
-		
 	}
 
 	@Override
@@ -64,5 +60,11 @@ public class Backpack extends Container {
 	@Override
 	public String getDescription() {
 		return null;
+	}
+
+	@Override
+	public void use(Player p, Controller ctrl) {
+		// TODO Auto-generated method stub
+		
 	}
 }

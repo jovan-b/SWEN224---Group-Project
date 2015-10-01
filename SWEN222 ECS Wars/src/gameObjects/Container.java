@@ -3,6 +3,8 @@ package gameObjects;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.GUICanvas;
+
 /**
  * Represents an Item which can contain several other Items.
  * 
@@ -11,7 +13,7 @@ import java.util.List;
  */
 public abstract class Container implements Item {
 	protected List<Item> contents;
-	private int capacity;
+	protected int capacity;
 
 	/**
 	 * Constructor for class container.

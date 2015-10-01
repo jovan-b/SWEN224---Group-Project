@@ -7,14 +7,16 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import characters.Player;
+import main.Controller;
+import main.GUICanvas;
 
 /**
- * A 1x1 container which can store 5 items.
+ * A 1x1 container which can store 4 items.
  * @author Sarah Dobie 300315033
  *
  */
-public class SmallChest extends Container {
-	private static final int CAPACITY = 5;
+public class Cabinet extends Container implements ItemSpawner {
+	private static final int CAPACITY = 4;
 
 	// base images
 	private Image imageNorth;
@@ -27,14 +29,14 @@ public class SmallChest extends Container {
 	private Image scaledImageWest;
 	private Image scaledImageEast;
 	
-	private String description = "A small chest, may contain items.";
+	private String description = "A cabinet, may contain items.";
 	
 	/**
 	 * Constructor for class SmallChest.
 	 * @param dir The direction (F, B, L, R) that the chest
 	 * is facing when the view direction is North.
 	 */
-	public SmallChest(char dir) {
+	public Cabinet(char dir) {
 		super(CAPACITY);
 		loadImages(dir);
 		scaledImageNorth = imageNorth;
@@ -55,10 +57,10 @@ public class SmallChest extends Container {
 		Image r = null;
 		// read image files
 		try {
-			f = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"SmallChestF.png"));
-			b = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"SmallChestB.png"));
-			l = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"SmallChestL.png"));
-			r = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"SmallChestR.png"));
+			f = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Cabinet.png"));
+			b = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Cabinet.png"));
+			l = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Cabinet.png"));
+			r = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Cabinet.png"));
 		} catch (IOException e) {
 			System.out.println("Failed to read Photocopier image file: " + e.getMessage());
 		}
@@ -101,8 +103,8 @@ public class SmallChest extends Container {
 	}
 
 	@Override
-	public void use(Player p) {
-		// TODO display items, let player pick some up
+	public void use(Player p, Controller ctrl) {
+		ctrl.getGUI().getCanvas().setCurrentContainer(this);
 	}
 
 	@Override
@@ -122,7 +124,7 @@ public class SmallChest extends Container {
 
 	@Override
 	public int yOffset(int viewDirection) {
-		return 1;
+		return 2;
 	}
 
 	@Override
@@ -153,6 +155,16 @@ public class SmallChest extends Container {
 	@Override
 	public String getDescription() {
 		return description;
+	}
+
+	@Override
+	public boolean addSpawnItem(Item item) {
+		return super.addItem(item);
+	}
+
+	@Override
+	public int remainingCapacity() {
+		return super.capacity - contents.size();
 	}
 	
 }

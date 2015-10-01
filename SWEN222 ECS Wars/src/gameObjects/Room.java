@@ -110,8 +110,9 @@ public class Room {
 		// code isn't an integer
 		switch(code){
 		case "__" : return new Floor();
-		case "_k" : return new Floor(new KeyCard());
-		case "_t" : return new Floor(new Torch());
+		case "_=" : Floor f = new Floor();
+					ctrl.addItemSpawner(f);
+					return f;
 		case "##" : return new Wall();
 		case "PP" : return new Pillar();
 		case "Dh" : return new Desk(true);
@@ -120,10 +121,18 @@ public class Room {
 		case "PB" : return new Photocopier('B');
 		case "PL" : return new Photocopier('L');
 		case "PR" : return new Photocopier('R');
-		case "cF" : return new SmallChest('F');
-		case "cB" : return new SmallChest('B');
-		case "cL" : return new SmallChest('L');
-		case "cR" : return new SmallChest('R');
+		case "cF" : Cabinet cF = new Cabinet('F');
+					ctrl.addItemSpawner(cF);
+					return cF;
+		case "cB" : Cabinet cB = new Cabinet('B');
+					ctrl.addItemSpawner(cB);
+					return cB;
+		case "cL" : Cabinet cL = new Cabinet('L');
+					ctrl.addItemSpawner(cL);
+					return cL;
+		case "cR" : Cabinet cR = new Cabinet('R');
+					ctrl.addItemSpawner(cR);
+					return cR;
 		default: return new Floor(); // no match, safely return a floor
 		}
 	}
@@ -227,7 +236,7 @@ public class Room {
 		} catch (ConcurrentModificationException e){}
 		
 		// draw the images
-		drawRoomContents(g, c, viewDirection, xOrigin, yOrigin, rotated, projectilesToDraw);
+		drawRoomContents(g, c, viewDirection, xOrigin, yOrigin, rotated, projectilesToDraw, player);
 	}
 
 	/**
@@ -239,9 +248,10 @@ public class Room {
 	 * @param drawY The y origin of the room
 	 * @param rotated The rotated contents array according to the view dir
 	 * @param projectiles The projectiles to be drawn
+	 * @param player 
 	 */
 	private void drawRoomContents(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY,
-			Item[][] rotated, Set<Projectile> projectiles) {
+			Item[][] rotated, Set<Projectile> projectiles, Player player) {
 		int viewScale = c.getViewScale();
 		
 		// Draw background Image
@@ -268,7 +278,7 @@ public class Room {
 				// draw player at this row
 				for (Player p : players){
 					if (p.getRow() == row-1){ // Ensures the player is drawn above their current row
-						drawPlayer(g, c, viewDirection, drawX, drawY, p);
+						drawPlayer(g, c, viewDirection, drawX, drawY, p, player);
 						p.setRow(-1);
 					}
 				}
@@ -276,7 +286,7 @@ public class Room {
 				// draw npc characters
 				for (NonPlayer npc : npcs){
 					if (npc.getRow() == row-1){ // Ensures the player is drawn above their current row
-						drawPlayer(g, c, viewDirection, drawX, drawY, npc);
+						drawPlayer(g, c, viewDirection, drawX, drawY, npc, player);
 						npc.setRow(-1);
 					}
 				}
@@ -295,8 +305,10 @@ public class Room {
 	 * @param drawX The x origin of the room
 	 * @param drawY The y origin of the room
 	 * @param p The player to draw
+	 * @param clientPlayer 
 	 */
-	private void drawPlayer(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Player p) {
+	private void drawPlayer(Graphics g, GUICanvas c, int viewDirection,
+			int drawX, int drawY, Player p, Player clientPlayer) {
 		Image playerImage = p.getImage(viewDirection);
 		int viewScale = c.getViewScale();
 		int playerX = p.getX();
@@ -319,6 +331,16 @@ public class Room {
 			g.drawImage(playerImage, drawX+(playerX*viewScale)-(16*viewScale),
 					drawY+(playerY*viewScale)-(24*viewScale), c);
 		}
+		if (p != clientPlayer){
+			// draw remaining health
+			g.setColor(Color.RED);
+			int playerHealth = p.getHealth();
+			int healthWd = (int)((double)playerHealth/(6.0+(1.0/3.0)))*viewScale;
+			int healthHt = 2*viewScale;
+			int healthX = drawX+(playerX-(healthWd/2))*viewScale;
+			int healthY =  drawY+(playerY+16)*viewScale;
+			g.fillRect(healthX, healthY, healthWd, healthHt);
+		}
 	}
 	
 	/**
@@ -332,6 +354,8 @@ public class Room {
 	 */
 	private void drawProjectile(Graphics g, GUICanvas c, int viewDirection, int drawX, int drawY, Projectile p){
 		int viewScale = c.getViewScale();
+		Image bulletImage = p.getImage(viewScale);
+		int bulletSize = (p.getSize()*viewScale)/2;
 		g.setColor(Color.GREEN);
 		int x;
 		int y;
@@ -340,24 +364,21 @@ public class Room {
 		case 1:
 			x = drawX+(p.getY()*viewScale);
 			y = drawY+((width-p.getX())*viewScale);
-//			g.fillRect(drawX+(p.getY()*viewScale), drawY+((width-p.getX())*viewScale), 2, 2);
 			break;
 		case 2:
 			x = drawX+((width-p.getX())*viewScale);
 			y = drawY+((height-p.getY())*viewScale);
-//			g.fillRect(drawX+((width-p.getX())*viewScale), drawY+((height-p.getY())*viewScale), 2, 2);
 			break;
 		case 3:
 			x = drawX+((height-p.getY())*viewScale);
 			y = drawY+(p.getX()*viewScale);
-//			g.fillRect(drawX+((height-p.getY())*viewScale), drawY+(p.getX()*viewScale), 2, 2);
 			break;
 		default:
 			x = drawX+(p.getX()*viewScale);
 			y = drawY+(p.getY()*viewScale);
-//			g.fillRect(drawX+(p.getX()*viewScale), drawY+(p.getY()*viewScale), 2, 2);
 		}
-		g.fillRect(x, y, 2, 2);
+		//g.fillRect(x, y, 2, 2);
+		g.drawImage(bulletImage, x-bulletSize, y-bulletSize, c);
 	}
 	
 	/**
@@ -716,7 +737,7 @@ public class Room {
 			Player p = playerIter.next();
 			
 			//Player is dead
-			if (p.getHealth() < 0){
+			if (p.getHealth() <= 0){
 				playerIter.remove(); //Make the player invisible
 				
 				//Schedule a respawn event

@@ -3,6 +3,7 @@ package gameObjects.weapons;
 import java.awt.Image;
 
 import characters.Player;
+import main.Controller;
 import gameObjects.weapons.projectiles.PaintBall;
 import gameObjects.weapons.projectiles.Projectile;
 import gameObjects.weapons.projectiles.RubberBullet;
@@ -34,7 +35,7 @@ public class ScatterGun extends Weapon{
 	}
 
 	@Override
-	public void use(Player p) {
+	public void use(Player p, Controller ctrl) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -168,9 +168,12 @@ public abstract class Player {
 	 * @param amt the amount to change by
 	 */
 	public void modifyHealth(int amt){
-		//TODO: Check that health hasn't gone above a maximum
 		health += amt;
-		
+		if(health > HEALTH_MAX){
+			health = HEALTH_MAX;
+		} else if(health < 0){
+			health = 0;
+		}
 	}
 
 	// TODO replace this
