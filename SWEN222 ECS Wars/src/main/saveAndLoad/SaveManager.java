@@ -118,7 +118,6 @@ public final class SaveManager {
 					
 					//get the room object from player
 					Room r = controller.getRoom((e.getAttribute("id")));
-					System.out.println(e.getAttributeNode("id"));
 					
 					for (int j = 0; j < playerlist.getLength(); j++){
 						Node pnode = (Node) playerlist.item(j);

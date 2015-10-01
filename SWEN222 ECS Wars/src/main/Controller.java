@@ -529,7 +529,6 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 */
 	public Room getRoom(String roomID){	//TODO: returns null
 		for(Room r: rooms){
-			System.out.println(r.getName());
 			if(r.getName().equals(roomID)){
 				return r;
 			}
