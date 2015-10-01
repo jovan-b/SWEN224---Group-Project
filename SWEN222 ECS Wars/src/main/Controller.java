@@ -229,9 +229,9 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			player.move("down");
 		}
 		if(isKeyPressed(KeyEvent.VK_SHIFT)){
-			player.setSpeedMulti(2);
+			player.setSpeedModifier(1);
 		} else {
-			player.setSpeedMulti(1);
+			player.setSpeedModifier(0);
 		}
 		if(isLeftMousePressed()){
 			player.shoot(mouseLocation[0], mouseLocation[1]);

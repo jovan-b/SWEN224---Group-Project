@@ -30,7 +30,7 @@ import gameObjects.weapons.Weapon;
  */
 public abstract class Player {
 	public static final int RESPAWN_TIME = 3000; //3 seconds
-	public static final double BASE_SPEED = 1.5;	//pixels per frame
+	public static final int BASE_SPEED = 2;	//pixels per frame
 	public static final int BASE_HEIGHT = 50;
 	public static final int BASE_WIDTH = 30;
 	public static final int HEALTH_MAX = 200;
@@ -51,13 +51,13 @@ public abstract class Player {
 	
 
 	//position describing the centre of a player object
-	protected double posX;
-	protected double posY;
+	protected int posX;
+	protected int posY;
 	protected int viewDirection;
-	protected int hitBox = 11;
+	protected int hitBox = 10;
 	
-	private double tempX;
-	private double tempY;
+	private int tempX;
+	private int tempY;
 	
 	protected Compass compass;
 	protected int lastDirMoved;
@@ -75,8 +75,8 @@ public abstract class Player {
 	protected Image[][] scaledSprites;
 
 	//player's speed is this constant * Player.SPEED
-	protected double speedMulti = 1;
-	protected double speed = speedMulti * Player.BASE_SPEED;
+	protected int speedModifier = 0;
+	protected int speed = speedModifier + Player.BASE_SPEED;
 	
 	public Player(Room room, int posX, int posY){
 		this.currentRoom = room;
@@ -155,7 +155,7 @@ public abstract class Player {
 		default: tempY -= speed;
 			break;
 		}
-		if (canMove((int)tempX, (int)tempY)){
+		if (canMove(tempX, tempY)){
 			posX = tempX;
 			posY = tempY;
 		}
@@ -401,9 +401,9 @@ public abstract class Player {
 		return convertToViewDir(lastDirMoved, viewDirection);
 	}
 	
-	public void setSpeedMulti(double multi){
-		speedMulti = multi;
-		speed = Player.BASE_SPEED*multi;
+	public void setSpeedModifier(int modifier){
+		speedModifier = modifier;
+		speed = Player.BASE_SPEED+speedModifier;
 	}
 	
 	/**
