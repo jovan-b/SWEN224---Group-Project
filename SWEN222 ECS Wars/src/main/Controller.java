@@ -236,15 +236,19 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		// Player Movement
 		if(isKeyPressed(KeyEvent.VK_RIGHT) || isKeyPressed(KeyEvent.VK_D)){
 			player.move("right");
+			gui.getCanvas().setCurrentContainer(null);
 		}
 		if(isKeyPressed(KeyEvent.VK_LEFT) || isKeyPressed(KeyEvent.VK_A)){
 			player.move("left");
+			gui.getCanvas().setCurrentContainer(null);
 		}
 		if(isKeyPressed(KeyEvent.VK_UP) || isKeyPressed(KeyEvent.VK_W)){
 			player.move("up");
+			gui.getCanvas().setCurrentContainer(null);
 		}
 		if(isKeyPressed(KeyEvent.VK_DOWN) || isKeyPressed(KeyEvent.VK_S)){
 			player.move("down");
+			gui.getCanvas().setCurrentContainer(null);
 		}
 		if(isKeyPressed(KeyEvent.VK_SHIFT)){
 			player.setSpeedModifier(1);
@@ -512,6 +516,9 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		int viewScale = gui.getCanvas().getViewScale();
 		int x = mouseX;
 		int y = mouseY;
+		int xMid = gui.getCanvas().getWidth()/2;
+		int yMid = gui.getCanvas().getHeight()/2;
+		Container container = gui.getCanvas().getCurrentContainer();
 		String desc = "";
 		// checks if the player is currently mousing over their inventory
 		if (24*2*viewScale < y && y < 24*3*viewScale){
@@ -523,6 +530,17 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 				// not hovering over inventory - check for items on floor
 				desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
 			}
+		// or if player is mousing over another inventory
+		} else if ((yMid-(24*2*viewScale) < y && y < yMid-(24*viewScale)) && container != null){
+			if (xMid-(24*2*viewScale) < x && x < xMid+(24*2*viewScale)){
+				// hovering over inventory
+				int index = (x-(xMid-(24*2*viewScale)))/(24*viewScale);
+				desc = container.getItem(index).getDescription();
+			} else {
+				// not hovering over inventory - check for items on floor
+				desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
+			}
+		
 		} else {
 			// not hovering over inventory - check for items on floor
 			desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();

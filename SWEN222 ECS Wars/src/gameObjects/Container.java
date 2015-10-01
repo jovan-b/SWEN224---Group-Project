@@ -52,4 +52,11 @@ public abstract class Container implements Item {
 		contents.clear();
 	}
 	
+	public Item getItem(int index){
+		if (0 <= index && index < contents.size()){
+			return contents.get(index);
+		}
+		return new Wall();
+	}
+	
 }

@@ -162,14 +162,15 @@ public class GUICanvas extends JComponent{
 		// draw room information
 		drawRoomInfo(g, r);
 		
-		// draw tooltip
-		if (toolTip != null){
-			showToolTip(g);
-		}
 		
 		// draw container inventory if one is selected
 		if(currentContainer != null){
 			drawContainer(g);
+		}
+		
+		// draw tooltip
+		if (toolTip != null){
+			showToolTip(g);
 		}
 	}
 	
@@ -404,5 +405,9 @@ public class GUICanvas extends JComponent{
 		} else {
 			this.currentContainer = container;
 		}
+	}
+	
+	public Container getCurrentContainer(){
+		return currentContainer;
 	}
 }

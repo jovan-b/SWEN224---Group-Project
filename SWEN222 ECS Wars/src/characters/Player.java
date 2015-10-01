@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 
+import main.Controller;
 import main.GUICanvas;
 import gameEvents.Event;
 import gameEvents.GameClock;
