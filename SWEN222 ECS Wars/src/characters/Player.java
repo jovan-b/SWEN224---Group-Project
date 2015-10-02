@@ -15,6 +15,7 @@ import gameObjects.Floor;
 import gameObjects.Item;
 import gameObjects.Room;
 import gameObjects.Wall;
+import gameObjects.Container;
 import gameObjects.weapons.PaintballGun;
 import gameObjects.weapons.ScatterGun;
 import gameObjects.weapons.Weapon;
@@ -473,8 +474,13 @@ public abstract class Player {
 		return null;
 	}
 
-	public void dropItem(int index) {
+	public void dropItem(int index, Container container) {
 		if (index < 0 || INVENTORY_SIZE <= index){
+			return;
+		}
+		if (container != null){
+			container.addItem(inventory[index]);
+			inventory[index] = null;
 			return;
 		}
 		Item square = currentRoom.itemAt((int)posX, (int)posY);

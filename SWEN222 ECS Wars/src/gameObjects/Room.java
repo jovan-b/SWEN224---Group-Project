@@ -122,16 +122,24 @@ public class Room {
 		case "PL" : return new Photocopier('L');
 		case "PR" : return new Photocopier('R');
 		case "cF" : Cabinet cF = new Cabinet('F');
-					ctrl.addItemSpawner(cF);
+					for (int i = 0; i < cF.remainingCapacity()-1; i++){
+						ctrl.addItemSpawner(cF);
+					}
 					return cF;
 		case "cB" : Cabinet cB = new Cabinet('B');
-					ctrl.addItemSpawner(cB);
+					for (int i = 0; i < cB.remainingCapacity()-1; i++){
+						ctrl.addItemSpawner(cB);
+					}
 					return cB;
 		case "cL" : Cabinet cL = new Cabinet('L');
-					ctrl.addItemSpawner(cL);
+					for (int i = 0; i < cL.remainingCapacity()-1; i++){
+						ctrl.addItemSpawner(cL);
+					}
 					return cL;
 		case "cR" : Cabinet cR = new Cabinet('R');
-					ctrl.addItemSpawner(cR);
+					for (int i = 0; i < cR.remainingCapacity()-1; i++){
+						ctrl.addItemSpawner(cR);
+					}
 					return cR;
 		default: return new Floor(); // no match, safely return a floor
 		}

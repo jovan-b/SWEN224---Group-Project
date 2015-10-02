@@ -459,10 +459,11 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			int x = e.getX();
 			int y = e.getY();
 			int viewScale = gui.getCanvas().getViewScale();
+			Container container = gui.getCanvas().getCurrentContainer();
 			if (24*2*viewScale < y && y < 24*3*viewScale){
 				if (24*viewScale < x && x < 24*(Player.INVENTORY_SIZE+1)*viewScale){
 					int index = (x-(24*viewScale))/(24*viewScale);
-					player.dropItem(index);
+					player.dropItem(index, container);
 				} else {
 					Room room = player.getCurrentRoom();
 					Item item = room.itemAtMouse(x, y, viewScale, player);
