@@ -52,10 +52,6 @@ public class LtsaBullet extends BasicProjectile{
 
 	@Override
 	public Projectile newInstance(Player p, double theta) {
-		return new LtsaBullet(p, p.getX(), p.getY(), state, theta, images, largeImages);
-	}
-
-	public LtsaBullet brandNewInstance(Player p, double theta){
 		return new LtsaBullet(p, p.getX(), p.getY(), nextState(), theta, images, largeImages);
 	}
 
@@ -83,6 +79,7 @@ public class LtsaBullet extends BasicProjectile{
 		if(newState >= images.length){
 			newState = 0;
 		}
+		state = newState;
 		return newState;
 	}
 	

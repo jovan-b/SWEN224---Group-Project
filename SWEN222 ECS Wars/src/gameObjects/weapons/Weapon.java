@@ -34,13 +34,7 @@ public abstract class Weapon implements Item {
 	 * @param theta
 	 */
 	public Projectile fire(Player p, double theta) {
-		Projectile proj;
-		if(projectile instanceof LtsaBullet){
-			proj = ((LtsaBullet) projectile).brandNewInstance(p, theta);
-			projectile = proj;
-		} else {
-			proj = projectile.newInstance(p, theta);
-		}
+		Projectile proj = projectile.newInstance(p, theta);
 		
 		if (!canFire){ //If we aren't allowed to shoot, fire a dud
 			proj.setActive(false);
