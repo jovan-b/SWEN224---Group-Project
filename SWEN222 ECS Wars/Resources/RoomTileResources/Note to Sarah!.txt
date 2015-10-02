@@ -1,0 +1,5 @@
+If you build off the Base images from the individual
+room folders then they've already got the doors marked
+on them. They should also be the right size that we
+need, with that space up the top for the back walls
+so hopefully that makes it easier :)
