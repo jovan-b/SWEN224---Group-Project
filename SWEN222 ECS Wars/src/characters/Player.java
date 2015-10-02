@@ -92,10 +92,6 @@ public abstract class Player {
 		this.currentWeapon = new ScatterGun();
 	}
 	
-	public void setCanvas(GUICanvas canvas){
-		this.canvas = canvas;
-	}
-	
 	/**
 	 * Draws the player to the canvas
 	 */
@@ -240,24 +236,6 @@ public abstract class Player {
 		return true;
 	}
 
-	public Room getCurrentRoom() {
-		return currentRoom;
-	}
-
-	public void setCurrentRoom(Room newRoom, int newX, int newY) {
-		currentRoom.removePlayer(this);
-		newRoom.addPlayer(this);
-		this.currentRoom = newRoom;
-
-		this.posX = newX;
-		this.posY = newY;
-		
-		//Prevent the pesky move updates from overwriting the pos change
-		this.tempX = newX;
-		this.tempY = newY;
-		
-	}
-
 	/**
 	 * Utility method to convert a direction relative to the view direction
 	 * back to the direction of the global coordinates
@@ -293,28 +271,6 @@ public abstract class Player {
 		return temp;
 	}
 
-	public int getX() {
-		return (int)posX;
-	}
-
-	public int getY() {
-		return (int)posY;
-	}
-	
-	public void setXY(int x, int y){
-		posX = x;
-		posY = y;
-		animate();
-	}
-
-	public int getViewDirection() {
-		return viewDirection;
-	}
-	
-	public void setViewDirection(int dir){
-		if (dir < 0 || dir > 3){return;}
-		viewDirection = dir;
-	}
 
 	/**
 	 * Rotates the player's view clockwise
@@ -337,62 +293,11 @@ public abstract class Player {
 		}
 		compass.rotate(-90);
 	}
-	
-	public void setCompass(Compass c){
-		this.compass = c;
-	}
 
 //	public Image getImage() {	
 //		int spriteDir = convertToViewDir(lastDirMoved, viewDirection);
 //		return scaledSprites[spriteDir][animState];
 //	}
-	
-	public Image getImage(int viewDir) {	
-		int spriteDir = convertToViewDir(lastDirMoved, viewDir);
-		return scaledSprites[spriteDir][animState];
-	}
-	
-	public void setRow(int row) {
-		currentRow = row;
-	}
-
-	public int getRow() {
-		return currentRow;
-	}
-
-	public Image[][] getImages() {
-		return sprites;
-	}
-
-	public void setScaledImages(Image[][] newImages) {
-		scaledSprites = newImages;
-	}
-	
-	public Rectangle getBoundingBox(){
-		return new Rectangle((int)posX-hitBox, (int)posY-hitBox, hitBox*2, hitBox*2);
-	}
-	
-	public void setHealth(int health){
-		this.health = health;
-	}
-	
-	public int getHealth(){
-		return health;
-	}
-	
-	public void setFacing(int dir){
-		if (dir < 0 || dir > 3){ return; }
-		lastDirMoved = dir;
-	}
-	
-	public int getFacing(){
-		return convertToViewDir(lastDirMoved, viewDirection);
-	}
-	
-	public void setSpeedModifier(int modifier){
-		speedModifier = modifier;
-		speed = Player.BASE_SPEED+speedModifier;
-	}
 	
 	/**
 	 * Gives the angle between the player and the mouse
@@ -476,7 +381,90 @@ public abstract class Player {
 	
 	public abstract Type getType();
 
-	public boolean isDead(){
-		return health == 0;
+	//State booleans
+	public boolean isDead(){return health == 0;}
+	
+	//Getters
+	public int getX() {return posX;}
+	
+	public int getY() {return posY;}
+	
+	public Room getCurrentRoom() {return currentRoom;}
+	
+	public int getRow() {return currentRow;}
+	
+	public int getHealth(){return health;}
+	
+
+	public Image[][] getImages() {return sprites;}
+	
+	public int getViewDirection() {return viewDirection;}
+	
+	/**
+	 * Gets the appropriate image for the given room direction
+	 * @param viewDir
+	 * @return
+	 */
+	public Image getImage(int viewDir) {	
+		int spriteDir = convertToViewDir(lastDirMoved, viewDir);
+		return scaledSprites[spriteDir][animState];
 	}
+	
+	public int getFacing(){
+		return convertToViewDir(lastDirMoved, viewDirection);
+	}
+	
+	public Rectangle getBoundingBox(){
+		return new Rectangle((int)posX-hitBox, (int)posY-hitBox, hitBox*2, hitBox*2);
+	}
+	
+	//Setters
+	public void setRow(int row) {currentRow = row;}
+	
+	public void setHealth(int health){this.health = health;}
+	
+	public void setCurrentRoom(Room newRoom, int newX, int newY) {
+		currentRoom.removePlayer(this);
+		newRoom.addPlayer(this);
+		this.currentRoom = newRoom;
+
+		this.posX = newX;
+		this.posY = newY;
+		
+		//Prevent the pesky move updates from overwriting the pos change
+		this.tempX = newX;
+		this.tempY = newY;	
+	}
+	
+	//TODO: Maybe move all view direction code up to one of the views rather
+	//than the player object?
+	public void setViewDirection(int dir){
+		if (dir < 0 || dir > 3){return;}
+		viewDirection = dir;
+	}
+	
+	public void setFacing(int dir){
+		if (dir < 0 || dir > 3){ return; }
+		lastDirMoved = dir;
+	}
+	
+	public void setXY(int x, int y){
+		posX = x;
+		posY = y;
+		animate();
+	}
+	
+	public void setCanvas(GUICanvas canvas){this.canvas = canvas;}
+	
+	public void setCompass(Compass c){this.compass = c;}
+	
+	public void setScaledImages(Image[][] newImages) {
+		scaledSprites = newImages;
+	}
+	
+	public void setSpeedModifier(int modifier){
+		speedModifier = modifier;
+		speed = Player.BASE_SPEED+speedModifier;
+	}
+	
 }
