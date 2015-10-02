@@ -4,6 +4,7 @@ import java.awt.Image;
 
 import characters.Player;
 import main.Controller;
+import gameObjects.weapons.projectiles.LtsaBullet;
 import gameObjects.weapons.projectiles.PaintBall;
 import gameObjects.weapons.projectiles.Projectile;
 import gameObjects.weapons.projectiles.RubberBullet;
@@ -17,7 +18,7 @@ public class ScatterGun extends Weapon{
 	private String description;
 
 	public ScatterGun() {
-		super(FIRE_RATE, new RubberBullet());
+		super(FIRE_RATE, new LtsaBullet());
 		this.description = "A scatter gun";
 	}
 	
