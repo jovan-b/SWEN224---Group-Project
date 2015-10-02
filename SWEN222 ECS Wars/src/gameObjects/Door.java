@@ -89,17 +89,29 @@ public class Door implements Item {
 	public void walkThrough(Player p) {
 		int x;
 		int y;
+		int dir = p.getFacing();
+		
+		int xDiff = 0;
+		int yDiff = 0;
+		
+		//work out correct placement location based off the direction the player
+		//moves through the door so that the player does not end up on the other door
+		xDiff = dir == 1 ? 1 : xDiff;
+		xDiff = dir == 3 ? -1 : xDiff;
+		yDiff = dir == 0 ? -1 : yDiff;
+		yDiff = dir == 2 ? 1 : yDiff;
+		
 		// check which room the player is currently in
 		if(room1 == p.getCurrentRoom()){
 			// player is being moved to room2
 			x = p.getX()-(room1Col*24);
 			y = p.getY()-(room1Row*24);
-			p.setCurrentRoom(room2, (room2Col*24)+x, (room2Row*24)+y);
+			p.setCurrentRoom(room2, ((room2Col+xDiff)*24)+x, ((room2Row+yDiff)*24)+y);
 		} else if(room2 == p.getCurrentRoom()){
 			// player is being moved to room1
 			x = p.getX()-(room2Col*24);
 			y = p.getY()-(room2Row*24);
-			p.setCurrentRoom(room1, (room1Col*24)+x, (room1Row*24)+y);
+			p.setCurrentRoom(room1, ((room1Col+xDiff)*24)+x, ((room1Row+yDiff)*24)+y);
 		}
 		// reset temporary unlocked status if the door was unlocked with a keycard
 		if(!unlocked){
