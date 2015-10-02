@@ -3,6 +3,7 @@ package gameObjects;
 import java.util.ArrayList;
 import java.util.List;
 
+import characters.Player;
 import main.GUICanvas;
 
 /**
@@ -57,6 +58,20 @@ public abstract class Container implements Item {
 			return contents.get(index);
 		}
 		return new Wall();
+	}
+	
+	public void pickUpItem(int index, Player player){
+		if (index < 0 || contents.size() <= index){
+			return;
+		}
+		Item item = contents.get(index);
+		if (player.pickUp(item)){
+			contents.remove(index);
+		}
+	}
+	
+	public int remainingCapacity(){
+		return capacity - contents.size();
 	}
 	
 }

@@ -458,23 +458,40 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		} else if (e.getButton() == 3){
 			int x = e.getX();
 			int y = e.getY();
-			int viewScale = gui.getCanvas().getViewScale();
-			Container container = gui.getCanvas().getCurrentContainer();
-			if (24*2*viewScale < y && y < 24*3*viewScale){
-				if (24*viewScale < x && x < 24*(Player.INVENTORY_SIZE+1)*viewScale){
-					int index = (x-(24*viewScale))/(24*viewScale);
-					player.dropItem(index, container);
-				} else {
-					Room room = player.getCurrentRoom();
-					Item item = room.itemAtMouse(x, y, viewScale, player);
-					item.use(player, this);
-				}
+			rightClickInteract(x, y);
+		}
+	}
+
+	private void rightClickInteract(int x, int y) {
+		int viewScale = gui.getCanvas().getViewScale();
+		Container container = gui.getCanvas().getCurrentContainer();
+		int xMid = gui.getCanvas().getWidth()/2;
+		int yMid = gui.getCanvas().getHeight()/2;
+		
+		// check if the player has clicked on their inventory
+		if (24*2*viewScale < y && y < 24*3*viewScale){
+			if (24*viewScale < x && x < 24*(Player.INVENTORY_SIZE+1)*viewScale){
+				int index = (x-(24*viewScale))/(24*viewScale);
+				player.dropItem(index, container);
 			} else {
 				Room room = player.getCurrentRoom();
 				Item item = room.itemAtMouse(x, y, viewScale, player);
 				item.use(player, this);
 			}
-			
+		} else if ((yMid-(24*2*viewScale) < y && y < yMid-(24*viewScale)) && container != null){
+			if (xMid-(24*2*viewScale) < x && x < xMid+(24*2*viewScale)){
+				// the player has clicked on an open container
+				int index = (x-(xMid-(24*2*viewScale)))/(24*viewScale);
+				container.pickUpItem(index, player);
+			} else {
+				Room room = player.getCurrentRoom();
+				Item item = room.itemAtMouse(x, y, viewScale, player);
+				item.use(player, this);
+			}
+		} else {
+			Room room = player.getCurrentRoom();
+			Item item = room.itemAtMouse(x, y, viewScale, player);
+			item.use(player, this);
 		}
 	}
 

@@ -478,9 +478,11 @@ public abstract class Player {
 		if (index < 0 || INVENTORY_SIZE <= index){
 			return;
 		}
-		if (container != null){
-			container.addItem(inventory[index]);
-			inventory[index] = null;
+		if (container != null) {
+			if  (container.remainingCapacity() > 0){
+				container.addItem(inventory[index]);
+				inventory[index] = null;
+			}
 			return;
 		}
 		Item square = currentRoom.itemAt((int)posX, (int)posY);
