@@ -1,11 +1,11 @@
 package gui;
 
 import gameWorld.Controller;
+import gameWorld.Room;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.Container;
 import gameWorld.gameObjects.Item;
-import gameWorld.gameObjects.Room;
 import gameWorld.gameObjects.Torch;
+import gameWorld.gameObjects.containers.Container;
 import main.MainMenu;
 
 import java.awt.Color;

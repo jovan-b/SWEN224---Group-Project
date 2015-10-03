@@ -1,7 +1,7 @@
 package gameWorld.characters.nonplayer.strategy;
 
+import gameWorld.Room;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.Room;
 
 /**
  * A combat strategy where the NPC stands still, and shoots at the

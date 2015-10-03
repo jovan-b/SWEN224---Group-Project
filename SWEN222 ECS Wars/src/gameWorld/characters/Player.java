@@ -5,15 +5,15 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 import gameWorld.Controller;
+import gameWorld.Room;
 import gameWorld.gameEvents.Event;
 import gameWorld.gameEvents.GameClock;
 import gameWorld.gameEvents.RespawnEvent;
-import gameWorld.gameObjects.Container;
 import gameWorld.gameObjects.Door;
 import gameWorld.gameObjects.Floor;
 import gameWorld.gameObjects.Item;
-import gameWorld.gameObjects.Room;
 import gameWorld.gameObjects.Wall;
+import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.weapons.PaintballGun;
 import gameWorld.gameObjects.weapons.ScatterGun;
 import gameWorld.gameObjects.weapons.Weapon;
@@ -365,8 +365,10 @@ public abstract class Player {
 		}
 		if (container != null) {
 			if  (container.remainingCapacity() > 0){
-				container.addItem(inventory[index]);
-				inventory[index] = null;
+				// check the item is successfully added to container
+				if(container.addItem(inventory[index])){
+					inventory[index] = null;
+				}
 			}
 			return;
 		}

@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import gameWorld.Room;
 import gameWorld.characters.Player.Type;
-import gameWorld.gameObjects.Room;
 
 public class PondyPlayer extends Player {
 

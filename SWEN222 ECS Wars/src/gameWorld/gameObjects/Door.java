@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import gameWorld.Controller;
+import gameWorld.Room;
 import gameWorld.characters.Player;
 import gui.GUICanvas;
 

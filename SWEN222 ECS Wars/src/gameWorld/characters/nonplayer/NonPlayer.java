@@ -8,10 +8,10 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import gameWorld.Room;
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.strategy.NonPlayerStrategy;
 import gameWorld.characters.nonplayer.strategy.WaitStrategy;
-import gameWorld.gameObjects.Room;
 import gameWorld.gameObjects.weapons.PaintballGun;
 
 public class NonPlayer extends Player {

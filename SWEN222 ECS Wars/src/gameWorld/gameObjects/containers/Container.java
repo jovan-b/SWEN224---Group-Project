@@ -1,102 +1,79 @@
 package gameWorld.gameObjects.containers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import gameWorld.characters.Player;
 import gameWorld.gameObjects.Item;
+import gameWorld.gameObjects.Wall;
+import gui.GUICanvas;
 
 /**
- * A representation of a container of Item objects
- * Anything that can store Item objects should extend this
+ * Represents an Item which can contain several other Items.
  * 
- * @author Jah Seng Lee
+ * @author Sarah Dobie 300315033
  *
  */
-public abstract class Container implements Item{
-	
-	protected Item[] items;
-	
-	
-	public Container(int size) {
-		items = new Item[size];
-	}
+public abstract class Container implements Item {
+	protected List<Item> contents;
+	protected int capacity;
 
 	/**
-	 * Returns true if items contains the specified item
-	 * Otherwise, returns false
-	 * 
-	 * @param item
-	 * @return
+	 * Constructor for class container.
+	 * @param capacity The max number of items this container can hold.
 	 */
-	public boolean contains(Item item){
-		for(int i = 0; i < items.length; i++){
-			if(items[i].equals(item)){
-				return true;
-			}
-		}
-		//item not found in array
-		return false;
+	public Container(int capacity){
+		contents = new ArrayList<Item>();
+		this.capacity = capacity;
 	}
 	
 	/**
-	 * Gets the item at the specified index
-	 * Returns null if item at index is null
-	 * Throws  error if index is out of bounds
-	 * 
-	 * @param i
-	 * @return
+	 * Returns a shallow clone of the contents of this container.
+	 * @return A shallow clone of this container's contents
 	 */
-	public Item getItem(int i){
-		return items[i];
+	public List<Item> getContents() {
+		return new ArrayList<Item>(contents);
 	}
 	
 	/**
-	 * Adds item to the container
-	 * If the container is full, return false (item not added)
-	 * Otherwise, return true
-	 * 
-	 * @param item item to be added to container
-	 * @return
+	 * Adds an item to the contents of this container.
+	 * @param item The item to add
+	 * @return True if the item was successfully added, false otherwise.
 	 */
 	public boolean addItem(Item item){
-		
-		for(int i = 0; i < items.length; i++){
-			if(items[i] == null){
-				items[i] = item;
-				return true;
-			}
+		if(contents.size() < capacity && item != this){
+			contents.add(item);
+			return true;
 		}
 		return false;
 	}
 	
 	/**
-	 * Removes and returns the specified item in the array
-	 * If item is not present, returns null
-	 * 
-	 * @param item
-	 * @return item if present, otherwise null
+	 * Removes all items from this container.
 	 */
-	public Item removeItem(Item item){
-		for(int i = 0; i < items.length; i++){
-			if(items[i].equals(item)){
-				Item returnItem = items[i];
-				items[i] = null;
-				return returnItem;
-			}
+	public void empty(){
+		contents.clear();
+	}
+	
+	public Item getItem(int index){
+		if (0 <= index && index < contents.size()){
+			return contents.get(index);
 		}
-		//item not found in array
-		return null;
+		return new Wall();
 	}
 	
-	/**
-	 * Removes and returns item at index i
-	 * If item is null, return null
-	 * 
-	 * @param i
-	 * @return items[i]
-	 */
-	public Item removeItem(int i){
-		Item returnItem = items[i];
-		items[i] = null;
-		return returnItem;
+	public void pickUpItem(int index, Player player){
+		if (index < 0 || contents.size() <= index){
+			return;
+		}
+		Item item = contents.get(index);
+		if (player.pickUp(item)){
+			contents.remove(index);
+		}
 	}
 	
+	public int remainingCapacity(){
+		return capacity - contents.size();
+	}
 	
 }

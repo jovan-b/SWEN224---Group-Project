@@ -7,6 +7,8 @@ import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 import gameWorld.characters.nonplayer.strategy.SentryCombatStrategy;
 import gameWorld.characters.nonplayer.strategy.WanderStrategy;
 import gameWorld.gameObjects.*;
+import gameWorld.gameObjects.containers.Container;
+import gameWorld.gameObjects.containers.Pouch;
 import gui.GUICanvas;
 import gui.GUIFrame;
 import main.SoundManager;
@@ -555,7 +557,10 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			if (xMid-(24*2*viewScale) < x && x < xMid+(24*2*viewScale)){
 				// hovering over inventory
 				int index = (x-(xMid-(24*2*viewScale)))/(24*viewScale);
-				desc = container.getItem(index).getDescription();
+				Item itemAtIndex = container.getItem(index);
+				if(itemAtIndex != null){
+					desc = itemAtIndex.getDescription();
+				}
 			} else {
 				// not hovering over inventory - check for items on floor
 				desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
@@ -583,6 +588,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 				switch(nextLine){
 				case "KeyCard" : toAdd = new KeyCard(); break;
 				case "Torch" : toAdd = new Torch(); break;
+				case "Pouch" : toAdd = new Pouch(); itemSpawners.add((ItemSpawner) toAdd); break;
 				}
 				// add the item if it's not null, otherwise print error message
 				if(toAdd != null){

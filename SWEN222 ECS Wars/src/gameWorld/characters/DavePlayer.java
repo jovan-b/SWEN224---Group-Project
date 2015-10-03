@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import gameWorld.gameObjects.Room;
+import gameWorld.Room;
 
 
 /**

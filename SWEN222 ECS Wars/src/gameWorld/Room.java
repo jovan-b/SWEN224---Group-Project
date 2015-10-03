@@ -1,11 +1,17 @@
-package gameWorld.gameObjects;
+package gameWorld;
 
-import gameWorld.Controller;
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 import gameWorld.gameEvents.Event;
 import gameWorld.gameEvents.GameClock;
 import gameWorld.gameEvents.RespawnEvent;
+import gameWorld.gameObjects.Desk;
+import gameWorld.gameObjects.Door;
+import gameWorld.gameObjects.Floor;
+import gameWorld.gameObjects.Item;
+import gameWorld.gameObjects.Photocopier;
+import gameWorld.gameObjects.Pillar;
+import gameWorld.gameObjects.Wall;
 import gameWorld.gameObjects.containers.Cabinet;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
 import gui.GUICanvas;

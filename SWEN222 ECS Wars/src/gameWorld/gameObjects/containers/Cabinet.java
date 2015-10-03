@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.Container;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.ItemSpawner;
 import gui.GUICanvas;

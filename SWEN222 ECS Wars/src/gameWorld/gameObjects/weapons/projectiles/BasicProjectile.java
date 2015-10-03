@@ -2,8 +2,8 @@ package gameWorld.gameObjects.weapons.projectiles;
 
 import java.awt.Rectangle;
 
+import gameWorld.Room;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.Room;
 
 /**
  * A basic projectile which this weapon can fire

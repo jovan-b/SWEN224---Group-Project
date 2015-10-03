@@ -1,7 +1,7 @@
 package gameWorld.gameEvents;
 
+import gameWorld.Room;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.Room;
 
 /**
  * A one-time respawn event that spawns the given player at x,y in a given room

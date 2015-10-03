@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gameWorld.Controller;
+import gameWorld.Room;
 import gameWorld.characters.*;
 import gameWorld.characters.nonplayer.NonPlayer;
-import gameWorld.gameObjects.Room;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

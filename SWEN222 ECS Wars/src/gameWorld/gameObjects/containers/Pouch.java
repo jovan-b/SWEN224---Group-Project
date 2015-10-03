@@ -1,68 +1,94 @@
 package gameWorld.gameObjects.containers;
 
 import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
+import gameWorld.gameObjects.Item;
+import gameWorld.gameObjects.ItemSpawner;
 
-public class Pouch extends Container {
+/**
+ * A small container which may be picked up.
+ * @author Sarah Dobie 300315033
+ *
+ */
+public class Pouch extends Container implements ItemSpawner {
+	
+	private Image image;
+	private Image scaledImage;
+	private String description;
 
-	public Pouch(int size) {
-		super(size);
+	/**
+	 * Constructor for class Pouch.
+	 */
+	public Pouch() {
+		super(4);
+		this.description = "A small pouch which holds "+super.capacity+" items.";
 		loadImages();
 	}
 
+	/**
+	 * Loads all required images.
+	 */
 	private void loadImages() {
-		// TODO Auto-generated method stub
-		
+		try{
+			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"IDCard.png")); //FIXME add pouch image
+			scaledImage = image;
+		} catch(IOException e){
+			System.out.println("Error loading KeyCard file: "+e.getMessage());
+		}
 	}
 
 	@Override
 	public void use(Player p, Controller ctrl) {
-		// TODO Auto-generated method stub
-		
+		ctrl.getGUI().getCanvas().setCurrentContainer(this);
 	}
 
 	@Override
 	public Image getImage(int viewDirection) {
-		// TODO Auto-generated method stub
-		return null;
+		return image;
 	}
 
 	@Override
 	public boolean canWalk() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public int yOffset(int viewDirection) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int xOffset(int viewDirection) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void setScaledImage(int viewDirection, Image scaledImage) {
-		// TODO Auto-generated method stub
-		
+		this.scaledImage = scaledImage;
 	}
 
 	@Override
 	public Image getScaledImage(int viewDirection) {
-		// TODO Auto-generated method stub
-		return null;
+		return scaledImage;
 	}
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return description;
+	}
+
+	@Override
+	public boolean addSpawnItem(Item item) {
+		if(item != this){
+			return super.addItem(item);
+		}
+		return false;
 	}
 
 }
