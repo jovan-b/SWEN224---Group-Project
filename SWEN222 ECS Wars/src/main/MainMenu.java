@@ -18,6 +18,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import gameWorld.Controller;
+import gui.GUICanvas;
 import main.saveAndLoad.SaveManager;
 
 /**

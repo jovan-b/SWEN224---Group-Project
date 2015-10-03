@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import gameObjects.Room;
+import gameWorld.Controller;
+import gameWorld.characters.*;
+import gameWorld.characters.nonplayer.NonPlayer;
+import gameWorld.gameObjects.Room;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,16 +20,11 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import main.Controller;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import characters.*;
-import characters.nonplayer.NonPlayer;
 
 /**
  * A save manager to store or load the state of a game controller from file

@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.BitSet;
 
-import characters.Player;
-import main.Controller;
+import gameWorld.Controller;
+import gameWorld.characters.Player;
 
 /**
  * The client connection handles the user input and writes it to
