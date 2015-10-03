@@ -5,6 +5,7 @@ import java.util.List;
 
 import gameWorld.characters.Player;
 import gameWorld.gameObjects.Item;
+import gameWorld.gameObjects.ItemSpawner;
 import gameWorld.gameObjects.Wall;
 import gui.GUICanvas;
 
@@ -14,7 +15,7 @@ import gui.GUICanvas;
  * @author Sarah Dobie 300315033
  *
  */
-public abstract class Container implements Item {
+public abstract class Container implements ItemSpawner {
 	protected List<Item> contents;
 	protected int capacity;
 

@@ -6,7 +6,7 @@ package gameWorld.gameObjects;
  * Sarah Dobie 300315033
  *
  */
-public interface ItemSpawner {
+public interface ItemSpawner extends Item {
 	
 	/**
 	 * Adds an item to this item's inventory.
