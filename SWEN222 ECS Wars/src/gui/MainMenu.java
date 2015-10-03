@@ -1,4 +1,4 @@
-package main;
+package gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -19,7 +19,6 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import gameWorld.Controller;
-import gui.GUICanvas;
 import main.saveAndLoad.SaveManager;
 
 /**

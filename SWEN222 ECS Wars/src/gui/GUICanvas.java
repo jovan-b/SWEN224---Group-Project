@@ -6,7 +6,6 @@ import gameWorld.characters.Player;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.Torch;
 import gameWorld.gameObjects.containers.Container;
-import main.MainMenu;
 
 import java.awt.Color;
 import java.awt.Dimension;

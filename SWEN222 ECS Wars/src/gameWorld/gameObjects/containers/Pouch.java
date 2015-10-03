@@ -36,7 +36,7 @@ public class Pouch extends Container implements ItemSpawner {
 	 */
 	private void loadImages() {
 		try{
-			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"IDCard.png")); //FIXME add pouch image
+			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Pouch.png")); //FIXME add pouch image
 			scaledImage = image;
 		} catch(IOException e){
 			System.out.println("Error loading KeyCard file: "+e.getMessage());
