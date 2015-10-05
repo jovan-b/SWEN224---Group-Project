@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import gameWorld.Controller;
+import main.saveAndLoad.LoadManager;
 import main.saveAndLoad.SaveManager;
 
 /**
@@ -31,6 +32,8 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	private static final int IMAGE_SCALE = 8;
 	private static final int BUTTON_WIDTH = 300;
 	private static final int BUTTON_HEIGHT = 40;
+	private static final int BUTTON_TOP_DIFF = BUTTON_HEIGHT*4;
+	private static final int BUTTON_LEFT_DIFF = (BUTTON_WIDTH/2)+100;
 	
 	private GUICanvas canvas; // the canvas this draws on
 	private Controller controller; // the controller running this
@@ -132,8 +135,8 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	 * @param midY The vertical centre of the screen
 	 */
 	private void drawTitle(Graphics g, int textSize, int midX, int midY) {
-		int buttonX = midX-(BUTTON_WIDTH/2)-100;
-		int buttonY = midY - (BUTTON_HEIGHT*4);
+		int buttonX = midX - BUTTON_LEFT_DIFF;
+		int buttonY = midY - BUTTON_TOP_DIFF;
 		int gap = 20 + BUTTON_HEIGHT;
 		// draw title
 		g.setFont(new Font("pixelmix", Font.PLAIN, textSize+10));
@@ -149,12 +152,13 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	 * @param midY The vertical centre of the screen
 	 */
 	private void drawButtons(Graphics g, int textSize, int midX, int midY) {
-		int buttonX = midX-(BUTTON_WIDTH/2)-100;
-		int buttonY = midY - (BUTTON_HEIGHT*4);
+		int buttonX = midX - BUTTON_LEFT_DIFF;
+		int buttonY = midY - BUTTON_TOP_DIFF;
 		int gap = 20 + BUTTON_HEIGHT;
 		// draw buttons
 		for(int i=0; i<buttonLabels.length; i++){
 			g.drawRect(buttonX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT);
+			// highlight the button hovered over
 			if(i == this.selectedButton){
 				g.setColor(new Color(255, 255, 255, 128));
 				g.fillRect(buttonX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -211,14 +215,14 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		int midY = canvas.getHeight()/2;
 		int x = e.getX();
 		int y = e.getY();
-		int buttonY = midY - (BUTTON_HEIGHT*4);
+		int buttonY = midY - BUTTON_TOP_DIFF;
 		int gap = 20 + BUTTON_HEIGHT;
-		int buttonLeft = midX-(BUTTON_WIDTH/2)-100;
+		int buttonX = midX - BUTTON_LEFT_DIFF;
 		
 		Graphics g = canvas.getGraphics();
 		
 		// check if x is within button bounds
-		if(buttonLeft <= x && x < buttonLeft+BUTTON_WIDTH){
+		if(buttonX <= x && x < buttonX+BUTTON_WIDTH){
 			// check which y it is on
 			for(int i=0; i<buttonLabels.length; i++){
 				// check if we are on a button
@@ -256,7 +260,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			return;
 		}
 		canvas.setMainMenu(false);
-		SaveManager.loadGame(controller, chooser.getSelectedFile());
+		LoadManager.loadGame(controller, chooser.getSelectedFile());
 		
 	}
 
@@ -284,13 +288,13 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		int midY = canvas.getHeight()/2;
 		int x = e.getX();
 		int y = e.getY();
-		int buttonY = midY - (BUTTON_HEIGHT*4);
+		int buttonY = midY - BUTTON_TOP_DIFF;
 		int gap = 20 + BUTTON_HEIGHT;
-		int buttonLeft = midX-(BUTTON_WIDTH/2)-100;
+		int buttonX = midX - BUTTON_LEFT_DIFF;
 		Graphics g = canvas.getGraphics();
 		
 		// check if x is within button bounds
-		if(buttonLeft <= x && x < buttonLeft+BUTTON_WIDTH){
+		if(buttonX <= x && x < buttonX+BUTTON_WIDTH){
 			// check which y it is on
 			for(int i=0; i<buttonLabels.length; i++){
 				if(buttonY <= y && y < buttonY + BUTTON_HEIGHT){

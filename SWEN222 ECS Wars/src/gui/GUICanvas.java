@@ -412,10 +412,14 @@ public class GUICanvas extends JComponent{
 		// change settings
 		if(escMenuView){
 			removeMouseListener(controller);
+			removeMouseMotionListener(controller);
 			addMouseListener(escMenu);
+			addMouseMotionListener(escMenu);
 		} else {
-			addMouseListener(controller);
 			removeMouseListener(escMenu);
+			removeMouseMotionListener(escMenu);
+			addMouseListener(controller);
+			addMouseMotionListener(controller);
 		}
 	}
 
