@@ -461,6 +461,8 @@ public abstract class Player {
 
 	public int getHealth(){return health;}
 
+	public int getPoints() {return points;}
+
 	public int getGlobalDir() {
 		return lastDirMoved;
 	}

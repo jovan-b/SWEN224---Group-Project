@@ -171,6 +171,8 @@ public class GUICanvas extends JComponent{
 		// draw room information
 		drawRoomInfo(g, r);
 		
+		// draw points
+		drawPoints(g);
 		
 		// draw container inventory if one is selected
 		if(currentContainer != null){
@@ -182,7 +184,8 @@ public class GUICanvas extends JComponent{
 			showToolTip(g);
 		}
 	}
-	
+
+
 	/**
 	 * Draws the contents of the selected container.
 	 * @param g The graphics object with which to draw
@@ -209,7 +212,7 @@ public class GUICanvas extends JComponent{
 
 
 	/**
-	 * Draws the name and rescription of the current room in the
+	 * Draws the name and description of the current room in the
 	 * bottom-left corner.
 	 * @param g The graphics object with which to draw
 	 * @param r The room whose details to display
@@ -230,6 +233,22 @@ public class GUICanvas extends JComponent{
 		g.setFont(new Font("pixelmix", Font.PLAIN, textSize));
 		g.drawString(desc, baseX, baseY + textSize + 2);
 		
+	}
+	
+	/**
+	 * Draws the number of points the player has in the bottom-right
+	 * corner.
+	 * @param g The graphics object with which to draw.
+	 */
+	private void drawPoints(Graphics g) {
+		g.setColor(Color.WHITE);
+		String points = ""+player.getPoints();
+		int textSize = 15;
+		g.setFont(new Font("pixelmix", Font.PLAIN, textSize));
+		int textWidth = g.getFontMetrics().stringWidth(points);
+		int baseX = getWidth() - textWidth - 10;
+		int baseY = this.getHeight() - textSize*2;
+		g.drawString(points, baseX, baseY);
 	}
 
 	/**
