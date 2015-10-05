@@ -90,7 +90,7 @@ public class Door implements Item {
 	public void walkThrough(Player p) {
 		int x;
 		int y;
-		int dir = p.getFacing();
+		int dir = p.getGlobalDir();
 		
 		int xDiff = 0;
 		int yDiff = 0;

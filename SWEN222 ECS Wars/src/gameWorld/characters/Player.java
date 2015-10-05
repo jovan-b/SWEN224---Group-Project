@@ -468,5 +468,9 @@ public abstract class Player {
 		speedModifier = modifier;
 		speed = Player.BASE_SPEED+speedModifier;
 	}
+
+	public int getGlobalDir() {
+		return lastDirMoved;
+	}
 	
 }

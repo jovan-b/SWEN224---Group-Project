@@ -362,20 +362,20 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			Item[][] contents = r.getContents();
 			for (int i = 0; i < contents.length; i++){
 				for (int j = 0; j < contents[0].length; j++){
+					item = contents[i][j];
 					for (int v = 0; v < 4; v++){
-						item = contents[i][j];
 						image = item.getImage(v);
 						if (image != null){
 							contents[i][j].setScaledImage(v, scaleImage(image, c, scale));
 						}
-						if (item instanceof Container){
-							for (Item contentsItem : ((Container)item).getContents()){
-								if (contentsItem != null){
-									image = contentsItem.getImage(0);
-									contentsItem.setScaledImage(0, scaleImage(image, c, scale));
-									image = contentsItem.getImage(1);
-									contentsItem.setScaledImage(1, scaleImage(image, c, scale));
-								}
+					}
+					if (item instanceof Container){
+						for (Item contentsItem : ((Container)item).getContents()){
+							if (contentsItem != null){
+								image = contentsItem.getImage(0);
+								contentsItem.setScaledImage(0, scaleImage(image, c, scale));
+								image = contentsItem.getImage(1);
+								contentsItem.setScaledImage(1, scaleImage(image, c, scale));
 							}
 						}
 					}
