@@ -31,6 +31,7 @@ import javax.swing.JComponent;
 public class GUICanvas extends JComponent{
 	
 	private GUIFrame frame; // the frame containing this
+	private Controller controller;
 	
 	private Player player; // the current player
 	private Compass compass; // the compass being displayed
@@ -44,6 +45,8 @@ public class GUICanvas extends JComponent{
 	
 	private boolean mainMenuView; // true if we are looking at main menu
 	private MainMenu mainMenu; // the main menu to display
+	private boolean escMenuView = false; // true if we are looking at esc menu
+	private EscMenu escMenu; // the esc menu to display
 	
 	// Static UI Images
 	private Image[] torchLight;
@@ -73,6 +76,7 @@ public class GUICanvas extends JComponent{
 		this.player = player;
 		this.compass = new Compass();
 		this.toolTip = null;
+		this.controller = controller;
 		
 		this.player.setCompass(compass);
 		
@@ -82,6 +86,8 @@ public class GUICanvas extends JComponent{
 		
 		this.mainMenu = new MainMenu(this, controller);
 		setMainMenu(true);
+		
+		this.escMenu = new EscMenu(this, controller);
 	}
 
 
@@ -134,6 +140,10 @@ public class GUICanvas extends JComponent{
 		Room r = player.getCurrentRoom();
 		r.draw(g, this, player);
 		drawHUD(g, r);
+		
+		if(escMenuView){
+			escMenu.paint(g);
+		}
 	}
 
 	/**
@@ -390,6 +400,22 @@ public class GUICanvas extends JComponent{
 		} else {
 			removeMouseListener(mainMenu);
 			removeMouseMotionListener(mainMenu);
+		}
+	}
+
+	/**
+	 * Opens or hides the esc menu.
+	 * @param isEscMenu true to show the main menu, false otherwise
+	 */
+	public void toggleEscMenu() {
+		escMenuView = !escMenuView; // toggle boolean
+		// change settings
+		if(escMenuView){
+			removeMouseListener(controller);
+			addMouseListener(escMenu);
+		} else {
+			addMouseListener(controller);
+			removeMouseListener(escMenu);
 		}
 	}
 

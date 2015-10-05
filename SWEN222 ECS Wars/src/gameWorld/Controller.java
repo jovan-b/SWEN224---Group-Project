@@ -336,6 +336,9 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			gui.getCanvas().setViewScale(2);
 			scaleEverything(2);
 		}
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+			gui.getCanvas().toggleEscMenu();
+		}
 		keyBits.clear(e.getKeyCode());
 	}
 
