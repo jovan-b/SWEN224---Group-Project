@@ -320,13 +320,13 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			player.rotateViewRight();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_1){
-			player.inventoryItem(0).use(player, this);
+			player.inventoryItemAt(0).use(player, this);
 		}
 		if(e.getKeyCode() == KeyEvent.VK_2){
-			player.inventoryItem(1).use(player, this);
+			player.inventoryItemAt(1).use(player, this);
 		}
 		if(e.getKeyCode() == KeyEvent.VK_3){
-			player.inventoryItem(2).use(player, this);
+			player.inventoryItemAt(2).use(player, this);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_MINUS){
 			gui.getCanvas().setViewScale(1);
@@ -550,7 +550,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 			if (24*viewScale < x && x < 24*(Player.INVENTORY_SIZE+1)*viewScale){
 				// hovering over inventory
 				int index = (x-(24*viewScale))/(24*viewScale);
-				desc = player.inventoryItem(index).getDescription();
+				desc = player.inventoryItemAt(index).getDescription();
 			} else {
 				// not hovering over inventory - check for items on floor
 				desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
