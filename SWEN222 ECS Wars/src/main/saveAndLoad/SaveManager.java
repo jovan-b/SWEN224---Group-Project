@@ -28,8 +28,15 @@ import org.xml.sax.SAXException;
 
 /**
  * A save manager to store or load the state of a game controller from file
+ * Saves the game state to an XML file
+ * XML file contains a bunch of XML elements
+ * If object is "contained" inside another parent object,
+ * element is also contained inside the parent element, i.e.
+ * 	a Room object has a Player object in it
+ * 	a Room XML element has a Player XML element in it
+ * 
  * @author Carl
- *
+ * Edited by Jah Seng Lee
  */
 public final class SaveManager {
 	public static String SAVE_DIR = "";
@@ -53,22 +60,7 @@ public final class SaveManager {
 			Element root = doc.createElement("Controller");
 			doc.appendChild(root);
 			
-			//Write rooms to file
-			for(Room r : controller.getRooms()){
-				Element room = doc.createElement("Room");
-				root.appendChild(room);
-				room.setAttribute("id", r.getName());
-				
-				//Write players in room
-				for (Player p : r.getPlayers()){
-					Element player = doc.createElement("Player");
-					room.appendChild(player);
-					
-					player.setAttribute("type", p.getType().toString());
-					player.setAttribute("x", Integer.toString(p.getX()));
-					player.setAttribute("y", Integer.toString(p.getY()));
-				}
-			}
+			saveRooms(controller, doc, root);
 			
 			//Save the file to disk
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -82,82 +74,44 @@ public final class SaveManager {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	 * Load game based on specified saveFile
-	 * Get's room based on ID and adds items/players to them
-	 * 
-	 * Throws I/O exception and Parser exception if error occur
-	 * 
-	 * @param controller
-	 * @param saveFile
-	 */
-	public static void loadGame(Controller controller, File saveFile){
-		try {
-			File file = saveFile;
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = builder.parse(file);
-			
-			doc.getDocumentElement().normalize();
-			
-			//Read rooms
-			NodeList list = doc.getElementsByTagName("Room");
-			
-			ArrayList<Room> rooms = new ArrayList<>();
-			ArrayList<Player> players = new ArrayList<>();
-			
-			for (int i = 0; i < list.getLength(); i++){
-				Node node = (Node) list.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE){
-					Element e = (Element) node;
-					
-					//read players in the room
-					NodeList playerlist = e.getChildNodes();
-					
-					//get the room object from player
-					Room r = controller.getRoom((e.getAttribute("id")));
-					
-					for (int j = 0; j < playerlist.getLength(); j++){
-						Node pnode = (Node) playerlist.item(j);
-						if(pnode.getNodeType() == Node.ELEMENT_NODE){
-							Element pelement = (Element) pnode;	//player element
-							Player p;
-							
-							//create a player object from the node
-							switch(pelement.getAttribute("type")){
-							case("PondyPlayer"):	//PondyPlayer
-								p = new PondyPlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
-										Integer.parseInt(pelement.getAttribute("y")));
-								break;
-							default:	//DavePlayer
-								p = new DavePlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
-										Integer.parseInt(pelement.getAttribute("y")));
-								break;
-							}
-							
-							//add player object to room object
-							r.addPlayer(p);
-							
-							//add player object to list of players
-							players.add(p);
-						}
-					}
-					//add room to list of rooms
-					rooms.add(r);
-				}
-			}
-			
-			
-			//add list of players to the controller
-			controller.setPlayers(players);
-			controller.setCurrentPlayer(players.get(0));
 
-		} catch (ParserConfigurationException | SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private static void saveRooms(Controller controller, Document doc, Element root) {
+		for(Room r : controller.getRooms()){
+			Element room = doc.createElement("Room");
+			root.appendChild(room);
+			room.setAttribute("id", r.getName());
+			
+			//Write players in room
+			savePlayers(room, r, doc);
+		}
+	}
+
+	private static void savePlayers(Element room, Room r, Document doc) {
+		for (Player p : r.getPlayers()){
+			Element player = doc.createElement("Player");
+			room.appendChild(player);
+			
+			player.setAttribute("type", p.getType().toString());
+			player.setAttribute("x", Integer.toString(p.getX()));
+			player.setAttribute("y", Integer.toString(p.getY()));
+			
+			//Write items player currently holds
+			writeInventory(p, player, doc);
+		}
+	}
+	
+	private static void writeInventory(Player p, Element player, Document doc){
+		//initialise inventory, players only have one
+		Element inventory = doc.createElement("Inventory");
+		player.appendChild(inventory);
+		
+		//List the inventory items in order
+		//i.e. the first item in inventory should be attibute 0 = [item description]
+		for(int i = 0; i < p.getInventory().length; i++){
+			if(p.getInventory()[i] != null){
+				inventory.setAttribute(Integer.toString(i),	 
+						p.getInventory()[i].toString());
+			}
 		}
 	}
 }
