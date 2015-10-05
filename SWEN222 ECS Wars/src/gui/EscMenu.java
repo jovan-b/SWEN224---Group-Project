@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -44,6 +45,7 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 		// draw background
 		g.setColor(new Color(0f,0f,0f,0.6f));
 		g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		g.setFont(new Font("pixelmix", Font.PLAIN, BUTTON_HEIGHT-10));
 		drawButtons(g);
 	}
 
