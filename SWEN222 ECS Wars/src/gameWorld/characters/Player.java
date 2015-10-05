@@ -17,6 +17,7 @@ import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.weapons.PaintballGun;
 import gameWorld.gameObjects.weapons.ScatterGun;
 import gameWorld.gameObjects.weapons.Weapon;
+import gameWorld.gameObjects.weapons.projectiles.Projectile;
 import gui.Compass;
 import gui.GUICanvas;
 
@@ -103,13 +104,6 @@ public abstract class Player {
 	}
 
 	/**
-	 * Draws the player to the canvas
-	 */
-	public void draw(Graphics g, GUICanvas c) {
-		//Blank for now
-	}
-
-	/**
 	 * Updates player 1 tick, and propagates update throughout
 	 * room
 	 */
@@ -174,13 +168,19 @@ public abstract class Player {
 	 * Negative values cause damage
 	 * 
 	 * @param amt the amount to change by
+	 * @param p The projectile the player was shot with, or null
+	 * if they were not shot.
 	 */
-	public void modifyHealth(int amt){
+	public void modifyHealth(int amt, Projectile p){
 		health += amt;
 		if(health > HEALTH_MAX){
 			health = HEALTH_MAX;
-		} else if(health < 0){
+		} else if(health <= 0){
 			health = 0;
+			// give points to the player that killed me
+			if(p != null){
+				p.getPlayer().givePoints(50); // FIXME change to constant
+			}
 		}
 	}
 

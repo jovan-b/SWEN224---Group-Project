@@ -13,6 +13,7 @@ import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.strategy.NonPlayerStrategy;
 import gameWorld.characters.nonplayer.strategy.WaitStrategy;
 import gameWorld.gameObjects.weapons.PaintballGun;
+import gameWorld.gameObjects.weapons.projectiles.Projectile;
 
 public class NonPlayer extends Player {
 	public static final NonPlayerStrategy GLOBAL_DEFAULT = new WaitStrategy();
@@ -61,9 +62,9 @@ public class NonPlayer extends Player {
 	}
 	
 	@Override
-	public void modifyHealth(int amt){
+	public void modifyHealth(int amt, Projectile p){
 		if (amt < 0){this.respond(Events.COMBAT);}
-		super.modifyHealth(amt);
+		super.modifyHealth(amt, null);
 		if (this.isDead()){
 			this.respond(Events.DEATH);
 		}

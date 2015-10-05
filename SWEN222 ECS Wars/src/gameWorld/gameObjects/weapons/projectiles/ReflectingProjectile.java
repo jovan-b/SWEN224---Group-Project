@@ -66,7 +66,7 @@ public abstract class ReflectingProjectile extends BasicProjectile {
 	 */
 	protected void playerCollision(Player p){
 		if (p == player){return;} //Players can't shoot themselves
-		p.modifyHealth(damage);
+		p.modifyHealth(damage, this);
 		this.setActive(false);
 	}
 

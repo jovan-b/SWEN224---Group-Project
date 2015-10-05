@@ -69,7 +69,7 @@ public abstract class BasicProjectile implements Projectile {
 		for (Player p : room.getAllCharacters()){
 			if (p == player){continue;} //Players can't shoot themselves
 			if (p.getBoundingBox().contains(this.getBoundingBox())){
-				p.modifyHealth(damage);
+				p.modifyHealth(damage, this);
 				this.setActive(false);
 				return;
 			}

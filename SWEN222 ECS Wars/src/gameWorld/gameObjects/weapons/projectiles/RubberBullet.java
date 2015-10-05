@@ -44,7 +44,7 @@ public class RubberBullet extends ReflectingProjectile {
 			return;
 		}
 		
-		p.modifyHealth(damage);
+		p.modifyHealth(damage, this);
 		this.setActive(false);
 	}
 
