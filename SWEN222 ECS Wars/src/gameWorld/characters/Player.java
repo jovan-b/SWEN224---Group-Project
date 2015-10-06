@@ -178,9 +178,11 @@ public abstract class Player {
 		} else if(health <= 0){
 			health = 0;
 			// give points to the player that killed me
-			if(p != null){
+			if(p != null && p.getPlayer() != this){
 				p.getPlayer().givePoints(50); // FIXME change to constant
 			}
+			// take points from this player for dying
+			removePoints(50);
 		}
 	}
 
