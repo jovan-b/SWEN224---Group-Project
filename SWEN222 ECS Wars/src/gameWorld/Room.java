@@ -5,6 +5,7 @@ import gameWorld.characters.nonplayer.NonPlayer;
 import gameWorld.gameEvents.Event;
 import gameWorld.gameEvents.GameClock;
 import gameWorld.gameEvents.RespawnEvent;
+import gameWorld.gameObjects.CharacterSpawner;
 import gameWorld.gameObjects.Desk;
 import gameWorld.gameObjects.Door;
 import gameWorld.gameObjects.Floor;
@@ -119,6 +120,8 @@ public class Room {
 		case "_=" : Floor f = new Floor();
 					ctrl.addItemSpawner(f);
 					return f;
+		case "_+" : ctrl.addCharacterSpawner(new CharacterSpawner(col, row, this));
+					return new Floor();
 		case "##" : return new Wall();
 		case "PP" : return new Pillar();
 		case "Dh" : return new Desk(true);

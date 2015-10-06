@@ -53,12 +53,14 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	private Player player;
 	private List<Player> players;
 	private int uid;
+	private boolean multiplayer;
+	private ClientConnection client;
+	
 	private ArrayList<Room> rooms;
 	private Set<Door> doors;
 	private List<ItemSpawner> itemSpawners;
 	private List<Item> itemsToSpawn;
-	private boolean multiplayer;
-	private ClientConnection client;
+	private List<CharacterSpawner> charSpawners = new ArrayList<>();
 	
 	
 	private BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
@@ -108,13 +110,15 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		loadItemsToSpawn();
 		setupSpawnItems();
 		Room room = rooms.get(0);
-		rooms.add(room);
+		//rooms.add(room);
 		
 		players = new ArrayList<Player>();
 		for(int i = 0; i<numberOfClients; i++){
 			players.add(new DavePlayer(room, (i+2)*24, 2*24));
 			room.addPlayer(players.get(i));
 		}
+		
+		spawnPlayers();
 		
 		gui = new GUIFrame(this, players.get(uid), key, mouse, mouse2);
 		
@@ -143,6 +147,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		player = new DavePlayer(room, 2*24, 2*24);
 		players = new ArrayList<Player>();
 		players.add(player);
+		spawnPlayers();
 		uid = 0;
 		gui = new GUIFrame(this, player, key, mouse, mouse2);
 		player.setCanvas(gui.getCanvas());
@@ -626,6 +631,22 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	}
 	
 	/**
+	 * Distributes players over the game world.
+	 */
+	private void spawnPlayers(){
+		Collections.shuffle(players);
+		Collections.shuffle(charSpawners);
+		for(int i=0; i<players.size(); i++){
+			if(i >= charSpawners.size()){break;}
+			CharacterSpawner spawner = charSpawners.get(i);
+			Player p = players.get(i);
+			p.getCurrentRoom().removePlayer(p);
+			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
+			spawner.getRoom().addPlayer(p);
+		}
+	}
+	
+	/**
 	 * Adds an ItemSpawner to the list of all such types in
 	 * the game.
 	 * @param spawner The ItemSpawner to add.
@@ -684,6 +705,10 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 */
 	public ArrayList<Room> getRooms(){
 		return rooms;
+	}
+
+	public void addCharacterSpawner(CharacterSpawner characterSpawner) {
+		charSpawners.add(characterSpawner);
 	}
 	
 	
