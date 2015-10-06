@@ -710,6 +710,11 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	public void addCharacterSpawner(CharacterSpawner characterSpawner) {
 		charSpawners.add(characterSpawner);
 	}
+
+	public CharacterSpawner getSpawner() {
+		Collections.shuffle(charSpawners);
+		return charSpawners.get(0);
+	}
 	
 	
 

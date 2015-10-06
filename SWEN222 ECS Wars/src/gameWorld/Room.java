@@ -51,6 +51,8 @@ public class Room {
 	private int xOrigin;
 	private int yOrigin;
 	
+	private Controller ctrl;
+	
 	// non-item contents of room
 	private Set<Projectile> projectiles = Collections.synchronizedSet(new HashSet<Projectile>());
 	private Set<Player> players = new HashSet<>();
@@ -63,6 +65,7 @@ public class Room {
 	 * @param ctrl The controller running this room
 	 */
 	public Room(String roomName, Controller ctrl){
+		this.ctrl = ctrl;
 		name = roomName;
 		images = new Image[4][2];
 		loadImages();
@@ -768,8 +771,9 @@ public class Room {
 				playerIter.remove(); //Make the player invisible
 				
 				//Schedule a respawn event
+				CharacterSpawner spawner = ctrl.getSpawner();
 				//TODO: Change this to respawn somewhere that isn't the tile they died on
-				Event respawn = new RespawnEvent(p, this, p.getX(), p.getY());
+				Event respawn = new RespawnEvent(p, spawner.getRoom(), spawner.getX(), spawner.getY());
 				GameClock.getInstance().scheduleEvent(respawn , Player.RESPAWN_TIME);
 			}
 		}
