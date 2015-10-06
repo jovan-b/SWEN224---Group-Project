@@ -59,10 +59,10 @@ public class Cabinet extends Container implements ItemSpawner {
 		Image r = null;
 		// read image files
 		try {
-			f = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Cabinet.png"));
-			b = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Cabinet.png"));
-			l = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Cabinet.png"));
-			r = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Cabinet.png"));
+			f = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetF.png"));
+			b = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetB.png"));
+			l = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetL.png"));
+			r = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetR.png"));
 		} catch (IOException e) {
 			System.out.println("Failed to read Photocopier image file: " + e.getMessage());
 		}

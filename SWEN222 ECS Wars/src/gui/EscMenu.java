@@ -45,7 +45,6 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 		// draw background
 		g.setColor(new Color(0f,0f,0f,0.6f));
 		g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		g.setFont(new Font("pixelmix", Font.PLAIN, BUTTON_HEIGHT-10));
 		drawButtons(g);
 	}
 
@@ -71,8 +70,9 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 			}
 			// draw text
 			g.setColor(Color.WHITE);
+			g.setFont(new Font("pixelmix", Font.PLAIN, BUTTON_HEIGHT-10));
 			int textWidth = g.getFontMetrics().stringWidth(buttonLabels[i]);
-			int labelX = buttonX + BUTTON_WIDTH/2 - textWidth/2;
+			int labelX = (int) (buttonX + BUTTON_WIDTH/2 - (double)textWidth/2.0);
 			int labelY = buttonY + BUTTON_HEIGHT/2 + TEXT_SIZE/4;
 			g.drawString(buttonLabels[i], labelX, labelY);
 			// increment y
