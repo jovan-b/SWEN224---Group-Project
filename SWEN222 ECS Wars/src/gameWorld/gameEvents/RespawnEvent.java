@@ -32,7 +32,7 @@ public class RespawnEvent implements Event {
 	public void activate() {
 		//Since this is a one-time event, we use activate
 		player.setCurrentRoom(room, x, y);
-		player.setHealth(player.HEALTH_MAX);
+		player.setHealth(player.getMaxHealth());
 		complete = true;
 	}
 

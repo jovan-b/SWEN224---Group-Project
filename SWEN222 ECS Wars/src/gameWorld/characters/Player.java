@@ -54,6 +54,8 @@ public abstract class Player {
 	//fields describing state of player
 	protected Weapon currentWeapon;
 	protected Item[] inventory = new Item[INVENTORY_SIZE];
+	protected int maxHealth = HEALTH_MAX;
+
 	protected int health = HEALTH_MAX;
 	protected int points = 5000;
 
@@ -180,7 +182,7 @@ public abstract class Player {
 			health = 0;
 			// give points to the player that killed me
 			if(p != null && p.getPlayer() != this){
-				p.getPlayer().givePoints(PointValues.KILL_PLAYER); // FIXME change to constant
+				p.getPlayer().givePoints(PointValues.KILL_PLAYER);
 			}
 			// take points from this player for dying
 			removePoints(PointValues.DEATH);
@@ -482,6 +484,8 @@ public abstract class Player {
 	public int getRow() {return currentRow;}
 
 	public int getHealth(){return health;}
+	
+	public int getMaxHealth() {return maxHealth;}
 
 	public int getPoints() {return points;}
 

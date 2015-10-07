@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import gameWorld.PointValues;
 import gameWorld.Room;
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.strategy.NonPlayerStrategy;
@@ -18,6 +19,7 @@ import gameWorld.gameObjects.weapons.projectiles.Projectile;
 public class NonPlayer extends Player {
 	public static final NonPlayerStrategy GLOBAL_DEFAULT = new WaitStrategy();
 	public static final Type type = Player.Type.NonPlayer;
+	public static final int NPC_HEALTH_MAX = 80;
 	
 	/**
 	 * An enum to describe what events non-players respond to
@@ -35,6 +37,8 @@ public class NonPlayer extends Player {
 
 	public NonPlayer(Room room, int posX, int posY, NonPlayerStrategy initial) {
 		super(room, posX, posY);
+		super.health = NPC_HEALTH_MAX;
+		super.maxHealth = NPC_HEALTH_MAX;
 		active = initial;
 		strategies = new HashMap<Events, NonPlayerStrategy>();
 		
@@ -66,6 +70,10 @@ public class NonPlayer extends Player {
 		if (amt < 0){this.respond(Events.COMBAT);}
 		super.modifyHealth(amt, null);
 		if (this.isDead()){
+			// remove player's points for killing npc
+			if(p != null && p.getPlayer() != this){
+				p.getPlayer().removePoints(PointValues.NPC_DEATH);
+			}
 			this.respond(Events.DEATH);
 		}
 	}
