@@ -9,37 +9,36 @@ import javax.imageio.ImageIO;
 import gameWorld.Controller;
 import gameWorld.characters.Player;
 
-public class MedicineBottle implements Item {
+public class MedicineBottle extends Sellable implements Item {
 	
 	private String description = "Medicine: Restores half your health.";
-	private int cost = 500;
 	private int health = Player.HEALTH_MAX/2;
 	private Image image;
 	private Image scaledImage;
 	
 	public MedicineBottle(){
+		super(500);
 		loadImages();
 	}
 
 	private void loadImages() {
 		try{
-			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"IDCard.png"));
+			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Medicine.png"));
 			scaledImage = image;
 		} catch(IOException e){
-			System.out.println("Error loading KeyCard file: "+e.getMessage());
+			System.out.println("Error loading image file: "+e.getMessage());
 		}
 	}
 
 	@Override
 	public void use(Player p, Controller ctrl) {
-		p.setHealth(health);
+		p.modifyHealth(health,null);
 		p.removeItem(this);
 	}
 
 	@Override
 	public Image getImage(int viewDirection) {
-		// TODO Auto-generated method stub
-		return null;
+		return image;
 	}
 
 	@Override
@@ -59,20 +58,17 @@ public class MedicineBottle implements Item {
 
 	@Override
 	public void setScaledImage(int viewDirection, Image scaledImage) {
-		// TODO Auto-generated method stub
-		
+		this.scaledImage = scaledImage;
 	}
 
 	@Override
 	public Image getScaledImage(int viewDirection) {
-		// TODO Auto-generated method stub
-		return null;
+		return scaledImage;
 	}
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return description;
 	}
 
 }

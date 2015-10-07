@@ -1,5 +1,6 @@
 package gameWorld.characters.nonplayer.strategy;
 
+import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 
 public interface NonPlayerStrategy {
@@ -25,4 +26,10 @@ public interface NonPlayerStrategy {
 	 * @return
 	 */
 	public NonPlayer getNPCReference();
+	
+	/**
+	 * Player interacts with this character.
+	 * @param p The player interacting with me
+	 */
+	public void interact(Player p, NonPlayer npc);
 }

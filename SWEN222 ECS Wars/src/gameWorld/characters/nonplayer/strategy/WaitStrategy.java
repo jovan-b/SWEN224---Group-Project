@@ -1,5 +1,6 @@
 package gameWorld.characters.nonplayer.strategy;
 
+import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 
 public class WaitStrategy implements NonPlayerStrategy {
@@ -26,5 +27,10 @@ public class WaitStrategy implements NonPlayerStrategy {
 		//do nothing
 	}
 	
-
+	@Override
+	public void interact(Player p, NonPlayer npc){
+		// do nothing
+	}
+	
+	
 }

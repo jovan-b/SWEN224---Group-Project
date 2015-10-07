@@ -2,6 +2,7 @@ package gameWorld;
 
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
+import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
 import gameWorld.gameEvents.Event;
 import gameWorld.gameEvents.GameClock;
 import gameWorld.gameEvents.RespawnEvent;
@@ -689,6 +690,53 @@ public class Room {
 			return itemAt(newX, newY);
 		}
 		return new Wall();
+	}
+	
+	/**
+	 * If there is a wandering NPC at the mouse, return it.
+	 * @param x The x position of the mouse
+	 * @param y The y position of the mouse
+	 * @param p The current player
+	 * @param viewScale The current view scaled
+	 * @return The wandering NPC at the mouse, or null if there is none
+	 */
+	public NonPlayer wanderingNpcAtMouse(int x, int y, Player p, int viewScale){
+		int newX;
+		int newY;
+		// determine the scaled x and y
+		switch(p.getViewDirection()){
+		case 1:
+			newX = (int)((double)((yOrigin+(width*viewScale))-y)/(double)viewScale);
+			newY = (int)((double)(x-xOrigin)/(double)viewScale);
+			break;
+		case 2:
+			newX = (int)((double)((xOrigin+(width*viewScale))-x)/(double)viewScale);
+			newY = (int)((double)((yOrigin+(height*viewScale))-y)/(double)viewScale);
+			break;
+		case 3:
+			newX = (int)((double)(y-yOrigin)/(double)viewScale);
+			newY = (int)((double)((xOrigin+(height*viewScale))-x)/(double)viewScale);
+			break;
+		default: 
+			newX = (int)((double)(x-xOrigin)/(double)viewScale);
+			newY = (int)((double)(y-yOrigin)/(double)viewScale);
+		}
+		// check the player is close enough to the npc
+		int xDiff = newX-p.getX();
+		int yDiff = newY-p.getY();
+		if (Math.abs(xDiff) < 48 && Math.abs(yDiff) < 48){
+			for(NonPlayer npc : npcs){
+				// check if npc is wandering
+				if(npc.getStrategy() instanceof WanderingMerchantStrategy){
+					// see if mouse is over npc
+					Rectangle bbox = npc.getBoundingBox();
+					if(bbox.contains(new Point(newX, newY))){
+						return npc;
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	/**

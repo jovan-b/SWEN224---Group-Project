@@ -5,7 +5,7 @@ import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 import gameWorld.characters.nonplayer.strategy.SentryCombatStrategy;
-import gameWorld.characters.nonplayer.strategy.WanderStrategy;
+import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
 import gameWorld.gameObjects.*;
 import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.containers.Pouch;
@@ -164,7 +164,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		room.addPlayer(player);
 		player.setCanvas(gui.getCanvas());
 		
-		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new WanderStrategy());
+		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new WanderingMerchantStrategy());
 		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
 		room.addNPC(npc);
 		
@@ -479,9 +479,15 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		Container container = gui.getCanvas().getCurrentContainer();
 		int xMid = gui.getCanvas().getWidth()/2;
 		int yMid = gui.getCanvas().getHeight()/2;
-		
+		// check if mousing over merchant NPC
+		Room currentRoom = player.getCurrentRoom();
+		NonPlayer npc = currentRoom.wanderingNpcAtMouse(x, y, player, viewScale);
+		if(npc != null){
+			WanderingMerchantStrategy strat = (WanderingMerchantStrategy) npc.getStrategy();
+			strat.interact(player, npc);
+		}
 		// check if the player has clicked on their inventory
-		if (24*2*viewScale < y && y < 24*3*viewScale){
+				else if (24*2*viewScale < y && y < 24*3*viewScale){
 			if (24*viewScale < x && x < 24*(Player.INVENTORY_SIZE+1)*viewScale){
 				int index = (x-(24*viewScale))/(24*viewScale);
 				player.dropItem(index, container);
@@ -542,7 +548,6 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 * which should display a tooltip.
 	 */
 	private void checkTooltip() {
-		// get 
 		int viewScale = gui.getCanvas().getViewScale();
 		int x = mouseX;
 		int y = mouseY;
@@ -550,8 +555,15 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		int yMid = gui.getCanvas().getHeight()/2;
 		Container container = gui.getCanvas().getCurrentContainer();
 		String desc = "";
+		// check if mousing over merchant NPC
+		Room currentRoom = player.getCurrentRoom();
+		NonPlayer npc = currentRoom.wanderingNpcAtMouse(x, y, player, viewScale);
+		if(npc != null){
+			WanderingMerchantStrategy strat = (WanderingMerchantStrategy) npc.getStrategy();
+			desc = strat.getDescription();
+		}
 		// checks if the player is currently mousing over their inventory
-		if (24*2*viewScale < y && y < 24*3*viewScale){
+		else if (24*2*viewScale < y && y < 24*3*viewScale){
 			if (24*viewScale < x && x < 24*(Player.INVENTORY_SIZE+1)*viewScale){
 				// hovering over inventory
 				int index = (x-(24*viewScale))/(24*viewScale);

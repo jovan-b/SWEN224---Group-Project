@@ -54,7 +54,7 @@ public abstract class Player {
 	protected Weapon currentWeapon;
 	protected Item[] inventory = new Item[INVENTORY_SIZE];
 	protected int health = HEALTH_MAX;
-	protected int points = 0;
+	protected int points = 5000;
 
 
 	//position describing the centre of a player object

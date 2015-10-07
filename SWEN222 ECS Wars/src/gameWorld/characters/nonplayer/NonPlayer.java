@@ -115,4 +115,16 @@ public class NonPlayer extends Player {
 	public Type getType() {
 		return type;
 	}
+	
+	/**
+	 * Player interacts with this character.
+	 * @param p The player interacting with me
+	 */
+	public void interact(Player p){
+		active.interact(p, this);
+	}
+	
+	public NonPlayerStrategy getStrategy(){
+		return active;
+	}
 }

@@ -3,7 +3,14 @@ package gameWorld.characters.nonplayer.strategy;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class WanderStrategy extends WaitStrategy {
+import gameWorld.characters.Player;
+import gameWorld.characters.nonplayer.NonPlayer;
+import gameWorld.gameObjects.Item;
+import gameWorld.gameObjects.MedicineBottle;
+import gameWorld.gameObjects.PillBottle;
+import gameWorld.gameObjects.Sellable;
+
+public class WanderingMerchantStrategy extends WaitStrategy {
 	public static final int MAX_WAIT_TIME = 2000;
 	public static final int MAX_WANDER_TIME = 500;
 	
@@ -16,6 +23,21 @@ public class WanderStrategy extends WaitStrategy {
 	
 	private Timer timer = new Timer();
 	private boolean activeTimer = false;
+	
+	private Sellable inventoryItem;
+	private String description;
+	
+	public WanderingMerchantStrategy(){
+		// decide which item this npc should sell
+		double chance = Math.random();
+		if(chance < 0.7){
+			inventoryItem = new MedicineBottle();
+			description = "I sell medicine!";
+		} else {
+			inventoryItem = new PillBottle();
+			description = "I sell pills!";
+		}
+	}
 	
 	@Override
 	public void update(){
@@ -65,5 +87,25 @@ public class WanderStrategy extends WaitStrategy {
 		case 3: return "left";
 		default: return "up";
 		}
+	}
+	
+	@Override
+	public void interact(Player p, NonPlayer npc){
+		for(int i=0; i<npc.getInventory().length; i++){
+			npc.pickUp(inventoryItem);
+		}
+		// if player has enough points
+		if(p.getPoints() >= inventoryItem.getCost()){
+			npc.dropItem(0, null);
+			p.removePoints(inventoryItem.getCost());
+		}
+	}
+
+	/**
+	 * Get the tooltip text for an npc using this strategy.
+	 * @return Appropriate tooltip depending on what the npc sells
+	 */
+	public String getDescription() {
+		return description;
 	}
 }
