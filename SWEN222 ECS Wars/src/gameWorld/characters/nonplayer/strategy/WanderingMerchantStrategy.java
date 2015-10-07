@@ -37,6 +37,7 @@ public class WanderingMerchantStrategy extends WaitStrategy {
 			inventoryItem = new PillBottle();
 			description = "I sell pills!";
 		}
+		description += " "+ inventoryItem.getCost() +" points each.";
 	}
 	
 	@Override
@@ -98,6 +99,8 @@ public class WanderingMerchantStrategy extends WaitStrategy {
 		if(p.getPoints() >= inventoryItem.getCost()){
 			npc.dropItem(0, null);
 			p.removePoints(inventoryItem.getCost());
+		} else {
+			
 		}
 	}
 
