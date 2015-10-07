@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
+import gameWorld.PointValues;
 import gameWorld.characters.Player;
 import gameWorld.gameObjects.Item.Type;
 
@@ -18,7 +19,7 @@ public class MedicineBottle extends Sellable implements Item {
 	private Image scaledImage;
 	
 	public MedicineBottle(){
-		super(500);
+		super(PointValues.MEDICINE_COST);
 		loadImages();
 	}
 

@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 import gameWorld.Controller;
+import gameWorld.PointValues;
 import gameWorld.Room;
 import gameWorld.gameEvents.Event;
 import gameWorld.gameEvents.GameClock;
@@ -179,10 +180,10 @@ public abstract class Player {
 			health = 0;
 			// give points to the player that killed me
 			if(p != null && p.getPlayer() != this){
-				p.getPlayer().givePoints(50); // FIXME change to constant
+				p.getPlayer().givePoints(PointValues.KILL_PLAYER); // FIXME change to constant
 			}
 			// take points from this player for dying
-			removePoints(50);
+			removePoints(PointValues.DEATH);
 		}
 	}
 

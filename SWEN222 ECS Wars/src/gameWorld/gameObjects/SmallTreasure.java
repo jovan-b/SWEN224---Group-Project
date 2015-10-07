@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
+import gameWorld.PointValues;
 import gameWorld.characters.Player;
 
 /**
@@ -30,27 +31,27 @@ public class SmallTreasure implements Item {
 		double randomType = Math.random();
 		String quality = "rough";
 		String type = "Sapphire";
-		points = 1000;
+		points = PointValues.TREASURE_BASE;
 		if (randomType > 0.9){
 			type = "Diamond";
-			points += 950;
+			points += PointValues.TREASURE_BASE*0.95;
 		} else if (randomType > 0.7){
 			type = "Ruby";
-			points += 700;
+			points += PointValues.TREASURE_BASE*0.7;
 		} else if (randomType > 0.4){
 			type = "Emerald";
-			points += 400;
+			points += PointValues.TREASURE_BASE*0.4;
 		} 
 		
 		if (randomQuality > 0.9){
 			quality = "exquisite";
-			points += 950;
+			points += PointValues.TREASURE_BASE*0.95;
 		} else if (randomQuality > 0.7){
 			quality = "rare";
-			points += 700;
+			points += PointValues.TREASURE_BASE*0.7;
 		} else if (randomQuality > 0.4){
 			quality = "good";
-			points += 400;
+			points += PointValues.TREASURE_BASE*0.4;
 		}
 		
 		this.description = "A "+ type + " of " + quality + " quality worth " + points + " points";
