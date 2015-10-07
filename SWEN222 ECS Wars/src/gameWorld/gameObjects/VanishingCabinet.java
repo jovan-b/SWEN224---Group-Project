@@ -83,13 +83,13 @@ public class VanishingCabinet implements Item {
 				   break;
 		case 'L' : imageNorth = l; // LEFT
 		   		   imageSouth = r;
-		   		   imageEast = f;
-		   		   imageWest = b;
+		   		   imageEast = b;
+		   		   imageWest = f;
 		   		   break;
 		case 'R' : imageNorth = r; // RIGHT
 				   imageSouth = l;
-				   imageEast = b;
-				   imageWest = f;
+				   imageEast = f;
+				   imageWest = b;
 				   break;
 		default :  imageNorth = f; // FRONT
 		   		   imageSouth = b;
@@ -108,6 +108,7 @@ public class VanishingCabinet implements Item {
 				SmallTreasure treasure = (SmallTreasure) item;
 				p.givePoints(treasure.getPoints());
 				p.removeItem(treasure);
+				ctrl.spawnItem(new SmallTreasure());
 				return;
 			}
 		}

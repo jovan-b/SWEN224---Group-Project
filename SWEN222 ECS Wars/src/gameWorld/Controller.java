@@ -341,10 +341,14 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		Collections.shuffle(itemSpawners);
 		Collections.shuffle(itemsToSpawn);
 		// while there is an item or container left, add item to container
-		while(itemSpawners.size() > 0 && itemsToSpawn.size() > 0){
+		for (int i = 0; i < itemsToSpawn.size(); i++){
+			if (i >= itemSpawners.size()){
+				System.out.println("Ran out of item spawners");
+				break;
+			}
 			// get random container and item
-			ItemSpawner holder = itemSpawners.remove(0);
-			Item toSpawn = itemsToSpawn.remove(0);
+			ItemSpawner holder = itemSpawners.get(i);
+			Item toSpawn = itemsToSpawn.get(i);
 			// add item if there's room
 			if(holder.remainingCapacity() > 0){
 				holder.addSpawnItem(toSpawn);
@@ -352,6 +356,20 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		}
 	}
 	
+	/**
+	 * Spawns a given item at a random item spawn location
+	 * @param itemToSpawn
+	 */
+	public void spawnItem(Item itemToSpawn){
+		Collections.shuffle(itemSpawners);
+		ItemSpawner holder = itemSpawners.get(0);
+		while (holder instanceof Pouch || holder.remainingCapacity() <= 0){
+			Collections.shuffle(itemSpawners);
+			holder = itemSpawners.get(0);
+		}
+		holder.addSpawnItem(itemToSpawn);
+	}
+
 	/**
 	 * Distributes players over the game world.
 	 */
