@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.Item.Type;
 
 /**
  * A 1x1 treasure worth points that can be found on floors and in containers.
@@ -26,10 +25,36 @@ public class SmallTreasure implements Item {
 	/**
 	 * Constructor for class KeyCard.
 	 */
-	public SmallTreasure(String imageFile, int points, String description){
-		this.description = description;
-		this.points = points;
-		loadImages(imageFile);
+	public SmallTreasure(){
+		double randomQuality = Math.random();
+		double randomType = Math.random();
+		String quality = "rough";
+		String type = "Sapphire";
+		points = 1000;
+		if (randomType > 0.9){
+			type = "Diamond";
+			points += 900;
+		} else if (randomType > 0.7){
+			type = "Ruby";
+			points += 700;
+		} else if (randomType > 0.4){
+			type = "Emerald";
+			points += 400;
+		} 
+		
+		if (randomQuality > 0.9){
+			quality = "exquisite";
+			points += 900;
+		} else if (randomQuality > 0.7){
+			quality = "rare";
+			points += 700;
+		} else if (randomQuality > 0.4){
+			quality = "good";
+			points += 400;
+		}
+		
+		this.description = "A "+ quality + " " + type + " worth " + points + " points";
+		loadImages(type);
 	}
 
 	/**
@@ -84,11 +109,6 @@ public class SmallTreasure implements Item {
 
 	public int getPoints() {
 		return points;
-	}
-	
-	@Override
-	public Type getType() {
-		return Type.SmallTreasure;
 	}
 	
 }
