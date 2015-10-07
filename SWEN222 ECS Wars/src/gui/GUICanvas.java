@@ -4,6 +4,7 @@ import gameWorld.Controller;
 import gameWorld.Room;
 import gameWorld.characters.Player;
 import gameWorld.gameObjects.Item;
+import gameWorld.gameObjects.Map;
 import gameWorld.gameObjects.Torch;
 import gameWorld.gameObjects.containers.Container;
 
@@ -66,6 +67,9 @@ public class GUICanvas extends JComponent{
 	private Image scaledContainerBg;
 	private Image scaledContainerFg;
 	
+	private Image mapImage;
+	private Image scaledMapImage;
+	
 	/**
 	 * Constructor for class GUICanvas.
 	 * @param frame The frame containing this canvas
@@ -102,6 +106,7 @@ public class GUICanvas extends JComponent{
 			noTorch = ImageIO.read(new File("Resources"+File.separator+"noTorch.png"));
 			containerBg = ImageIO.read(new File("Resources"+File.separator+"ContainerBackground.png"));
 			containerFg = ImageIO.read(new File("Resources"+File.separator+"ContainerForeground.png"));
+			mapImage = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Map.png"));
 			for (int dir = 0; dir < 4; dir++){
 				torchLight[dir] = ImageIO.read(new File("Resources"+File.separator+"torchLightDirectional"
 								+File.separator+"torchLight"+dir+".png"));
@@ -116,6 +121,7 @@ public class GUICanvas extends JComponent{
 		scaledTorchLight = Arrays.copyOf(torchLight, 4);
 		scaledContainerBg = containerBg;
 		scaledContainerFg = containerFg;
+		scaledMapImage = mapImage;
 	}
 	
 	@Override
@@ -154,7 +160,7 @@ public class GUICanvas extends JComponent{
 	private void drawHUD(Graphics g, Room r) {
 		// draw server room overlays
 		if (r.getName().equals("Server Room")){
-			drawServerRoomOverlay(r, g);
+			drawDarknessOverlay(r, g);
 		}
 		
 		// Draw compass
@@ -183,6 +189,23 @@ public class GUICanvas extends JComponent{
 		if (toolTip != null){
 			showToolTip(g);
 		}
+		
+		// draw Map overlay
+		Item map = player.inventoryContains(new Map());
+		if (map != null && ((Map)map).isOpen()){
+			drawMap(g);
+		}
+	}
+
+
+	/**
+	 * Draws the Map overlay if the player has a Map open
+	 * @param g The Graphics object with which to draw
+	 */
+	private void drawMap(Graphics g) {
+		int x = (this.getWidth()/2)-(24*9*viewScale)-(12*viewScale);
+		int y = (this.getHeight()/2)-(24*7*viewScale)-(12*viewScale);
+		g.drawImage(scaledMapImage, x, y, this);
 	}
 
 
@@ -258,7 +281,7 @@ public class GUICanvas extends JComponent{
 	 * @param r The server room
 	 * @param g The graphics object with which to draw
 	 */
-	private void drawServerRoomOverlay(Room r, Graphics g) {
+	private void drawDarknessOverlay(Room r, Graphics g) {
 		// calculate drawing variables
 		g.setColor(Color.BLACK);
 		Image image = scaledNoTorch;
@@ -400,6 +423,9 @@ public class GUICanvas extends JComponent{
 		// scale torch light
 		scaledNoTorch = noTorch.getScaledInstance(noTorch.getWidth(this)*viewScale, 
 				noTorch.getHeight(this)*viewScale, Image.SCALE_FAST);
+		// scale map overlay
+		scaledMapImage = mapImage.getScaledInstance(mapImage.getWidth(this)*viewScale,
+				mapImage.getHeight(this)*viewScale, Image.SCALE_FAST);
 		Image temp[] = torchLight;
 		for (int dir = 0; dir < 4; dir++){
 			scaledTorchLight[dir] = temp[dir].getScaledInstance(temp[dir].getWidth(this)*viewScale, 

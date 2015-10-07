@@ -597,6 +597,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 				case "KeyCard" : toAdd = new KeyCard(); break;
 				case "Torch" : toAdd = new Torch(); break;
 				case "Pouch" : toAdd = new Pouch(); itemSpawners.add((ItemSpawner) toAdd); break;
+				case "Map" : toAdd = new Map(); break;
 				}
 				// add the item if it's not null, otherwise print error message
 				if(toAdd != null){
