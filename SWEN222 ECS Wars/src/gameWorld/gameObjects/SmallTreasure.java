@@ -110,6 +110,11 @@ public class SmallTreasure implements Item {
 	public int getPoints() {
 		return points;
 	}
+
+	@Override
+	public Type getType() {
+		return Type.SmallTreasure;
+	}
 	
 	@Override
 	public Type getType() {
