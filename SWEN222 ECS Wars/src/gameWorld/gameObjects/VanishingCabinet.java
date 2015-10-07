@@ -1,4 +1,4 @@
-package gameWorld.gameObjects.containers;
+package gameWorld.gameObjects;
 
 import java.awt.Image;
 import java.io.File;
@@ -8,19 +8,14 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.Item;
-import gameWorld.gameObjects.ItemSpawner;
-import gui.GUICanvas;
 
 /**
- * A 1x1 container which can store 4 items.
- * @author Sarah Dobie 300315033
+ * A 1x1 object that consumes treasure items to give the player points
  * @author Chris Read 300254724
  *
  */
-public class Cabinet extends Container implements ItemSpawner {
-	private static final int CAPACITY = 4;
-
+public class VanishingCabinet implements Item {
+	
 	// base images
 	private Image imageNorth;
 	private Image imageSouth;
@@ -32,15 +27,14 @@ public class Cabinet extends Container implements ItemSpawner {
 	private Image scaledImageWest;
 	private Image scaledImageEast;
 	
-	private String description = "A cabinet, may contain items.";
-	
+	private String description = "A Vanishing Cabinet, it seems to like certain items...";
+
 	/**
-	 * Constructor for class Cabinet.
+	 * Constructor for class VanishingCabinet.
 	 * @param dir The direction (F, B, L, R) that the cabinet
 	 * is facing when the view direction is North.
 	 */
-	public Cabinet(char dir) {
-		super(CAPACITY);
+	public VanishingCabinet(char dir) {
 		loadImages(dir);
 		scaledImageNorth = imageNorth;
 		scaledImageSouth = imageSouth;
@@ -60,10 +54,10 @@ public class Cabinet extends Container implements ItemSpawner {
 		Image r = null;
 		// read image files
 		try {
-			f = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetF.png"));
-			b = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetB.png"));
-			l = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetL.png"));
-			r = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetR.png"));
+			f = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetBlueF.png"));
+			b = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetBlueB.png"));
+			l = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetBlueL.png"));
+			r = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetBlueR.png"));
 		} catch (IOException e) {
 			System.out.println("Failed to read Photocopier image file: " + e.getMessage());
 		}
@@ -107,7 +101,8 @@ public class Cabinet extends Container implements ItemSpawner {
 
 	@Override
 	public void use(Player p, Controller ctrl) {
-		ctrl.getGUI().getCanvas().setCurrentContainer(this);
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -160,14 +155,4 @@ public class Cabinet extends Container implements ItemSpawner {
 		return description;
 	}
 
-	@Override
-	public boolean addSpawnItem(Item item) {
-		return super.addItem(item);
-	}
-
-	@Override
-	public int remainingCapacity() {
-		return super.capacity - contents.size();
-	}
-	
 }
