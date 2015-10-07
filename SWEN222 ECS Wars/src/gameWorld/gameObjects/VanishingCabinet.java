@@ -101,8 +101,16 @@ public class VanishingCabinet implements Item {
 
 	@Override
 	public void use(Player p, Controller ctrl) {
-		// TODO Auto-generated method stub
-
+		Item[] inventory = p.getInventory();
+		for (int i = 0; i < inventory.length; i++){
+			Item item = inventory[i];
+			if (item != null && item instanceof SmallTreasure){
+				SmallTreasure treasure = (SmallTreasure) item;
+				p.givePoints(treasure.getPoints());
+				p.removeItem(treasure);
+				return;
+			}
+		}
 	}
 
 	@Override

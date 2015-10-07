@@ -52,7 +52,6 @@ public class Torch implements Item {
 
 	@Override
 	public void use(Player p, Controller ctrl) {
-		System.out.println("Player used the torch!!");
 		isOn = !isOn;
 	}
 

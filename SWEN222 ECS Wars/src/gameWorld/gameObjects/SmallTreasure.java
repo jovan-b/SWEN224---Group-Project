@@ -33,7 +33,7 @@ public class SmallTreasure implements Item {
 		points = 1000;
 		if (randomType > 0.9){
 			type = "Diamond";
-			points += 900;
+			points += 950;
 		} else if (randomType > 0.7){
 			type = "Ruby";
 			points += 700;
@@ -44,7 +44,7 @@ public class SmallTreasure implements Item {
 		
 		if (randomQuality > 0.9){
 			quality = "exquisite";
-			points += 900;
+			points += 950;
 		} else if (randomQuality > 0.7){
 			quality = "rare";
 			points += 700;
@@ -53,7 +53,7 @@ public class SmallTreasure implements Item {
 			points += 400;
 		}
 		
-		this.description = "A "+ quality + " " + type + " worth " + points + " points";
+		this.description = "A "+ type + " of " + quality + " quality worth " + points + " points";
 		loadImages(type);
 	}
 
@@ -62,10 +62,10 @@ public class SmallTreasure implements Item {
 	 */
 	private void loadImages(String fileName) {
 		try{
-			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+fileName));
+			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+fileName+".png"));
 			scaledImage = image;
 		} catch(IOException e){
-			System.out.println("Error loading image file: "+e.getMessage());
+			System.out.println("Error loading treasure image file: "+e.getMessage());
 		}
 	}
 	
@@ -111,11 +111,6 @@ public class SmallTreasure implements Item {
 		return points;
 	}
 
-	@Override
-	public Type getType() {
-		return Type.SmallTreasure;
-	}
-	
 	@Override
 	public Type getType() {
 		return Type.SmallTreasure;

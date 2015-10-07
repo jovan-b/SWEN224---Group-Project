@@ -313,8 +313,12 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 				switch(nextLine){
 				case "KeyCard" : toAdd = new KeyCard(); break;
 				case "Torch" : toAdd = new Torch(); break;
-				case "Pouch" : toAdd = new Pouch(); itemSpawners.add((ItemSpawner) toAdd); break;
+				case "Pouch" : toAdd = new Pouch(); 
+							for (int i = 0; i < 3; i++){
+								itemSpawners.add((ItemSpawner) toAdd);
+							} break;
 				case "Map" : toAdd = new Map(); break;
+				case "Treasure" : toAdd = new SmallTreasure(); break;
 				}
 				// add the item if it's not null, otherwise print error message
 				if(toAdd != null){
