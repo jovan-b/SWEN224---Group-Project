@@ -48,6 +48,8 @@ public class GUICanvas extends JComponent{
 	private MainMenu mainMenu; // the main menu to display
 	private boolean escMenuView = false; // true if we are looking at esc menu
 	private EscMenu escMenu; // the esc menu to display
+	private boolean winnerMenuView = false; // true if we are looking at winner menu
+	private WinnerMenu winnerMenu; // the winner menu to display
 	
 	// Static UI Images
 	private Image[] torchLight;
@@ -156,6 +158,10 @@ public class GUICanvas extends JComponent{
 	public void paint(Graphics g){
 		if(mainMenuView){
 			mainMenu.paint(g);
+			return;
+		}
+		if(winnerMenuView){
+			winnerMenu.paint(g);
 			return;
 		}
 		//paint background
@@ -487,10 +493,25 @@ public class GUICanvas extends JComponent{
 
 	/**
 	 * Opens or hides the end-game winner view.
+	 * @param display true to display menu, false to hide it
 	 */
-	public void toggleWinnerView() {
-		// TODO Auto-generated method stub
-		
+	public void setWinnerView(boolean display) {
+		if(winnerMenu == null){
+			this.winnerMenu = new WinnerMenu(this, controller);
+		}
+		winnerMenuView = display; // toggle boolean
+		// change settings
+		if(winnerMenuView){
+			removeMouseListener(controller);
+			removeMouseMotionListener(controller);
+			addMouseListener(winnerMenu);
+			addMouseMotionListener(winnerMenu);
+		} else {
+			removeMouseListener(winnerMenu);
+			removeMouseMotionListener(winnerMenu);
+			addMouseListener(controller);
+			addMouseMotionListener(controller);
+		}
 	}
 
 	/**
