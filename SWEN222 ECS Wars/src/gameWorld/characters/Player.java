@@ -37,7 +37,7 @@ public abstract class Player {
 	public static final int BASE_SPEED = 2;	//pixels per frame
 	public static final int BASE_HEIGHT = 50;
 	public static final int BASE_WIDTH = 30;
-	public final int HEALTH_MAX = 200;
+	public static final  int HEALTH_MAX = 200;
 
 	public static final int INVENTORY_SIZE = 3;
 
@@ -418,6 +418,25 @@ public abstract class Player {
 				inventory[index] = null;
 			}
 		}
+	}
+	
+	/**
+	 * Removes ('consumes') an item from the player's inventory.
+	 * @param item The item to remove
+	 * @return true iff the item was successfully removed
+	 */
+	public boolean removeItem(Item item){
+		if(item == null){return true;} // ignore null - will have no effect
+		// search for item
+		for(int i=0; i<inventory.length; i++){
+			if(inventory[i] == item){
+				// found item, remove it
+				inventory[i] = null;
+				return true;
+			}
+		}
+		// didn't ffind item in inventory
+		return false;
 	}
 	
 	/**
