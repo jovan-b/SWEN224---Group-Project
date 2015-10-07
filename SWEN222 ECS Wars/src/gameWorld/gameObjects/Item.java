@@ -13,6 +13,18 @@ import gameWorld.characters.Player;
  *
  */
 public interface Item {
+	
+	public enum Type{
+		KeyCard,
+		SmallTreasure,
+		Torch,
+		Pouch,
+		MedicineBottle,
+		PillBottle,
+		Map
+		//TODO: Add weapon after implementation
+	}
+	
 	/**
 	 * Allows the player to interact with this item if possible.
 	 * @param p The player using this item.
