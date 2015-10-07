@@ -74,9 +74,7 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 * Controller constructor for a singeplayer game
 	 */
 	public Controller(){
-		initialise(this, this, this);
-		run();
-		
+		initialise();		
 	}
 	
 	/**
@@ -85,7 +83,6 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	public Controller(ClientConnection client, int numberOfClients, int uid){
 		this.client = client;
 		MPInitialise(client, client, client, numberOfClients, uid);
-		start();
 	}
 
 	/**
@@ -120,37 +117,34 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 		
 		spawnPlayers();
 		
-		gui = new GUIFrame(this, players.get(uid), key, mouse, mouse2);
-		
 		for(Player p: players){
 			p.setCanvas(gui.getCanvas());
 		}
-		
-		gui.getCanvas().setMainMenu(false);
-		
+				
 		SoundManager.playSong("battle_1.mp3");
 	}
 	
 	/**
 	 * Initialise the pre-game fields of this class
 	 */
-	private void initialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2) {
+	private void initialise() {
 		isRunning = true;
 		rooms = new ArrayList<>();
 		doors = new HashSet<>();
 		itemSpawners = new ArrayList<>();
 		itemsToSpawn = new ArrayList<>();
+		
 		setupRooms();
 		loadItemsToSpawn();
 		setupSpawnItems();
 		Room room = rooms.get(0); //FIXME
+		
 		player = new DavePlayer(room, 2*24, 2*24);
 		players = new ArrayList<Player>();
 		players.add(player);
 		spawnPlayers();
+		
 		uid = 0;
-		gui = new GUIFrame(this, player, key, mouse, mouse2);
-		player.setCanvas(gui.getCanvas());
 		
 		SoundManager.playSong("battle_1.mp3");
 	}
@@ -710,6 +704,14 @@ public class Controller extends Thread implements KeyListener, MouseListener, Mo
 	 */
 	public GUIFrame getGUI(){
 		return gui;
+	}
+	
+	/**
+	 * Sets the frame for this controller
+	 * @param gui
+	 */
+	public void setGUI(GUIFrame gui){
+		this.gui = gui;
 	}
 
 	/**

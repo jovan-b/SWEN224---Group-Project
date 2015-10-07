@@ -43,18 +43,25 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	private int animCounter = 0; // counts each frame the player has moved
 	private String[] buttonLabels; // the button text
 	private int selectedButton = Integer.MAX_VALUE; // the button currently highlighted
+	
+	private RedrawThread redraw;
 
 	/**
 	 * Constructor for class MainMenu.
 	 * @param canvas The GUICanvas the menu will be drawn on
 	 * @param controller The controller running this
 	 */
-	public MainMenu(GUICanvas canvas, Controller controller) {
+	public MainMenu(GUICanvas canvas) {
 		this.canvas = canvas;
-		this.controller = controller;
 		loadImages();
 		loadFonts();
 		buttonLabels = new String[]{"New Game", "Load Game", "New Server", "Connect", "Quit"};
+		
+		redraw = new RedrawThread();
+		redraw.start();
+		
+		//Preload the controller
+		this.controller = new Controller();
 	}
 
 	/**
@@ -244,8 +251,11 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 
 	
 	private void newGame() {
-		controller.initialiseGame();
-		canvas.setMainMenu(false);
+		//controller.initialiseGame();
+		//canvas.setMainMenu(false);
+		
+		canvas.startGame(controller, 0);
+		redraw.stopRunning();
 	}
 
 	private void loadGame() {
@@ -265,7 +275,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	}
 
 	private void newServer() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -309,4 +318,48 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		this.selectedButton = Integer.MAX_VALUE;
 	}
 	
+	/**
+	 * A class to constantly redraw the canvas while the main menu is running
+	 * before a controller is created
+	 * @author Carl
+	 *
+	 */
+	private class RedrawThread extends Thread {
+		public boolean isRunning = true;
+		
+		@Override
+		public void run(){
+			//convert time to seconds
+			double nextTime = (double)System.nanoTime()/1000000000.0;
+			
+			while(isRunning){
+				//convert time to seconds
+				double currentTime = (double)System.nanoTime()/1000000000.0;
+				
+				if(currentTime >= nextTime){
+					nextTime += Controller.FRAME_RATE;
+					if(currentTime < nextTime){
+						canvas.repaint();
+					}
+				}
+				else{
+					// calculate the time to sleep
+					int sleepTime = (int) (1000.0 * (nextTime - currentTime));
+					// sanity check
+					if (sleepTime > 0) {
+						// sleep until the next update
+						try {
+							Thread.sleep(sleepTime);
+						} catch (InterruptedException e) {
+							// do nothing
+						}
+					}
+				}
+			}
+		}
+		
+		public void stopRunning(){
+			isRunning = false;
+		}
+	}
 }

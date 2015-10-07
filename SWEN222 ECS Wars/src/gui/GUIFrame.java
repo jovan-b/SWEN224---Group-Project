@@ -10,6 +10,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.*;
 
 import gameWorld.Controller;
+import gameWorld.characters.DavePlayer;
 import gameWorld.characters.Player;
 
 /**
@@ -33,12 +34,12 @@ public class GUIFrame extends JFrame {
 	 * @param controller The game controller for this frame
 	 * @param player The current client's player
 	 */
-	public GUIFrame(Controller controller, Player player, KeyListener key, MouseListener mouse, MouseMotionListener mouse2){
+	public GUIFrame(){
 		super("ECS Wars"); // set window title
+
 		// initialise the canvas
-		canvas = new GUICanvas(this, controller, player);
-		canvas.addMouseListener(mouse);
-		canvas.addMouseMotionListener(mouse2);
+		canvas = new GUICanvas(this);
+		
 		// set up layout
 		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
 		setLayout(new BorderLayout());
@@ -48,7 +49,6 @@ public class GUIFrame extends JFrame {
 		pack();
 		setResizable(true);
 		setVisible(true);
-		addKeyListener(key);
 	}
 	
 	public GUICanvas getCanvas(){
@@ -61,5 +61,8 @@ public class GUIFrame extends JFrame {
 	public void draw(){
 		canvas.repaint();
 	}
-
+	
+	public static void main(String[] args){
+		new GUIFrame();
+	}
 }

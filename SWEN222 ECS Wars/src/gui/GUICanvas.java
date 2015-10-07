@@ -75,25 +75,43 @@ public class GUICanvas extends JComponent{
 	 * @param frame The frame containing this canvas
 	 * @param player The current client's player.
 	 */
-	public GUICanvas(GUIFrame frame, Controller controller, Player player){
+	public GUICanvas(GUIFrame frame){
 		this.frame = frame;
-		this.player = player;
 		this.compass = new Compass();
 		this.toolTip = null;
-		this.controller = controller;
-		
-		this.player.setCompass(compass);
-		
+				
 		this.torchLight = new Image[4];
 		
 		loadImages();
 		
-		this.mainMenu = new MainMenu(this, controller);
-		setMainMenu(true);
+		this.mainMenu = new MainMenu(this);
+		this.setMainMenu(true);
 		
 		this.escMenu = new EscMenu(this, controller);
 	}
-
+	
+	/**
+	 * Starts a game with the given controller
+	 * @param controller the game controller
+	 * @param uid the id of the player who is using this canvas
+	 */
+	public void startGame(Controller controller, int uid){
+		this.controller = controller;
+		controller.setGUI(frame);
+		
+		this.player = controller.getPlayer(uid);
+		this.player.setCompass(compass);
+		this.player.setCanvas(this);
+		
+		this.addMouseListener(controller);
+		this.addMouseMotionListener(controller);
+		frame.addKeyListener(controller);
+		
+		//TODO: Set player & update compass
+		this.setMainMenu(false);
+		controller.start();
+	}
+	
 
 	/**
 	 * Parses and stores all images used in the UI.
@@ -440,11 +458,11 @@ public class GUICanvas extends JComponent{
 	public void setMainMenu(boolean isMainMenu) {
 		this.mainMenuView = isMainMenu;
 		if(isMainMenu){
-			addMouseListener(mainMenu);
-			addMouseMotionListener(mainMenu);
+			this.addMouseListener(mainMenu);
+			this.addMouseMotionListener(mainMenu);
 		} else {
-			removeMouseListener(mainMenu);
-			removeMouseMotionListener(mainMenu);
+			this.removeMouseListener(mainMenu);
+			this.removeMouseMotionListener(mainMenu);
 		}
 	}
 
@@ -484,4 +502,5 @@ public class GUICanvas extends JComponent{
 	public Container getCurrentContainer(){
 		return currentContainer;
 	}
+	
 }
