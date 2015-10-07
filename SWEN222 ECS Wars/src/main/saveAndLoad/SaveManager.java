@@ -178,6 +178,8 @@ public final class SaveManager {
 			player.setAttribute("x", Integer.toString(p.getX()));
 			player.setAttribute("y", Integer.toString(p.getY()));
 			
+			//TODO: Save player Weapon
+			
 			//Write items player currently holds
 			saveInventory(p, player);
 		}

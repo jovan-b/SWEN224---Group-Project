@@ -63,4 +63,9 @@ public abstract class Weapon implements Item {
 		}, delay);
 	}
 	
+	@Override
+	public Item.Type getType(){
+		return Item.Type.Weapon;
+	}
+	
 }

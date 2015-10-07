@@ -23,6 +23,7 @@ public interface Item {
 		PillBottle,
 		Map,
 		Cabinet,
+		Weapon
 		//TODO: Add weapon after implementation
 		
 	}
