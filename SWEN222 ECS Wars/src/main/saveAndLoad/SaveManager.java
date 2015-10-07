@@ -9,6 +9,9 @@ import gameWorld.Controller;
 import gameWorld.Room;
 import gameWorld.characters.*;
 import gameWorld.characters.nonplayer.NonPlayer;
+import gameWorld.gameObjects.Floor;
+import gameWorld.gameObjects.Item;
+import gameWorld.gameObjects.containers.Container;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -40,6 +43,7 @@ import org.xml.sax.SAXException;
  */
 public final class SaveManager {
 	public static String SAVE_DIR = "";
+	private static Document doc;
 	
 	private SaveManager(){
 		//prevent instantiation
@@ -54,13 +58,13 @@ public final class SaveManager {
 		try {
 			//Create the xml document
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = builder.newDocument();
+			doc = builder.newDocument();
 			
 			//Create root element
 			Element root = doc.createElement("Controller");
 			doc.appendChild(root);
 			
-			saveRooms(controller, doc, root);
+			saveRooms(controller, root);
 			
 			//Save the file to disk
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -75,32 +79,112 @@ public final class SaveManager {
 		}
 	}
 
-	private static void saveRooms(Controller controller, Document doc, Element root) {
+	private static void saveRooms(Controller controller, Element root) {
 		for(Room r : controller.getRooms()){
 			Element room = doc.createElement("Room");
 			root.appendChild(room);
 			room.setAttribute("id", r.getName());
 			
 			//Write players in room
-			savePlayers(room, r, doc);
+			savePlayers(room, r);
+			saveRoomContents(room, r);
 		}
 	}
 
-	private static void savePlayers(Element room, Room r, Document doc) {
+	/**
+	 * Save dynamic items in the room
+	 * All pick up items saved as a "Item" tag inside the room tag
+	 * All container items saved as a "Container" tag inside the room tag
+	 * 		"Container" tags may have an "Item" tag as a child
+	 * 
+	 * @param room
+	 * @param r
+	 */
+	private static void saveRoomContents(Element room, Room r) {
+		Item[][] contents = r.getContents();
+		
+		for(int i = 0; i < contents.length; i++){
+			for(int j = 0; j < contents[0].length; j++){
+				if(!(contents[i][j] instanceof Floor)) continue;
+				
+				Item item = ((Floor)contents[i][j]).getItem();
+				if(item == null){ //no item in this position 
+					continue;	
+				}
+				else{
+					//write the item to the XML file
+					Element e;
+					
+					if(item instanceof Container){
+						//Save container
+						e = doc.createElement("Container");
+						e.setAttribute("type", item.getType().name());
+						e.setAttribute("x", Integer.toString(i));
+						e.setAttribute("y", Integer.toString(j));
+						room.appendChild(e);
+						
+						//store inner child item(s)
+						saveContainerItems(e, item);
+					}
+					else{//not a container, store the item
+						e = doc.createElement("Item");
+						System.out.println(item.getType());
+						e.setAttribute("type", item.getType().name());
+						e.setAttribute("x", Integer.toString(i));
+						e.setAttribute("y", Integer.toString(j));
+						room.appendChild(e);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Save all the items inside a container
+	 * If no items are present, no XML element is created
+	 * 
+	 * @param e
+	 * @param item
+	 */
+	private static void saveContainerItems(Element e, Item item) {
+		List<Item> items = ((Container)item).getContents();
+		
+		Element innerItem;
+		for(Item i: items){
+			innerItem = doc.createElement("Item");
+			innerItem.setAttribute("type", i.getType().name());
+			e.appendChild(innerItem);
+		}
+	}
+
+	/**
+	 * Write Player objects into XML file
+	 * Player tags should contain:
+	 * 	-inventory tag
+	 * Player should have attributes:
+	 * 	-x, y position
+	 * 	-type(DavePlayer, PondyPlayer, etc)
+	 * 	-weapon
+	 * 	-health
+	 * 
+	 * @param room
+	 * @param r
+	 */
+	private static void savePlayers(Element room, Room r) {
 		for (Player p : r.getPlayers()){
 			Element player = doc.createElement("Player");
 			room.appendChild(player);
 			
-			player.setAttribute("type", p.getType().toString());
+			player.setAttribute("type", p.getType().name());
 			player.setAttribute("x", Integer.toString(p.getX()));
 			player.setAttribute("y", Integer.toString(p.getY()));
 			
 			//Write items player currently holds
-			writeInventory(p, player, doc);
+			saveInventory(p, player);
 		}
 	}
 	
-	private static void writeInventory(Player p, Element player, Document doc){
+	private static void saveInventory(Player p, Element player){
 		//initialise inventory, players only have one
 		Element inventory = doc.createElement("Inventory");
 		player.appendChild(inventory);
