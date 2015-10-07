@@ -128,7 +128,6 @@ public final class SaveManager {
 					}
 					else{//not a container, store the item
 						e = doc.createElement("Item");
-						System.out.println(item.getType());
 						e.setAttribute("type", item.getType().name());
 						e.setAttribute("x", Integer.toString(i));
 						e.setAttribute("y", Integer.toString(j));

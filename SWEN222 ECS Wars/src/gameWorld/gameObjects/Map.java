@@ -88,4 +88,9 @@ public class Map implements Item {
 		return mapOpen;
 	}
 
+	@Override
+	public Type getType() {
+		return Type.Map;
+	}
+
 }

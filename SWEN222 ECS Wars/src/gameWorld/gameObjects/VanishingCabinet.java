@@ -155,4 +155,9 @@ public class VanishingCabinet implements Item {
 		return description;
 	}
 
+	@Override
+	public Type getType() {
+		return null;
+	}
+
 }
