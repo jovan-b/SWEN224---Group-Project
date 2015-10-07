@@ -12,6 +12,7 @@ import gameWorld.gameObjects.Floor;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.Photocopier;
 import gameWorld.gameObjects.Pillar;
+import gameWorld.gameObjects.VanishingCabinet;
 import gameWorld.gameObjects.Wall;
 import gameWorld.gameObjects.containers.Cabinet;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
@@ -153,6 +154,10 @@ public class Room {
 						ctrl.addItemSpawner(cR);
 					}
 					return cR;
+		case "vF" : return new VanishingCabinet('F');
+		case "vB" : return new VanishingCabinet('B');
+		case "vL" : return new VanishingCabinet('L');
+		case "vR" : return new VanishingCabinet('R');
 		default: return new Floor(); // no match, safely return a floor
 		}
 	}
