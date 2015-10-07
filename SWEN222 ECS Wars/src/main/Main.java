@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import gameWorld.Controller;
+import gameWorld.SinglePlayerController;
 import network.ClientConnection;
 import network.ServerHandler;
 
@@ -147,7 +148,7 @@ public class Main {
 	 * Set up a single player game
 	 */
 	public static void singlePlayer() {
-		new Controller();
+		new SinglePlayerController();
 	}
 
 	/**

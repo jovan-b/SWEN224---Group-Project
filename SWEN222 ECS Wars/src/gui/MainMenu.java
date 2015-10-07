@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import gameWorld.Controller;
+import gameWorld.SinglePlayerController;
 import main.saveAndLoad.LoadManager;
 import main.saveAndLoad.SaveManager;
 
@@ -61,7 +62,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		redraw.start();
 		
 		//Preload the controller
-		this.controller = new Controller();
+		this.controller = new SinglePlayerController();
 	}
 
 	/**

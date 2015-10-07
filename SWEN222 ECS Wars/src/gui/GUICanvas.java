@@ -109,7 +109,7 @@ public class GUICanvas extends JComponent{
 		
 		//TODO: Set player & update compass
 		this.setMainMenu(false);
-		controller.start();
+		controller.startGame();
 	}
 	
 

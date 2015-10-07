@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.BitSet;
 
 import gameWorld.Controller;
+import gameWorld.SinglePlayerController;
 import gameWorld.characters.Player;
 
 /**
@@ -50,7 +51,8 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 			uid = input.readInt();
 
 			//Keep running the game until the player disconnects or loses connection to the server
-			controller = new Controller(this, numberOfPlayers, uid);
+			//controller = new Controller(this, numberOfPlayers, uid);
+			controller = new SinglePlayerController();
 
 			//While the game is running, take incoming updates of other clients
 			while(true){
