@@ -21,8 +21,10 @@ public interface Item {
 		Pouch,
 		MedicineBottle,
 		PillBottle,
-		Map
+		Map,
+		Cabinet,
 		//TODO: Add weapon after implementation
+		
 	}
 	
 	/**
@@ -80,4 +82,12 @@ public interface Item {
 	 * @return A brief description of this object, or null if it is not interactive.
 	 */
 	public String getDescription();
+	
+	/**
+	 * Returns type of items which can be picked up in rooms
+	 * If cannot be picked up, return null
+	 * 
+	 * @return
+	 */
+	public abstract Type getType();
 }

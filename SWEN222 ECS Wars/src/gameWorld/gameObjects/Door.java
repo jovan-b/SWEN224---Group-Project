@@ -6,6 +6,7 @@ import java.awt.Image;
 import gameWorld.Controller;
 import gameWorld.Room;
 import gameWorld.characters.Player;
+import gameWorld.gameObjects.Item.Type;
 import gui.GUICanvas;
 
 /**
@@ -215,6 +216,11 @@ public class Door implements Item {
 
 	@Override
 	public String getDescription() {
+		return null;
+	}
+	
+	@Override
+	public Type getType() {
 		return null;
 	}
 	

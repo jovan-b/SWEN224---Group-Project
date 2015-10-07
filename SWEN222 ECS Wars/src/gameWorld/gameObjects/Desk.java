@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
+import gameWorld.gameObjects.Item.Type;
 import gui.GUICanvas;
 
 /**
@@ -150,5 +151,9 @@ public class Desk implements Item {
 		return null;
 	}
 	
+	@Override
+	public Type getType() {
+		return null;
+	}
 	
 }

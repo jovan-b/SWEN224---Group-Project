@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
+import gameWorld.gameObjects.Item.Type;
 
 public class MedicineBottle extends Sellable implements Item {
 	
@@ -69,6 +70,11 @@ public class MedicineBottle extends Sellable implements Item {
 	@Override
 	public String getDescription() {
 		return description;
+	}
+	
+	@Override
+	public Type getType() {
+		return Type.MedicineBottle;
 	}
 
 }

@@ -169,5 +169,10 @@ public class Cabinet extends Container implements ItemSpawner {
 	public int remainingCapacity() {
 		return super.capacity - contents.size();
 	}
+
+	@Override
+	public Type getType() {
+		return Type.Cabinet;
+	}
 	
 }

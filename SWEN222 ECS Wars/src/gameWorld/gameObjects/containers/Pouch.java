@@ -91,4 +91,9 @@ public class Pouch extends Container implements ItemSpawner {
 		return false;
 	}
 
+	@Override
+	public Type getType() {
+		return Type.Pouch;
+	}
+
 }

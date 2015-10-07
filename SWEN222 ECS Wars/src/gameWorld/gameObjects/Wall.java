@@ -54,4 +54,9 @@ public class Wall implements Item {
 		return null;
 	}
 
+	@Override
+	public Type getType() {
+		return null;
+	}
+
 }

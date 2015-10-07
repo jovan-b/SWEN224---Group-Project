@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
+import gameWorld.gameObjects.Item.Type;
 import gui.GUICanvas;
 
 /**
@@ -178,8 +179,11 @@ public class Photocopier implements Item {
 	public String getDescription() {
 		return description;
 	}
-
-
+	
+	@Override
+	public Type getType() {
+		return null;
+	}
 }
 
 

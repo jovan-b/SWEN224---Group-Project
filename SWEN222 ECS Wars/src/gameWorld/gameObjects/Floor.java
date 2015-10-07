@@ -121,4 +121,9 @@ public class Floor implements Item, ItemSpawner {
 		return 0;
 	}
 
+	@Override
+	public Type getType() {
+		return null;
+	}
+
 }

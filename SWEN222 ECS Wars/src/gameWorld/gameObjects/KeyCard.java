@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
+import gameWorld.gameObjects.Item.Type;
 
 /**
  * A key card that allows the player to open certain in-game doors.
@@ -80,6 +81,11 @@ public class KeyCard implements Item {
 	@Override
 	public String getDescription() {
 		return description;
+	}
+	
+	@Override
+	public Type getType() {
+		return Type.KeyCard;
 	}
 
 }

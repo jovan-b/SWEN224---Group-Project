@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
+import gameWorld.gameObjects.Item.Type;
 
 /**
  * A 1x1 treasure worth points that can be found on floors and in containers.
@@ -83,6 +84,11 @@ public class SmallTreasure implements Item {
 
 	public int getPoints() {
 		return points;
+	}
+	
+	@Override
+	public Type getType() {
+		return Type.SmallTreasure;
 	}
 	
 }
