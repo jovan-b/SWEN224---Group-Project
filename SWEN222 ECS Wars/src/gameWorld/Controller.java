@@ -52,6 +52,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	
 	protected GUIFrame gui;
 	protected List<Player> players;
+
 	protected ClientConnection client;
 	
 	protected ArrayList<Room> rooms;
@@ -167,6 +168,11 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 				//assign time for the next update
 				nextTime += FRAME_RATE;
 				update();
+				// check if game is over
+				if(checkForWinner() != null){
+					gui.getCanvas().toggleWinnerView();
+					return;
+				}
 				if(currentTime < nextTime) gui.draw();
 			}
 			else{
@@ -183,6 +189,20 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 				}
 			}
 		}
+	}
+
+	/**
+	 * Checks if any player has won the game, and if they have,
+	 * return the winning player.
+	 * @return The Player that has won, or null if no player has won.
+	 */
+	private Player checkForWinner() {
+		for(Player p : players){
+			if(p.getPoints() >= PointValues.END_GAME_TARGET){
+				return p;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -411,6 +431,10 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		}
 		
 		return null;
+	}
+	
+	public List<Player> getPlayers() {
+		return players;
 	}
 
 

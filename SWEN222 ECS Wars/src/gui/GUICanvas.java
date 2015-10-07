@@ -468,7 +468,6 @@ public class GUICanvas extends JComponent{
 
 	/**
 	 * Opens or hides the esc menu.
-	 * @param isEscMenu true to show the main menu, false otherwise
 	 */
 	public void toggleEscMenu() {
 		escMenuView = !escMenuView; // toggle boolean
@@ -484,6 +483,14 @@ public class GUICanvas extends JComponent{
 			addMouseListener(controller);
 			addMouseMotionListener(controller);
 		}
+	}
+
+	/**
+	 * Opens or hides the end-game winner view.
+	 */
+	public void toggleWinnerView() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**

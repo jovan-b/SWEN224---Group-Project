@@ -38,4 +38,9 @@ public class PondyPlayer extends Player {
 		return type;
 	}
 
+	@Override
+	public String getName() {
+		return "Pondy";
+	}
+
 }

@@ -135,4 +135,9 @@ public class NonPlayer extends Player {
 	public NonPlayerStrategy getStrategy(){
 		return active;
 	}
+
+	@Override
+	public String getName() {
+		return "Non player";
+	}
 }

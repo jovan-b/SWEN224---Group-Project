@@ -57,7 +57,7 @@ public abstract class Player {
 	protected int maxHealth = HEALTH_MAX;
 
 	protected int health = HEALTH_MAX;
-	protected int points = 5000;
+	protected int points = 32000;
 
 
 	//position describing the centre of a player object
@@ -492,6 +492,8 @@ public abstract class Player {
 	public int getGlobalDir() {
 		return lastDirMoved;
 	}
+	
+	public abstract String getName();
 
 
 	public Image[][] getImages() {return sprites;}

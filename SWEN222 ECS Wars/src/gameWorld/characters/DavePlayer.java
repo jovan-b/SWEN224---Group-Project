@@ -42,4 +42,9 @@ public class DavePlayer extends Player {
 	public Type getType() {
 		return type;
 	}
+
+	@Override
+	public String getName() {
+		return "Dave";
+	}
 }
