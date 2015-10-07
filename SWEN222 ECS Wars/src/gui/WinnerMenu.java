@@ -95,6 +95,12 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 		// draw background
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		// draw title
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("pixelmix", Font.PLAIN, TEXT_SIZE*2));
+		String title = "GAME OVER";
+		int nameWidth = g.getFontMetrics().stringWidth(title);
+		g.drawString(title, canvas.getWidth()/2-nameWidth/2, 50);
 		drawResults(g);
 	}
 
@@ -119,21 +125,30 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 		g.setFont(new Font("pixelmix", Font.PLAIN, TEXT_SIZE));
 		// draw results
 		for(Player p : orderedPlayers){
-			g.drawRect(slotX, slotY, BUTTON_WIDTH, BUTTON_HEIGHT);
-			Player.Type type = p.getType();
-			Image toDraw;
-			switch(type){ //TODO add other player types
-			case DavePlayer : toDraw = daveImages[animState]; break;
-			default : toDraw = daveImages[animState];
-			}
-			int nameWidth = g.getFontMetrics().stringWidth(p.getName());
-			int pointsWidth = g.getFontMetrics().stringWidth(""+p.getPoints());
-			g.drawImage(toDraw, slotX+10, slotY+(BUTTON_HEIGHT/2)-(SPRITE_WIDTH/2), canvas);
-			g.drawString(p.getName(), midX-(nameWidth/2), slotY+TEXT_SIZE+5);
-			g.drawString(""+p.getPoints(), midX-(pointsWidth/2), slotY+TEXT_SIZE*2+10);
+			drawPlayerInfo(g, midX, slotX, slotY, p);
 			slotY += gap;
 		}
 		animate();
+	}
+
+	private void drawPlayerInfo(Graphics g, int midX, int slotX, int slotY, Player p) {
+		// draw border
+		g.drawRect(slotX, slotY, BUTTON_WIDTH, BUTTON_HEIGHT);
+		// determine which player type to draw
+		Player.Type type = p.getType();
+		Image toDraw;
+		switch(type){ //TODO add other player types
+		case DavePlayer : toDraw = daveImages[animState]; break;
+		default : toDraw = daveImages[animState];
+		}
+		// draw player name and points
+		int nameWidth = g.getFontMetrics().stringWidth(p.getName());
+		int pointsWidth = g.getFontMetrics().stringWidth(""+p.getPoints());
+		g.drawString(p.getName(), midX-(nameWidth/2), slotY+TEXT_SIZE+5);
+		g.drawString(""+p.getPoints(), midX-(pointsWidth/2), slotY+TEXT_SIZE*2+10);
+		// draw player images
+		g.drawImage(toDraw, slotX+10, slotY+(BUTTON_HEIGHT/2)-(SPRITE_WIDTH/2), canvas);
+		g.drawImage(toDraw, slotX+BUTTON_WIDTH-SPRITE_WIDTH-10, slotY+(BUTTON_HEIGHT/2)-(SPRITE_WIDTH/2), canvas);
 	}
 	
 	/**
