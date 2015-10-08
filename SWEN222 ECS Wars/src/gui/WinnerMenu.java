@@ -213,6 +213,7 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if(buttonSelected){
+			buttonSelected = false;
 			mainMenu();
 		}
 	}
@@ -221,8 +222,8 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 	 * Return to the main menu
 	 */
 	private void mainMenu() {
-		canvas.setWinnerView(false);
 		canvas.setMainMenu(true);
+		canvas.setWinnerView(false);
 	}
 
 	@Override

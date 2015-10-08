@@ -159,7 +159,6 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 
 		//convert time to seconds
 		double nextTime = (double)System.nanoTime()/1000000000.0;
-		
 		while(isRunning){
 			//convert time to seconds
 			double currentTime = (double)System.nanoTime()/1000000000.0;
@@ -188,6 +187,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 				}
 			}
 		}
+		
 	}
 
 	/**
@@ -487,7 +487,8 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		return charSpawners.get(0);
 	}
 	
-	
-
+	public void setRunning(boolean running){
+		isRunning = running;
+	}
 
 }

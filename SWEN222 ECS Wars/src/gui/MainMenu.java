@@ -44,7 +44,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	private String[] buttonLabels; // the button text
 	private int selectedButton = Integer.MAX_VALUE; // the button currently highlighted
 	
-	private RedrawThread redraw;
+	private static RedrawThread redraw;
 
 	/**
 	 * Constructor for class MainMenu.
@@ -57,8 +57,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		loadFonts();
 		buttonLabels = new String[]{"New Game", "Load Game", "New Server", "Connect", "Quit"};
 		
-		redraw = new RedrawThread();
-		redraw.start();
+		setRedrawLoop(true);
 	}
 
 	/**
@@ -71,6 +70,15 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Resources"+File.separator+"pixelmix.ttf")));
 		} catch (IOException|FontFormatException e) {
 		     System.out.println("Error loading fonts : "+e.getMessage());
+		}
+	}
+	
+	public void setRedrawLoop(boolean looping){
+		if (looping && redraw == null){
+			redraw = new RedrawThread();
+			redraw.start();
+		} else if (!looping && redraw != null){
+			redraw.stopRunning();
 		}
 	}
 
@@ -250,9 +258,9 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	private void newGame() {
 		//controller.initialiseGame();
 		//canvas.setMainMenu(false);
-
+		
+		this.setRedrawLoop(false);
 		canvas.startGame(new SinglePlayerController(), 0);
-		redraw.stopRunning();
 	}
 
 	private void loadGame() {
@@ -268,7 +276,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		}
 		
 		canvas.startGame(new SinglePlayerController(chooser.getSelectedFile()), 0);
-		redraw.stopRunning();
+		this.setRedrawLoop(false);
 		
 	}
 
@@ -329,7 +337,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		public void run(){
 			//convert time to seconds
 			double nextTime = (double)System.nanoTime()/1000000000.0;
-			
 			while(isRunning){
 				//convert time to seconds
 				double currentTime = (double)System.nanoTime()/1000000000.0;
@@ -354,10 +361,15 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 					}
 				}
 			}
+			
+			redraw = null; //last thing is to destroy the parent reference to this object
 		}
 		
 		public void stopRunning(){
 			isRunning = false;
+			//redraw = null;
 		}
 	}
+	
+	
 }

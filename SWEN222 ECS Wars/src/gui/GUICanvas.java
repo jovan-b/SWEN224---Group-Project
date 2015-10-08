@@ -87,14 +87,12 @@ public class GUICanvas extends JComponent{
 		this.compass = new Compass();
 		this.toolTip = null;
 				
-		this.torchLight = new Image[4];
+		torchLight = new Image[4];
 		
 		loadImages();
 		
-		this.mainMenu = new MainMenu(this);
+		mainMenu = new MainMenu(this);
 		this.setMainMenu(true);
-		
-		this.escMenu = new EscMenu(this, controller);
 	}
 	
 	/**
@@ -103,6 +101,10 @@ public class GUICanvas extends JComponent{
 	 * @param uid the id of the player who is using this canvas
 	 */
 	public void startGame(Controller controller, int uid){
+		if (this.controller != null){
+			this.removeController(this.controller);
+		}
+		
 		this.controller = controller;
 		controller.setGUI(frame);
 		
@@ -112,6 +114,9 @@ public class GUICanvas extends JComponent{
 		this.addMouseListener(controller);
 		this.addMouseMotionListener(controller);
 		frame.addKeyListener(controller);
+		
+		this.escMenuView = false;
+		this.escMenu = new EscMenu(this, controller);
 		
 		//TODO: Set player & update compass
 		this.setMainMenu(false);
@@ -467,12 +472,18 @@ public class GUICanvas extends JComponent{
 	 */
 	public void setMainMenu(boolean isMainMenu) {
 		this.mainMenuView = isMainMenu;
+		
 		if(isMainMenu){
+			this.removeController(controller);
 			this.addMouseListener(mainMenu);
 			this.addMouseMotionListener(mainMenu);
+			
+			mainMenu.setRedrawLoop(true);
 		} else {
 			this.removeMouseListener(mainMenu);
 			this.removeMouseMotionListener(mainMenu);
+			
+			mainMenu.setRedrawLoop(false);
 		}
 	}
 
@@ -508,13 +519,15 @@ public class GUICanvas extends JComponent{
 		if(winnerMenuView){
 			removeMouseListener(controller);
 			removeMouseMotionListener(controller);
+			
 			addMouseListener(winnerMenu);
 			addMouseMotionListener(winnerMenu);
 		} else {
 			removeMouseListener(winnerMenu);
 			removeMouseMotionListener(winnerMenu);
-			addMouseListener(controller);
-			addMouseMotionListener(controller);
+		
+//			addMouseListener(controller);
+//			addMouseMotionListener(controller);
 		}
 	}
 
@@ -613,5 +626,30 @@ public class GUICanvas extends JComponent{
 		case "left": return convertFromViewDir(WEST, viewDirection);
 		default: return convertFromViewDir(NORTH, viewDirection);
 		}
+	}
+
+	/**
+	 * Clean up the controller, removing it from this 
+	 * canvas
+	 * @param controller
+	 */
+	public void removeController(Controller controller) {
+		if (controller == null){return;}
+		controller.setRunning(false);
+		
+		this.removeMouseListener(controller);
+		this.removeMouseMotionListener(controller);
+		frame.removeKeyListener(controller);
+		
+		if (this.controller == controller){
+			this.controller = null;
+		}
+	}
+	
+	public void removeEscMenu(EscMenu menu){
+		if(menu == null){return;}
+		
+		this.removeMouseListener(menu);
+		this.removeMouseMotionListener(menu);
 	}
 }
