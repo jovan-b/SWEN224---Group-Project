@@ -1,25 +1,18 @@
 package gameWorld.characters;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-import gameWorld.Controller;
 import gameWorld.PointValues;
 import gameWorld.Room;
-import gameWorld.gameEvents.Event;
-import gameWorld.gameEvents.GameClock;
-import gameWorld.gameEvents.RespawnEvent;
 import gameWorld.gameObjects.Door;
 import gameWorld.gameObjects.Floor;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.Wall;
 import gameWorld.gameObjects.containers.Container;
-import gameWorld.gameObjects.weapons.PaintballGun;
 import gameWorld.gameObjects.weapons.ScatterGun;
 import gameWorld.gameObjects.weapons.Weapon;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
-import gui.Compass;
 import gui.GUICanvas;
 
 /**
@@ -68,7 +61,6 @@ public abstract class Player {
 	private int tempX;
 	private int tempY;
 
-	protected Compass compass;
 	protected int lastDirMoved;
 	protected int animState; // the current animation frame
 	protected int animModifier; // flicks between 1 and -1 to loop animation
@@ -199,22 +191,6 @@ public abstract class Player {
 				animModifier *= -1;
 			}
 		}
-	}
-
-	/**
-	 * Sets the lastDirMoved variable according to the button pressed
-	 * @param dir The directional button pressed
-	 * @return The direction moved
-	 */
-	private int moved(String dir) {
-		switch(dir){
-		case "up": return 0;
-		case "right": return 1;
-		case "down": return 2;
-		case "left": return 3;
-		default: return 0;
-		}
-		//System.out.println("Position: " + this.posX + " " + this.posY);
 	}
 
 	/**
@@ -508,8 +484,6 @@ public abstract class Player {
 	}
 
 	public void setCanvas(GUICanvas canvas){this.canvas = canvas;}
-
-	public void setCompass(Compass c){this.compass = c;}
 
 	public void setScaledImages(Image[][] newImages) {
 		scaledSprites = newImages;

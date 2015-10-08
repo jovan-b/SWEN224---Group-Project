@@ -107,7 +107,6 @@ public class GUICanvas extends JComponent{
 		controller.setGUI(frame);
 		
 		this.player = controller.getPlayer(uid);
-		this.player.setCompass(compass);
 		this.player.setCanvas(this);
 		
 		this.addMouseListener(controller);

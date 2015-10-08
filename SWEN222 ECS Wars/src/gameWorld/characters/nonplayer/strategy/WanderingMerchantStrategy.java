@@ -5,6 +5,7 @@ import java.util.TimerTask;
 
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
+import gameWorld.gameObjects.Floor;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.MedicineBottle;
 import gameWorld.gameObjects.PillBottle;
@@ -81,10 +82,17 @@ public class WanderingMerchantStrategy extends WaitStrategy {
 		}
 		// if player has enough points
 		if(p.getPoints() >= inventoryItem.getCost()){
-			npc.dropItem(0, null);
-			p.removePoints(inventoryItem.getCost());
-		} else {
 			
+			//Check the floor has space
+			Item square = npc.getCurrentRoom().itemAt(npc.getX(), npc.getY());
+			if (square instanceof Floor){
+				if (((Floor) square).getItem() == null){
+					
+					//Drop the item and remove the points from the buying player
+					npc.dropItem(0, null);
+					p.removePoints(inventoryItem.getCost());
+				}
+			}
 		}
 	}
 
