@@ -63,4 +63,9 @@ public class PaintballGun extends Weapon {
 		return description;
 	}
 
+	@Override
+	public WeaponType getWeaponType() {
+		return WeaponType.PaintballGun;
+	}
+
 }

@@ -94,7 +94,7 @@ public class GUICanvas extends JComponent{
 		this.mainMenu = new MainMenu(this);
 		this.setMainMenu(true);
 		
-		this.escMenu = new EscMenu(this, controller);
+		
 	}
 	
 	/**
@@ -115,6 +115,7 @@ public class GUICanvas extends JComponent{
 		
 		//TODO: Set player & update compass
 		this.setMainMenu(false);
+		this.escMenu = new EscMenu(this, controller);
 		controller.startGame();
 	}
 	

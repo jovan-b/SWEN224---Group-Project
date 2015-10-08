@@ -493,5 +493,9 @@ public abstract class Player {
 		speedModifier = modifier;
 		speed = Player.BASE_SPEED+speedModifier;
 	}
+	
+	public Weapon getWeapon(){
+		return currentWeapon;
+	}
 
 }

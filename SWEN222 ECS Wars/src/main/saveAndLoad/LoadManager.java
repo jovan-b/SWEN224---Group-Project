@@ -2,13 +2,15 @@ package main.saveAndLoad;
 
 import gameWorld.Controller;
 import gameWorld.Room;
-import gameWorld.characters.DavePlayer;
-import gameWorld.characters.Player;
-import gameWorld.characters.PondyPlayer;
+import gameWorld.characters.*;
+import gameWorld.gameObjects.*;
+import gameWorld.gameObjects.Item.Type;
+import gameWorld.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,7 +44,7 @@ public class LoadManager {
 	 * @param controller
 	 * @param saveFile
 	 */
-	public static void loadGame(Controller controller, File saveFile){
+	public static void loadGame(File saveFile,Controller controller){
 		try {
 			File file = saveFile;
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -50,57 +52,7 @@ public class LoadManager {
 			
 			doc.getDocumentElement().normalize();
 			
-			//Read rooms
-			NodeList list = doc.getElementsByTagName("Room");
-			
-			ArrayList<Room> rooms = new ArrayList<>();
-			ArrayList<Player> players = new ArrayList<>();
-			
-			for (int i = 0; i < list.getLength(); i++){
-				Node node = (Node) list.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE){
-					Element e = (Element) node;
-					
-					//read players in the room
-					NodeList playerlist = e.getChildNodes();
-					
-					//get the room object from player
-					Room r = controller.getRoom((e.getAttribute("id")));
-					
-					for (int j = 0; j < playerlist.getLength(); j++){
-						Node pnode = (Node) playerlist.item(j);
-						if(pnode.getNodeType() == Node.ELEMENT_NODE){
-							Element pelement = (Element) pnode;	//player element
-							Player p;
-							
-							//create a player object from the node
-							switch(pelement.getAttribute("type")){
-							case("PondyPlayer"):	//PondyPlayer
-								p = new PondyPlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
-										Integer.parseInt(pelement.getAttribute("y")));
-								break;
-							default:	//DavePlayer
-								p = new DavePlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
-										Integer.parseInt(pelement.getAttribute("y")));
-								break;
-							}
-							
-							//add player object to room object
-							r.addPlayer(p);
-							
-							//add player object to list of players
-							players.add(p);
-						}
-					}
-					//add room to list of rooms
-					rooms.add(r);
-				}
-			}
-			
-			
-			//add list of players to the controller
-			controller.setPlayers(players);
-			controller.setCurrentPlayer(players.get(0));
+			loadRoom(controller, doc);
 
 		} catch (ParserConfigurationException | SAXException e) {
 			// TODO Auto-generated catch block
@@ -110,4 +62,150 @@ public class LoadManager {
 			e.printStackTrace();
 		}
 	}
+
+	private static void loadRoom(Controller controller, Document doc) {
+		//Read rooms
+		NodeList list = doc.getElementsByTagName("Room");
+		
+		ArrayList<Room> rooms = new ArrayList<>();
+		ArrayList<Player> players = new ArrayList<>();
+		
+		for (int i = 0; i < list.getLength(); i++){
+			Node node = (Node) list.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE){
+				Element e = (Element) node;
+				
+				//get the room object from player
+				Room r = controller.getRoom((e.getAttribute("id")));
+				
+				//load players into room
+				loadPlayers(controller, r, e, players);
+				
+				//TODO: load items into rooms
+				loadItems(controller, r, e);
+				
+				//add room to list of rooms
+				rooms.add(r);
+			}
+		}
+		
+		
+		//add list of players to the controller
+		controller.setPlayers(players);
+	}
+
+	private static void loadItems(Controller controller, Room r, Element e) {
+		NodeList itemlist = e.getChildNodes();
+		
+		for(int i = 0; i < itemlist.getLength(); i++){
+			Node inode = (Node) itemlist.item(i);
+			if(inode.getNodeType() == Node.ELEMENT_NODE
+					&& inode.getNodeName() == "Item"){
+				Element ielement = (Element) inode;	//item element
+				Item[][] roomContents = r.getContents();	//load room contents to modify
+				
+				switch(Type.valueOf(ielement.getAttribute("type"))){
+				case KeyCard:
+					
+					//load item into room at correct position
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= new KeyCard();
+					break;
+				case SmallTreasure:
+					
+					//load item into room at correct position
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= new SmallTreasure();
+					break;
+				case Torch:
+					
+					//load item into room at correct position
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= new Torch();
+					break;
+				case MedicineBottle:
+					
+					//load item into room at correct position
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= new MedicineBottle();
+					break;
+				case PillBottle: 
+					
+					//load item into room at correct position
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= new PillBottle();
+					break;
+				case Map:
+					
+					//load item into room at correct position
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= new Map();
+					break;
+				//TODO: containers
+				default:	//weapon
+					loadWeapons(controller, r);
+					break;
+				}
+			}
+		}
+	}
+
+	private static void loadPlayers(Controller controller, Room r, Element e, 
+			ArrayList<Player> players) {
+		
+		//read players in the room
+		NodeList playerlist = e.getChildNodes();
+		
+		for (int i = 0; i < playerlist.getLength(); i++){
+			Node pnode = (Node) playerlist.item(i);
+			if(pnode.getNodeType() == Node.ELEMENT_NODE
+					&& pnode.getNodeName() == "Player"){	//is a player node
+				Element pelement = (Element) pnode;	//player element
+				Player p;
+				
+				//create a player object from the node
+				switch(pelement.getAttribute("type")){
+				case("PondyPlayer"):	//PondyPlayer
+					p = new PondyPlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
+							Integer.parseInt(pelement.getAttribute("y")));
+					break;
+				default:	//DavePlayer
+					p = new DavePlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
+							Integer.parseInt(pelement.getAttribute("y")));
+					break;
+				}
+				
+				//TODO: load inventory into player
+				loadInventory(controller, p, pelement);
+				
+				//TODO: load weapon into player
+				loadWeapon(controller, p, pelement);
+				
+				//add player object to room object
+				r.addPlayer(p);
+				
+				//add player object to list of players
+				players.add(p);
+			}
+		}
+	}
+
+	private static void loadWeapon(Controller controller, Player p,
+			Element pelement) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void loadInventory(Controller controller, Player p,
+			Element pelement) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
