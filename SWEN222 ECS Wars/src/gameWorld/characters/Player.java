@@ -63,7 +63,6 @@ public abstract class Player {
 	//position describing the centre of a player object
 	protected int posX;
 	protected int posY;
-	protected int viewDirection;
 	protected int hitBox = 10;
 
 	private int tempX;
@@ -98,7 +97,6 @@ public abstract class Player {
 		this.currentRoom = room;
 		this.posX = posX;
 		this.posY = posY;
-		this.viewDirection = 0;
 		this.lastDirMoved = 2;
 		this.animState = 0;
 		this.animModifier = 1;
@@ -127,7 +125,7 @@ public abstract class Player {
 				x, y);
 
 		//Correct theta based on view direction
-		theta += Math.toRadians(90)*viewDirection;
+		theta += Math.toRadians(90)*canvas.getViewDirection();
 		currentRoom.addProjectile(currentWeapon.fire(this, theta));
 	}
 
@@ -135,11 +133,10 @@ public abstract class Player {
 	 * Update player's position by "speed" amount
 	 * Direction is specified by dir (up, down, left, right)
 	 */
-	public void move(String dir) {
+	public void move(int dir) {
 		animate();
 		// Convert movement direction to global coordinates
-		int moveDir = convertFromViewDir(moved(dir));
-		movePlayer(moveDir);
+		movePlayer(dir);
 	}
 
 	/**
@@ -256,64 +253,6 @@ public abstract class Player {
 			((Door)item).walkThrough(this);
 		}
 		return true;
-	}
-
-	/**
-	 * Utility method to convert a direction relative to the view direction
-	 * back to the direction of the global coordinates
-	 * @param toConvert the input value to convert
-	 * @return the converted direction value
-	 */
-	private int convertFromViewDir(int toConvert) {
-		int temp = toConvert;
-		for (int i = 1; i <= viewDirection; i++){
-			temp++;
-			if (temp > 3){
-				temp = 0;
-			}
-		}
-		return temp;
-	}
-
-	/**
-	 * Utility method to convert a global direction
-	 * to a direction relative to the view
-	 * @param toConvert the input value to convert
-	 * @param viewDirection2 
-	 * @return the converted direction value
-	 */
-	private int convertToViewDir(int toConvert, int viewDir) {
-		int temp = toConvert;
-		for (int i = 1; i <= viewDir; i++){
-			temp--;
-			if (temp < 0){
-				temp = 3;
-			}
-		}
-		return temp;
-	}
-
-
-	/**
-	 * Rotates the player's view clockwise
-	 */
-	public void rotateViewRight() {
-		viewDirection--;
-		if (viewDirection < 0){
-			viewDirection = 3;
-		}
-		compass.rotate(90);
-	}
-
-	/**
-	 * Rotates the player's view anticlockwise
-	 */
-	public void rotateViewLeft() {
-		viewDirection++;
-		if (viewDirection > 3){
-			viewDirection = 0;
-		}
-		compass.rotate(-90);
 	}
 
 	/**
@@ -498,15 +437,13 @@ public abstract class Player {
 
 	public Image[][] getImages() {return sprites;}
 
-	public int getViewDirection() {return viewDirection;}
-
 	/**
 	 * Gets the appropriate image for the given room direction
 	 * @param viewDir The view direction
 	 * @return The sprite image appropriate to player and view direction.
 	 */
 	public Image getImage(int viewDir) {	
-		int spriteDir = convertToViewDir(lastDirMoved, viewDir);
+		int spriteDir = GUICanvas.convertToViewDir(lastDirMoved, viewDir);
 		return scaledSprites[spriteDir][animState];
 	}
 
@@ -515,7 +452,7 @@ public abstract class Player {
 	 * @return The direction the player is facing
 	 */
 	public int getFacing(){
-		return convertToViewDir(lastDirMoved, viewDirection);
+		return GUICanvas.convertToViewDir(lastDirMoved, canvas.getViewDirection());
 	}
 
 	/**
@@ -548,18 +485,6 @@ public abstract class Player {
 		//Prevent the pesky move updates from overwriting the pos change
 		this.tempX = newX;
 		this.tempY = newY;	
-	}
-
-	//TODO: Maybe move all view direction code up to one of the views rather
-	//than the player object?
-	
-	/**
-	 * Change the view direction of the player.
-	 * @param dir The new view direction
-	 */
-	public void setViewDirection(int dir){
-		if (dir < 0 || dir > 3){return;}
-		viewDirection = dir;
 	}
 
 	/**

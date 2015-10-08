@@ -84,7 +84,7 @@ public class NonPlayer extends Player {
 				x, y);
 		
 		//Correct theta based on view direction
-		theta += Math.toRadians(90)*viewDirection;
+		theta += Math.toRadians(90)*canvas.getViewDirection();
 		currentRoom.addProjectile(currentWeapon.fire(this, theta));
 	}
 	

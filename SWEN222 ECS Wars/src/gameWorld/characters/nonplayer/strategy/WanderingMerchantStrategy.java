@@ -55,7 +55,7 @@ public class WanderingMerchantStrategy extends WaitStrategy {
 				direction = (int)(Math.random()*4);
 			}
 			
-			npc.move(directionToString(direction));
+			npc.move(direction);
 		}
 	}
 	
@@ -71,22 +71,6 @@ public class WanderingMerchantStrategy extends WaitStrategy {
 			}
 			
 			}, (int)(Math.random()*max_delay));
-		}
-	}
-	
-	/**
-	 * Converts the direction int to a string
-	 * @param dir
-	 * @return
-	 */
-	private String directionToString(int dir){
-		//TODO: Put this somewhere else. It doesn't belong here.
-		switch(dir){
-		case 0: return "up";
-		case 1: return "right";
-		case 2: return "down";
-		case 3: return "left";
-		default: return "up";
 		}
 	}
 	

@@ -7,6 +7,7 @@ import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.containers.Container;
+import gui.GUICanvas;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -17,6 +18,8 @@ import java.util.BitSet;
 
 
 import main.saveAndLoad.LoadManager;
+import java.util.BitSet;
+
 import main.saveAndLoad.SaveManager;
 
 public class SinglePlayerController extends Controller {
@@ -85,19 +88,19 @@ public class SinglePlayerController extends Controller {
 	private void dealWithInput() {
 		// Player Movement
 		if(isKeyPressed(KeyEvent.VK_RIGHT) || isKeyPressed(KeyEvent.VK_D)){
-			player.move("right");
+			player.move(GUICanvas.convertStringToDir("right", gui.getCanvas().getViewDirection()));
 			gui.getCanvas().setCurrentContainer(null);
 		}
 		if(isKeyPressed(KeyEvent.VK_LEFT) || isKeyPressed(KeyEvent.VK_A)){
-			player.move("left");
+			player.move(GUICanvas.convertStringToDir("left", gui.getCanvas().getViewDirection()));
 			gui.getCanvas().setCurrentContainer(null);
 		}
 		if(isKeyPressed(KeyEvent.VK_UP) || isKeyPressed(KeyEvent.VK_W)){
-			player.move("up");
+			player.move(GUICanvas.convertStringToDir("up", gui.getCanvas().getViewDirection()));
 			gui.getCanvas().setCurrentContainer(null);
 		}
 		if(isKeyPressed(KeyEvent.VK_DOWN) || isKeyPressed(KeyEvent.VK_S)){
-			player.move("down");
+			player.move(GUICanvas.convertStringToDir("down", gui.getCanvas().getViewDirection()));
 			gui.getCanvas().setCurrentContainer(null);
 		}
 		if(isKeyPressed(KeyEvent.VK_SHIFT)){
@@ -136,10 +139,10 @@ public class SinglePlayerController extends Controller {
 	public void keyReleased(KeyEvent e) {
 		// View Rotation
 		if(e.getKeyCode() == KeyEvent.VK_Q){
-			player.rotateViewLeft();
+			gui.getCanvas().rotateViewLeft();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_E){
-			player.rotateViewRight();
+			gui.getCanvas().rotateViewRight();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_1){
 			player.inventoryItemAt(0).use(player, this);
@@ -205,12 +208,13 @@ public class SinglePlayerController extends Controller {
 
 	private void rightClickInteract(int x, int y) {
 		int viewScale = gui.getCanvas().getViewScale();
+		int viewDirection = gui.getCanvas().getViewDirection();
 		Container container = gui.getCanvas().getCurrentContainer();
 		int xMid = gui.getCanvas().getWidth()/2;
 		int yMid = gui.getCanvas().getHeight()/2;
 		// check if mousing over merchant NPC
 		Room currentRoom = player.getCurrentRoom();
-		NonPlayer npc = currentRoom.wanderingNpcAtMouse(x, y, player, viewScale);
+		NonPlayer npc = currentRoom.wanderingNpcAtMouse(x, y, player, viewScale, viewDirection);
 		if(npc != null){
 			WanderingMerchantStrategy strat = (WanderingMerchantStrategy) npc.getStrategy();
 			strat.interact(player, npc);
@@ -222,7 +226,7 @@ public class SinglePlayerController extends Controller {
 				player.dropItem(index, container);
 			} else {
 				Room room = player.getCurrentRoom();
-				Item item = room.itemAtMouse(x, y, viewScale, player);
+				Item item = room.itemAtMouse(x, y, viewScale, player, viewDirection);
 				item.use(player, this);
 			}
 		} else if ((yMid-(24*2*viewScale) < y && y < yMid-(24*viewScale)) && container != null){
@@ -232,12 +236,12 @@ public class SinglePlayerController extends Controller {
 				container.pickUpItem(index, player);
 			} else {
 				Room room = player.getCurrentRoom();
-				Item item = room.itemAtMouse(x, y, viewScale, player);
+				Item item = room.itemAtMouse(x, y, viewScale, player, viewDirection);
 				item.use(player, this);
 			}
 		} else {
 			Room room = player.getCurrentRoom();
-			Item item = room.itemAtMouse(x, y, viewScale, player);
+			Item item = room.itemAtMouse(x, y, viewScale, player, viewDirection);
 			item.use(player, this);
 		}
 	}
@@ -270,6 +274,7 @@ public class SinglePlayerController extends Controller {
 	 */
 	private void checkTooltip() {
 		int viewScale = gui.getCanvas().getViewScale();
+		int viewDirection = gui.getCanvas().getViewDirection();
 		int x = mouseX;
 		int y = mouseY;
 		int xMid = gui.getCanvas().getWidth()/2;
@@ -278,7 +283,7 @@ public class SinglePlayerController extends Controller {
 		String desc = "";
 		// check if mousing over merchant NPC
 		Room currentRoom = player.getCurrentRoom();
-		NonPlayer npc = currentRoom.wanderingNpcAtMouse(x, y, player, viewScale);
+		NonPlayer npc = currentRoom.wanderingNpcAtMouse(x, y, player, viewScale, viewDirection);
 		if(npc != null){
 			WanderingMerchantStrategy strat = (WanderingMerchantStrategy) npc.getStrategy();
 			desc = strat.getDescription();
@@ -291,7 +296,7 @@ public class SinglePlayerController extends Controller {
 				desc = player.inventoryItemAt(index).getDescription();
 			} else {
 				// not hovering over inventory - check for items on floor
-				desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
+				desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player, viewDirection).getDescription();
 			}
 		// or if player is mousing over another inventory
 		} else if ((yMid-(24*2*viewScale) < y && y < yMid-(24*viewScale)) && container != null){
@@ -304,12 +309,12 @@ public class SinglePlayerController extends Controller {
 				}
 			} else {
 				// not hovering over inventory - check for items on floor
-				desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
+				desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player, viewDirection).getDescription();
 			}
 		
 		} else {
 			// not hovering over inventory - check for items on floor
-			desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player).getDescription();
+			desc = player.getCurrentRoom().itemAtMouse(x, y, viewScale, player, viewDirection).getDescription();
 		}
 		gui.getCanvas().setToolTip(desc, x, y);
 	}

@@ -219,9 +219,9 @@ public class Room {
 	 * @param c The canvas on which to draw the room.
 	 * @param player The current player.
 	 */
-	public void draw(Graphics g, GUICanvas c, Player player){
+	public void draw(Graphics g, GUICanvas c, Player player, int viewDirection){
 		int viewScale = c.getViewScale();
-		int viewDirection = player.getViewDirection(); 
+		//int viewDirection = player.getViewDirection(); 
 		int playerX = player.getX(); 
 		int playerY = player.getY(); 
 		
@@ -664,10 +664,10 @@ public class Room {
 	 * @param p the current player
 	 * @return the item
 	 */
-	public Item itemAtMouse(int x, int y, int viewScale, Player p){
+	public Item itemAtMouse(int x, int y, int viewScale, Player p, int viewDirection){
 		int newX;
 		int newY;
-		switch(p.getViewDirection()){
+		switch(viewDirection){
 		case 1:
 			newX = (int)((double)((yOrigin+(width*viewScale))-y)/(double)viewScale);
 			newY = (int)((double)(x-xOrigin)/(double)viewScale);
@@ -700,11 +700,11 @@ public class Room {
 	 * @param viewScale The current view scaled
 	 * @return The wandering NPC at the mouse, or null if there is none
 	 */
-	public NonPlayer wanderingNpcAtMouse(int x, int y, Player p, int viewScale){
+	public NonPlayer wanderingNpcAtMouse(int x, int y, Player p, int viewScale, int viewDirection){
 		int newX;
 		int newY;
 		// determine the scaled x and y
-		switch(p.getViewDirection()){
+		switch(viewDirection){
 		case 1:
 			newX = (int)((double)((yOrigin+(width*viewScale))-y)/(double)viewScale);
 			newY = (int)((double)(x-xOrigin)/(double)viewScale);
