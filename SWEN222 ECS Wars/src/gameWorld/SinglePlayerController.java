@@ -10,10 +10,13 @@ import gameWorld.gameObjects.containers.Container;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-
+import java.io.File;
 import java.util.BitSet;
 
 
+
+
+import main.saveAndLoad.LoadManager;
 import main.saveAndLoad.SaveManager;
 
 public class SinglePlayerController extends Controller {
@@ -34,6 +37,11 @@ public class SinglePlayerController extends Controller {
 		initialise();		
 	}
 	
+	public SinglePlayerController(File selectedFile) {
+		super(0);
+		LoadManager.loadGame(selectedFile, this);
+	}
+
 	/**
 	 * Initialise the pre-game fields of this class
 	 */
