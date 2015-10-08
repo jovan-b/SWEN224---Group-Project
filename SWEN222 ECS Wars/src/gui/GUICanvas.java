@@ -30,6 +30,10 @@ import javax.swing.JComponent;
  */
 @SuppressWarnings("serial")
 public class GUICanvas extends JComponent{
+	public static final int NORTH = 0;
+	public static final int EAST = 1;
+	public static final int SOUTH = 2;
+	public static final int WEST = 3;
 	
 	private GUIFrame frame; // the frame containing this
 	private Controller controller;
@@ -43,6 +47,7 @@ public class GUICanvas extends JComponent{
 	private int toolTipY; //
 	
 	private int viewScale = 1; // view drawing scale
+	private int viewDirection = 0; //The screen view direction
 	
 	private boolean mainMenuView; // true if we are looking at main menu
 	private MainMenu mainMenu; // the main menu to display
@@ -168,7 +173,7 @@ public class GUICanvas extends JComponent{
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		Room r = player.getCurrentRoom();
-		r.draw(g, this, player);
+		r.draw(g, this, player, viewDirection);
 		drawHUD(g, r);
 		
 		if(escMenuView){
@@ -530,5 +535,84 @@ public class GUICanvas extends JComponent{
 	public Container getCurrentContainer(){
 		return currentContainer;
 	}
+
+	public int getViewDirection() {
+		return viewDirection;
+	}
 	
+	/**
+	 * Change the view direction.
+	 * @param dir The new view direction
+	 */
+	public void setViewDirection(int dir){
+		if (dir < 0 || dir > 3){return;}
+		viewDirection = dir;
+	}
+	
+	/**
+	 * Rotates the player's view clockwise
+	 */
+	public void rotateViewRight() {
+		viewDirection--;
+		if (viewDirection < 0){
+			viewDirection = 3;
+		}
+		compass.rotate(90);
+	}
+
+	/**
+	 * Rotates the player's view anticlockwise
+	 */
+	public void rotateViewLeft() {
+		viewDirection++;
+		if (viewDirection > 3){
+			viewDirection = 0;
+		}
+		compass.rotate(-90);
+	}
+	
+	/**
+	 * Utility method to convert a direction relative to the view direction
+	 * back to the direction of the global coordinates
+	 * @param toConvert the input value to convert
+	 * @return the converted direction value
+	 */
+	public static int convertFromViewDir(int toConvert, int viewDirection) {
+		int temp = toConvert;
+		for (int i = 1; i <= viewDirection; i++){
+			temp++;
+			if (temp > 3){
+				temp = 0;
+			}
+		}
+		return temp;
+	}
+	
+	/**
+	 * Utility method to convert a global direction
+	 * to a direction relative to the view
+	 * @param toConvert the input value to convert
+	 * @param viewDirection2 
+	 * @return the converted direction value
+	 */
+	public static int convertToViewDir(int toConvert, int viewDir) {
+		int temp = toConvert;
+		for (int i = 1; i <= viewDir; i++){
+			temp--;
+			if (temp < NORTH){
+				temp = WEST;
+			}
+		}
+		return temp;
+	}
+	
+	public static int convertStringToDir(String dir, int viewDirection){
+		switch(dir){
+		case "up": return convertFromViewDir(NORTH, viewDirection);
+		case "right": return convertFromViewDir(EAST, viewDirection);
+		case "down": return convertFromViewDir(SOUTH, viewDirection);
+		case "left": return convertFromViewDir(WEST, viewDirection);
+		default: return convertFromViewDir(NORTH, viewDirection);
+		}
+	}
 }

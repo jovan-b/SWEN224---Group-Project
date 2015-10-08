@@ -14,6 +14,8 @@ import java.util.BitSet;
 import gameWorld.Controller;
 import gameWorld.SinglePlayerController;
 import gameWorld.characters.Player;
+import gui.GUICanvas;
+import gui.GUIFrame;
 
 /**
  * The client connection handles the user input and writes it to
@@ -96,35 +98,37 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 	public void dealWithInput() {
 		try{
 			boolean posChanged = false;
+			GUIFrame gui = controller.getGUI();
+			Player player = controller.getPlayer(uid);
 			// Player Movement
 			if(isKeyPressed(KeyEvent.VK_RIGHT) || isKeyPressed(KeyEvent.VK_D)){
-				controller.getPlayer(uid).move("right");
+				player.move(GUICanvas.convertStringToDir("right", gui.getCanvas().getViewDirection()));
 				posChanged = true;
 			}
 			if(isKeyPressed(KeyEvent.VK_LEFT) || isKeyPressed(KeyEvent.VK_A)){
-				controller.getPlayer(uid).move("left");
+				player.move(GUICanvas.convertStringToDir("left", gui.getCanvas().getViewDirection()));
 				posChanged = true;
 			}
 			if(isKeyPressed(KeyEvent.VK_UP) || isKeyPressed(KeyEvent.VK_W)){
-				controller.getPlayer(uid).move("up");
+				player.move(GUICanvas.convertStringToDir("up", gui.getCanvas().getViewDirection()));
 				posChanged = true;
 			}
 			if(isKeyPressed(KeyEvent.VK_DOWN) || isKeyPressed(KeyEvent.VK_S)){
-				controller.getPlayer(uid).move("down");
+				player.move(GUICanvas.convertStringToDir("down", gui.getCanvas().getViewDirection()));
 				posChanged = true;
 			}
 			if(isKeyPressed(KeyEvent.VK_SHIFT)){
-				controller.getPlayer(uid).setSpeedModifier(2);
+				player.setSpeedModifier(2);
 			} else {
-				controller.getPlayer(uid).setSpeedModifier(1);
+				player.setSpeedModifier(1);
 			}
 	//		if(isLeftMousePressed()){
 	//			player.shoot(mouseLocation[0], mouseLocation[1]);
 	//		}
 
 			if(posChanged){
-				int x = controller.getPlayer(uid).getX();
-				int y = controller.getPlayer(uid).getY();
+				int x = player.getX();
+				int y = player.getY();
 				output.writeInt(1);
 				output.writeInt(x);
 				output.writeInt(y);
@@ -144,10 +148,12 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_Q){
-			controller.getPlayer(uid).rotateViewLeft();
+			controller.getGUI().getCanvas().rotateViewLeft();
+			//controller.getPlayer(uid).rotateViewLeft();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_E){
-			controller.getPlayer(uid).rotateViewRight();
+			controller.getGUI().getCanvas().rotateViewRight();
+			//controller.getPlayer(uid).rotateViewRight();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_1){
 			controller.getPlayer(uid).inventoryItemAt(0).use(controller.getPlayer(uid), controller);
