@@ -26,17 +26,20 @@ import gameWorld.characters.Player;
  *
  */
 public class WinnerMenu implements MouseListener, MouseMotionListener{
-	private static final int BUTTON_WIDTH = 400;
-	private static final int BUTTON_HEIGHT = 50;
-	private static final int BUTTON_TOP_DIFF = BUTTON_HEIGHT*3;
-	private static final int BUTTON_LEFT_DIFF = BUTTON_WIDTH/2;
+	private static final int SLOT_WIDTH = 400;
+	private static final int SLOT_HEIGHT = 50;
+	private static final int SLOT_TOP_DIFF = SLOT_HEIGHT*3;
+	private static final int SLOT_LEFT_DIFF = SLOT_WIDTH/2;
+	private static final int BUTTON_WIDTH = 200;
+	private static final int BUTTON_HEIGHT = 20;
+	private static final int BUTTON_BOT_DIFF = BUTTON_HEIGHT*2;
 	private static final int SPRITE_WIDTH = 32;
-	private static final int TEXT_SIZE = BUTTON_HEIGHT/2-10;
+	private static final int TEXT_SIZE = SLOT_HEIGHT/2-10;
 
 	private GUICanvas canvas;
 	private Controller controller;
 	private Player[] orderedPlayers;
-	private int selectedButton = Integer.MAX_VALUE;
+	private boolean buttonSelected = false;
 	
 	private Image[] daveImages;
 	private Image[] pondyImages;
@@ -102,6 +105,32 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 		int nameWidth = g.getFontMetrics().stringWidth(title);
 		g.drawString(title, canvas.getWidth()/2-nameWidth/2, 50);
 		drawResults(g);
+		drawButton(g);
+	}
+
+	/**
+	 * Draws the button that returns user to main menu.
+	 * @param g The graphics object with which to draw
+	 */
+	private void drawButton(Graphics g) {
+		// calculate canvas centre
+		int midX = canvas.getWidth()/2;
+		int midY = canvas.getHeight()/2;
+		int buttonX = midX - BUTTON_WIDTH/2;
+		int buttonY = canvas.getHeight() - BUTTON_BOT_DIFF;
+		g.setFont(new Font("pixelmix", Font.PLAIN, TEXT_SIZE));
+		// edit graphics settings
+		Graphics2D g2 = ((Graphics2D)g);
+		g2.setStroke(new BasicStroke(1));
+		g.setColor(Color.WHITE);
+		String buttonText = "Main Menu";
+		int textWidth = g.getFontMetrics().stringWidth(buttonText);
+		g.drawRect(buttonX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT);
+		g.drawString(buttonText, buttonX+(BUTTON_WIDTH/2)-(textWidth/2), buttonY+(BUTTON_HEIGHT/2)+(TEXT_SIZE/2));
+		if(buttonSelected){
+			g.setColor(new Color(255, 255, 255, 128));
+			g.fillRect(buttonX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT);
+		}
 	}
 
 	/**
@@ -114,10 +143,10 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 		int midX = canvas.getWidth()/2;
 		int midY = canvas.getHeight()/2;
 		// set up positions
-		int gap = 20 + BUTTON_HEIGHT;
-		int slotX = midX - BUTTON_LEFT_DIFF;
+		int gap = 20 + SLOT_HEIGHT;
+		int slotX = midX - SLOT_LEFT_DIFF;
 		int nameX = slotX + SPRITE_WIDTH;
-		int slotY = midY - BUTTON_TOP_DIFF;
+		int slotY = midY - SLOT_TOP_DIFF;
 		// edit graphics settings
 		Graphics2D g2 = ((Graphics2D)g);
 		g2.setStroke(new BasicStroke(2));
@@ -133,7 +162,7 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 
 	private void drawPlayerInfo(Graphics g, int midX, int slotX, int slotY, Player p) {
 		// draw border
-		g.drawRect(slotX, slotY, BUTTON_WIDTH, BUTTON_HEIGHT);
+		g.drawRect(slotX, slotY, SLOT_WIDTH, SLOT_HEIGHT);
 		// determine which player type to draw
 		Player.Type type = p.getType();
 		Image toDraw;
@@ -147,8 +176,8 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 		g.drawString(p.getName(), midX-(nameWidth/2), slotY+TEXT_SIZE+5);
 		g.drawString(""+p.getPoints(), midX-(pointsWidth/2), slotY+TEXT_SIZE*2+10);
 		// draw player images
-		g.drawImage(toDraw, slotX+10, slotY+(BUTTON_HEIGHT/2)-(SPRITE_WIDTH/2), canvas);
-		g.drawImage(toDraw, slotX+BUTTON_WIDTH-SPRITE_WIDTH-10, slotY+(BUTTON_HEIGHT/2)-(SPRITE_WIDTH/2), canvas);
+		g.drawImage(toDraw, slotX+10, slotY+(SLOT_HEIGHT/2)-(SPRITE_WIDTH/2), canvas);
+		g.drawImage(toDraw, slotX+SLOT_WIDTH-SPRITE_WIDTH-10, slotY+(SLOT_HEIGHT/2)-(SPRITE_WIDTH/2), canvas);
 	}
 	
 	/**
@@ -183,18 +212,9 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// calculate positional values
-		int midX = canvas.getWidth()/2;
-		int midY = canvas.getHeight()/2;
-		int x = e.getX();
-		int y = e.getY();
-		int buttonX = midX - BUTTON_LEFT_DIFF;
-		int buttonY = midY - BUTTON_TOP_DIFF;
-		int gap = 20 + BUTTON_HEIGHT;
-
-		Graphics g = canvas.getGraphics();
-
-		
+		if(buttonSelected){
+			mainMenu();
+		}
 	}
 
 	/**
@@ -207,30 +227,24 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// calculate canvas centre
-		int midX = canvas.getWidth()/2;
-		int midY = canvas.getHeight()/2;
 		int x = e.getX();
 		int y = e.getY();
-		int buttonY = midY - BUTTON_TOP_DIFF;
-		int gap = 20 + BUTTON_HEIGHT;
-		int buttonLeft = midX - BUTTON_LEFT_DIFF;
-		Graphics g = canvas.getGraphics();
+		// calculate canvas centre
+		int midX = canvas.getWidth()/2;
+		int buttonY = canvas.getHeight() - BUTTON_BOT_DIFF;
+		int buttonX = midX - BUTTON_WIDTH/2;
 
 		// check if x is within button bounds
-		if(buttonLeft <= x && x < buttonLeft+BUTTON_WIDTH){
+		if(buttonX <= x && x < buttonX + BUTTON_WIDTH){
 			// check which y it is on
-			for(int i=0; i<orderedPlayers.length; i++){
-				if(buttonY <= y && y < buttonY + BUTTON_HEIGHT){
-					// found the selected button
-					this.selectedButton = i;
-					return;
-				}
-				buttonY += gap;
+			if(buttonY <= y && y < buttonY + BUTTON_HEIGHT){
+				// found the selected button
+				this.buttonSelected = true;
+				return;
 			}
 		}
-		// deselect buttons
-		this.selectedButton = Integer.MAX_VALUE;
+		// deselect button
+		this.buttonSelected = false;
 	}
 
 	@Override
