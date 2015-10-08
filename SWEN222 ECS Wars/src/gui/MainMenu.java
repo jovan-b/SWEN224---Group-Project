@@ -37,7 +37,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	private static final int BUTTON_LEFT_DIFF = (BUTTON_WIDTH/2)+100;
 	
 	private GUICanvas canvas; // the canvas this draws on
-	private Controller controller; // the controller running this
 	private Image[] sprites; // the sprite images to animate
 	private int animState = 0; // the current animation frame
 	private int animModifier = 1; // flicks between 1 and -1 to loop animation
@@ -60,9 +59,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		
 		redraw = new RedrawThread();
 		redraw.start();
-		
-		//Preload the controller
-		this.controller = new SinglePlayerController();
 	}
 
 	/**
@@ -254,8 +250,8 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	private void newGame() {
 		//controller.initialiseGame();
 		//canvas.setMainMenu(false);
-		
-		canvas.startGame(controller, 0);
+
+		canvas.startGame(new SinglePlayerController(), 0);
 		redraw.stopRunning();
 	}
 
@@ -270,8 +266,9 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 				returnVal != JFileChooser.APPROVE_OPTION){	//Player hasn't choosen a file
 			return;
 		}
-		canvas.setMainMenu(false);
-		LoadManager.loadGame(controller, chooser.getSelectedFile());
+		
+		canvas.startGame(new SinglePlayerController(chooser.getSelectedFile()), 0);
+		redraw.stopRunning();
 		
 	}
 
