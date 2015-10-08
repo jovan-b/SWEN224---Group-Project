@@ -179,10 +179,20 @@ public final class SaveManager {
 			player.setAttribute("y", Integer.toString(p.getY()));
 			
 			//TODO: Save player Weapon
+			saveWeapon(p, player);
 			
 			//Write items player currently holds
 			saveInventory(p, player);
 		}
+	}
+	
+	private static void saveWeapon(Player p, Element player){
+		//initialise weapon
+		Element weapon = doc.createElement("Weapon");
+		player.appendChild(weapon);
+		
+		weapon.setAttribute("type", p.getWeapon().getWeaponType().name());
+		
 	}
 	
 	private static void saveInventory(Player p, Element player){

@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import main.saveAndLoad.SaveManager;
 import gameWorld.Controller;
 
 /**
@@ -161,7 +162,8 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 	}
 
 	private void saveGame() {
-		// TODO Auto-generated method stub
+		//TODO: change so player can specify name
+		SaveManager.saveGame(controller, "test_save.xml");
 	}
 
 	private void disconnect() {

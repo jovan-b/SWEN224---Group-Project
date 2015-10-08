@@ -76,4 +76,9 @@ public class ScatterGun extends Weapon{
 		return description;
 	}
 
+	@Override
+	public WeaponType getWeaponType() {
+		return WeaponType.ScatterGun;
+	}
+
 }

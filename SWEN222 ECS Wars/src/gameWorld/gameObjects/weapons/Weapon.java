@@ -20,6 +20,11 @@ public abstract class Weapon implements Item {
 	
 	protected boolean canFire;
 	
+	public enum WeaponType{
+		PaintballGun,
+		ScatterGun
+	}
+	
 	public Weapon(double fireRate, Projectile projectile){
 		this.fireRate = fireRate;
 		this.projectile = projectile;
@@ -67,5 +72,7 @@ public abstract class Weapon implements Item {
 	public Item.Type getType(){
 		return Item.Type.Weapon;
 	}
+	
+	public abstract WeaponType getWeaponType();
 	
 }
