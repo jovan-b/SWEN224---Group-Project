@@ -22,6 +22,7 @@ import gui.GUICanvas;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
@@ -486,6 +487,8 @@ public class Room {
 		double xCol = (double)x/(double)squareSize;
 		if (xCol > contents.length-1){
 			return contents.length-1;
+		} else if (xCol < 0){
+			return 0;
 		}
 		return (int)xCol;
 	}
@@ -499,6 +502,8 @@ public class Room {
 		double yRow = (double)y/(double)squareSize;
 		if (yRow > contents[0].length-1){
 			return contents[0].length-1;
+		} else if (yRow < 0){
+			return 0;
 		}
 		return (int)yRow;
 	}
@@ -898,5 +903,66 @@ public class Room {
 	 */
 	public int getRows(){
 		return rows;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + cols;
+		result = prime * result + Arrays.deepHashCode(contents);
+		result = prime * result + ((ctrl == null) ? 0 : ctrl.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((doors == null) ? 0 : doors.hashCode());
+		result = prime * result + height;
+		result = prime * result + Arrays.deepHashCode(images);
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + rows;
+		result = prime * result + width;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Room other = (Room) obj;
+		if (cols != other.cols)
+			return false;
+		if (!Arrays.deepEquals(contents, other.contents))
+			return false;
+		if (ctrl == null) {
+			if (other.ctrl != null)
+				return false;
+		} else if (!ctrl.equals(other.ctrl))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (doors == null) {
+			if (other.doors != null)
+				return false;
+		} else if (!doors.equals(other.doors))
+			return false;
+		if (height != other.height)
+			return false;
+		if (!Arrays.deepEquals(images, other.images))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (rows != other.rows)
+			return false;
+		if (width != other.width)
+			return false;
+		return true;
 	}
 }
