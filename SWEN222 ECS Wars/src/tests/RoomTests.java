@@ -10,6 +10,8 @@ import org.junit.Test;
 import gameWorld.*;
 import gameWorld.characters.DavePlayer;
 import gameWorld.characters.Player;
+import gameWorld.gameObjects.Desk;
+import gameWorld.gameObjects.Wall;
 import gameWorld.gameObjects.weapons.projectiles.LtsaBullet;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
 import gameWorld.gameObjects.weapons.projectiles.RubberBullet;
@@ -168,10 +170,23 @@ public class RoomTests {
 	
 	@Test
 	/**
-	 * Tests removing of a projectile from a room
+	 * Tests getting item at certain position
 	 */
 	public void testItemAt1(){
 		Room room = classroom103;
-		
+		// check out of bounds cases
+		assertTrue(room.itemAt(-1,-1) instanceof Wall);
+		assertTrue(room.itemAt(SQUARE_SIZE*room.getCols()+10,
+				SQUARE_SIZE*room.getRows()+10) instanceof Wall);
+	}
+	
+	@Test
+	/**
+	 * Tests getting item at certain position
+	 */
+	public void testItemAt2(){
+		Room room = classroom103;
+		assertTrue(room.itemAt(SQUARE_SIZE*2,
+				SQUARE_SIZE*3) instanceof Desk);
 	}
 }

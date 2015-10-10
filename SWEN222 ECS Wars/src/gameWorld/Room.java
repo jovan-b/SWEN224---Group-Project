@@ -645,7 +645,7 @@ public class Room {
 	 * Get the item at a given (x,y) co-ordinate.
 	 * @param x The x position of the item
 	 * @param y The y position of the item
-	 * @return The Item at position (x,y)
+	 * @return The Item at position (x,y), or a Wall if out of bounds.
 	 */
 	public Item itemAt(int x, int y) {
 		//Bounds check
