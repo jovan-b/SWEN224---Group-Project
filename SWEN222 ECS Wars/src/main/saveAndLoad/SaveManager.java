@@ -1,14 +1,11 @@
 package main.saveAndLoad;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import gameWorld.Controller;
 import gameWorld.Room;
 import gameWorld.characters.*;
-import gameWorld.characters.nonplayer.NonPlayer;
 import gameWorld.gameObjects.Floor;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.containers.Container;
@@ -25,9 +22,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * A save manager to store or load the state of a game controller from file

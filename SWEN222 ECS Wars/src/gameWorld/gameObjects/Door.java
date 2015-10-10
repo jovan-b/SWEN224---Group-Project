@@ -1,13 +1,10 @@
 package gameWorld.gameObjects;
 
-import java.awt.Graphics;
 import java.awt.Image;
 
 import gameWorld.Controller;
 import gameWorld.Room;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.Item.Type;
-import gui.GUICanvas;
 
 /**
  * A door which connects two rooms, which a player can walk through

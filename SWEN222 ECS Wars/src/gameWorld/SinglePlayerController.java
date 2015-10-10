@@ -18,8 +18,6 @@ import java.util.BitSet;
 
 
 import main.saveAndLoad.LoadManager;
-import java.util.BitSet;
-
 import main.saveAndLoad.SaveManager;
 
 public class SinglePlayerController extends Controller {

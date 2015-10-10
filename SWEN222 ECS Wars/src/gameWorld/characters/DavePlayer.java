@@ -1,8 +1,6 @@
 package gameWorld.characters;
 
 
-import gui.GUICanvas;
-
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;

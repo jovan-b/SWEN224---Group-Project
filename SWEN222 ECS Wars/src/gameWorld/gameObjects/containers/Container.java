@@ -7,7 +7,6 @@ import gameWorld.characters.Player;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.ItemSpawner;
 import gameWorld.gameObjects.Wall;
-import gui.GUICanvas;
 
 /**
  * Represents an Item which can contain several other Items.

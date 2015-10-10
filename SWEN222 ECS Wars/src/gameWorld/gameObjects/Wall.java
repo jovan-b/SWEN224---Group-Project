@@ -1,11 +1,9 @@
 package gameWorld.gameObjects;
 
-import java.awt.Graphics;
 import java.awt.Image;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
-import gui.GUICanvas;
 
 
 /**

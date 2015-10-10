@@ -3,15 +3,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-
 import javax.swing.*;
-
-import gameWorld.Controller;
-import gameWorld.characters.DavePlayer;
-import gameWorld.characters.Player;
 
 /**
  * The game winndow.

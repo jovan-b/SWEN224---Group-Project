@@ -5,7 +5,6 @@ import java.util.TimerTask;
 
 import gameWorld.characters.Player;
 import gameWorld.gameObjects.Item;
-import gameWorld.gameObjects.weapons.projectiles.LtsaBullet;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
 
 /**

@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.Item.Type;
 
 /**
  * A torch item that allows the player to see in dark environments

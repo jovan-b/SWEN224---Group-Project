@@ -1,6 +1,5 @@
 package gameWorld.gameObjects;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -9,8 +8,6 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.Item.Type;
-import gui.GUICanvas;
 
 /**
  * A photocopier item which can be interacted with.
@@ -33,7 +30,6 @@ public class Photocopier implements Item {
 	private Image scaledImageEast;
 	
 	private int[] xoffset; // x offset for the index view direction
-	private char dir; // the dir of the item when looking North
 	private String description;
 
 	/**
@@ -45,7 +41,6 @@ public class Photocopier implements Item {
 	 * 'R' = right
 	 */
 	public Photocopier(char dir) {
-		this.dir = dir;
 		loadImages(dir);
 		scaledImageNorth = imageNorth;
 		scaledImageSouth = imageSouth;

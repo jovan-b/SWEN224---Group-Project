@@ -1,7 +1,6 @@
 package gameWorld.gameObjects;
 
 import gameWorld.Room;
-import gameWorld.characters.Player;
 
 /**
  * Represents an item that can spawn a player onto it.

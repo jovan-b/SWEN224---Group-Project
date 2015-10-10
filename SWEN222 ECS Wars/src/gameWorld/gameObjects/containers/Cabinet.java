@@ -10,7 +10,6 @@ import gameWorld.Controller;
 import gameWorld.characters.Player;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.ItemSpawner;
-import gui.GUICanvas;
 
 /**
  * A 1x1 container which can store 4 items.

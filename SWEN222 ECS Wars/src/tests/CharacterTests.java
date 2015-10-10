@@ -3,7 +3,6 @@ package tests;
 import static org.junit.Assert.*;
 
 import org.junit.*;
-import gameWorld.*;
 
 
 public class CharacterTests {

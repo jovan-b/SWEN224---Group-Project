@@ -4,8 +4,6 @@ import java.awt.Image;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.weapons.projectiles.LtsaBullet;
-import gameWorld.gameObjects.weapons.projectiles.PaintBall;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
 import gameWorld.gameObjects.weapons.projectiles.RubberBullet;
 

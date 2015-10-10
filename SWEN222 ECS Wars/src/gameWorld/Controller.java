@@ -1,10 +1,8 @@
 package gameWorld;
 
-import gameWorld.characters.DavePlayer;
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
-import gameWorld.characters.nonplayer.strategy.SentryCombatStrategy;
 import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
 import gameWorld.gameObjects.*;
 import gameWorld.gameObjects.containers.Container;
@@ -16,9 +14,7 @@ import main.saveAndLoad.SaveManager;
 import network.ClientConnection;
 
 import java.awt.Image;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
@@ -226,6 +222,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 				roomName = s.nextLine();
 				rooms.add(new Room(roomName, this));
 			}
+			s.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("Error loading RoomIndex file: " + e.getMessage());
 		}
@@ -347,6 +344,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 				}
 				
 			}
+			s.close();
 		} catch(IOException e){
 			System.out.println("Error loading spawn items: "+e.getMessage());
 		}

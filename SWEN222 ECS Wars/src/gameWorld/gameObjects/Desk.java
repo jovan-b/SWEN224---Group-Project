@@ -1,6 +1,5 @@
 package gameWorld.gameObjects;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -9,8 +8,6 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.Item.Type;
-import gui.GUICanvas;
 
 /**
  * A decorative 2x1 desk object which cannot be walked on.
