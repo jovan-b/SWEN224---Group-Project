@@ -8,7 +8,10 @@ import gameWorld.Room;
 import gameWorld.characters.*;
 import gameWorld.gameObjects.Floor;
 import gameWorld.gameObjects.Item;
+import gameWorld.gameObjects.Item.Type;
+import gameWorld.gameObjects.containers.Cabinet;
 import gameWorld.gameObjects.containers.Container;
+import gameWorld.gameObjects.weapons.Weapon;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -81,7 +84,34 @@ public final class SaveManager {
 			
 			//Write players in room
 			savePlayers(room, r);
+			saveCabinets(room, r);
 			saveRoomContents(room, r);
+		}
+	}
+
+	/**
+	 * Save all items stored inside cabinets
+	 * The saveRoomContents() method is unable to safely parse cabinets
+	 * Thus, this method is needed to properly store cabinets states
+	 * 
+	 * @param room
+	 * @param r
+	 */
+	private static void saveCabinets(Element room, Room r) {
+		Item[][] contents = r.getContents();
+		
+		for(int i = 0; i < contents.length; i++){
+			for(int j = 0; j < contents[0].length; j++){
+				if(!(contents[i][j] instanceof Cabinet)) continue;
+				
+				Cabinet c = (Cabinet)contents[i][j];
+				
+				Element e = doc.createElement("Cabinet");
+				saveContainerItems(e, c);
+				e.setAttribute("x", Integer.toString(i));
+				e.setAttribute("y", Integer.toString(j));
+				room.appendChild(e);
+			}
 		}
 	}
 
@@ -123,6 +153,11 @@ public final class SaveManager {
 					else{//not a container, store the item
 						e = doc.createElement("Item");
 						e.setAttribute("type", item.getType().name());
+						//if type is weapon, save the type of weapon
+						if(item.getType() == Type.Weapon){
+							e.setAttribute("weaponType", 
+									((Weapon)item).getWeaponType().name());
+						}
 						e.setAttribute("x", Integer.toString(i));
 						e.setAttribute("y", Integer.toString(j));
 						room.appendChild(e);
