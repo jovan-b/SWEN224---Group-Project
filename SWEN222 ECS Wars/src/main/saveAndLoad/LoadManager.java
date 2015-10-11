@@ -5,6 +5,9 @@ import gameWorld.Room;
 import gameWorld.characters.*;
 import gameWorld.gameObjects.*;
 import gameWorld.gameObjects.Item.Type;
+import gameWorld.gameObjects.containers.*;
+import gameWorld.gameObjects.weapons.*;
+import gameWorld.gameObjects.weapons.Weapon.WeaponType;
 import gameWorld.*;
 
 import java.io.File;
@@ -81,8 +84,11 @@ public class LoadManager {
 				//load players into room
 				loadPlayers(controller, r, e, players);
 				
-				//TODO: load items into rooms
-				loadItems(controller, r, e);
+				//load items into rooms
+				loadRoomItems(controller, r, e);
+				
+				//load cabinet contents into rooms
+				loadCabinetContents(controller, r, e);
 				
 				//add room to list of rooms
 				rooms.add(r);
@@ -94,7 +100,27 @@ public class LoadManager {
 		controller.setPlayers(players);
 	}
 
-	private static void loadItems(Controller controller, Room r, Element e) {
+	private static void loadCabinetContents(Controller controller, Room r,
+			Element e) {
+		NodeList itemlist = e.getChildNodes();
+		
+		for(int i = 0; i < itemlist.getLength(); i++){
+			Element itemElem = (Element) itemlist.item(i);
+			
+			//if not a cabinet, start again
+			if(!itemElem.getTagName().equals("Cabinet")) continue;
+			//else, load cabinet contents
+			
+			//firstly, get the correct cabinet
+			Cabinet c = (Cabinet)r.getContents()[Integer.parseInt(itemElem.getAttribute("x"))]
+					[Integer.parseInt(itemElem.getAttribute("y"))];
+			
+			//then, load all items into cabinet
+			loadContainerItems(c, itemElem);
+		}
+	}
+
+	private static void loadRoomItems(Controller controller, Room r, Element e) {
 		NodeList itemlist = e.getChildNodes();
 		
 		for(int i = 0; i < itemlist.getLength(); i++){
@@ -147,12 +173,75 @@ public class LoadManager {
 							[Integer.parseInt(ielement.getAttribute("y"))]
 							= new Map();
 					break;
-				//TODO: containers
+				//container items
+				case Pouch:
+					Pouch p = new Pouch();
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= p;
+					loadContainerItems(p, ielement);
+					break;
 				default:	//weapon
-					loadWeapons(controller, r);
+					loadRoomWeapons(controller, r, roomContents, ielement);
 					break;
 				}
 			}
+		}
+	}
+
+	@SuppressWarnings("incomplete-switch")
+	private static void loadContainerItems(Container c, Element e) {
+		NodeList items = e.getChildNodes();
+		
+		for(int i = 0; i < items.getLength(); i++){
+			Element itemElem = (Element)items.item(i);
+			
+			
+			switch(Type.valueOf(itemElem.getAttribute("type"))){
+			//add correct item to container
+			case KeyCard:
+				c.addItem(new KeyCard());
+				break;
+			case SmallTreasure:
+				c.addItem(new SmallTreasure());
+				break;
+			case Torch:
+				c.addItem(new Torch());
+				break;
+			case MedicineBottle:
+				c.addItem(new MedicineBottle());
+				break;
+			case PillBottle: 
+				c.addItem(new PillBottle());
+				break;
+			case Map:
+				c.addItem(new Map());
+				break;
+			//container items
+			case Pouch:
+				Pouch p = new Pouch();
+				//load inner pouch items
+				loadContainerItems(p, itemElem);
+				c.addItem(p);
+				break;
+			}
+		}
+		
+	}
+
+	private static void loadRoomWeapons(Controller controller, Room r, 
+			Item[][] roomContents, Element ielement) {
+		switch(WeaponType.valueOf(ielement.getAttribute("weaponType"))){
+		case PaintballGun:
+			roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+					[Integer.parseInt(ielement.getAttribute("y"))]
+							= new PaintballGun();
+			break;
+		case ScatterGun:
+			roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+					[Integer.parseInt(ielement.getAttribute("y"))]
+							= new ScatterGun();
+			break;
 		}
 	}
 
@@ -198,13 +287,13 @@ public class LoadManager {
 
 	private static void loadWeapon(Controller controller, Player p,
 			Element pelement) {
-		// TODO Auto-generated method stub
+		// TODO: finish loading weapon onto player
 		
 	}
 
 	private static void loadInventory(Controller controller, Player p,
 			Element pelement) {
-		// TODO Auto-generated method stub
+		// TODO: finish loading player's inventory
 		
 	}
 	
