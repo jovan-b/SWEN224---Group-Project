@@ -59,7 +59,7 @@ public class SinglePlayerController extends Controller {
 		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
 		rooms.get(0).addNPC(npc);
 		
-		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, 30));
+		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, DAY_LENGTH));
 	}
 
 	/**

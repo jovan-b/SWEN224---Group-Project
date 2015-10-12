@@ -9,7 +9,7 @@ public class DayNightEvent implements Event{
 	
 	public DayNightEvent(Controller c, int duration){
 		this.controller = c;
-		this.duration = duration;
+		this.duration = GameClock.secondsToTicks(duration);
 	}
 	
 	@Override
@@ -17,6 +17,8 @@ public class DayNightEvent implements Event{
 		if (time % duration == 0){
 			controller.setDayTime(!controller.isDayTime());	
 		}
+		
+		controller.getGUI().getCanvas().rotateSundial(180/duration);
 	}
 
 	@Override

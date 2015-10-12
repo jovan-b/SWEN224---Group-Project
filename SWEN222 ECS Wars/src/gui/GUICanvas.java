@@ -43,6 +43,7 @@ public class GUICanvas extends JComponent{
 	
 	private Player player; // the current player
 	private Compass compass; // the compass being displayed
+	private Sundial sundial; // the sundial being displayed
 	private Container currentContainer;
 	
 	private String toolTip; // current tooltip text
@@ -59,6 +60,8 @@ public class GUICanvas extends JComponent{
 	private boolean winnerMenuView = false; // true if we are looking at winner menu
 	private WinnerMenu winnerMenu; // the winner menu to display
 	
+	private double dayNightRotation = 0;
+
 	// Static UI Images
 	private Image[] torchLight;
 	private Image noTorch;
@@ -88,6 +91,8 @@ public class GUICanvas extends JComponent{
 	public GUICanvas(GUIFrame frame){
 		this.frame = frame;
 		this.compass = new Compass();
+		this.sundial = new Sundial();
+		this.dayNightRotation = (180/Controller.DAY_LENGTH);
 		this.toolTip = null;
 				
 		torchLight = new Image[4];
@@ -203,7 +208,11 @@ public class GUICanvas extends JComponent{
 			drawDarknessOverlay(r, g);
 		}
 		
-		// Draw compass
+		// Draw Sundial
+		sundial.update();
+		g.drawImage(sundial.getImage(), getWidth()-(96*viewScale)-20, 20, this);
+		
+		// Draw Compass
 		compass.update();
 		g.drawImage(compass.getImage(), getWidth()-(96*viewScale)-20, 20, this);
 		g.drawImage(scaledCompassCont, getWidth()-(96*viewScale)-20, 20, this);
@@ -457,6 +466,7 @@ public class GUICanvas extends JComponent{
 		scaledCompassCont = compassControls.getScaledInstance(compassControls.getWidth(this)*viewScale, 
 				compassControls.getHeight(this)*viewScale, Image.SCALE_FAST);
 		compass.scaleImage(viewScale, this);
+		sundial.scaleImage(viewScale, this);
 		// scale health bar
 		scaledHealthBack = healthInventBack.getScaledInstance(healthInventBack.getWidth(this)*viewScale, 
 				healthInventBack.getHeight(this)*viewScale, Image.SCALE_FAST);
@@ -673,5 +683,9 @@ public class GUICanvas extends JComponent{
 	
 	public boolean getShowWinnerView(){
 		return this.winnerMenuView;
+	}
+	
+	public void rotateSundial(double degrees){
+		sundial.rotate(degrees);
 	}
 }
