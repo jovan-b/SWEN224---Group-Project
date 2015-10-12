@@ -12,19 +12,19 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class PaintballGun extends Weapon {
+public class LtsaGun extends Weapon {
 	public static final double BULLET_SPREAD = 10;
 	private String description;
 	
-	public PaintballGun(){
-		super(4, new PaintBall());
+	public LtsaGun(){
+		super(4, new LtsaBullet());
 		this.description = "A basic paintball gun";
 		loadImages();
 	}
 	
 	private void loadImages(){
 		try{
-			super.image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"gun1.png"));
+			super.image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"gun3.png"));
 			super.scaledImage = image;
 		} catch(IOException e){
 			System.out.println("Error loading weapon image file: "+e.getMessage());

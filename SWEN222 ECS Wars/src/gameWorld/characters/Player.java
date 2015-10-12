@@ -11,6 +11,7 @@ import gameWorld.gameObjects.Floor;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.Wall;
 import gameWorld.gameObjects.containers.Container;
+import gameWorld.gameObjects.weapons.PaintballGun;
 import gameWorld.gameObjects.weapons.ScatterGun;
 import gameWorld.gameObjects.weapons.Weapon;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
@@ -94,7 +95,7 @@ public abstract class Player {
 		this.animState = 0;
 		this.animModifier = 1;
 		this.animCounter = 0;
-		this.currentWeapon = new ScatterGun();
+		this.currentWeapon = new PaintballGun();
 	}
 
 	/**
@@ -508,6 +509,19 @@ public abstract class Player {
 	
 	public Weapon getWeapon(){
 		return currentWeapon;
+	}
+
+	/**
+	 * Replace the player's current weapon with the one on the given
+	 * floor.
+	 * @param weapon The weapon to pick up
+	 * @param floor The floor the weapon is on
+	 */
+	public void pickUpWeapon(Weapon weapon, Floor floor) {
+		// drop current weapon
+		floor.setItem(currentWeapon);
+		// set my weapon to the new one
+		this.currentWeapon = weapon;
 	}
 
 }

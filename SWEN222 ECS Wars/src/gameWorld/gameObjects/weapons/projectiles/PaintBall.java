@@ -17,7 +17,7 @@ public class PaintBall extends BasicProjectile{
 	public PaintBall(){
 		super();
 		try {
-			image = ImageIO.read(new File("Resources"+File.separator+"Projectiles"+File.separator+"RedBullet.png"));
+			image = ImageIO.read(new File("Resources"+File.separator+"Projectiles"+File.separator+"BlueBullet.png"));
 			largeImage = image.getScaledInstance(bulletSize*2, bulletSize*2, Image.SCALE_FAST);
 		} catch (IOException e) {
 			System.out.println("Error loading projectile image: " + e.getMessage());
@@ -26,6 +26,8 @@ public class PaintBall extends BasicProjectile{
 	
 	private PaintBall(Player p, int x, int y, double theta, Image image, Image largeImage){
 		super(p, x, y, theta);
+		this.image = image;
+		this.largeImage = largeImage;
 	}
 
 	@Override

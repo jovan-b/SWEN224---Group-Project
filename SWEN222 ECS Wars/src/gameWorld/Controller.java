@@ -7,6 +7,9 @@ import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
 import gameWorld.gameObjects.*;
 import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.containers.Pouch;
+import gameWorld.gameObjects.weapons.LtsaGun;
+import gameWorld.gameObjects.weapons.PaintballGun;
+import gameWorld.gameObjects.weapons.ScatterGun;
 import gui.GUICanvas;
 import gui.GUIFrame;
 import main.SoundManager;
@@ -338,6 +341,9 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 							} break;
 				case "Map" : toAdd = new Map(); break;
 				case "Treasure" : toAdd = new SmallTreasure(); break;
+				case "Paintball Gun" : toAdd = new PaintballGun(); break;
+				case "Scatter Gun" : toAdd = new ScatterGun(); break;
+				case "LTSA Gun" : toAdd = new LtsaGun(); break;
 				}
 				// add the item if it's not null, otherwise print error message
 				if(toAdd != null){

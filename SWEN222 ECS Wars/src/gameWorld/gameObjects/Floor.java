@@ -4,6 +4,7 @@ import java.awt.Image;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
+import gameWorld.gameObjects.weapons.Weapon;
 
 
 /**
@@ -33,7 +34,9 @@ public class Floor implements Item, ItemSpawner {
 	@Override
 	public void use(Player p, Controller ctrl) {
 		if (item != null){
-			if (p.pickUp(item)){
+			if(item instanceof Weapon){
+				p.pickUpWeapon((Weapon)item, this);
+			} else if (p.pickUp(item)){
 				setItem(null);
 			}
 		}

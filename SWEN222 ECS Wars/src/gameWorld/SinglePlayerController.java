@@ -210,6 +210,7 @@ public class SinglePlayerController extends Controller {
 		Container container = gui.getCanvas().getCurrentContainer();
 		int xMid = gui.getCanvas().getWidth()/2;
 		int yMid = gui.getCanvas().getHeight()/2;
+		
 		// check if mousing over merchant NPC
 		Room currentRoom = player.getCurrentRoom();
 		NonPlayer npc = currentRoom.wanderingNpcAtMouse(x, y, player, viewScale, viewDirection);

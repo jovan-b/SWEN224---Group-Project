@@ -48,10 +48,7 @@ public class ScatterGun extends Weapon{
 	}
 
 	@Override
-	public void use(Player p, Controller ctrl) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void use(Player p, Controller ctrl) {}
 
 	@Override
 	public Image getImage(int viewDirection) {
