@@ -7,6 +7,7 @@ import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.Map;
 import gameWorld.gameObjects.Torch;
 import gameWorld.gameObjects.containers.Container;
+import gameWorld.gameObjects.weapons.Weapon;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -355,6 +356,9 @@ public class GUICanvas extends JComponent{
 				g.drawImage(itemImage, (24*viewScale)*(1+i), (24*viewScale)*2, this);
 			}
 		}
+		Weapon weapon = player.getWeapon();
+		Image weaponImage = weapon.getScaledImage(0);
+		g.drawImage(weaponImage, (24*viewScale), (24*viewScale)*3, this);
 	}
 
 	/**

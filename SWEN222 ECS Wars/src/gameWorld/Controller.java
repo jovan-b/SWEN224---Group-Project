@@ -280,6 +280,10 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 			
 			// scale players
 			for (Player p : r.getAllCharacters()){
+				// scale weapon image
+				Weapon weapon = p.getWeapon();
+				Image weaponImage = weapon.getImage(0);
+				weapon.setScaledImage(0, scaleImage(weaponImage, c, scale));
 				images = p.getImages();
 				scaled = new Image[4][3];
 				for (int i = 0; i < 4; i++){
