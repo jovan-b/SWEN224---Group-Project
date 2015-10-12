@@ -108,7 +108,7 @@ public class VanishingCabinet implements Item {
 				SmallTreasure treasure = (SmallTreasure) item;
 				p.givePoints(treasure.getPoints());
 				p.removeItem(treasure);
-				ctrl.spawnItem(new SmallTreasure());
+				ctrl.reSpawnItem(new SmallTreasure());
 				return;
 			}
 		}

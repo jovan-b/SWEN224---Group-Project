@@ -4,6 +4,7 @@ import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
+import gameWorld.gameEvents.GameClock;
 import gameWorld.gameObjects.*;
 import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.containers.Pouch;
@@ -53,6 +54,8 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	
 	protected GUIFrame gui;
 	protected List<Player> players;
+	protected GameClock clock;
+	protected int lastClockTime;
 
 	protected ClientConnection client;
 	
@@ -121,6 +124,15 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		setupRooms();
 		loadItemsToSpawn();
 		setupSpawnItems();
+		startClock();
+	}
+
+	/**
+	 * Starts the game clock
+	 */
+	private void startClock() {
+		clock = new GameClock();
+		clock.start();
 	}
 
 	/**
@@ -373,19 +385,16 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		// shuffle spawn item lists
 		Collections.shuffle(itemSpawners);
 		Collections.shuffle(itemsToSpawn);
-		// while there is an item or container left, add item to container
-		for (int i = 0; i < itemsToSpawn.size(); i++){
-			if (i >= itemSpawners.size()){
-				System.out.println("Ran out of item spawners");
-				break;
+		// while there is an item left, add item to container
+		for(Item item : itemsToSpawn){
+			Collections.shuffle(itemSpawners);
+			ItemSpawner holder = itemSpawners.get(0);
+			while ((item instanceof Weapon && !(holder instanceof Floor))
+					|| holder.remainingCapacity() <= 0){
+				Collections.shuffle(itemSpawners);
+				holder = itemSpawners.get(0);
 			}
-			// get random container and item
-			ItemSpawner holder = itemSpawners.get(i);
-			Item toSpawn = itemsToSpawn.get(i);
-			// add item if there's room
-			if(holder.remainingCapacity() > 0){
-				holder.addSpawnItem(toSpawn);
-			}
+			holder.addSpawnItem(item);
 		}
 	}
 	
@@ -393,11 +402,10 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	 * Spawns a given item at a random item spawn location
 	 * @param itemToSpawn
 	 */
-	public void spawnItem(Item itemToSpawn){
+	public void reSpawnItem(Item itemToSpawn){
 		Collections.shuffle(itemSpawners);
 		ItemSpawner holder = itemSpawners.get(0);
-		while (holder instanceof Pouch || holder.remainingCapacity() <= 0
-				|| (itemToSpawn instanceof Weapon && !(holder instanceof Floor))){
+		while (holder instanceof Pouch || holder.remainingCapacity() <= 0){
 			Collections.shuffle(itemSpawners);
 			holder = itemSpawners.get(0);
 		}

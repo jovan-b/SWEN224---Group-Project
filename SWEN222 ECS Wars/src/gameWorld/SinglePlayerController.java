@@ -8,6 +8,7 @@ import gameWorld.characters.StreaderPlayer;
 import gameWorld.characters.nonplayer.NonPlayer;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
+import gameWorld.gameEvents.GameClock;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.containers.Container;
 import gui.GUICanvas;
@@ -81,6 +82,21 @@ public class SinglePlayerController extends Controller {
 		dealWithInput();//deal with user input
 		checkTooltip(); // check if a tooltip should be displayed
 		player.update();
+		if(lastClockTime != clock.getTime()){
+			clockEventUpdate();
+		}
+	}
+
+	/**
+	 * Informs classes of clock events.
+	 */
+	private void clockEventUpdate() {
+		int time = clock.getTime();
+		lastClockTime = time;
+		System.out.println(time);
+		if (time % 40 == 0){
+			gui.getCanvas().toggleNight();
+		}
 	}
 
 	/**

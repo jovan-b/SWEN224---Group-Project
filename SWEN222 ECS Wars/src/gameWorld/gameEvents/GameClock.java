@@ -20,7 +20,7 @@ public final class GameClock {
 	private int time;
 	private Set<Event> events;
 	
-	private GameClock(){
+	public GameClock(){
 		time = START_TIME;
 		events = new HashSet<Event>();
 		clockTimer = new Timer();
