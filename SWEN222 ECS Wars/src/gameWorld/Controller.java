@@ -10,6 +10,7 @@ import gameWorld.gameObjects.containers.Pouch;
 import gameWorld.gameObjects.weapons.LtsaGun;
 import gameWorld.gameObjects.weapons.PaintballGun;
 import gameWorld.gameObjects.weapons.ScatterGun;
+import gameWorld.gameObjects.weapons.Weapon;
 import gui.GUICanvas;
 import gui.GUIFrame;
 import main.SoundManager;
@@ -389,7 +390,8 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	public void spawnItem(Item itemToSpawn){
 		Collections.shuffle(itemSpawners);
 		ItemSpawner holder = itemSpawners.get(0);
-		while (holder instanceof Pouch || holder.remainingCapacity() <= 0){
+		while (holder instanceof Pouch || holder.remainingCapacity() <= 0
+				|| (itemToSpawn instanceof Weapon && !(holder instanceof Floor))){
 			Collections.shuffle(itemSpawners);
 			holder = itemSpawners.get(0);
 		}
