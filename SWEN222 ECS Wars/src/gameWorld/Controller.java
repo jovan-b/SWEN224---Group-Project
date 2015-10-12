@@ -105,7 +105,8 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 			p.setCanvas(gui.getCanvas());
 		}
 				
-		SoundManager.playSong("battle_1.mp3");
+		//SoundManager.playSong("battle_1.mp3");
+		SoundManager.playSong(SoundManager.CREDIT_SONGS[0]);
 	}
 	
 	/**
@@ -135,7 +136,9 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	
 	public void startGame(){
 		spawnPlayers();
-		SoundManager.playSong("battle_1.mp3");
+		//SoundManager.playSong("battle_1.mp3");
+		//SoundManager.playSong(SoundManager.CREDIT_SONGS[0]);
+		SoundManager.playQueue(SoundManager.BATTLE_SONGS);
 		
 		this.start();
 	}
@@ -164,7 +167,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 				nextTime += FRAME_RATE;
 				update();
 				// check if game is over
-				if(checkForWinner() != null){
+				if(checkForWinner() != null && !gui.getCanvas().getShowWinnerView()){
 					gui.getCanvas().setWinnerView(true);
 				}
 				if(currentTime < nextTime) gui.draw();

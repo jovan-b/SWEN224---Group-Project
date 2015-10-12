@@ -3,6 +3,7 @@ package gameWorld.characters;
 import java.awt.Image;
 import java.awt.Rectangle;
 
+import main.SoundManager;
 import gameWorld.PointValues;
 import gameWorld.Room;
 import gameWorld.gameObjects.Door;
@@ -257,13 +258,24 @@ public abstract class Player {
 	 */
 	public boolean pickUp(Item item) {
 		int index = 0;
+		Container container = null;
 		// look for empty space in inventory
 		while(index < INVENTORY_SIZE){
 			if (inventory[index] == null){
 				inventory[index] = item;
 				return true;
+			} else if (	container == null && inventory[index] instanceof Container){
+				//Look for empty containers in the inventory
+				Container c = (Container)inventory[index];
+				if (c.remainingCapacity() > 0){
+					container = c;
+				}
 			}
 			index++;
+		}
+		
+		if (container != null){
+			return container.addItem(item);
 		}
 		// no space in inventory
 		return false;

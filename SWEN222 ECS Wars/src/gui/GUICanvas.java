@@ -21,6 +21,8 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
+import main.SoundManager;
+
 /**
  * The main canvas inside the game window in which the game is drawn.
  * 
@@ -476,6 +478,8 @@ public class GUICanvas extends JComponent{
 		this.mainMenuView = isMainMenu;
 		
 		if(isMainMenu){
+			SoundManager.playSong("Main menu/8-Bit Survivor Eye Of The Tiger.mp3");
+			
 			this.removeController(controller);
 			this.addMouseListener(mainMenu);
 			this.addMouseMotionListener(mainMenu);
@@ -518,12 +522,14 @@ public class GUICanvas extends JComponent{
 		}
 		winnerMenuView = display; // toggle boolean
 		// change settings
-		if(winnerMenuView){
+		if(winnerMenuView){			
 			removeMouseListener(controller);
 			removeMouseMotionListener(controller);
 			
 			addMouseListener(winnerMenu);
 			addMouseMotionListener(winnerMenu);
+			
+			SoundManager.playQueue(SoundManager.CREDIT_SONGS);
 		} else {
 			removeMouseListener(winnerMenu);
 			removeMouseMotionListener(winnerMenu);
@@ -653,5 +659,9 @@ public class GUICanvas extends JComponent{
 		
 		this.removeMouseListener(menu);
 		this.removeMouseMotionListener(menu);
+	}
+	
+	public boolean getShowWinnerView(){
+		return this.winnerMenuView;
 	}
 }
