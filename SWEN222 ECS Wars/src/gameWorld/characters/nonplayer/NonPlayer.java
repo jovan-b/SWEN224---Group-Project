@@ -48,11 +48,12 @@ public class NonPlayer extends Player {
 		
 		// Load sprites
 		sprites = new Image[4][3];
+		int spriteNo = (int) (Math.random()*3)+1;
 		try {
 			for (int dir = 0; dir < 4; dir++){
 				for (int ani = 0; ani < 3; ani++){
 					sprites[dir][ani] = ImageIO.read(new File
-							("Resources"+File.separator+"NPC"+File.separator+"npc1"+dir+ani+".png"));
+							("Resources"+File.separator+"NPC"+File.separator+"npc"+spriteNo+dir+ani+".png"));
 				}
 			}
 		} catch (IOException e) {
