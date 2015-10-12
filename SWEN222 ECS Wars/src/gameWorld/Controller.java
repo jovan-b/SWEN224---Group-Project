@@ -94,36 +94,6 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	}
 	
 	/**
-	 * Controller constructor for a multiplayer client
-	 */
-	public Controller(ClientConnection client, int numberOfClients, int uid){
-		this.client = client;
-		this.uid = uid;
-		MPInitialise(client, client, client, numberOfClients, uid);
-	}
-
-	/**
-	 * Initialises the fields of a multiplayer game
-	 * @param key The KeyListener for the game
-	 * @param mouse The MouseListener for the game
-	 * @param mouse2 The MouseMotionListener for the game
-	 * @param numberOfClients The number of clients in the game
-	 * @param uid The user id
-	 */
-	public void MPInitialise(KeyListener key, MouseListener mouse, MouseMotionListener mouse2,
-			int numberOfClients, int uid) {
-		
-		spawnPlayers();
-		
-		for(Player p: players){
-			p.setCanvas(gui.getCanvas());
-		}
-				
-		//SoundManager.playSong("battle_1.mp3");
-		SoundManager.playSong(SoundManager.CREDIT_SONGS[0]);
-	}
-	
-	/**
 	 * Initialise the pre-game fields of this class
 	 */
 	protected void initialise() {
@@ -489,6 +459,10 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	 */
 	public GUIFrame getGUI(){
 		return gui;
+	}
+	
+	public BitSet getKeysPressed(){
+		return keyBits;
 	}
 	
 	/**

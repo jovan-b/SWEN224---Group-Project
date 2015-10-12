@@ -11,15 +11,20 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.Socket;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import gameWorld.Controller;
+import gameWorld.MultiPlayerController;
 import gameWorld.SinglePlayerController;
+import network.Server;
 
 /**
  * Displays the main menu for the game.
@@ -278,13 +283,53 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		
 	}
 
+	/**
+	 * Creates a server for game clients to connect to.
+	 */
 	private void newServer() {
-		
+		try{
+			String p = JOptionPane.showInputDialog(canvas, "Enter the "
+					+ "port for the server");
+			String numberOfClients = JOptionPane.showInputDialog(canvas, "Enter the "
+					+ "number of clients for the server");
+			int port = Integer.parseInt(p);
+			int clients = Integer.parseInt(numberOfClients);
+			Server server = new Server(port, clients, canvas);
+			server.start();
+		} catch (NumberFormatException ne){
+			JOptionPane.showMessageDialog(canvas, "Error: port or "
+					+ "number of clients entered is not a number");
+		}
 	}
 
+	/**
+	 * Gets which server the client wants to connect to then starts the game.
+	 */
 	private void connect() {
-		// TODO Auto-generated method stub
-		
+		try{
+			String ip = JOptionPane.showInputDialog(canvas, "Enter the "
+					+ "IP of the server");
+			String p = JOptionPane.showInputDialog(canvas, "Enter the "
+					+ "port for the server");
+			int port = Integer.parseInt(p);
+			
+			Socket s = new Socket(ip, port);
+			
+			//Create the socket input stream to wait for the user input
+			DataInputStream input = new DataInputStream(s.getInputStream());
+
+			//Waits for the server to send an amount of players in the game
+			int numberOfPlayers = input.readInt();
+			int uid = input.readInt();
+			
+			//ClientConnection client = new ClientConnection(s);
+			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers), uid);
+			redraw.stopRunning();
+		} catch (IOException e){
+			JOptionPane.showMessageDialog(canvas, "Error: could not find server");
+		} catch (NumberFormatException ne){
+			JOptionPane.showMessageDialog(canvas, "Error: port is not a number");
+		}
 	}
 
 	private void quit() {

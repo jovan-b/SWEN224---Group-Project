@@ -71,6 +71,8 @@ public abstract class Player {
 	protected int animCounter; // counts each frame the player has moved
 	protected Room currentRoom;
 	protected int currentRow; // view dependant row - for drawing correctly
+	
+	protected boolean disconnected;
 
 	protected GUICanvas canvas;
 
@@ -98,6 +100,7 @@ public abstract class Player {
 		this.animModifier = 1;
 		this.animCounter = 0;
 		this.currentWeapon = new PaintballGun();
+		this.disconnected = false;
 	}
 
 	/**
@@ -524,6 +527,44 @@ public abstract class Player {
 		floor.setItem(currentWeapon);
 		// set my weapon to the new one
 		this.currentWeapon = weapon;
+	}
+	
+	/**
+	 * Sets a players position and room
+	 * Used in multiplayer to send the players state
+	 * @param x
+	 * @param y
+	 * @param direction
+	 * @param room
+	 */
+	public void setPosition(int x, int y, int direction, Room room){
+		//If the players room has changed, update them to their new room
+		if(room != null && room != currentRoom){
+			setCurrentRoom(room, x, y);
+		//else just update their position
+		} else{
+			posX = x;
+			posY = y;
+		}
+		setFacing(direction);
+		animate();
+	}
+
+	/**
+	 * Returns if a player is disconnected
+	 * @return true if disconnected, false if still in game.
+	 */
+	public boolean isDisconnected(){
+		return disconnected;
+	}
+
+	/**
+	 * Sets the players status as disconnected.
+	 */
+	public void disconnect(){
+		disconnected = true;
+		//Sets them out of the games bounds, will change this later
+		setPosition(99999999, 99999999, 1, currentRoom);
 	}
 
 }

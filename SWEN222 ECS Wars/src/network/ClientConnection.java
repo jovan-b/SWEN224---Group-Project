@@ -9,9 +9,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.BitSet;
 
 import gameWorld.Controller;
+import gameWorld.MultiPlayerController;
+import gameWorld.Room;
 import gameWorld.SinglePlayerController;
 import gameWorld.characters.Player;
 import gui.GUICanvas;
@@ -25,37 +28,33 @@ import gui.GUIFrame;
  * @author Jovan Bogoievski
  *
  */
-public class ClientConnection extends Thread implements KeyListener, MouseListener, MouseMotionListener{
+public class ClientConnection extends Thread{
 
 	private Socket socket;
 	private DataInputStream input;
 	private DataOutputStream output;
-	private Controller controller;
+	private MultiPlayerController controller;
 	private int uid;
-	private BitSet keyBits = new BitSet(256);
 
-	public ClientConnection(Socket socket){
+	public ClientConnection(Socket socket, MultiPlayerController controller, int uid){
 		this.socket = socket;
+		this.controller = controller;
+		this.uid = uid;
+		try {
+			input = new DataInputStream(socket.getInputStream());
+			output = new DataOutputStream(socket.getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		start();
 	}
 
 	/**
 	 * Runs the client side game and sends updates of key presses
 	 */
 	@Override
-	public void run(){
+	synchronized public void run(){
 		try{
-			//Create the socket input and output to write to for the server
-			input = new DataInputStream(socket.getInputStream());
-			output = new DataOutputStream(socket.getOutputStream());
-
-			//Waits for the server to send an amount of players in the game
-			int numberOfPlayers = input.readInt();
-			uid = input.readInt();
-
-			//Keep running the game until the player disconnects or loses connection to the server
-			//controller = new Controller(this, numberOfPlayers, uid);
-			controller = new SinglePlayerController();
-
 			//While the game is running, take incoming updates of other clients
 			while(true){
 				//Read which player is trying to perform an action
@@ -63,16 +62,27 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 				Player player = controller.getPlayer(user);
 				int action = input.readInt();
 				switch(action){
-					//Move
-					case 1:
-						int x = input.readInt();
-						int y = input.readInt();
-						player.setXY(x, y);
-						break;
-					case 5:
-						int mouseX = input.readInt();
-						int mouseY = input.readInt();
-						player.shoot(mouseX, mouseY);
+				//Move
+				case 1:
+					int x = input.readInt();
+					int y = input.readInt();
+					int direction = input.readInt();
+					int roomNumber = input.readInt();
+					Room newRoom = controller.getRooms().get(roomNumber);
+					player.setPosition(x, y, direction, newRoom);
+					break;
+				//Shoot
+				case 2:
+					int mouseX = input.readInt();
+					int mouseY = input.readInt();
+					player.shoot(mouseX, mouseY);
+					break;
+				case 3:
+					//Tell the server handler to remove writing to the disconnected player
+					controller.getPlayer(user).disconnect();
+					output.writeInt(3);
+					output.writeInt(user);
+					break;
 				}
 			}
 		}
@@ -88,11 +98,6 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 				//Do nothing
 			}
 		}
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		keyBits.set(e.getKeyCode());
 	}
 
 	public void dealWithInput() {
@@ -119,8 +124,6 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 			}
 			if(isKeyPressed(KeyEvent.VK_SHIFT)){
 				player.setSpeedModifier(2);
-			} else {
-				player.setSpeedModifier(1);
 			}
 	//		if(isLeftMousePressed()){
 	//			player.shoot(mouseLocation[0], mouseLocation[1]);
@@ -129,9 +132,13 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 			if(posChanged){
 				int x = player.getX();
 				int y = player.getY();
+				int direction = player.getFacing();
+				int roomNumber = controller.getRooms().indexOf(player.getCurrentRoom());
 				output.writeInt(1);
 				output.writeInt(x);
 				output.writeInt(y);
+				output.writeInt(direction);
+				output.writeInt(roomNumber);
 			}
 
 		} catch(IOException e){
@@ -140,96 +147,34 @@ public class ClientConnection extends Thread implements KeyListener, MouseListen
 	}
 
 	private boolean isKeyPressed(int keyCode) {
-		return keyBits.get(keyCode);
+		return controller.getKeysPressed().get(keyCode);
 	}
 
-	public void keyTyped(KeyEvent e) {}
+//	@Override
+//	public void mousePressed(MouseEvent e) {
+//		try{
+//			if (e.getButton() == 1){
+//				//Tell the server they sent a mouse click
+//				output.writeInt(2);
+//				output.writeInt(e.getX());
+//				output.writeInt(e.getY());
+//			}
+//		} catch(IOException ex){
+//			//Couldn't read mouse press, ignore
+//		}
+//	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_Q){
-			controller.getGUI().getCanvas().rotateViewLeft();
-			//controller.getPlayer(uid).rotateViewLeft();
-		}
-		if(e.getKeyCode() == KeyEvent.VK_E){
-			controller.getGUI().getCanvas().rotateViewRight();
-			//controller.getPlayer(uid).rotateViewRight();
-		}
-		if(e.getKeyCode() == KeyEvent.VK_1){
-			controller.getPlayer(uid).inventoryItemAt(0).use(controller.getPlayer(uid), controller);
-		}
-		if(e.getKeyCode() == KeyEvent.VK_2){
-			controller.getPlayer(uid).inventoryItemAt(1).use(controller.getPlayer(uid), controller);
-		}
-		if(e.getKeyCode() == KeyEvent.VK_3){
-			controller.getPlayer(uid).inventoryItemAt(2).use(controller.getPlayer(uid), controller);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_MINUS){
-			controller.getGUI().getCanvas().setViewScale(1);
-			controller.scaleEverything(1);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_EQUALS){
-			controller.getGUI().getCanvas().setViewScale(2);
-			controller.scaleEverything(2);
-		}
-		keyBits.clear(e.getKeyCode());
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		try{
-			if (e.getButton() == 1){
-				//Tell the server they sent a mouse click
-				output.writeInt(2);
-				output.writeInt(e.getX());
-				output.writeInt(e.getY());
-			}
-		} catch(IOException ex){
-			//Couldn't read mouse press, ignore
-		}
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		try{
-			if (e.getButton() == 1){
-				//Tell the server they sent a mouse click
-				output.writeInt(2);
-				output.writeInt(e.getX());
-				output.writeInt(e.getY());
-			}
-		} catch(IOException ex){
-			//Couldn't read mouse press, ignore
-		}
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
+//	@Override
+//	public void mouseDragged(MouseEvent e) {
+//		try{
+//			if (e.getButton() == 1){
+//				//Tell the server they sent a mouse click
+//				output.writeInt(2);
+//				output.writeInt(e.getX());
+//				output.writeInt(e.getY());
+//			}
+//		} catch(IOException ex){
+//			//Couldn't read mouse press, ignore
+//		}
+//	}
 }
