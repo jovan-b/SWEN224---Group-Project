@@ -24,7 +24,7 @@ import gui.GUICanvas;
  * 		FIRERATE * firerateMulti
  * 
  * @author Jah Seng Lee
- * @author Chris Read
+ * @author Chris Read 300254724
  * @author Sarah Dobie 300315033
  *
  */
@@ -185,7 +185,6 @@ public abstract class Player {
 		}
 	}
 
-	// TODO replace this
 	/**
 	 * Update the player's animation state.
 	 */
@@ -371,7 +370,7 @@ public abstract class Player {
 				return true;
 			}
 		}
-		// didn't ffind item in inventory
+		// didn't find item in inventory
 		return false;
 	}
 	
@@ -458,6 +457,10 @@ public abstract class Player {
 	}
 
 	//Setters
+	/**
+	 * Sets the row variable for the current room relative to the view direction 
+	 * @param row the row variable to set
+	 */
 	public void setRow(int row) {currentRow = row;}
 
 	public void setHealth(int health){this.health = health;}
@@ -503,6 +506,10 @@ public abstract class Player {
 
 	public void setCanvas(GUICanvas canvas){this.canvas = canvas;}
 
+	/**
+	 * replace player sprites with images scaled to the current view direction
+	 * @param newImages
+	 */
 	public void setScaledImages(Image[][] newImages) {
 		scaledSprites = newImages;
 	}

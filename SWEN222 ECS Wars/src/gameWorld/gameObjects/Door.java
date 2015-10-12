@@ -30,6 +30,7 @@ public class Door implements Item {
 	private boolean unlocked; // true if the door is unlocked by default
 	private boolean tempUnlocked; // true if the door has been unlocked by a keycard
 								  // or is unlocked by default
+	// Door images - only displayed if locked
 	private Image doorImage;
 	private Image scaledDoorImage;
 	
@@ -49,6 +50,9 @@ public class Door implements Item {
 		loadImages();
 	}
 
+	/**
+	 * loads the locked door images
+	 */
 	private void loadImages() {
 		try{
 			doorImage = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"DoorLocked.png"));
@@ -86,12 +90,15 @@ public class Door implements Item {
 //		System.out.println("Connecting to Door: " + id + " " + room2.getName());
 	}
 	
+	/**
+	 * Temporarily unlocks the door if the player is holding a key card
+	 */
 	@Override
 	public void use(Player p, Controller ctrl) {
 		Item keyCard = p.inventoryContains(new KeyCard());
 		if(keyCard != null){
 			tempUnlocked = true;
-			System.out.println("Unlocked the door"); // TODO implement properly
+			//System.out.println("Unlocked the door"); // TODO implement properly
 		}
 		
 	}
@@ -138,6 +145,9 @@ public class Door implements Item {
 		return doorImage;
 	}
 
+	/**
+	 * returns true if the door is currently unlocked
+	 */
 	@Override
 	public boolean canWalk() {
 		return tempUnlocked;

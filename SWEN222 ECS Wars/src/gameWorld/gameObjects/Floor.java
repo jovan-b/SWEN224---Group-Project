@@ -9,6 +9,7 @@ import gameWorld.gameObjects.weapons.Weapon;
 
 /**
  * A blank item used for empty squares which player can walk over.
+ * Can hold an item to be displayed on the floor
  * 
  * @author Chris Read 300254724
  * @author Sarah Dobie 300315033
@@ -31,6 +32,10 @@ public class Floor implements Item, ItemSpawner {
 		this.item = item;
 	}
 
+	/**
+	 * allows the player to pick up an item if one is on 
+	 * this floor tile
+	 */
 	@Override
 	public void use(Player p, Controller ctrl) {
 		if (item != null){
@@ -42,6 +47,9 @@ public class Floor implements Item, ItemSpawner {
 		}
 	}
 
+	/**
+	 * returns the image of an item on this floor tile
+	 */
 	@Override
 	public Image getImage(int viewDirection) {
 		if(item != null){
@@ -104,6 +112,9 @@ public class Floor implements Item, ItemSpawner {
 		return null;
 	}
 
+	/**
+	 * adds a spawning item to this container
+	 */
 	@Override
 	public boolean addSpawnItem(Item item) {
 		if(this.item == null){

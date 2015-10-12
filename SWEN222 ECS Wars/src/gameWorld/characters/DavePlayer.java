@@ -12,7 +12,7 @@ import gameWorld.Room;
 
 /**
  * Represents the Dave playable character
- * @author Chris Read
+ * @author Chris Read 300254724
  *
  */
 public class DavePlayer extends Player {

@@ -25,7 +25,8 @@ import gui.GUIFrame;
 public class RoomTests {
 	
 	private static final int SQUARE_SIZE = 24;
-	private Controller ctrl = new TestController(0);
+	private Controller ctrl = new SinglePlayerController();
+	private GUIFrame gui = new GUIFrame();
 	private Room classroom103 = new Room("Classroom 103", ctrl);
 	private Room classroom102 = new Room("Classroom 102", ctrl);
 	private Room seHallway = new Room("SE Hallway", ctrl);
@@ -40,6 +41,7 @@ public class RoomTests {
 	 * Tests the conversion between x and column values.
 	 */
 	public void testXColConversion1(){
+		ctrl.setGUI(gui);
 		Room room = classroom103;
 		// check simple values
 		assertEquals(room.colFromX(0), 0);

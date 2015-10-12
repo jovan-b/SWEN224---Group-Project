@@ -44,7 +44,6 @@ public class KeyCard implements Item {
 	
 	@Override
 	public void use(Player p, Controller ctrl) {
-		System.out.println("Player used the keycard!!"); // FIXME
 	}
 
 	@Override

@@ -47,7 +47,7 @@ public class GUICanvas extends JComponent{
 	private Player player; // the current player
 	private Compass compass; // the compass being displayed
 	private Sundial sundial; // the sundial being displayed
-	private Container currentContainer;
+	private Container currentContainer; // the container being used by the player
 	
 	private String toolTip; // current tooltip text
 	private int toolTipX; // current tooltip position
@@ -201,6 +201,7 @@ public class GUICanvas extends JComponent{
 
 	/**
 	 * Draws the heads up display, ie. UI components like health, score etc.
+	 * Includes elements like the compass and sundial
 	 * @param g The graphics object with which to draw
 	 * @param r The room to draw
 	 */
@@ -329,9 +330,11 @@ public class GUICanvas extends JComponent{
 
 	/**
 	 * Draw a black overlay over the server room to make it appear dark.
+	 * Also draws a transparent overlay over the Courtyard according to the
+	 * time of day.
 	 * If the player is carrying a torch, there is a directional 'hole'
 	 * in the overlay to simulate light.
-	 * @param r The server room
+	 * @param r The server room or courtyard
 	 * @param g The graphics object with which to draw
 	 */
 	private void drawDarknessOverlay(Room r, Graphics2D g) {
@@ -662,6 +665,13 @@ public class GUICanvas extends JComponent{
 		return temp;
 	}
 	
+	/**
+	 * Utility method converting a string representing a direction to 
+	 * a global direction
+	 * @param dir The string representing a direction
+	 * @param viewDirection The current view direction
+	 * @return the global direction integer
+	 */
 	public static int convertStringToDir(String dir, int viewDirection){
 		switch(dir){
 		case "up": return convertFromViewDir(NORTH, viewDirection);
@@ -700,7 +710,10 @@ public class GUICanvas extends JComponent{
 	public boolean getShowWinnerView(){
 		return this.winnerMenuView;
 	}
-	
+	 /**
+	  * Rotates the sundial by the specified number of degrees
+	  * @param degrees The degrees to rotate
+	  */
 	public void rotateSundial(double degrees){
 		sundial.rotate(degrees);
 	}

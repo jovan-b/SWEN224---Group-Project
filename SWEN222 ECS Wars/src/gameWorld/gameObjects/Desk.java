@@ -51,6 +51,10 @@ public class Desk implements Item {
 		return;
 	}
 
+	/**
+	 * returns the correct image relative to both the view direction
+	 * and the orientation of the desk
+	 */
 	@Override
 	public Image getImage(int viewDirection) {
 		if(this.horizontal){
@@ -74,6 +78,10 @@ public class Desk implements Item {
 		return false;
 	}
 
+	/**
+	 * returns the correct offset relative to both the view direction
+	 * and the orientation of the desk
+	 */
 	@Override
 	public int xOffset(int viewDirection) {
 		if(this.horizontal){
