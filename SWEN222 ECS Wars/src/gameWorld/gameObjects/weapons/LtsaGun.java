@@ -35,6 +35,9 @@ public class LtsaGun extends Weapon {
 	@Override
 	public Projectile fire(Player p, double theta){
 		double spread = Math.toRadians((Math.random()*BULLET_SPREAD)-BULLET_SPREAD/2);
+		if (this.canFire && projectile instanceof LtsaBullet){
+			((LtsaBullet)projectile).nextState();
+		}
 		return super.fire(p, theta+spread);
 	}
 

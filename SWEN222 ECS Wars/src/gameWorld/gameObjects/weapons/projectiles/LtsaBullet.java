@@ -52,7 +52,7 @@ public class LtsaBullet extends BasicProjectile{
 
 	@Override
 	public Projectile newInstance(Player p, double theta) {
-		return new LtsaBullet(p, p.getX(), p.getY(), nextState(), theta, images, largeImages);
+		return new LtsaBullet(p, p.getX(), p.getY(), state, theta, images, largeImages);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class LtsaBullet extends BasicProjectile{
 	 * if it reaches maximum state.
 	 * @return The next animation state of a bullet.
 	 */
-	private int nextState(){
+	public int nextState(){
 		int newState = state+1;
 		if(newState >= images.length){
 			newState = 0;
