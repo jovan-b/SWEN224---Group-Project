@@ -384,7 +384,7 @@ public class Room {
 			//		drawY+(playerY*viewScale)-(24*viewScale), c);
 		}
 		g.drawImage(playerImage, x-(16*viewScale), y-(24*viewScale), c);
-		if (p != clientPlayer){
+		if (p != clientPlayer && p.getHealth() < p.getMaxHealth()){
 			// draw remaining health
 			g.setColor(Color.RED);
 			int playerHealth = p.getHealth();
