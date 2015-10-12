@@ -66,6 +66,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	protected List<Item> itemsToSpawn;
 	protected List<CharacterSpawner> charSpawners = new ArrayList<>();
 	
+	protected boolean isDay = true;
 	
 	protected BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
 	protected int[] mouseLocation = new int[2];	//position of mouse if it is being clicked
@@ -132,8 +133,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	 * Starts the game clock
 	 */
 	private void startClock() {
-		clock = new GameClock();
-		clock.start();
+		clock = GameClock.getInstance();
 	}
 
 	/**
@@ -513,6 +513,18 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	
 	public void setRunning(boolean running){
 		isRunning = running;
+	}
+	
+	/**
+	 * Set whether it is day time.
+	 * @param day true for day, false for night
+	 */
+	public void setDayTime(boolean day){
+		isDay = day;
+	}
+	
+	public boolean isDayTime(){
+		return isDay;
 	}
 
 }

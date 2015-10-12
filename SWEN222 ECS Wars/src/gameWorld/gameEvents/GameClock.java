@@ -20,7 +20,7 @@ public final class GameClock {
 	private int time;
 	private Set<Event> events;
 	
-	public GameClock(){
+	private GameClock(){
 		time = START_TIME;
 		events = new HashSet<Event>();
 		clockTimer = new Timer();
@@ -100,6 +100,7 @@ public final class GameClock {
 	public static GameClock getInstance(){
 		if (_instance == null){
 			_instance = new GameClock();
+			_instance.start();
 		}
 		
 		return _instance;
