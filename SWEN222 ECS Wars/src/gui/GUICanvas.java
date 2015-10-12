@@ -9,10 +9,13 @@ import gameWorld.gameObjects.Torch;
 import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.weapons.Weapon;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -174,7 +177,8 @@ public class GUICanvas extends JComponent{
 	}
 	
 	@Override
-	public void paint(Graphics g){
+	public void paint(Graphics graphics){
+		Graphics2D g = (Graphics2D) graphics;
 		if(mainMenuView){
 			mainMenu.paint(g);
 			return;
@@ -200,11 +204,11 @@ public class GUICanvas extends JComponent{
 	 * @param g The graphics object with which to draw
 	 * @param r The room to draw
 	 */
-	private void drawHUD(Graphics g, Room r) {
+	private void drawHUD(Graphics2D g, Room r) {
 		// draw server room overlays
 		String roomName = r.getName();
 		if (roomName.equals("Server Room") ||
-				(roomName.equals("Courtyard") && !controller.isDayTime())){
+				roomName.equals("Courtyard")){
 			drawDarknessOverlay(r, g);
 		}
 		
@@ -330,9 +334,15 @@ public class GUICanvas extends JComponent{
 	 * @param r The server room
 	 * @param g The graphics object with which to draw
 	 */
-	private void drawDarknessOverlay(Room r, Graphics g) {
+	private void drawDarknessOverlay(Room r, Graphics2D g) {
 		// calculate drawing variables
-		g.setColor(Color.BLACK);
+		String roomName = r.getName();
+		float alpha = 1;
+		if (roomName.equals("Courtyard")){
+			alpha = controller.getNightAlpha();
+		} 	
+		g.setColor(new Color(0.0f, 0.0f, 0.0f, alpha));
+
 		Image image = scaledNoTorch;
 		int width = this.getWidth();
 		int height = this.getHeight();
@@ -352,7 +362,13 @@ public class GUICanvas extends JComponent{
 		g.fillRect(0, yMid+yView, width, yMid-yView);
 		g.fillRect(0, yMid-yView, xMid-xView, yView*2);
 		g.fillRect(xMid+xView, yMid-yView, xMid-xView, yView*2);
+		
+		// Set image alpha
+		Composite temp = g.getComposite();
+		AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha);
+        g.setComposite(ac);
 		g.drawImage(image, xMid-xView, yMid-yView, this);
+        g.setComposite(temp);
 	}
 
 	/**

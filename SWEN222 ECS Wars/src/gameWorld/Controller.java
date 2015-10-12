@@ -48,7 +48,7 @@ import java.util.Set;
 public abstract class Controller extends Thread implements KeyListener, MouseListener, MouseMotionListener{
 	
 	public static final double FRAME_RATE = 1.0/60;	//a 60th of a second
-	public static final int DAY_LENGTH = 30;
+	public static final int DAY_LENGTH = 40;
 	protected boolean isRunning = false;
 	
 	protected int uid;
@@ -66,7 +66,8 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	protected List<Item> itemsToSpawn;
 	protected List<CharacterSpawner> charSpawners = new ArrayList<>();
 	
-	protected boolean isDay = true;
+	protected float nightAlpha = 0;
+	protected float nightAlphaMod = 0;
 	
 	protected BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
 	protected int[] mouseLocation = new int[2];	//position of mouse if it is being clicked
@@ -85,6 +86,8 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		itemSpawners = new ArrayList<>();
 		itemsToSpawn = new ArrayList<>();
 		players = new ArrayList<Player>();
+		nightAlpha = 0;
+		nightAlphaMod = (1.0f/DAY_LENGTH);
 		
 		this.uid = uid;
 	}
@@ -514,17 +517,24 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	public void setRunning(boolean running){
 		isRunning = running;
 	}
-	
+
 	/**
-	 * Set whether it is day time.
-	 * @param day true for day, false for night
+	 * Gets the current alpha value for the day/night overlay
+	 * @return
 	 */
-	public void setDayTime(boolean day){
-		isDay = day;
+	public float getNightAlpha() {
+		return nightAlpha;
 	}
-	
-	public boolean isDayTime(){
-		return isDay;
+
+	public void updateNightAlpha() {
+		nightAlpha += nightAlphaMod;
+		if (nightAlpha > 1){
+			nightAlpha = 1;
+			nightAlphaMod *= -1;
+		} else if (nightAlpha < 0){
+			nightAlpha = 0;
+			nightAlphaMod *= -1;
+		}
 	}
 
 }

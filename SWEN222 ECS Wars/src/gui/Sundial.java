@@ -28,8 +28,8 @@ public class Sundial {
 	 * Constructor for class Sundial.
 	 */
 	public Sundial() {
-		rot = -90;
-		targetRot = -90;
+		rot = 0;
+		targetRot = 0;
 		loadImages();
 	}
 
@@ -101,7 +101,7 @@ public class Sundial {
 		if (rot == targetRot){
 			return;
 		}
-		double rotateAngle = (targetRot-rot)*0.01;
+		double rotateAngle = (targetRot-rot)*0.02;
 		rot += rotateAngle;
 		rotateImage(rot);
 	}

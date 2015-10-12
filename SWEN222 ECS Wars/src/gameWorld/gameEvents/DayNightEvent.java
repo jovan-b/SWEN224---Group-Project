@@ -14,9 +14,10 @@ public class DayNightEvent implements Event{
 	
 	@Override
 	public void notify(int time) {
-		if (time % duration == 0){
-			controller.setDayTime(!controller.isDayTime());	
-		}
+//		if (time % duration == 0){
+//			controller.setDayTime(!controller.isDayTime());	
+//		}
+		controller.updateNightAlpha();
 		
 		controller.getGUI().getCanvas().rotateSundial(180/duration);
 	}
