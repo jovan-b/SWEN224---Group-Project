@@ -120,10 +120,10 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		//room.addPlayer(player);
 		//player.setCanvas(gui.getCanvas());
 		
-		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new WanderingMerchantStrategy());
-		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
-		npc.setStrategy(NonPlayer.Events.COMBAT, new ChaseCombatStrategy(npc, 50));
-		room.addNPC(npc);
+//		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new WanderingMerchantStrategy());
+//		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
+//		npc.setStrategy(NonPlayer.Events.COMBAT, new ChaseCombatStrategy(npc, 50));
+//		room.addNPC(npc);
 		
 		SaveManager.saveGame(this, "test_save.xml");
 	}
@@ -456,13 +456,22 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	private void spawnPlayers(){
 		Collections.shuffle(players);
 		Collections.shuffle(charSpawners);
-		for(int i=0; i<players.size(); i++){
+		int i;
+		for(i=0; i<players.size(); i++){
 			if(i >= charSpawners.size()){break;}
 			CharacterSpawner spawner = charSpawners.get(i);
 			Player p = players.get(i);
 			p.getCurrentRoom().removePlayer(p);
 			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
 			spawner.getRoom().addPlayer(p);
+		}
+		
+		// Fill empty spawns with NPCs
+		for (int j = i; j < charSpawners.size(); j++){
+			CharacterSpawner spawner = charSpawners.get(j);
+			NonPlayer npc = new NonPlayer(spawner.getRoom(), spawner.getX(), spawner.getY(), 
+					new WanderingMerchantStrategy());
+			spawner.getRoom().addNPC(npc);
 		}
 	}
 	
@@ -633,6 +642,10 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		return nightAlpha;
 	}
 
+	/**
+	 * Updates the alpha value of the day/night display according to the 
+	 * current time
+	 */
 	public void updateNightAlpha() {
 		nightAlpha += nightAlphaMod;
 		if (nightAlpha > 1){
