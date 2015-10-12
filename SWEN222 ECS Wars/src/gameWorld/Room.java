@@ -313,7 +313,11 @@ public class Room {
 			for(int col=0; col<rotated.length; col++){
 				Item item = rotated[col][row];
 				if (item instanceof Door){
-					
+					if (doorsDrawn.contains(item)){
+						continue;
+					} else {
+						doorsDrawn.add((Door) item);
+					}
 				}
 				// draw item at current square
 				if(item.getScaledImage(viewDirection) != null){

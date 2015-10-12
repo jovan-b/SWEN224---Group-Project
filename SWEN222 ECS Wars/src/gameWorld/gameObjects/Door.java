@@ -147,7 +147,7 @@ public class Door implements Item {
 	public int yOffset(int viewDirection) {
 		if (viewDirection == 0 || viewDirection == 2){
 			return 1;
-		}
+		} 
 		return 0;
 	}
 
