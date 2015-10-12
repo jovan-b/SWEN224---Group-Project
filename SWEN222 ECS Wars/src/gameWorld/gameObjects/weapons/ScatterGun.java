@@ -1,6 +1,10 @@
 package gameWorld.gameObjects.weapons;
 
 import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
@@ -18,6 +22,16 @@ public class ScatterGun extends Weapon{
 	public ScatterGun() {
 		super(FIRE_RATE, new RubberBullet());
 		this.description = "A scatter gun";
+		loadImages();
+	}
+	
+	private void loadImages(){
+		try{
+			super.image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"gun2.png"));
+			super.scaledImage = image;
+		} catch(IOException e){
+			System.out.println("Error loading weapon image file: "+e.getMessage());
+		}
 	}
 	
 	@Override
@@ -41,32 +55,27 @@ public class ScatterGun extends Weapon{
 
 	@Override
 	public Image getImage(int viewDirection) {
-		// TODO Auto-generated method stub
-		return null;
+		return super.image;
 	}
 
 	@Override
 	public int yOffset(int viewDirection) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int xOffset(int viewDirection) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void setScaledImage(int viewDirection, Image scaledImage) {
-		// TODO Auto-generated method stub
-		
+		super.scaledImage = scaledImage;
 	}
 
 	@Override
 	public Image getScaledImage(int viewDirection) {
-		// TODO Auto-generated method stub
-		return null;
+		return super.scaledImage;
 	}
 
 	@Override

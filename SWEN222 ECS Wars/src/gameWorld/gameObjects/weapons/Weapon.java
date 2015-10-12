@@ -1,5 +1,6 @@
 package gameWorld.gameObjects.weapons;
 
+import java.awt.Image;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,6 +17,8 @@ import gameWorld.gameObjects.weapons.projectiles.Projectile;
 public abstract class Weapon implements Item {
 	protected double fireRate = 0;
 	protected Projectile projectile;
+	protected Image image;
+	protected Image scaledImage;
 	
 	protected boolean canFire;
 	

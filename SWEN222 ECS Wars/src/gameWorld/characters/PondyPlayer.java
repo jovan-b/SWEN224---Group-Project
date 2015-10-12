@@ -26,8 +26,7 @@ public class PondyPlayer extends Player {
 				}
 			}
 		} catch (IOException e) {
-			System.out
-					.println("Error loading player images: " + e.getMessage());
+			System.out.println("Error loading player images: " + e.getMessage());
 		}
 		scaledSprites = sprites;
 	}
