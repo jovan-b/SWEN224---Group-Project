@@ -705,7 +705,7 @@ public class Room {
 	 * @param viewScale The current view scaled
 	 * @return The wandering NPC at the mouse, or null if there is none
 	 */
-	public NonPlayer wanderingNpcAtMouse(int x, int y, Player p, int viewScale, int viewDirection){
+	public NonPlayer npcAtMouse(int x, int y, Player p, int viewScale, int viewDirection){
 		int newX;
 		int newY;
 		// determine the scaled x and y
@@ -732,12 +732,9 @@ public class Room {
 		if (Math.abs(xDiff) < 48 && Math.abs(yDiff) < 48){
 			for(NonPlayer npc : npcs){
 				// check if npc is wandering
-				if(npc.getStrategy() instanceof WanderingMerchantStrategy){
-					// see if mouse is over npc
-					Rectangle bbox = npc.getBoundingBox();
-					if(bbox.contains(new Point(newX, newY))){
-						return npc;
-					}
+				Rectangle bbox = npc.getBoundingBox();
+				if(bbox.contains(new Point(newX, newY))){
+					return npc;
 				}
 			}
 		}

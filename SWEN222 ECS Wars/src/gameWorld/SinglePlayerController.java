@@ -221,7 +221,7 @@ public class SinglePlayerController extends Controller {
 
 		// check if mousing over merchant NPC
 		Room currentRoom = player.getCurrentRoom();
-		NonPlayer npc = currentRoom.wanderingNpcAtMouse(x, y, player,
+		NonPlayer npc = currentRoom.npcAtMouse(x, y, player,
 				viewScale, viewDirection);
 		if (npc != null) {
 			WanderingMerchantStrategy strat = (WanderingMerchantStrategy) npc
@@ -300,12 +300,10 @@ public class SinglePlayerController extends Controller {
 		String desc = "";
 		// check if mousing over merchant NPC
 		Room currentRoom = player.getCurrentRoom();
-		NonPlayer npc = currentRoom.wanderingNpcAtMouse(x, y, player,
+		NonPlayer npc = currentRoom.npcAtMouse(x, y, player,
 				viewScale, viewDirection);
 		if (npc != null) {
-			WanderingMerchantStrategy strat = (WanderingMerchantStrategy) npc
-					.getStrategy();
-			desc = strat.getDescription();
+			desc = npc.getStrategy().getDescription();
 		}
 		// checks if the player is currently mousing over their inventory
 		else if (24 * 2 * viewScale < y && y < 24 * 3 * viewScale) {

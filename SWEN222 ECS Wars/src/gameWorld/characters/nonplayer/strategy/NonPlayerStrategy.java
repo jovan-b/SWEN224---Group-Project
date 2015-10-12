@@ -32,4 +32,10 @@ public interface NonPlayerStrategy {
 	 * @param p The player interacting with me
 	 */
 	public void interact(Player p, NonPlayer npc);
+	
+	/**
+	 * Returns a description for the NPC using this strategy
+	 * @return
+	 */
+	public String getDescription();
 }

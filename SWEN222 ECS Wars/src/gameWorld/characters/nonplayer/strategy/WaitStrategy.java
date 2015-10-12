@@ -6,6 +6,7 @@ import gameWorld.characters.nonplayer.NonPlayer;
 public class WaitStrategy implements NonPlayerStrategy {
 	
 	protected NonPlayer npc;
+	protected String description = "";
 	
 	@Override
 	public void update() {
@@ -30,6 +31,11 @@ public class WaitStrategy implements NonPlayerStrategy {
 	@Override
 	public void interact(Player p, NonPlayer npc){
 		// do nothing
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
 	}
 	
 	

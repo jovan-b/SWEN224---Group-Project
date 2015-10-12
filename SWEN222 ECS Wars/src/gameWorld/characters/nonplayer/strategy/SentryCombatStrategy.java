@@ -64,5 +64,10 @@ public class SentryCombatStrategy extends WaitStrategy {
 			npc.shoot(target.getX(), target.getY());
 		}
 	}
+	
+	@Override
+	public String getDescription(){
+		return "He looks angry, yet staunch";
+	}
 
 }
