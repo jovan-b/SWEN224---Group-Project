@@ -18,7 +18,8 @@ public class PaintballGun extends Weapon {
 	
 	public PaintballGun(){
 		super(4, new PaintBall());
-		this.description = "A basic paintball gun";
+		this.description = "A basic Paintball Gun. Aim for the head.";
+		this.name = "Paintball Gun";
 		loadImages();
 	}
 	

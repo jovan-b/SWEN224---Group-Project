@@ -19,6 +19,7 @@ public abstract class Weapon implements Item {
 	protected Projectile projectile;
 	protected Image image;
 	protected Image scaledImage;
+	protected String name;
 	
 	protected boolean canFire;
 	
@@ -76,5 +77,9 @@ public abstract class Weapon implements Item {
 	}
 	
 	public abstract WeaponType getWeaponType();
+
+	public String getName() {
+		return name;
+	}
 	
 }

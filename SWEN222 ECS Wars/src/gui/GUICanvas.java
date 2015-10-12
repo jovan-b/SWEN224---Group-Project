@@ -345,7 +345,7 @@ public class GUICanvas extends JComponent{
 	}
 
 	/**
-	 * Draw the player's inventory in the top-left corner.
+	 * Draw the player's inventory and weapon in the top-left corner.
 	 * @param g The graphics object with which to draw
 	 */
 	private void drawInventory(Graphics g) {
@@ -356,9 +356,13 @@ public class GUICanvas extends JComponent{
 				g.drawImage(itemImage, (24*viewScale)*(1+i), (24*viewScale)*2, this);
 			}
 		}
+		// draws the players current weapon
 		Weapon weapon = player.getWeapon();
 		Image weaponImage = weapon.getScaledImage(0);
 		g.drawImage(weaponImage, (24*viewScale), (24*viewScale)*3, this);
+		g.setFont(new Font("pixelmix", Font.PLAIN, 10*viewScale));
+		g.setColor(Color.WHITE);
+		g.drawString(weapon.getName(), (24*viewScale)*2+(6*viewScale), (24*viewScale)*3+(18*viewScale));
 	}
 
 	/**

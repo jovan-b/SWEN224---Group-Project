@@ -21,7 +21,8 @@ public class ScatterGun extends Weapon{
 
 	public ScatterGun() {
 		super(FIRE_RATE, new RubberBullet());
-		this.description = "A scatter gun";
+		this.description = "A Scatter Gun. Watch out for ricochets.";
+		this.name = "Scatter Gun";
 		loadImages();
 	}
 	

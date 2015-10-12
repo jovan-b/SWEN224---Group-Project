@@ -18,7 +18,8 @@ public class LtsaGun extends Weapon {
 	
 	public LtsaGun(){
 		super(4, new LtsaBullet());
-		this.description = "A basic paintball gun";
+		this.description = "The LTSA Gun. Effectively ineffective.";
+		this.name = "LTSA Gun";
 		loadImages();
 	}
 	
