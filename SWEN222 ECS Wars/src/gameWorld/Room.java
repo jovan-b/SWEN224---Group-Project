@@ -312,18 +312,25 @@ public class Room {
 			// draw items at this row
 			for(int col=0; col<rotated.length; col++){
 				Item item = rotated[col][row];
+				
+				// Checked locked door modifiers
+				int yOffsetMod = 0;
 				if (item instanceof Door){
 					if (doorsDrawn.contains(item)){
 						continue;
 					} else {
 						doorsDrawn.add((Door) item);
 					}
+					if (row+1 >= rotated[0].length || rotated[col][row+1] instanceof Wall){
+						yOffsetMod = 1;
+					}
 				}
+				
 				// draw item at current square
 				if(item.getScaledImage(viewDirection) != null){
 					image = item.getScaledImage(viewDirection);
 					g.drawImage(image, drawX+(col*squareSize*viewScale)-(item.xOffset(viewDirection)*squareSize*viewScale), 
-							drawY+(row*squareSize*viewScale)-(item.yOffset(viewDirection)*squareSize*viewScale), c);
+							drawY+(row*squareSize*viewScale)-((item.yOffset(viewDirection)+yOffsetMod)*squareSize*viewScale), c);
 				}
 			}
 		}
