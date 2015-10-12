@@ -285,36 +285,41 @@ public class Room {
 		
 		// draw contents
 		Image image;
+		Set<Door> doorsDrawn = new HashSet<>();
 		for(int row=0; row<rotated[0].length; row++){
+			// draw projectile at this row
+			for (Projectile p : projectiles){
+				if (p.getRow() == row-1){ // Ensures the projectile is drawn above their current row
+					drawProjectile(g, c, viewDirection, drawX, drawY, p);
+					p.setRow(-1);
+				}
+			}
+			// draw player at this row
+			for (Player p : players){
+				if (p.getRow() == row-1){ // Ensures the player is drawn above their current row
+					drawPlayer(g, c, viewDirection, drawX, drawY, p, player);
+					p.setRow(-1);
+				}
+			}
+			
+			// draw npc characters
+			for (NonPlayer npc : npcs){
+				if (npc.getRow() == row-1){ // Ensures the player is drawn above their current row
+					drawPlayer(g, c, viewDirection, drawX, drawY, npc, player);
+					npc.setRow(-1);
+				}
+			}
+			// draw items at this row
 			for(int col=0; col<rotated.length; col++){
 				Item item = rotated[col][row];
+				if (item instanceof Door){
+					
+				}
 				// draw item at current square
 				if(item.getScaledImage(viewDirection) != null){
 					image = item.getScaledImage(viewDirection);
 					g.drawImage(image, drawX+(col*squareSize*viewScale)-(item.xOffset(viewDirection)*squareSize*viewScale), 
 							drawY+(row*squareSize*viewScale)-(item.yOffset(viewDirection)*squareSize*viewScale), c);
-				}
-				// draw projectile at this row
-				for (Projectile p : projectiles){
-					if (p.getRow() == row-1){ // Ensures the projectile is drawn above their current row
-						drawProjectile(g, c, viewDirection, drawX, drawY, p);
-						p.setRow(-1);
-					}
-				}
-				// draw player at this row
-				for (Player p : players){
-					if (p.getRow() == row-1){ // Ensures the player is drawn above their current row
-						drawPlayer(g, c, viewDirection, drawX, drawY, p, player);
-						p.setRow(-1);
-					}
-				}
-				
-				// draw npc characters
-				for (NonPlayer npc : npcs){
-					if (npc.getRow() == row-1){ // Ensures the player is drawn above their current row
-						drawPlayer(g, c, viewDirection, drawX, drawY, npc, player);
-						npc.setRow(-1);
-					}
 				}
 			}
 		}

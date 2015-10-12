@@ -1,6 +1,10 @@
 package gameWorld.gameObjects;
 
 import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.Room;
@@ -26,6 +30,8 @@ public class Door implements Item {
 	private boolean unlocked; // true if the door is unlocked by default
 	private boolean tempUnlocked; // true if the door has been unlocked by a keycard
 								  // or is unlocked by default
+	private Image doorImage;
+	private Image scaledDoorImage;
 	
 	/**
 	 * Constructor for class door.
@@ -40,7 +46,16 @@ public class Door implements Item {
 		this.room1 = room1;
 		this.room1Col = room1Col;
 		this.room1Row = room1Row;
-//		System.out.println("New Door: " + parseCode + " " + room1.getName());
+		loadImages();
+	}
+
+	private void loadImages() {
+		try{
+			doorImage = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"DoorLocked.png"));
+			scaledDoorImage = doorImage;
+		} catch(IOException e){
+			System.out.println("Error loading Door image file: "+e.getMessage());
+		}
 	}
 
 	/**
@@ -120,7 +135,7 @@ public class Door implements Item {
 
 	@Override
 	public Image getImage(int viewDirection) {
-		return null;
+		return doorImage;
 	}
 
 	@Override
@@ -130,6 +145,9 @@ public class Door implements Item {
 
 	@Override
 	public int yOffset(int viewDirection) {
+		if (viewDirection == 0 || viewDirection == 2){
+			return 1;
+		}
 		return 0;
 	}
 
@@ -140,10 +158,14 @@ public class Door implements Item {
 
 	@Override
 	public void setScaledImage(int viewDirection, Image scaledImage) {
+		scaledDoorImage = scaledImage;
 	}
 
 	@Override
 	public Image getScaledImage(int viewDirection) {
+		if (!tempUnlocked && (viewDirection == 0 || viewDirection == 2)){
+			return scaledDoorImage;
+		}
 		return null;
 	}
 
@@ -213,6 +235,9 @@ public class Door implements Item {
 
 	@Override
 	public String getDescription() {
+		if (!tempUnlocked){
+			return "A locked door, requires a key card to access";
+		}
 		return null;
 	}
 	
