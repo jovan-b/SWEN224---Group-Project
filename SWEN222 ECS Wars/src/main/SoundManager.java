@@ -120,9 +120,16 @@ public final class SoundManager {
 		}
 				
 		//Fade the new song in
-		FadeThread ft = new FadeThread(player, FADE_IN_DURATION, NO_VOLUME, volume);
-		if (playing){ft.setDelay(TRANSITION_DURATION);}
-		player.setOnReady(ft);
+		//(New runnable object to ensure the thread is started correctly)
+		Runnable run = new Runnable(){
+			@Override
+			public void run() {
+				FadeThread ft = new FadeThread(player, FADE_IN_DURATION, NO_VOLUME, volume);
+				if (playing){ft.setDelay(TRANSITION_DURATION);}
+				ft.start();
+			}
+		};
+		player.setOnReady(run);
 	}
 	
 	/**
