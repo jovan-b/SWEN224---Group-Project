@@ -22,7 +22,7 @@ public class PondyPlayer extends Player {
 				for (int ani = 0; ani < 3; ani++) {
 					sprites[dir][ani] = ImageIO.read(new File("Resources"
 							+ File.separator + "Players" + File.separator
-							+ "Dave" + dir + ani + ".png"));
+							+ "Pondy" + dir + ani + ".png"));
 				}
 			}
 		} catch (IOException e) {

@@ -43,6 +43,8 @@ public abstract class Player {
 	public enum Type{
 		DavePlayer,
 		PondyPlayer,
+		MarcoPlayer,
+		StreaderPlayer,
 		NonPlayer
 	}
 

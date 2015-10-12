@@ -1,7 +1,10 @@
 package gameWorld;
 
 import gameWorld.characters.DavePlayer;
+import gameWorld.characters.MarcoPlayer;
 import gameWorld.characters.Player;
+import gameWorld.characters.PondyPlayer;
+import gameWorld.characters.StreaderPlayer;
 import gameWorld.characters.nonplayer.NonPlayer;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
