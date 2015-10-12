@@ -23,6 +23,7 @@ public class Sundial {
 	BufferedImage rotated;
 	double rot; // the current rotation angle
 	double targetRot; // the target rotation angle
+	double rotateAngle;
 
 	/**
 	 * Constructor for class Sundial.
@@ -30,6 +31,7 @@ public class Sundial {
 	public Sundial() {
 		rot = 0;
 		targetRot = 0;
+		rotateAngle = 0;
 		loadImages();
 	}
 
@@ -53,6 +55,8 @@ public class Sundial {
 	 */
 	public void rotate(double angle){
 		targetRot += angle;
+		rotateAngle = (targetRot-rot)*0.02;
+		targetRot = targetRot%360;
 	}
 	
 	/**
@@ -101,8 +105,8 @@ public class Sundial {
 		if (rot == targetRot){
 			return;
 		}
-		double rotateAngle = (targetRot-rot)*0.02;
 		rot += rotateAngle;
+		rot = rot % 360;
 		rotateImage(rot);
 	}
 

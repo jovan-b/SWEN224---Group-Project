@@ -62,8 +62,8 @@ public abstract class Player {
 	protected int posY;
 	protected int hitBox = 10;
 
-	private int tempX;
-	private int tempY;
+	protected int tempX;
+	protected int tempY;
 
 	protected int lastDirMoved;
 	protected int animState; // the current animation frame

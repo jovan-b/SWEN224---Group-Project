@@ -67,8 +67,8 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	protected List<Item> itemsToSpawn;
 	protected List<CharacterSpawner> charSpawners = new ArrayList<>();
 	
-	protected float nightAlpha = 0;
-	protected float nightAlphaMod = 0;
+	protected double nightAlpha = 0;
+	protected double nightAlphaMod = 0;
 	
 	protected boolean shooting = false;
 	protected BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
@@ -639,7 +639,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	 * @return
 	 */
 	public float getNightAlpha() {
-		return nightAlpha;
+		return (float)nightAlpha;
 	}
 
 	/**
@@ -654,7 +654,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		} else if (nightAlpha < 0){
 			nightAlpha = 0;
 			nightAlphaMod *= -1;
-		}
+		}		
 	}
 
 }
