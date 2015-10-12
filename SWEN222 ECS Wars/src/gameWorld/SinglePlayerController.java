@@ -234,8 +234,8 @@ public class SinglePlayerController extends Controller {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
+		super.mouseX = e.getX();
+		super.mouseY = e.getY();
 	}
 
 
