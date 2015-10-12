@@ -70,6 +70,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	protected float nightAlpha = 0;
 	protected float nightAlphaMod = 0;
 	
+	protected boolean shooting = false;
 	protected BitSet keyBits = new BitSet(256);	//set of keys being pressed right now
 	protected int[] mouseLocation = new int[2];	//position of mouse if it is being clicked
 												//mouseLocation[0] is x
@@ -206,6 +207,67 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		//Hook to run on game tick
 	}
 
+	/**
+	 * Checks the mouse position to see if it is hovering over an item which
+	 * should display a tooltip.
+	 */
+	protected void checkTooltip(Player player) {
+		int viewScale = gui.getCanvas().getViewScale();
+		int viewDirection = gui.getCanvas().getViewDirection();
+		int x = mouseX;
+		int y = mouseY;
+		int xMid = gui.getCanvas().getWidth() / 2;
+		int yMid = gui.getCanvas().getHeight() / 2;
+		Container container = gui.getCanvas().getCurrentContainer();
+		String desc = "";
+		// check if mousing over merchant NPC
+		Room currentRoom = player.getCurrentRoom();
+		NonPlayer npc = currentRoom.npcAtMouse(x, y, player,
+				viewScale, viewDirection);
+		if (npc != null) {
+			desc = npc.getStrategy().getDescription();
+		}
+		// checks if the player is currently mousing over their inventory
+		else if (24 * 2 * viewScale < y && y < 24 * 3 * viewScale) {
+			if (24 * viewScale < x
+					&& x < 24 * (Player.INVENTORY_SIZE + 1) * viewScale) {
+				// hovering over inventory
+				int index = (x - (24 * viewScale)) / (24 * viewScale);
+				desc = player.inventoryItemAt(index).getDescription();
+			} else {
+				// not hovering over inventory - check for items on floor
+				desc = player.getCurrentRoom()
+						.itemAtMouse(x, y, viewScale, player, viewDirection)
+						.getDescription();
+			}
+			// or if player is mousing over another inventory
+		} else if ((yMid - (24 * 2 * viewScale) < y && y < yMid
+				- (24 * viewScale))
+				&& container != null) {
+			if (xMid - (24 * 2 * viewScale) < x
+					&& x < xMid + (24 * 2 * viewScale)) {
+				// hovering over inventory
+				int index = (x - (xMid - (24 * 2 * viewScale)))
+						/ (24 * viewScale);
+				Item itemAtIndex = container.getItem(index);
+				if (itemAtIndex != null) {
+					desc = itemAtIndex.getDescription();
+				}
+			} else {
+				// not hovering over inventory - check for items on floor
+				desc = player.getCurrentRoom()
+						.itemAtMouse(x, y, viewScale, player, viewDirection)
+						.getDescription();
+			}
+
+		} else {
+			// not hovering over inventory - check for items on floor
+			desc = player.getCurrentRoom()
+					.itemAtMouse(x, y, viewScale, player, viewDirection)
+					.getDescription();
+		}
+		gui.getCanvas().setToolTip(desc, x, y);
+	}
 	
 	/**
 	 * Parses all the room objects in the game.
@@ -414,6 +476,63 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	}
 
 	/**
+	 * Decides what to do when a player uses right click
+	 * @param x
+	 * @param y
+	 * @param player
+	 */
+	public void rightClickInteract(int x, int y, Player player) {
+		int viewScale = gui.getCanvas().getViewScale();
+		int viewDirection = gui.getCanvas().getViewDirection();
+		Container container = gui.getCanvas().getCurrentContainer();
+		int xMid = gui.getCanvas().getWidth() / 2;
+		int yMid = gui.getCanvas().getHeight() / 2;
+
+		// check if mousing over merchant NPC
+		Room currentRoom = player.getCurrentRoom();
+		NonPlayer npc = currentRoom.npcAtMouse(x, y, player,
+				viewScale, viewDirection);
+		if (npc != null) {
+			WanderingMerchantStrategy strat = (WanderingMerchantStrategy) npc
+					.getStrategy();
+			strat.interact(player, npc);
+		}
+		// check if the player has clicked on their inventory
+		else if (24 * 2 * viewScale < y && y < 24 * 3 * viewScale) {
+			if (24 * viewScale < x
+					&& x < 24 * (Player.INVENTORY_SIZE + 1) * viewScale) {
+				int index = (x - (24 * viewScale)) / (24 * viewScale);
+				player.dropItem(index, container);
+			} else {
+				Room room = player.getCurrentRoom();
+				Item item = room.itemAtMouse(x, y, viewScale, player,
+						viewDirection);
+				item.use(player, this);
+			}
+		} else if ((yMid - (24 * 2 * viewScale) < y && y < yMid
+				- (24 * viewScale))
+				&& container != null) {
+			if (xMid - (24 * 2 * viewScale) < x
+					&& x < xMid + (24 * 2 * viewScale)) {
+				// the player has clicked on an open container
+				int index = (x - (xMid - (24 * 2 * viewScale)))
+						/ (24 * viewScale);
+				container.pickUpItem(index, player);
+			} else {
+				Room room = player.getCurrentRoom();
+				Item item = room.itemAtMouse(x, y, viewScale, player,
+						viewDirection);
+				item.use(player, this);
+			}
+		} else {
+			Room room = player.getCurrentRoom();
+			Item item = room
+					.itemAtMouse(x, y, viewScale, player, viewDirection);
+			item.use(player, this);
+		}
+	}
+	
+	/**
 	 * Gets all the doors in the game.
 	 * @return A Set of all doors in the game
 	 */
@@ -463,6 +582,18 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	
 	public BitSet getKeysPressed(){
 		return keyBits;
+	}
+	
+	public boolean isShooting(){
+		return shooting;
+	}
+	
+	public int getMouseX(){
+		return mouseX;
+	}
+	
+	public int getMouseY(){
+		return mouseY;
 	}
 	
 	/**

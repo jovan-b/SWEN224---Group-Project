@@ -125,10 +125,18 @@ public class ClientConnection extends Thread{
 			if(isKeyPressed(KeyEvent.VK_SHIFT)){
 				player.setSpeedModifier(2);
 			}
-	//		if(isLeftMousePressed()){
-	//			player.shoot(mouseLocation[0], mouseLocation[1]);
-	//		}
+			
+			if (controller.isShooting()) {
+				int mx = controller.getMouseX();
+				int my = controller.getMouseY();
+				player.shoot(mx, my);
+				//Write that the player is shooting at the mouse positions
+				output.writeInt(2);
+				output.writeInt(mx);
+				output.writeInt(my);
+			}
 
+			//If there players position has changed, send there new position to every client in the game
 			if(posChanged){
 				int x = player.getX();
 				int y = player.getY();

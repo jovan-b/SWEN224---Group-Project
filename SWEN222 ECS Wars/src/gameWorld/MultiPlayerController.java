@@ -3,6 +3,7 @@ package gameWorld;
 import gameWorld.characters.DavePlayer;
 import gameWorld.characters.Player;
 import gameWorld.gameObjects.CharacterSpawner;
+import gui.GUICanvas;
 import main.SoundManager;
 import network.ClientConnection;
 
@@ -13,9 +14,11 @@ import java.net.Socket;
 public class MultiPlayerController extends Controller {
 	
 	private int numPlayers;
+	private GUICanvas canvas;
 
-	public MultiPlayerController(Socket socket, int uid, int numPlayers) {
+	public MultiPlayerController(Socket socket, int uid, int numPlayers, GUICanvas canvas) {
 		super(uid);
+		this.canvas = canvas;
 		this.numPlayers = numPlayers;
 		initialise();
 		
@@ -28,6 +31,15 @@ public class MultiPlayerController extends Controller {
 		
 		for (int i=0; i<numPlayers; i++){
 			players.add(new DavePlayer(rooms.get(0), (i+2)*24, 2*24));
+		}
+		
+		for(int i=0; i<numPlayers; i++){
+			Player player = players.get(i);
+			if(i == uid){
+				continue;
+			} else{
+				player.setCanvas(canvas);
+			}
 		}
 	}
 	
@@ -55,7 +67,7 @@ public class MultiPlayerController extends Controller {
 	@Override
 	public void update(){
 		client.dealWithInput();
-		//checkToolTip();
+		checkTooltip(getPlayer(uid));
 		players.get(uid).update();
 	}
 	
@@ -91,46 +103,52 @@ public class MultiPlayerController extends Controller {
 			this.getGUI().getCanvas().setViewScale(2);
 			this.scaleEverything(2);
 		}
+		players.get(uid).setSpeedModifier(1);
 		keyBits.clear(e.getKeyCode());
 	}
 
 	public void keyTyped(KeyEvent e) {}
 	public void mouseClicked(MouseEvent e) {}
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
+	
+	/**
+	 * clear mouselocation, so that nothing is being pressed
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		if (e.getButton() == 1) {
+			shooting = false;
+		}
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		mouseX = e.getX();
+		mouseY = e.getY();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		mouseX = e.getX();
+		mouseY = e.getY();
 	}
+	
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if (e.getButton() == 1) {
+			shooting = true;
+			mouseX = e.getX();
+			mouseY = e.getY();
+		} else if (e.getButton() == 3) {
+			int x = e.getX();
+			int y = e.getY();
+			rightClickInteract(x, y, players.get(uid));
+			//TODO: network sync
+		}
+	}
+	
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
 
 }

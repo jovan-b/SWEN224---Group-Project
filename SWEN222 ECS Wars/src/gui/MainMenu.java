@@ -323,7 +323,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			int uid = input.readInt();
 			
 			//ClientConnection client = new ClientConnection(s);
-			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers), uid);
+			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers, canvas), uid);
 			redraw.stopRunning();
 		} catch (IOException e){
 			JOptionPane.showMessageDialog(canvas, "Error: could not find server");
