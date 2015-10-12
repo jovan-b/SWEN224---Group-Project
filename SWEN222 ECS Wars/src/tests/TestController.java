@@ -16,7 +16,7 @@ public class TestController extends Controller {
 
 	public TestController(int uid) {
 		super(uid);
-		gui = new GUIFrame();
+		gui = new TestFrame();
 	}
 
 	@Override
