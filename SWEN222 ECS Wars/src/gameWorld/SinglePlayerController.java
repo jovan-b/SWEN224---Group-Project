@@ -6,10 +6,12 @@ import gameWorld.characters.Player;
 import gameWorld.characters.PondyPlayer;
 import gameWorld.characters.StreaderPlayer;
 import gameWorld.characters.nonplayer.NonPlayer;
+import gameWorld.characters.nonplayer.strategy.ChaseCombatStrategy;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
 import gameWorld.gameEvents.DayNightEvent;
 import gameWorld.gameEvents.GameClock;
+import gameWorld.gameEvents.SlowUpdateEvent;
 import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.containers.Container;
 import gui.GUICanvas;
@@ -57,9 +59,11 @@ public class SinglePlayerController extends Controller {
 		NonPlayer npc = new NonPlayer(rooms.get(0), 5 * 24, 7 * 24,
 				new WanderingMerchantStrategy());
 		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
+		npc.setStrategy(NonPlayer.Events.COMBAT, new ChaseCombatStrategy(npc, 50));
 		rooms.get(0).addNPC(npc);
 		
 		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, DAY_LENGTH));
+		GameClock.getInstance().scheduleEvent(new SlowUpdateEvent(this, 1));
 	}
 
 	/**

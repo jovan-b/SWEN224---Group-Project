@@ -2,6 +2,7 @@ package gameWorld;
 
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
+import gameWorld.characters.nonplayer.strategy.ChaseCombatStrategy;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
 import gameWorld.gameEvents.GameClock;
@@ -150,6 +151,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		
 		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new WanderingMerchantStrategy());
 		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
+		npc.setStrategy(NonPlayer.Events.COMBAT, new ChaseCombatStrategy(npc, 50));
 		room.addNPC(npc);
 		
 		SaveManager.saveGame(this, "test_save.xml");
