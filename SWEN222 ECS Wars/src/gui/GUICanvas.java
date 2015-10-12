@@ -60,6 +60,7 @@ public class GUICanvas extends JComponent{
 	private WinnerMenu winnerMenu; // the winner menu to display
 	
 	private boolean isNight; // true if it is currently night time
+	private float dayNightRotation = 0;
 	
 	// Static UI Images
 	private Image[] torchLight;
@@ -677,7 +678,24 @@ public class GUICanvas extends JComponent{
 		return this.winnerMenuView;
 	}
 	
+	/**
+	 * toggle the night time black overlay on the courtyard
+	 */
 	public void toggleNight(){
 		isNight = !isNight;
+	}
+
+	/**
+	 * Sets the time value to be displayed on the screen
+	 * @param time
+	 */
+	public void setTime(int time) {
+		int dayLength = Controller.DAY_LENGTH;
+		int localTime = time%dayLength;
+		System.out.println(localTime);
+		if (localTime == 0){
+			toggleNight();
+		}
+		dayNightRotation = (360/dayLength)*localTime;
 	}
 }

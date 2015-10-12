@@ -12,6 +12,11 @@ import gameWorld.gameObjects.weapons.Weapon.WeaponType;
 import gameWorld.gameObjects.weapons.projectiles.PistolBullet;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
 
+/**
+ * A pistol weapon, fires slowly but accurately
+ * @author Chris Read 300254724
+ *
+ */
 public class Pistol extends Weapon {
 	public static final double BULLET_SPREAD = 5;
 	private String description;

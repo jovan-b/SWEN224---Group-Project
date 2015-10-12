@@ -93,10 +93,7 @@ public class SinglePlayerController extends Controller {
 	private void clockEventUpdate() {
 		int time = clock.getTime();
 		lastClockTime = time;
-		System.out.println(time);
-		if (time % 40 == 0){
-			gui.getCanvas().toggleNight();
-		}
+		gui.getCanvas().setTime(time);
 	}
 
 	/**

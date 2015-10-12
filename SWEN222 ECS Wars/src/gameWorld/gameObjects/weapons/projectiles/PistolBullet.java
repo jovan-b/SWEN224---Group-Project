@@ -8,6 +8,11 @@ import javax.imageio.ImageIO;
 
 import gameWorld.characters.Player;
 
+/**
+ * A bullet for the Pistol gun. High speed and damage
+ * @author Chris Read 300254724
+ *
+ */
 public class PistolBullet extends BasicProjectile{
 	
 	private Image image;

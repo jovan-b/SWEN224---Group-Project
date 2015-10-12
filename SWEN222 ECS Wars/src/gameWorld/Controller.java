@@ -48,6 +48,7 @@ import java.util.Set;
 public abstract class Controller extends Thread implements KeyListener, MouseListener, MouseMotionListener{
 	
 	public static final double FRAME_RATE = 1.0/60;	//a 60th of a second
+	public static final int DAY_LENGTH = 30;
 	protected boolean isRunning = false;
 	
 	protected int uid;
