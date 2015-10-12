@@ -9,6 +9,7 @@ import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.containers.Pouch;
 import gameWorld.gameObjects.weapons.LtsaGun;
 import gameWorld.gameObjects.weapons.PaintballGun;
+import gameWorld.gameObjects.weapons.Pistol;
 import gameWorld.gameObjects.weapons.ScatterGun;
 import gameWorld.gameObjects.weapons.Weapon;
 import gui.GUICanvas;
@@ -349,6 +350,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 				case "Paintball Gun" : toAdd = new PaintballGun(); break;
 				case "Scatter Gun" : toAdd = new ScatterGun(); break;
 				case "LTSA Gun" : toAdd = new LtsaGun(); break;
+				case "Pistol" : toAdd = new Pistol(); break;
 				}
 				// add the item if it's not null, otherwise print error message
 				if(toAdd != null){

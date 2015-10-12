@@ -25,7 +25,9 @@ public abstract class Weapon implements Item {
 	
 	public enum WeaponType{
 		PaintballGun,
-		ScatterGun
+		ScatterGun,
+		LTSAGun,
+		Pistol
 	}
 	
 	public Weapon(double fireRate, Projectile projectile){
@@ -78,6 +80,10 @@ public abstract class Weapon implements Item {
 	
 	public abstract WeaponType getWeaponType();
 
+	/**
+	 * returns the weapon's name - for displaying as part of the HUD
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
