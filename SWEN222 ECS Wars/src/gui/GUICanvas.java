@@ -43,6 +43,7 @@ public class GUICanvas extends JComponent{
 	
 	private Player player; // the current player
 	private Compass compass; // the compass being displayed
+	private Sundial sundial; // the sundial being displayed
 	private Container currentContainer;
 	
 	private String toolTip; // current tooltip text
@@ -60,7 +61,7 @@ public class GUICanvas extends JComponent{
 	private WinnerMenu winnerMenu; // the winner menu to display
 	
 	private boolean isNight; // true if it is currently night time
-	private float dayNightRotation = 0;
+	private double dayNightRotation = 0;
 	
 	// Static UI Images
 	private Image[] torchLight;
@@ -91,6 +92,8 @@ public class GUICanvas extends JComponent{
 	public GUICanvas(GUIFrame frame){
 		this.frame = frame;
 		this.compass = new Compass();
+		this.sundial = new Sundial();
+		this.dayNightRotation = (180/Controller.DAY_LENGTH);
 		this.toolTip = null;
 				
 		torchLight = new Image[4];
@@ -206,7 +209,11 @@ public class GUICanvas extends JComponent{
 			drawDarknessOverlay(r, g);
 		}
 		
-		// Draw compass
+		// Draw Sundial
+		sundial.update();
+		g.drawImage(sundial.getImage(), getWidth()-(96*viewScale)-20, 20, this);
+		
+		// Draw Compass
 		compass.update();
 		g.drawImage(compass.getImage(), getWidth()-(96*viewScale)-20, 20, this);
 		g.drawImage(scaledCompassCont, getWidth()-(96*viewScale)-20, 20, this);
@@ -460,6 +467,7 @@ public class GUICanvas extends JComponent{
 		scaledCompassCont = compassControls.getScaledInstance(compassControls.getWidth(this)*viewScale, 
 				compassControls.getHeight(this)*viewScale, Image.SCALE_FAST);
 		compass.scaleImage(viewScale, this);
+		sundial.scaleImage(viewScale, this);
 		// scale health bar
 		scaledHealthBack = healthInventBack.getScaledInstance(healthInventBack.getWidth(this)*viewScale, 
 				healthInventBack.getHeight(this)*viewScale, Image.SCALE_FAST);
@@ -692,10 +700,9 @@ public class GUICanvas extends JComponent{
 	public void setTime(int time) {
 		int dayLength = Controller.DAY_LENGTH;
 		int localTime = time%dayLength;
-		System.out.println(localTime);
 		if (localTime == 0){
 			toggleNight();
 		}
-		dayNightRotation = (360/dayLength)*localTime;
+		sundial.rotate(dayNightRotation);
 	}
 }
