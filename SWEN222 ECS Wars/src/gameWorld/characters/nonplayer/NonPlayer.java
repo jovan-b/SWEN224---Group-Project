@@ -69,7 +69,10 @@ public class NonPlayer extends Player {
 	
 	@Override
 	public void modifyHealth(int amt, Projectile p){
-		if (amt < 0){this.respond(Events.COMBAT);}
+		if (amt < 0){
+			this.respond(Events.COMBAT);
+			this.interact(p.getPlayer());
+		}
 		super.modifyHealth(amt, null);
 		if (this.isDead()){
 			// remove player's points for killing npc
@@ -96,6 +99,13 @@ public class NonPlayer extends Player {
 		currentRoom.removeNPC(this);
 		newRoom.addNPC(this);
 		this.currentRoom = newRoom;
+		
+		this.posX = newX;
+		this.posY = newY;
+
+		//Prevent the pesky move updates from overwriting the pos change
+		this.tempX = newX;
+		this.tempY = newY;	
 	}
 	
 	/**
