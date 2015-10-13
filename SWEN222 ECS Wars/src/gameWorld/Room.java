@@ -823,6 +823,7 @@ public class Room {
 				npcs.remove(npc);
 			}
 		}		
+
 	}
 
 	/**

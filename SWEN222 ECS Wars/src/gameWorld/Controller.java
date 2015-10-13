@@ -453,8 +453,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	/**
 	 * Distributes players over the game world.
 	 */
-	private void spawnPlayers(){
-		Collections.shuffle(players);
+	protected void spawnPlayers(){
 		Collections.shuffle(charSpawners);
 		int i;
 		for(i=0; i<players.size(); i++){

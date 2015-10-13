@@ -9,6 +9,8 @@ import org.junit.Test;
 import gameWorld.*;
 import gameWorld.characters.DavePlayer;
 import gameWorld.characters.Player;
+import gameWorld.characters.nonplayer.NonPlayer;
+import gameWorld.characters.nonplayer.strategy.WanderingStrategy;
 import gameWorld.gameObjects.Desk;
 import gameWorld.gameObjects.Wall;
 import gameWorld.gameObjects.weapons.projectiles.LtsaBullet;
@@ -25,12 +27,11 @@ import gui.GUIFrame;
 public class RoomTests {
 	
 	private static final int SQUARE_SIZE = 24;
-	private Controller ctrl = new SinglePlayerController();
-	private GUIFrame gui = new GUIFrame();
-	private Room classroom103 = new Room("Classroom 103", ctrl);
-	private Room classroom102 = new Room("Classroom 102", ctrl);
-	private Room seHallway = new Room("SE Hallway", ctrl);
-	private Room courtyard = new Room("Courtyard", ctrl);
+	private static final Controller ctrl = new TestController(0);
+	private static final Room classroom103 = new Room("Classroom 103", ctrl);
+	private static final Room classroom102 = new Room("Classroom 102", ctrl);
+	private static final Room seHallway = new Room("SE Hallway", ctrl);
+	private static final Room courtyard = new Room("Courtyard", ctrl);
 	
 	//
 	// POSITIONAL CONVERSION
@@ -41,7 +42,6 @@ public class RoomTests {
 	 * Tests the conversion between x and column values.
 	 */
 	public void testXColConversion1(){
-		ctrl.setGUI(gui);
 		Room room = classroom103;
 		// check simple values
 		assertEquals(room.colFromX(0), 0);
@@ -121,6 +121,18 @@ public class RoomTests {
 	
 	@Test
 	/**
+	 * Tests adding of an NPC to a room
+	 */
+	public void testAddNPC(){
+		Room room = classroom103;
+		NonPlayer p = new NonPlayer(room,0,0,new WanderingStrategy());
+		room.addNPC(p);
+		Set<Player> players = room.getAllCharacters();
+		assertTrue(players.contains(p));
+	}
+	
+	@Test
+	/**
 	 * Tests adding of a projectile to a room
 	 */
 	public void testAddProjectile(){
@@ -149,6 +161,19 @@ public class RoomTests {
 		room.addPlayer(p);
 		room.removePlayer(p);
 		Set<Player> players = room.getPlayers();
+		assertFalse(players.contains(p));
+	}
+	
+	@Test
+	/**
+	 * Tests adding of a player to a room
+	 */
+	public void testRemoveNPC(){
+		Room room = classroom103;
+		NonPlayer p = new NonPlayer(room,0,0, new WanderingStrategy());
+		room.addNPC(p);
+		room.removeNPC(p);
+		Set<Player> players = room.getAllCharacters();
 		assertFalse(players.contains(p));
 	}
 	

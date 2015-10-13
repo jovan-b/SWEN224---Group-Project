@@ -2,6 +2,9 @@ package gameWorld;
 
 import gameWorld.characters.DavePlayer;
 import gameWorld.characters.Player;
+import gameWorld.gameEvents.DayNightEvent;
+import gameWorld.gameEvents.GameClock;
+import gameWorld.gameEvents.SlowUpdateEvent;
 import gameWorld.gameObjects.CharacterSpawner;
 import gui.GUICanvas;
 import main.SoundManager;
@@ -33,6 +36,7 @@ public class MultiPlayerController extends Controller {
 			players.add(new DavePlayer(rooms.get(0), (i+2)*24, 2*24));
 		}
 		
+		//Set the canvas of the players in game locally, this is needed so the weapons can shoot
 		for(int i=0; i<numPlayers; i++){
 			Player player = players.get(i);
 			if(i == uid){
@@ -41,6 +45,9 @@ public class MultiPlayerController extends Controller {
 				player.setCanvas(canvas);
 			}
 		}
+		
+		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, DAY_LENGTH));
+		GameClock.getInstance().scheduleEvent(new SlowUpdateEvent(this, 1));
 	}
 	
 	@Override
@@ -52,17 +59,18 @@ public class MultiPlayerController extends Controller {
 		start();
 	}
 	
-	public void spawnPlayers(){
-		for(int i=0; i<players.size(); i++){
-			if(i >= charSpawners.size()){break;}
-			CharacterSpawner spawner = charSpawners.get(0);
-			Player p = players.get(i);
-			p.getCurrentRoom().removePlayer(p);
-			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
-			spawner.getRoom().addPlayer(p);
-		}
-
-	}
+//	@Override
+//	public void spawnPlayers(){
+//		for(int i=0; i<players.size(); i++){
+//			if(i >= charSpawners.size()){break;}
+//			CharacterSpawner spawner = charSpawners.get(0);
+//			Player p = players.get(i);
+//			p.getCurrentRoom().removePlayer(p);
+//			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
+//			spawner.getRoom().addPlayer(p);
+//		}
+//
+//	}
 
 	@Override
 	public void update(){
