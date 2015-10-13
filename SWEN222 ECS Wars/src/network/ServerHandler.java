@@ -10,7 +10,7 @@ import java.net.Socket;
  * then updates to the server to display their action
  * for everyone else in the game.
  *
- * @author Jovan Bogoievski
+ * @author Jovan Bogoievski 300305140
  *
  */
 public class ServerHandler extends Thread{

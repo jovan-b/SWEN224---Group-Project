@@ -25,7 +25,7 @@ import gui.GUIFrame;
  * the socket for the server to update what the player does to the
  * rest of the game
  *
- * @author Jovan Bogoievski
+ * @author Jovan Bogoievski 300305140
  *
  */
 public class ClientConnection extends Thread{
@@ -40,6 +40,7 @@ public class ClientConnection extends Thread{
 		this.socket = socket;
 		this.controller = controller;
 		this.uid = uid;
+		//Create the input and output streams
 		try {
 			input = new DataInputStream(socket.getInputStream());
 			output = new DataOutputStream(socket.getOutputStream());
@@ -157,32 +158,4 @@ public class ClientConnection extends Thread{
 	private boolean isKeyPressed(int keyCode) {
 		return controller.getKeysPressed().get(keyCode);
 	}
-
-//	@Override
-//	public void mousePressed(MouseEvent e) {
-//		try{
-//			if (e.getButton() == 1){
-//				//Tell the server they sent a mouse click
-//				output.writeInt(2);
-//				output.writeInt(e.getX());
-//				output.writeInt(e.getY());
-//			}
-//		} catch(IOException ex){
-//			//Couldn't read mouse press, ignore
-//		}
-//	}
-
-//	@Override
-//	public void mouseDragged(MouseEvent e) {
-//		try{
-//			if (e.getButton() == 1){
-//				//Tell the server they sent a mouse click
-//				output.writeInt(2);
-//				output.writeInt(e.getX());
-//				output.writeInt(e.getY());
-//			}
-//		} catch(IOException ex){
-//			//Couldn't read mouse press, ignore
-//		}
-//	}
 }

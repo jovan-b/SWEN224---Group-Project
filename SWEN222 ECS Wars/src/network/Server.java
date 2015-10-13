@@ -14,7 +14,7 @@ import gui.GUICanvas;
  * 
  * Keeps running until no more clients are in the game.
  * 
- * @author Jovan Bogoievski
+ * @author Jovan Bogoievski 300305140
  *
  */
 public class Server extends Thread{
@@ -45,13 +45,16 @@ public class Server extends Thread{
 			while (true) {
 				//Wait for a client to connect
 				Socket s = server.accept();
+				
+				//Give the client a user ID and add create a new server handler for them
 				int uid = i;
 				clientsConnected[i] = new ServerHandler(s, uid);
 				i++;
 
 				System.out.println("ACCEPTED CONNECTION FROM: " + s.getInetAddress());
 				clients -= 1;
-
+				
+				//When all clients have joined, start the game.
 				if(clients == 0) {
 					System.out.println("ALL CLIENTS ACCEPTED --- GAME BEGINS");
 					startMultiplayer(clientsConnected);
@@ -78,27 +81,30 @@ public class Server extends Thread{
 	public static void startMultiplayer(ServerHandler[] clientsConnected) {
 		Socket socket;
 		DataOutputStream output;
-
-		//Go through the server handlers for each client to start their game
-		for(int i = 0; i<clientsConnected.length; i++){
-			clientsConnected[i].setServerHandlers(clientsConnected);
-			clientsConnected[i].start();
-			socket = clientsConnected[i].getSocket();
-			try{
+		try{
+			//Go through the server handlers for each client to start their game
+			for(int i = 0; i<clientsConnected.length; i++){
+				clientsConnected[i].setServerHandlers(clientsConnected);
+				clientsConnected[i].start();
+				socket = clientsConnected[i].getSocket();
+		
 				output = new DataOutputStream(socket.getOutputStream());
 				//Tells the player how many players are in the game and their user ID
 				output.writeInt(clientsConnected.length);
 				output.writeInt(i);
 			}
-			catch(IOException e){
-				System.err.println("I/O error: " + e.getMessage());
+			while(true){
+				//do some stuff to run the game here
 			}
-		}
-		while(true){
-			//do some stuff to run the game here
+		} catch(IOException e){
+			//TODO: tell every player server shut down
 		}
 	}
 	
+	/**
+	 * Returns the server
+	 * @return
+	 */
 	public ServerSocket getServer(){
 		return server;
 	}

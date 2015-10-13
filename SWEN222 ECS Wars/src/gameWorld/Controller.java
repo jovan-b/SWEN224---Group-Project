@@ -44,6 +44,7 @@ import java.util.Set;
  * @author Jah Seng Lee
  * @author Sarah Dobie 300315033
  * @author Chris Read 300254724
+ * @author Jovan Bogoievski 300305140
  *
  */
 public abstract class Controller extends Thread implements KeyListener, MouseListener, MouseMotionListener{

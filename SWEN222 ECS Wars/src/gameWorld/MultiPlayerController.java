@@ -14,8 +14,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.net.Socket;
 
+/**
+ * 
+ * Controller for a multiplayer game that will update the player's state
+ * 
+ * @author Jovan Bogoievski 300305140
+ *
+ */
 public class MultiPlayerController extends Controller {
 	
+	//Number of players in the game
 	private int numPlayers;
 	private GUICanvas canvas;
 
@@ -32,8 +40,13 @@ public class MultiPlayerController extends Controller {
 	public void initialise(){
 		super.initialise();
 		
+		//Create every play in the game
 		for (int i=0; i<numPlayers; i++){
-			players.add(new DavePlayer(rooms.get(0), (i+2)*24, 2*24));
+			/*
+			 * Set every player's initial position be outside of the game world
+			 * as every player will update for every client when they first move in the game
+			 */
+			players.add(new DavePlayer(rooms.get(0), 99999, 99999));
 		}
 		
 		//Set the canvas of the players in game locally, this is needed so the weapons can shoot
@@ -46,6 +59,7 @@ public class MultiPlayerController extends Controller {
 			}
 		}
 		
+		//Start the day and night cycle
 		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, DAY_LENGTH));
 		GameClock.getInstance().scheduleEvent(new SlowUpdateEvent(this, 1));
 	}
@@ -54,7 +68,7 @@ public class MultiPlayerController extends Controller {
 	public void startGame(){
 		spawnPlayers();
 		
-		//SoundManager.playSong("battle_1.mp3");
+		SoundManager.playQueue(SoundManager.BATTLE_SONGS);
 		
 		start();
 	}
@@ -72,6 +86,9 @@ public class MultiPlayerController extends Controller {
 //
 //	}
 
+	/**
+	 * Deal with player input and update a clients state (position, room, etc
+	 */
 	@Override
 	public void update(){
 		client.dealWithInput();
