@@ -110,6 +110,24 @@ public class ServerHandler extends Thread{
 								socketOut.writeInt(weapon);							}
 						}
 						break;
+					//If 5 is the action, update the players health
+					case 5:
+						int hp = input.readInt();
+						for(int i = 0; i<serverHandlers.length; i++){
+							if(serverHandlers[i] == this){
+								continue; // don't need to broadcast to yourself
+							} else if(serverHandlers[i].disconnected == true){
+								continue;
+							} else{
+								Socket socket = serverHandlers[i].getSocket();
+								DataOutputStream socketOut = new DataOutputStream(socket.getOutputStream());
+								//4 is the code for a weapon change
+								socketOut.writeInt(uid);
+								socketOut.writeInt(5);	
+								socketOut.writeInt(hp);
+							}
+						}
+						break;
 				}
 			}
 			socket.close();

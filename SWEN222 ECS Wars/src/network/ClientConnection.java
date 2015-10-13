@@ -1,28 +1,18 @@
 package network;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.BitSet;
-
-import gameWorld.Controller;
 import gameWorld.MultiPlayerController;
 import gameWorld.Room;
-import gameWorld.SinglePlayerController;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.weapons.LtsaGun;
+import gameWorld.gameObjects.weapons.LTSAGun;
 import gameWorld.gameObjects.weapons.PaintballGun;
 import gameWorld.gameObjects.weapons.Pistol;
 import gameWorld.gameObjects.weapons.ScatterGun;
 import gameWorld.gameObjects.weapons.Weapon;
-import gameWorld.gameObjects.weapons.Weapon.WeaponType;
 import gui.GUICanvas;
 import gui.GUIFrame;
 
@@ -101,14 +91,18 @@ public class ClientConnection extends Thread{
 					if(weapon == 0){
 						newWep = new PaintballGun();
 					} else if(weapon == 1){
-						newWep = new LtsaGun();
+						newWep = new LTSAGun();
 					} else if(weapon == 2){
 						newWep = new Pistol();
 					} else{
 						newWep = new ScatterGun();
 					}
-					//TODO: drop wep aswell
+					//TODO: drop weapon as well
 					player.setCurrentWeapon(newWep);
+					break;
+				case 5:
+					int hp = input.readInt();
+					player.setHealth(hp);
 					break;
 				}
 			}
@@ -153,6 +147,11 @@ public class ClientConnection extends Thread{
 				player.setSpeedModifier(2);
 			}
 			
+			//Update the health of the player for every client
+			output.writeInt(5);
+			output.writeInt(player.getHealth());
+			
+			//Check if a player has changed weapon
 			if(!weapon.equals(currentWeapon)){
 				currentWeapon = weapon;
 				output.writeInt(4);
@@ -169,6 +168,7 @@ public class ClientConnection extends Thread{
 				output.writeInt(wep);
 			}
 			
+			//If the player is shooting, send shoot updates to each client
 			if (controller.isShooting()) {
 				int mx = controller.getMouseX();
 				int my = controller.getMouseY();
