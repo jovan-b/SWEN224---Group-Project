@@ -40,7 +40,7 @@ public abstract class Player {
 	/**
 	 * Enum representing the type of player.
 	 */
-	public enum Type{
+	public enum PlayerType{
 		DavePlayer,
 		PondyPlayer,
 		MarcoPlayer,
@@ -394,7 +394,7 @@ public abstract class Player {
 	 * Gets the Type of player this is.
 	 * @return The Type of player
 	 */
-	public abstract Type getType();
+	public abstract PlayerType getType();
 
 	//State booleans
 	
@@ -534,6 +534,10 @@ public abstract class Player {
 		floor.setItem(currentWeapon);
 		// set my weapon to the new one
 		this.currentWeapon = weapon;
+	}
+	
+	public void setCurrentWeapon(Weapon currentWeapon) {
+		this.currentWeapon = currentWeapon;
 	}
 	
 	/**

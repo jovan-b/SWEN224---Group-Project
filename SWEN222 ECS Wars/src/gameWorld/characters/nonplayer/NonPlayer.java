@@ -18,7 +18,7 @@ import gameWorld.gameObjects.weapons.projectiles.Projectile;
 
 public class NonPlayer extends Player {
 	public static final NonPlayerStrategy GLOBAL_DEFAULT = new WaitStrategy();
-	public static final Type type = Player.Type.NonPlayer;
+	public static final PlayerType type = Player.PlayerType.NonPlayer;
 	public static final int NPC_HEALTH_MAX = 80;
 	
 	/**
@@ -132,7 +132,7 @@ public class NonPlayer extends Player {
 	}
 
 	@Override
-	public Type getType() {
+	public PlayerType getType() {
 		return type;
 	}
 	

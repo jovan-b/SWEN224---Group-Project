@@ -19,7 +19,7 @@ import gameWorld.Room;
  */
 public class StreaderPlayer extends Player {
 	
-	public static final Type type = Type.MarcoPlayer;
+	public static final PlayerType type = PlayerType.MarcoPlayer;
 
 	public StreaderPlayer(Room room, int posX, int posY){
 		super(room, posX, posY);
@@ -39,7 +39,7 @@ public class StreaderPlayer extends Player {
 	}
 
 	@Override
-	public Type getType() {
+	public PlayerType getType() {
 		return type;
 	}
 

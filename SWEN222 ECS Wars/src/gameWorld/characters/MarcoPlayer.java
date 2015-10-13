@@ -20,7 +20,7 @@ import gameWorld.Room;
  */
 public class MarcoPlayer extends Player {
 	
-	public static final Type type = Type.MarcoPlayer;
+	public static final PlayerType type = PlayerType.MarcoPlayer;
 
 	public MarcoPlayer(Room room, int posX, int posY){
 		super(room, posX, posY);
@@ -41,7 +41,7 @@ public class MarcoPlayer extends Player {
 	}
 
 	@Override
-	public Type getType() {
+	public PlayerType getType() {
 		return type;
 	}
 

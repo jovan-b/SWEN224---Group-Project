@@ -10,7 +10,7 @@ import gameWorld.Room;
 
 public class PondyPlayer extends Player {
 
-	public static final Type type = Type.PondyPlayer;
+	public static final PlayerType type = PlayerType.PondyPlayer;
 	
 	public PondyPlayer(Room room, int posX, int posY) {
 		super(room, posX, posY);
@@ -30,7 +30,7 @@ public class PondyPlayer extends Player {
 	}
 
 	@Override
-	public Type getType() {
+	public PlayerType getType() {
 		return type;
 	}
 

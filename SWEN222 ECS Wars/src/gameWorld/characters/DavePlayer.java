@@ -18,7 +18,7 @@ import gameWorld.Room;
  */
 public class DavePlayer extends Player {
 	
-	public static final Type type = Type.DavePlayer;
+	public static final PlayerType type = PlayerType.DavePlayer;
 
 	public DavePlayer(Room room, int posX, int posY){
 		super(room, posX, posY);
@@ -40,7 +40,7 @@ public class DavePlayer extends Player {
 	}
 
 	@Override
-	public Type getType() {
+	public PlayerType getType() {
 		return type;
 	}
 
