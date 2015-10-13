@@ -19,6 +19,7 @@ public class CharacterSpawner {
 	 * Constructor for class CharacterSpawner.
 	 * @param col The column to spawn player at
 	 * @param row The row to spawn player at
+	 * @param room The room to spawn the player in
 	 */
 	public CharacterSpawner(int col, int row, Room room){
 		this.x = col*24+12;

@@ -10,6 +10,11 @@ import gameWorld.Controller;
 import gameWorld.PointValues;
 import gameWorld.characters.Player;
 
+/**
+ * A class representing a buyable health recover item
+ * @author Sarah Dobie 300315033
+ *
+ */
 public class PillBottle extends Sellable implements Item {
 	
 	private String description = "Miracle pill: Restores all your health.";

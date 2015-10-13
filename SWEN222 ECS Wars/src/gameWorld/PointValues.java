@@ -1,5 +1,11 @@
 package gameWorld;
 
+/**
+ * A class to define the point values and costs of ingame events
+ * @author Chris Read 300254724
+ * @author Sarah Dobie 300315033
+ *
+ */
 public class PointValues {
 	// if a player has this many points, they win the game
 	public static final int END_GAME_TARGET = 32768;

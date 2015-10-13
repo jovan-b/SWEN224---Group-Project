@@ -8,6 +8,13 @@ import javax.imageio.ImageIO;
 
 import gameWorld.Room;
 
+/**
+ * Represents the Pondy playable character
+ * 
+ * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
+ *
+ */
 public class PondyPlayer extends Player {
 
 	public static final PlayerType type = PlayerType.PondyPlayer;

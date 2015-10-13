@@ -14,6 +14,7 @@ import gameWorld.characters.Player;
  * 2x1 image, 1x1 grid space.
  * 
  * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
  *
  */
 public class Photocopier implements Item {

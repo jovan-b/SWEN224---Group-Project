@@ -100,6 +100,10 @@ public class VanishingCabinet implements Item {
 	}
 
 	@Override
+	/**
+	 * Consumes a SmallTreasure in the player's inventory and gives the player 
+	 * its value in points
+	 */
 	public void use(Player p, Controller ctrl) {
 		Item[] inventory = p.getInventory();
 		for (int i = 0; i < inventory.length; i++){

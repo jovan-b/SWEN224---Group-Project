@@ -8,6 +8,12 @@ import gameWorld.gameObjects.MedicineBottle;
 import gameWorld.gameObjects.PillBottle;
 import gameWorld.gameObjects.Sellable;
 
+/**
+ * A strategy representing a merchant NPC, from
+ * which the player can buy recovery items
+ * @author Sarah Dobie 300315033
+ *
+ */
 public class WanderingMerchantStrategy extends WanderingStrategy {
 	
 	private Sellable inventoryItem;

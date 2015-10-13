@@ -98,6 +98,10 @@ public class Torch implements Item {
 		return description;
 	}
 
+	/**
+	 * Returns true if the torch is on
+	 * @return
+	 */
 	public boolean isOn() {
 		return isOn;
 	}

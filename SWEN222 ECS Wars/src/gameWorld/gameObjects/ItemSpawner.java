@@ -3,7 +3,7 @@ package gameWorld.gameObjects;
 /**
  * An item which can hold other items (eg. containers, floors)
  * and will have items spawned within them when a new game is created.
- * Sarah Dobie 300315033
+ * @author Sarah Dobie 300315033
  *
  */
 public interface ItemSpawner extends Item {

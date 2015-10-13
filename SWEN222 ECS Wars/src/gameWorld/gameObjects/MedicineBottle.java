@@ -10,6 +10,11 @@ import gameWorld.Controller;
 import gameWorld.PointValues;
 import gameWorld.characters.Player;
 
+/**
+ * A medicine bottle class representing a buyable  health recovery item
+ * @author Sarah Dobie 300315033
+ *
+ */
 public class MedicineBottle extends Sellable implements Item {
 	
 	private String description = "Medicine: Restores half your health.";

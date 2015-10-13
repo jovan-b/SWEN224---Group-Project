@@ -14,6 +14,7 @@ import gameWorld.characters.Player;
  * A 1x1 treasure worth points that can be found on floors and in containers.
  * 
  * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
  *
  */
 public class SmallTreasure implements Item {
@@ -24,7 +25,10 @@ public class SmallTreasure implements Item {
 	private int points;
 	
 	/**
-	 * Constructor for class KeyCard.
+	 * Constructor for class SmallTreasure.
+	 * 
+	 * Randomises both type and quality of the treasure
+	 * giving a large range of possible values
 	 */
 	public SmallTreasure(){
 		double randomQuality = Math.random();
