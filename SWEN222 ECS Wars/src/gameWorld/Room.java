@@ -816,14 +816,21 @@ public class Room {
 	 * Updates all NPCs in the room for the next frame
 	 */
 	private void updateNPCs() {
-		Iterator<NonPlayer> npcIter = npcs.iterator();
-		
-		while(npcIter.hasNext()){
-			NonPlayer npc = npcIter.next();
+//		Iterator<NonPlayer> npcIter = npcs.iterator();
+//		
+//		while(npcIter.hasNext()){
+//			NonPlayer npc = npcIter.next();
+//			npc.update();
+//			
+//			if (npc.isDead()){
+//				npcIter.remove();
+//			}
+//		}
+		for(NonPlayer npc: npcs){
 			npc.update();
 			
 			if (npc.isDead()){
-				npcIter.remove();
+				npcs.remove(npc);
 			}
 		}
 	}
