@@ -229,20 +229,16 @@ public final class SaveManager {
 	}
 	
 	private static void saveInventory(Player p, Element player){
-		//initialise inventory, players only have one
-		Element inventory = doc.createElement("Inventory");
-		player.appendChild(inventory);
 		
-		//put all the items inside the inventory
+		//put all the items inside player element
 		Item[] items = p.getInventory();
 		
-		Element innerItem;
 		for(int i = 0; i < items.length; i++){
 			if(items[i] != null){
 				Element inventoryItem = doc.createElement("Item");
 				inventoryItem.setAttribute("type", items[i].getType().name());
 				inventoryItem.setAttribute("index", Integer.toString(i));
-				inventory.appendChild(inventoryItem);
+				player.appendChild(inventoryItem);
 			}
 		}
 	}
