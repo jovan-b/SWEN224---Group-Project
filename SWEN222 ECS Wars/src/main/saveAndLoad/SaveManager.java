@@ -164,10 +164,7 @@ public final class SaveManager {
 									((Weapon)item).getWeaponType().name());
 						}
 						//if type is emerald, ruby or diamond, save quality and price
-						if(item.getType() == Type.Emerald || 
-								item.getType() == Type.Ruby || 
-								item.getType() == Type.Diamond ||
-								item.getType() == Type.Sapphire){
+						if(item instanceof SmallTreasure){
 							e.setAttribute("quality", ((SmallTreasure)item).getQuality());
 							e.setAttribute("points", Integer.toString(((SmallTreasure)item).getPrice()));
 						}
@@ -194,10 +191,7 @@ public final class SaveManager {
 		for(Item i: items){
 			innerItem = doc.createElement("Item");
 			innerItem.setAttribute("type", i.getType().name());
-			if(i.getType() == Type.Emerald || 
-					i.getType() == Type.Ruby || 
-					i.getType() == Type.Diamond || 
-					i.getType() == Type.Sapphire){
+			if(i instanceof SmallTreasure){
 				innerItem.setAttribute("quality", ((SmallTreasure)i).getQuality());
 				innerItem.setAttribute("points", Integer.toString(((SmallTreasure)i).getPrice()));
 			}
@@ -254,9 +248,7 @@ public final class SaveManager {
 				Element inventoryItem = doc.createElement("Item");
 				inventoryItem.setAttribute("type", items[i].getType().name());
 				inventoryItem.setAttribute("index", Integer.toString(i));
-				if(items[i].getType() == Type.Emerald || 
-						items[i].getType() == Type.Ruby || 
-						items[i].getType() == Type.Diamond){
+				if(items[i] instanceof SmallTreasure){
 					inventoryItem.setAttribute("quality", ((SmallTreasure)items[i]).getQuality());
 					inventoryItem.setAttribute("points", 
 							Integer.toString(((SmallTreasure)items[i]).getPrice()));
