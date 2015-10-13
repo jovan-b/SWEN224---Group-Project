@@ -23,6 +23,7 @@ public class Server extends Thread{
 	private int numberOfClients;
 	private ServerSocket server;
 	private GUICanvas canvas;
+	private ServerHandler[] clientsConnected;
 	
 	public Server(int port, int numberOfClients, GUICanvas canvas){
 		this.port = port;
@@ -63,14 +64,8 @@ public class Server extends Thread{
 				}
 			}
 		} catch(IOException e) {
-			System.err.println("I/O error: " + e.getMessage());
-		} finally {
-			try {
-				server.close();
-			} catch (IOException e) {
-				//Should never get here
-				e.printStackTrace();
-			}
+			JOptionPane.showMessageDialog(canvas, "Error: address already "
+					+ "in use");
 		}
 	}
 	
@@ -78,7 +73,7 @@ public class Server extends Thread{
 	 * Sets up a multiplayer game for each client
 	 * @param clientsConnected
 	 */
-	public static void startMultiplayer(ServerHandler[] clientsConnected) {
+	public void startMultiplayer(ServerHandler[] clientsConnected) {
 		Socket socket;
 		DataOutputStream output;
 		try{
@@ -93,14 +88,35 @@ public class Server extends Thread{
 				output.writeInt(clientsConnected.length);
 				output.writeInt(i);
 			}
-			while(true){
-				//do some stuff to run the game here
+			while(clientsConnected(clientsConnected)){
+				//Keep running the game
 			}
 		} catch(IOException e){
-			//TODO: tell every player server shut down
+			//Will not reach here
+			e.printStackTrace(System.err);
+		} finally{
+			try {
+				server.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
+	/**
+	 * Checks if there's still players connected to the server
+	 * @param clientsConnected
+	 * @return true if players in the server, false if not
+	 */
+	private boolean clientsConnected(ServerHandler[] clientsConnected) {
+		for(ServerHandler sh: clientsConnected){
+			if(!sh.isDisconnected()){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Returns the server
 	 * @return

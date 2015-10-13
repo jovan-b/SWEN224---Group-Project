@@ -5,6 +5,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+
+import javax.swing.JOptionPane;
+
 import gameWorld.MultiPlayerController;
 import gameWorld.Room;
 import gameWorld.characters.Player;
@@ -108,13 +111,14 @@ public class ClientConnection extends Thread{
 			}
 		}
 		catch(IOException e){
-			System.err.println("I/O Error: " + e.getMessage());
-			e.printStackTrace(System.err);
+			JOptionPane.showMessageDialog(controller.getGUI().getCanvas(), "Lost connection to server.");
 		}
 		finally{
 			try{
 				//Disconnect player
 				socket.close();
+				//Change this to return to main menu
+				System.exit(0);
 			} catch(IOException e){
 				//Do nothing
 			}
@@ -193,7 +197,7 @@ public class ClientConnection extends Thread{
 			}
 
 		} catch(IOException e){
-			e.printStackTrace();
+			return;
 		}
 	}
 

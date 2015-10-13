@@ -58,13 +58,13 @@ public class ServerHandler extends Thread{
 								continue;
 							} else{
 								Socket socket = serverHandlers[i].getSocket();
-								DataOutputStream socketOut = new DataOutputStream(socket.getOutputStream());
-								socketOut.writeInt(uid);
-								socketOut.writeInt(1);
-								socketOut.writeInt(playerX);
-								socketOut.writeInt(playerY);
-								socketOut.writeInt(playerDir);
-								socketOut.writeInt(roomNumber);
+								output = new DataOutputStream(socket.getOutputStream());
+								output.writeInt(uid);
+								output.writeInt(1);
+								output.writeInt(playerX);
+								output.writeInt(playerY);
+								output.writeInt(playerDir);
+								output.writeInt(roomNumber);
 							}
 						}
 						break;
@@ -79,12 +79,12 @@ public class ServerHandler extends Thread{
 								continue;
 							} else{
 								Socket socket = serverHandlers[i].getSocket();
-								DataOutputStream socketOut = new DataOutputStream(socket.getOutputStream());
-								socketOut.writeInt(uid);
+								output = new DataOutputStream(socket.getOutputStream());
+								output.writeInt(uid);
 								//2 is the code that a player shoots for the ClientConnection
-								socketOut.writeInt(2);
-								socketOut.writeInt(x);
-								socketOut.writeInt(y);
+								output.writeInt(2);
+								output.writeInt(x);
+								output.writeInt(y);
 							}
 						}
 						break;
@@ -103,11 +103,11 @@ public class ServerHandler extends Thread{
 								continue;
 							} else{
 								Socket socket = serverHandlers[i].getSocket();
-								DataOutputStream socketOut = new DataOutputStream(socket.getOutputStream());
+								output = new DataOutputStream(socket.getOutputStream());
 								//4 is the code for a weapon change
-								socketOut.writeInt(uid);
-								socketOut.writeInt(4);
-								socketOut.writeInt(weapon);							}
+								output.writeInt(uid);
+								output.writeInt(4);
+								output.writeInt(weapon);							}
 						}
 						break;
 					//If 5 is the action, update the players health
@@ -120,11 +120,11 @@ public class ServerHandler extends Thread{
 								continue;
 							} else{
 								Socket socket = serverHandlers[i].getSocket();
-								DataOutputStream socketOut = new DataOutputStream(socket.getOutputStream());
+								output = new DataOutputStream(socket.getOutputStream());
 								//4 is the code for a weapon change
-								socketOut.writeInt(uid);
-								socketOut.writeInt(5);	
-								socketOut.writeInt(hp);
+								output.writeInt(uid);
+								output.writeInt(5);	
+								output.writeInt(hp);
 							}
 						}
 						break;
@@ -150,6 +150,10 @@ public class ServerHandler extends Thread{
 	public Socket getSocket(){
 		return socket;
 	}
+	
+	public boolean isDisconnected(){
+		return disconnected;
+	}
 
 	public void setServerHandlers(ServerHandler[] serverHandlers){
 		this.serverHandlers = serverHandlers;
@@ -167,10 +171,10 @@ public class ServerHandler extends Thread{
 					continue;
 				} else{
 					Socket socket = serverHandlers[i].getSocket();
-					DataOutputStream socketOut = new DataOutputStream(socket.getOutputStream());
-					socketOut.writeInt(uid);
+					output = new DataOutputStream(socket.getOutputStream());
+					output.writeInt(uid);
 					//3 is the code that the player has disconnected from the game
-					socketOut.writeInt(3);
+					output.writeInt(3);
 				}
 			}
 		}
