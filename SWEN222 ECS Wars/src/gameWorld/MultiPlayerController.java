@@ -59,17 +59,18 @@ public class MultiPlayerController extends Controller {
 		start();
 	}
 	
-	public void spawnPlayers(){
-		for(int i=0; i<players.size(); i++){
-			if(i >= charSpawners.size()){break;}
-			CharacterSpawner spawner = charSpawners.get(0);
-			Player p = players.get(i);
-			p.getCurrentRoom().removePlayer(p);
-			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
-			spawner.getRoom().addPlayer(p);
-		}
-
-	}
+//	@Override
+//	public void spawnPlayers(){
+//		for(int i=0; i<players.size(); i++){
+//			if(i >= charSpawners.size()){break;}
+//			CharacterSpawner spawner = charSpawners.get(0);
+//			Player p = players.get(i);
+//			p.getCurrentRoom().removePlayer(p);
+//			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
+//			spawner.getRoom().addPlayer(p);
+//		}
+//
+//	}
 
 	@Override
 	public void update(){

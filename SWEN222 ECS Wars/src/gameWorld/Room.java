@@ -817,14 +817,20 @@ public class Room {
 	 */
 	private void updateNPCs() {
 		Iterator<NonPlayer> npcIter = npcs.iterator();
-		
-		while(npcIter.hasNext()){
-			NonPlayer npc = npcIter.next();
-			npc.update();
-			
-			if (npc.isDead()){
-				npcIter.remove();
+		try{
+			while(npcIter.hasNext()){
+				NonPlayer npc = npcIter.next();
+				npc.update();
+				
+				if (npc.isDead()){
+					npcIter.remove();
+				}
 			}
+		} catch (ConcurrentModificationException e){
+			//If we get an exception, try again
+			//FIXME: Dirty as fuck. 
+			update();
+			return;
 		}
 	}
 
