@@ -16,7 +16,10 @@ public interface Item {
 	
 	public enum Type{
 		KeyCard,
-		SmallTreasure,
+		Ruby,
+		Diamond,
+		Emerald,
+		Sapphire,
 		Torch,
 		Pouch,
 		MedicineBottle,
@@ -24,7 +27,6 @@ public interface Item {
 		Map,
 		Cabinet,
 		Weapon
-		//TODO: Add weapon after implementation
 		
 	}
 	

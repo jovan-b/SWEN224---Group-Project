@@ -100,11 +100,7 @@ public class LoadManager {
 		//add list of players to the controller
 		controller.setPlayers(players);
 		controller.setCurrentPlayer(players.get(0));
-		
-		//TODO: Test code, remove!
-		System.out.println(players.get(0).getName());
-		System.out.println(players.get(0).getCurrentRoom().getName());
-		System.out.println(players.get(0).getX() + ", " + players.get(0).getY());
+
 	}
 
 	private static void loadCabinetContents(Controller controller, Room r,
@@ -145,12 +141,33 @@ public class LoadManager {
 							[Integer.parseInt(ielement.getAttribute("y"))]
 							= new KeyCard();
 					break;
-				case SmallTreasure:
-					
-					//load item into room at correct position
+				case Diamond:
 					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-							[Integer.parseInt(ielement.getAttribute("y"))]
-							= new SmallTreasure();
+							[Integer.parseInt(ielement.getAttribute("y"))] = 
+					new SmallTreasure(ielement.getAttribute("type"),
+							Integer.parseInt(ielement.getAttribute("points")), 
+							ielement.getAttribute("quality"));
+					break;
+				case Ruby: 
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))] = 
+					new SmallTreasure(ielement.getAttribute("type"),
+							Integer.parseInt(ielement.getAttribute("points")), 
+							ielement.getAttribute("quality"));
+					break;
+				case Emerald:
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))] = 
+					new SmallTreasure(ielement.getAttribute("type"),
+							Integer.parseInt(ielement.getAttribute("points")), 
+							(ielement.getAttribute("quality")));
+					break;
+				case Sapphire:
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))] = 
+					new SmallTreasure(ielement.getAttribute("type"),
+							Integer.parseInt(ielement.getAttribute("points")), 
+							(ielement.getAttribute("quality")));
 					break;
 				case Torch:
 					
@@ -209,8 +226,25 @@ public class LoadManager {
 			case KeyCard:
 				c.addItem(new KeyCard());
 				break;
-			case SmallTreasure:
-				c.addItem(new SmallTreasure());
+			case Diamond:
+				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
+						Integer.parseInt(itemElem.getAttribute("points")), 
+						itemElem.getAttribute("quality")));
+				break;
+			case Ruby: 
+				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
+						Integer.parseInt(itemElem.getAttribute("points")), 
+						itemElem.getAttribute("quality")));
+				break;
+			case Emerald:
+				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
+						Integer.parseInt(itemElem.getAttribute("points")), 
+						itemElem.getAttribute("quality")));
+				break;
+			case Sapphire:
+				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
+						Integer.parseInt(itemElem.getAttribute("points")), 
+						itemElem.getAttribute("quality")));
 				break;
 			case Torch:
 				c.addItem(new Torch());
@@ -248,6 +282,15 @@ public class LoadManager {
 			roomContents[Integer.parseInt(ielement.getAttribute("x"))]
 					[Integer.parseInt(ielement.getAttribute("y"))]
 							= new ScatterGun();
+			break;
+		case LTSAGun:roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+				[Integer.parseInt(ielement.getAttribute("y"))]
+						= new LTSAGun();
+			break;
+		case Pistol:
+			roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+					[Integer.parseInt(ielement.getAttribute("y"))]
+							= new Pistol();
 			break;
 		}
 	}
@@ -321,8 +364,23 @@ public class LoadManager {
 			case KeyCard:
 				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = new KeyCard();
 				break;
-			case SmallTreasure:
-				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = new SmallTreasure();
+			case Diamond:
+				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = 
+				new SmallTreasure(itemElem.getAttribute("type"),
+						Integer.parseInt(itemElem.getAttribute("points")), 
+						itemElem.getAttribute("quality"));
+				break;
+			case Ruby: 
+				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = 
+				new SmallTreasure(itemElem.getAttribute("type"),
+						Integer.parseInt(itemElem.getAttribute("points")), 
+						itemElem.getAttribute("quality"));
+				break;
+			case Emerald:
+				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = 
+				new SmallTreasure(itemElem.getAttribute("type"),
+						Integer.parseInt(itemElem.getAttribute("points")), 
+						itemElem.getAttribute("quality"));
 				break;
 			case Torch:
 				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = new Torch();
@@ -363,7 +421,7 @@ public class LoadManager {
 				p.setCurrentWeapon(new PaintballGun());
 				break;
 			case LTSAGun:
-				p.setCurrentWeapon(new LtsaGun());
+				p.setCurrentWeapon(new LTSAGun());
 				break;
 			case ScatterGun:
 				p.setCurrentWeapon(new ScatterGun());

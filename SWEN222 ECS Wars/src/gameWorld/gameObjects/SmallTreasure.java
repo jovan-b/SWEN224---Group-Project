@@ -23,6 +23,8 @@ public class SmallTreasure implements Item {
 	private Image scaledImage;
 	private String description;
 	private int points;
+	String quality;
+	String type;
 	
 	/**
 	 * Constructor for class SmallTreasure.
@@ -33,8 +35,8 @@ public class SmallTreasure implements Item {
 	public SmallTreasure(){
 		double randomQuality = Math.random();
 		double randomType = Math.random();
-		String quality = "rough";
-		String type = "Sapphire";
+		quality = "rough";
+		type = "Sapphire";
 		points = PointValues.TREASURE_BASE;
 		if (randomType > 0.9){
 			type = "Diamond";
@@ -59,6 +61,20 @@ public class SmallTreasure implements Item {
 		}
 		
 		this.description = "A "+ type + " of " + quality + " quality worth " + points + " points";
+		loadImages(type);
+	}
+	
+	/**
+	 * Constructor for loading a game from XML file
+	 * 
+	 * @param type
+	 * @param points
+	 * @param string
+	 */
+	public SmallTreasure(String type, int points, String string){
+		this.type = type;
+		this.points = points;
+		this.description = "A "+ type + " of " + string + " quality worth " + points + " points";
 		loadImages(type);
 	}
 
@@ -118,6 +134,14 @@ public class SmallTreasure implements Item {
 
 	@Override
 	public Type getType() {
-		return Type.SmallTreasure;
+		return Type.valueOf(type);
+	}
+
+	public int getPrice() {
+		return points;
+	}
+	
+	public String getQuality(){
+		return quality;
 	}
 }
