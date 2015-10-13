@@ -12,11 +12,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class LtsaGun extends Weapon {
+public class LTSAGun extends Weapon {
 	public static final double BULLET_SPREAD = 10;
 	private String description;
 	
-	public LtsaGun(){
+	public LTSAGun(){
 		super(4, new LtsaBullet());
 		this.description = "The LTSA Gun. Effectively ineffective.";
 		this.name = "LTSA Gun";
@@ -25,7 +25,7 @@ public class LtsaGun extends Weapon {
 	
 	private void loadImages(){
 		try{
-			super.image = ImageIO.read(LtsaGun.class.getResource("/Items/gun3.png"));
+			super.image = ImageIO.read(LTSAGun.class.getResource("/Items/gun3.png"));
 			super.scaledImage = image;
 		} catch(IOException e){
 			System.out.println("Error loading weapon image file: "+e.getMessage());
