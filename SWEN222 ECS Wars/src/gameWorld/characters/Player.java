@@ -54,7 +54,7 @@ public abstract class Player {
 	protected int maxHealth = HEALTH_MAX;
 
 	protected int health = HEALTH_MAX;
-	protected int points = 0;
+	protected int points = 500;
 
 
 	//position describing the centre of a player object
