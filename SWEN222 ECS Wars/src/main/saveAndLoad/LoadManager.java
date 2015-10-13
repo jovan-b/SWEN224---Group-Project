@@ -103,6 +103,7 @@ public class LoadManager {
 		
 		//TODO: Test code, remove!
 		System.out.println(players.get(0).getName());
+		System.out.println(players.get(0).getCurrentRoom().getName());
 		System.out.println(players.get(0).getX() + ", " + players.get(0).getY());
 	}
 

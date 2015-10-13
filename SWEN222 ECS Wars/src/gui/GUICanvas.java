@@ -189,8 +189,8 @@ public class GUICanvas extends JComponent{
 		//paint background
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		Room r = player.getCurrentRoom();
-		r.draw(g, this, player, viewDirection);
+		Room r = controller.getCurrentPlayer().getCurrentRoom();
+		r.draw(g, this, controller.getCurrentPlayer(), viewDirection);
 		drawHUD(g, r);
 		
 		if(escMenuView){
@@ -244,7 +244,7 @@ public class GUICanvas extends JComponent{
 		}
 		
 		// draw Map overlay
-		Item map = player.inventoryContains(new Map());
+		Item map = controller.getCurrentPlayer().inventoryContains(new Map());
 		if (map != null && ((Map)map).isOpen()){
 			drawMap(g);
 		}
@@ -318,7 +318,7 @@ public class GUICanvas extends JComponent{
 	 */
 	private void drawPoints(Graphics g) {
 		g.setColor(Color.WHITE);
-		String points = ""+player.getPoints();
+		String points = ""+controller.getCurrentPlayer().getPoints();
 		int textSize = 15;
 		g.setFont(new Font("pixelmix", Font.PLAIN, textSize));
 		int textWidth = g.getFontMetrics().stringWidth(points);
@@ -353,11 +353,11 @@ public class GUICanvas extends JComponent{
 		int xView = 40*viewScale;
 		int yView = 40*viewScale;
 		// check if the player has a torch in their inventory
-		Torch torch = (Torch)player.inventoryContains(new Torch());
+		Torch torch = (Torch)controller.getCurrentPlayer().inventoryContains(new Torch());
 		if (torch != null && torch.isOn()){
 			xView = 160*viewScale;
 			yView = 160*viewScale;
-			image = scaledTorchLight[player.getFacing()];
+			image = scaledTorchLight[controller.getCurrentPlayer().getFacing()];
 		} 
 		// draw the overlay
 		g.fillRect(0, 0, width, yMid-yView);
@@ -378,7 +378,7 @@ public class GUICanvas extends JComponent{
 	 * @param g The graphics object with which to draw
 	 */
 	private void drawInventory(Graphics g) {
-		Item[] inventory = player.getInventory();
+		Item[] inventory = controller.getCurrentPlayer().getInventory();
 		for (int i = 0; i < Player.INVENTORY_SIZE; i++){
 			if (inventory[i] != null){
 				Image itemImage = inventory[i].getScaledImage(0);
@@ -386,7 +386,7 @@ public class GUICanvas extends JComponent{
 			}
 		}
 		// draws the players current weapon
-		Weapon weapon = player.getWeapon();
+		Weapon weapon = controller.getCurrentPlayer().getWeapon();
 		Image weaponImage = weapon.getScaledImage(0);
 		g.drawImage(weaponImage, (24*viewScale), (24*viewScale)*3, this);
 		g.setFont(new Font("pixelmix", Font.PLAIN, 10*viewScale));
@@ -399,7 +399,7 @@ public class GUICanvas extends JComponent{
 	 * @param g The Graphics object to draw with
 	 */
 	private void drawHealth(Graphics g) {
-		int health = player.getHealth();
+		int health = controller.getCurrentPlayer().getHealth();
 		if (health <= 50){
 			g.setColor(Color.RED);
 		} else {
@@ -473,7 +473,7 @@ public class GUICanvas extends JComponent{
 	 * @return the current player
 	 */
 	public Player getCurrentPlayer(){
-		return player;
+		return controller.getCurrentPlayer();
 	}
 	
 	/**

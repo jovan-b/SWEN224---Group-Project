@@ -472,7 +472,9 @@ public abstract class Player {
 	 * @param newY The new y position of the player
 	 */
 	public void setCurrentRoom(Room newRoom, int newX, int newY) {
-		currentRoom.removePlayer(this);
+		if (currentRoom != null){
+			currentRoom.removePlayer(this);
+		}
 		newRoom.addPlayer(this);
 		this.currentRoom = newRoom;
 

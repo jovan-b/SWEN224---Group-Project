@@ -66,12 +66,18 @@ public class SinglePlayerController extends Controller {
 	 * Initialise the pre-game fields of this class
 	 */
 	protected void initialise() {
-		super.initialise();
-		player = new DavePlayer(rooms.get(0), 2 * 24, 2 * 24);
+		player = new DavePlayer(null, 2 * 24, 2 * 24);
 		players.add(player);
 		
+		super.initialise();
+	}
+	
+	@Override
+	public void startGame(){
 		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, DAY_LENGTH));
 		GameClock.getInstance().scheduleEvent(new SlowUpdateEvent(this, 1));
+		
+		super.startGame();
 	}
 
 	@Override
@@ -230,8 +236,8 @@ public class SinglePlayerController extends Controller {
 		super.mouseY = e.getY();
 	}
 
-
 	public void setCurrentPlayer(Player player) {
+		super.setCurrentPlayer(player);
 		this.player = player;
 		players.set(0, player);
 	}

@@ -101,14 +101,13 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		setupRooms();
 		loadItemsToSpawn();
 		setupSpawnItems();
+		spawnPlayers();
 	}
 	
 	/**
 	 * Starts the main game thread
 	 */
 	public void startGame(){
-		spawnPlayers();
-
 		SoundManager.playQueue(SoundManager.BATTLE_SONGS);
 		
 		this.start();
@@ -437,7 +436,9 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 			if(i >= charSpawners.size()){break;}
 			CharacterSpawner spawner = charSpawners.get(i);
 			Player p = players.get(i);
-			p.getCurrentRoom().removePlayer(p);
+			if (p.getCurrentRoom() != null){
+				p.getCurrentRoom().removePlayer(p);
+			}
 			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
 			spawner.getRoom().addPlayer(p);
 		}
@@ -556,6 +557,14 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	 * @return The player with the given uid
 	 */
 	public Player getPlayer(int uid){
+		return players.get(uid);
+	}
+	
+	/**
+	 * Returns the player associated with this controller
+	 * @return
+	 */
+	public Player getCurrentPlayer(){
 		return players.get(uid);
 	}
 	
