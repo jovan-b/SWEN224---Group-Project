@@ -11,7 +11,7 @@ import gameWorld.gameEvents.SlowUpdateEvent;
 import gameWorld.gameObjects.*;
 import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.containers.Pouch;
-import gameWorld.gameObjects.weapons.LtsaGun;
+import gameWorld.gameObjects.weapons.LTSAGun;
 import gameWorld.gameObjects.weapons.PaintballGun;
 import gameWorld.gameObjects.weapons.Pistol;
 import gameWorld.gameObjects.weapons.ScatterGun;
@@ -380,7 +380,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 				case "Treasure" : toAdd = new SmallTreasure(); break;
 				case "Paintball Gun" : toAdd = new PaintballGun(); break;
 				case "Scatter Gun" : toAdd = new ScatterGun(); break;
-				case "LTSA Gun" : toAdd = new LtsaGun(); break;
+				case "LTSA Gun" : toAdd = new LTSAGun(); break;
 				case "Pistol" : toAdd = new Pistol(); break;
 				}
 				// add the item if it's not null, otherwise print error message
