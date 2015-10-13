@@ -151,6 +151,7 @@ public abstract class Player {
 	 * Direction is specified by dir (up, down, left, right)
 	 */
 	public void move(int dir) {
+		if (isDead()){return;}
 		animate();
 		// Convert movement direction to global coordinates
 		movePlayer(dir);
