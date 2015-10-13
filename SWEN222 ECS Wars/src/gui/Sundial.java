@@ -108,7 +108,6 @@ public class Sundial {
 		rot += rotateAngle;
 		rot = rot % 360;
 		rotateImage(rot);
-		System.out.println("Target Rotation: "+targetRot+" Rotation: "+rot);
 	}
 
 }
