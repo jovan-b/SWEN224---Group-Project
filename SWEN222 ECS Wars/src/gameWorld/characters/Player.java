@@ -253,6 +253,25 @@ public abstract class Player {
 		if (inDoor){
 			((Door)item).walkThrough(this);
 		}
+		
+		//Get the bounding box at the new position
+		Rectangle box = this.getBoundingBox();
+		box.translate(x-posX, y-posY);
+		
+		for (Player p : currentRoom.getAllCharacters()){
+			if (p == this){continue;}
+			//Check if the player intersects with another player
+			if (box.intersects(p.getBoundingBox())){
+				//If this player is already intersecting (such as spawning inside them)
+				//let them move
+				if (this.getBoundingBox().intersects(p.getBoundingBox())){
+					return true;
+				}
+				
+				return false;
+			}
+		}
+		
 		return true;
 	}
 
@@ -472,7 +491,7 @@ public abstract class Player {
 	 * @return The minimal rectangle that encloses the whole player.
 	 */
 	public Rectangle getBoundingBox(){
-		return new Rectangle((int)posX-hitBox, (int)posY-hitBox, hitBox*2, hitBox*2);
+		return new Rectangle(posX-hitBox, posY-hitBox, hitBox*2, hitBox*2);
 	}
 
 	//Setters
