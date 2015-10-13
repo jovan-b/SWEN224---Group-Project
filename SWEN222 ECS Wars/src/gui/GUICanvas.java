@@ -62,6 +62,7 @@ public class GUICanvas extends JComponent{
 	private EscMenu escMenu; // the esc menu to display
 	private boolean winnerMenuView = false; // true if we are looking at winner menu
 	private WinnerMenu winnerMenu; // the winner menu to display
+	private PlayerSelectMenu playerSelectMenu = new PlayerSelectMenu(this);
 	
 	private double dayNightRotation = 0;
 
