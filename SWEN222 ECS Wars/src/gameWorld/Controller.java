@@ -5,7 +5,9 @@ import gameWorld.characters.nonplayer.NonPlayer;
 import gameWorld.characters.nonplayer.strategy.ChaseCombatStrategy;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
+import gameWorld.gameEvents.DayNightEvent;
 import gameWorld.gameEvents.GameClock;
+import gameWorld.gameEvents.SlowUpdateEvent;
 import gameWorld.gameObjects.*;
 import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.containers.Pouch;
@@ -110,6 +112,9 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	public void startGame(){
 		SoundManager.playQueue(SoundManager.BATTLE_SONGS);
 		
+		//Start the day and night cycle
+		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, DAY_LENGTH));
+		GameClock.getInstance().scheduleEvent(new SlowUpdateEvent(this, 1));
 		this.start();
 	}
 	

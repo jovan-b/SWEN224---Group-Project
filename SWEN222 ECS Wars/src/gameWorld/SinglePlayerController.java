@@ -71,14 +71,6 @@ public class SinglePlayerController extends Controller {
 		
 		super.initialise();
 	}
-	
-	@Override
-	public void startGame(){
-		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, DAY_LENGTH));
-		GameClock.getInstance().scheduleEvent(new SlowUpdateEvent(this, 1));
-		
-		super.startGame();
-	}
 
 	@Override
 	protected void update() {

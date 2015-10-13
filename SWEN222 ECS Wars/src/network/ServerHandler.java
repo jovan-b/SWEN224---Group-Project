@@ -74,7 +74,6 @@ public class ServerHandler extends Thread{
 					case 2:
 						int x = input.readInt();
 						int y = input.readInt();
-						System.out.println(x + " : " +y);
 						for(int i = 0; i<serverHandlers.length; i++){
 							if(serverHandlers[i] == this){
 								continue; // don't need to broadcast to yourself

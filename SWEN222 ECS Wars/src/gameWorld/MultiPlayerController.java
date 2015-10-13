@@ -38,15 +38,13 @@ public class MultiPlayerController extends Controller {
 	
 	@Override
 	public void initialise(){
-		super.initialise();
-		
 		//Create every play in the game
 		for (int i=0; i<numPlayers; i++){
 			/*
 			 * Set every player's initial position be outside of the game world
 			 * as every player will update for every client when they first move in the game
 			 */
-			players.add(new DavePlayer(rooms.get(0), 99999, 99999));
+			players.add(new DavePlayer(null, 0, 0));
 		}
 		
 		//Set the canvas of the players in game locally, this is needed so the weapons can shoot
@@ -58,33 +56,8 @@ public class MultiPlayerController extends Controller {
 				player.setCanvas(canvas);
 			}
 		}
-		
-		//Start the day and night cycle
-		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, DAY_LENGTH));
-		GameClock.getInstance().scheduleEvent(new SlowUpdateEvent(this, 1));
+		super.initialise();
 	}
-	
-	@Override
-	public void startGame(){
-		spawnPlayers();
-		
-		SoundManager.playQueue(SoundManager.BATTLE_SONGS);
-		
-		start();
-	}
-	
-//	@Override
-//	public void spawnPlayers(){
-//		for(int i=0; i<players.size(); i++){
-//			if(i >= charSpawners.size()){break;}
-//			CharacterSpawner spawner = charSpawners.get(0);
-//			Player p = players.get(i);
-//			p.getCurrentRoom().removePlayer(p);
-//			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
-//			spawner.getRoom().addPlayer(p);
-//		}
-//
-//	}
 
 	/**
 	 * Deal with player input and update a clients state (position, room, etc
