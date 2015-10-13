@@ -217,26 +217,4 @@ public class RoomTests {
 		assertTrue(room.itemAt(SQUARE_SIZE*2,
 				SQUARE_SIZE*3) instanceof Desk);
 	}
-	
-	@Test
-	/**
-	 * Tests getting item at certain position.
-	 * Use an out of bounds case and ensure that a Wall is returned.
-	 */
-	public void testItemAt3(){
-		Room room = classroom103;
-		assertTrue(room.itemAt(SQUARE_SIZE*-1,
-				SQUARE_SIZE) instanceof Wall);
-	}
-	
-	@Test
-	/**
-	 * Tests getting item at certain position
-	 * Use an out of bounds case and ensure that a Wall is returned.
-	 */
-	public void testItemAt4(){
-		Room room = classroom103;
-		assertTrue(room.itemAt(SQUARE_SIZE*room.getCols()+10,
-				SQUARE_SIZE) instanceof Wall);
-	}
 }
