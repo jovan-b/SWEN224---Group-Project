@@ -92,26 +92,12 @@ public class Compass {
 			scaledCompass = largeImage;
 			rotated = scaledCompass;
 		}
-//		// scale is 2, scale the image
-//		BufferedImage before = compassImage; // original image
-//		int w = before.getWidth();
-//		int h = before.getHeight();
-//		BufferedImage after = new BufferedImage(w*2, h*2, BufferedImage.TYPE_INT_ARGB); // image to scale
-//		AffineTransform at = new AffineTransform();
-//		// perform scale
-//		at.scale(2.0, 2.0);
-//		AffineTransformOp scaleOp = 
-//		   new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-//		// update fields
-//		scaledCompass = scaleOp.filter(before, after);
-//		rotated = scaledCompass;
 	}
 
 	/**
 	 * Updates the image to the next frame in its animation.
 	 */
 	public void update() {
-		//double rotateAngle = ((targetRot+(Math.random()*20)-10)-rot)*0.1; // adds "wiggle" to compass
 		if (rot == targetRot){ // dont need to rotate image if the angles are the same
 			return;
 		}

@@ -12,6 +12,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * An LTSAGun Weapon that fires LTSA Bullets
+ * @author Sarah Dobie 300315033
+ *
+ */
 public class LTSAGun extends Weapon {
 	public static final double BULLET_SPREAD = 10;
 	private String description;

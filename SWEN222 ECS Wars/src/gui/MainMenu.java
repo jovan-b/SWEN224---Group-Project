@@ -225,6 +225,10 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	public void mousePressed(MouseEvent e) {}
 
 	@Override
+	/**
+	 * Calculates which button has been clicked on and carries out the corresponding
+	 * action
+	 */
 	public void mouseReleased(MouseEvent e) {
 		// calculate positional values
 		int midX = canvas.getWidth()/2;
@@ -338,6 +342,9 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	public void mouseDragged(MouseEvent e) {}
 
 	@Override
+	/**
+	 * Checks which button the mouse is over and highlights that button
+	 */
 	public void mouseMoved(MouseEvent e) {
 		// calculate canvas centre
 		int midX = canvas.getWidth()/2;

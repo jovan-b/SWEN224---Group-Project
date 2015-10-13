@@ -19,6 +19,9 @@ public class PistolBullet extends BasicProjectile{
 	private Image largeImage;
 	private int bulletSize = 3;
 	
+	/**
+	 * The constructor for the PistolBullet Class
+	 */
 	public PistolBullet(){
 		super();
 		try {
@@ -29,6 +32,9 @@ public class PistolBullet extends BasicProjectile{
 		}
 	}
 	
+	/**
+	 * Alternate constructor used for making a clone of this bullet
+	 */
 	private PistolBullet(Player p, int x, int y, double theta, Image image, Image largeImage){
 		super(p, x, y, theta);
 		this.setSpeedMultiplier(3.0);
@@ -37,6 +43,9 @@ public class PistolBullet extends BasicProjectile{
 		this.largeImage = largeImage;
 	}
 
+	/**
+	 * Returns a new instance of this type of bullet
+	 */
 	@Override
 	public Projectile newInstance(Player p, double theta) {
 		return new PistolBullet(p, p.getX(), p.getY(), theta, image, largeImage);

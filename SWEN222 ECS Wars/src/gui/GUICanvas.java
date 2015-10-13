@@ -176,6 +176,13 @@ public class GUICanvas extends JComponent{
 	}
 	
 	@Override
+	/**
+	 * Draws the game screen
+	 * If the player is in a menu, displays that,
+	 * otherwise draws the game state.
+	 * Draws room and contents first then draws
+	 * HUD and UI elements on top
+	 */
 	public void paint(Graphics graphics){
 		Graphics2D g = (Graphics2D) graphics;
 		if(mainMenuView){

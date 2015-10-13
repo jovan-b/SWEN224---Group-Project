@@ -43,6 +43,10 @@ public class Pouch extends Container implements ItemSpawner {
 		}
 	}
 
+	/**
+	 * Sets the currentContainer to this, so the player can move
+	 * items between inventories
+	 */
 	@Override
 	public void use(Player p, Controller ctrl) {
 		ctrl.getGUI().getCanvas().setCurrentContainer(this);

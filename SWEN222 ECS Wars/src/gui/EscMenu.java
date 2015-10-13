@@ -98,6 +98,9 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 	}
 
 	@Override
+	/**
+	 * Calculates which button the player has clicked on
+	 */
 	public void mouseReleased(MouseEvent e) {
 		// calculate positional values
 		int midX = canvas.getWidth()/2;
@@ -130,6 +133,9 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 	}
 
 	@Override
+	/**
+	 * Calculates which button the mouse is hovering over and highlights that button
+	 */
 	public void mouseMoved(MouseEvent e) {
 		// calculate canvas centre
 		int midX = canvas.getWidth()/2;
