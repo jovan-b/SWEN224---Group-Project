@@ -26,6 +26,7 @@ import gui.GUICanvas;
  * @author Jah Seng Lee
  * @author Chris Read 300254724
  * @author Sarah Dobie 300315033
+ * @author Jovan Bogoievski 300305140
  *
  */
 public abstract class Player {
@@ -120,12 +121,29 @@ public abstract class Player {
 	 * @param y
 	 */
 	public void shoot(int x, int y) {
-		double theta = Player.angleBetweenPlayerAndMouse(canvas.getWidth()/2, canvas.getHeight()/2,
-				x, y);
-
-		//Correct theta based on view direction
-		theta += Math.toRadians(90)*canvas.getViewDirection();
+		double theta = getTheta(x, y);
 		currentRoom.addProjectile(currentWeapon.fire(this, theta));
+	}
+	
+	/**
+	 * Shoots from the players direction
+	 * @param theta
+	 */
+	public void shoot(double theta){
+		currentRoom.addProjectile(currentWeapon.fire(this, theta));
+	}
+	
+	/**
+	 * Calculates the direction to shoot from
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public double getTheta(int x, int y){
+		Double theta = Player.angleBetweenPlayerAndMouse(canvas.getWidth()/2, canvas.getHeight()/2,
+				x, y);
+		theta += Math.toRadians(90)*canvas.getViewDirection();
+		return theta;
 	}
 
 	/**

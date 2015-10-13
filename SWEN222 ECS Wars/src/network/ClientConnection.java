@@ -78,9 +78,8 @@ public class ClientConnection extends Thread{
 					break;
 				//Shoot
 				case 2:
-					int mouseX = input.readInt();
-					int mouseY = input.readInt();
-					player.shoot(mouseX, mouseY);
+					double theta = input.readDouble();
+					player.shoot(theta);
 					break;
 				case 3:
 					//Tell the server handler to remove writing to the disconnected player
@@ -178,9 +177,9 @@ public class ClientConnection extends Thread{
 				int my = controller.getMouseY();
 				player.shoot(mx, my);
 				//Write that the player is shooting at the mouse positions
+				double theta = player.getTheta(mx, my);
 				output.writeInt(2);
-				output.writeInt(mx);
-				output.writeInt(my);
+				output.writeDouble(theta);
 			}
 
 			//If there players position has changed, send there new position to every client in the game

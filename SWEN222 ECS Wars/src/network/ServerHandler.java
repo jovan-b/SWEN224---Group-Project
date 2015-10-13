@@ -70,8 +70,7 @@ public class ServerHandler extends Thread{
 						break;
 					//If 2 is the action, it means a mouse clicked on the game
 					case 2:
-						int x = input.readInt();
-						int y = input.readInt();
+						double theta = input.readDouble();
 						for(int i = 0; i<serverHandlers.length; i++){
 							if(serverHandlers[i] == this){
 								continue; // don't need to broadcast to yourself
@@ -83,8 +82,7 @@ public class ServerHandler extends Thread{
 								output.writeInt(uid);
 								//2 is the code that a player shoots for the ClientConnection
 								output.writeInt(2);
-								output.writeInt(x);
-								output.writeInt(y);
+								output.writeDouble(theta);
 							}
 						}
 						break;
