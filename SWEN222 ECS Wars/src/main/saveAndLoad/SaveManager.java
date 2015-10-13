@@ -72,7 +72,7 @@ public final class SaveManager {
 			transformer.transform(src, result);
 			
 		} catch (ParserConfigurationException | TransformerFactoryConfigurationError | TransformerException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Failed to save game.");
 			e.printStackTrace();
 		}
 	}
@@ -85,8 +85,6 @@ public final class SaveManager {
 			
 			//Write players in room
 			savePlayers(room, r);
-			
-			//TODO: save NPC players positions and types
 			
 			//save room contents
 			saveCabinets(room, r);
@@ -221,7 +219,7 @@ public final class SaveManager {
 			player.setAttribute("x", Integer.toString(p.getX()));
 			player.setAttribute("y", Integer.toString(p.getY()));
 			
-			//TODO: Save player Weapon
+			//Save player Weapon
 			saveWeapon(p, player);
 			
 			//Write items player currently holds
