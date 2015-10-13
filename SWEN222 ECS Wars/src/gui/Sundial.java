@@ -56,7 +56,6 @@ public class Sundial {
 	public void rotate(double angle){
 		targetRot += angle;
 		rotateAngle = (targetRot-rot)*0.02;
-		targetRot = targetRot%360;
 	}
 	
 	/**
@@ -106,7 +105,6 @@ public class Sundial {
 			return;
 		}
 		rot += rotateAngle;
-		rot = rot % 360;
 		rotateImage(rot);
 	}
 

@@ -64,7 +64,6 @@ public class GUICanvas extends JComponent{
 	private WinnerMenu winnerMenu; // the winner menu to display
 	private PlayerSelectMenu playerSelectMenu = new PlayerSelectMenu(this);
 	
-	private double dayNightRotation = 0;
 
 	// Static UI Images
 	private Image[] torchLight;
@@ -96,7 +95,6 @@ public class GUICanvas extends JComponent{
 		this.frame = frame;
 		this.compass = new Compass();
 		this.sundial = new Sundial();
-		this.dayNightRotation = (180/Controller.DAY_LENGTH);
 		this.toolTip = null;
 				
 		torchLight = new Image[4];
