@@ -28,8 +28,8 @@ public class Map implements Item {
 		mapOpen = false;
 		description = "A map displaying the room layout";
 		try {
-			mapImage = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"MapIcon.png"));
-		} catch (IOException e) {
+			mapImage = ImageIO.read(Map.class.getResource("/Items/MapIcon.png"));
+		} catch (IOException e ) {
 			System.out.println("Error reading Map image: " + e.getMessage());
 		}
 		scaledMapImage = mapImage;

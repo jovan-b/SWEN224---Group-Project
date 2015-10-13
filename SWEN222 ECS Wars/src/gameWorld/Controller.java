@@ -251,14 +251,14 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	 */
 	private void setupRooms(){
 		try {
-			Scanner s = new Scanner(new File("Resources"+File.separator+"RoomIndex.txt"));
+			Scanner s = new Scanner(Controller.class.getResourceAsStream("/RoomIndex.txt"));
 			String roomName;
 			while (s.hasNextLine()){
 				roomName = s.nextLine();
 				rooms.add(new Room(roomName, this));
 			}
 			s.close();
-		} catch (FileNotFoundException e) {
+		} catch (NullPointerException e) {
 			System.out.println("Error loading RoomIndex file: " + e.getMessage());
 		}
 	}
@@ -359,7 +359,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	 */
 	private void loadItemsToSpawn() {
 		try	{
-			Scanner s = new Scanner(new File("Resources"+File.separator+"ItemsToSpawn.txt"));
+			Scanner s = new Scanner(Controller.class.getResourceAsStream("/ItemsToSpawn.txt"));
 			// iterate over file
 			while(s.hasNextLine()){
 				String nextLine = s.nextLine();
@@ -388,7 +388,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 				
 			}
 			s.close();
-		} catch(IOException e){
+		} catch(NullPointerException e){
 			System.out.println("Error loading spawn items: "+e.getMessage());
 		}
 	}

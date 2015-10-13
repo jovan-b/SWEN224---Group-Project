@@ -82,7 +82,7 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 		daveImages = new Image[3];
 		try {
 			for (int ani = 0; ani < 3; ani++){
-				daveImages[ani] = ImageIO.read(new File("Resources"+File.separator+"Players"+File.separator+"Dave"+2+ani+".png"));
+				daveImages[ani] = ImageIO.read(WinnerMenu.class.getResource("/Players/Dave"+2+ani+".png"));
 			}
 		} catch (IOException e) {
 			System.out.println("Error loading player images: " + e.getMessage());

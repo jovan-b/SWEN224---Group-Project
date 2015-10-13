@@ -31,7 +31,7 @@ public class LtsaBullet extends BasicProjectile{
 		state = 0;
 		try {
 			for(int i=0; i<images.length; i++){
-				largeImages[i] = ImageIO.read(new File("Resources"+File.separator+"Projectiles"+File.separator+"ltsa_"+(i-1)+".png"));
+				largeImages[i] = ImageIO.read(LtsaBullet.class.getResource("/Projectiles/ltsa_"+(i-1)+".png"));
 				images[i] = largeImages[i].getScaledInstance(bulletSize, bulletSize, Image.SCALE_FAST);
 			}
 		} catch (IOException e) {

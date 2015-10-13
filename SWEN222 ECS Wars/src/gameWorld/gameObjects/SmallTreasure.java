@@ -63,7 +63,7 @@ public class SmallTreasure implements Item {
 	 */
 	private void loadImages(String fileName) {
 		try{
-			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+fileName+".png"));
+			image = ImageIO.read(SmallTreasure.class.getResource("/Items/"+fileName+".png"));
 			scaledImage = image;
 		} catch(IOException e){
 			System.out.println("Error loading treasure image file: "+e.getMessage());

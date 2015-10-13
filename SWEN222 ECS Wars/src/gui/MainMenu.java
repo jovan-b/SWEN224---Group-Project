@@ -71,7 +71,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		try {
 		     GraphicsEnvironment ge = 
 		         GraphicsEnvironment.getLocalGraphicsEnvironment();
-		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Resources"+File.separator+"pixelmix.ttf")));
+		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, MainMenu.class.getResourceAsStream("/pixelmix.ttf")));
 		} catch (IOException|FontFormatException e) {
 		     System.out.println("Error loading fonts : "+e.getMessage());
 		}
@@ -95,7 +95,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		try {
 			for (int ani = 0; ani < 3; ani++){
 				Image img = ImageIO.read(
-						new File("Resources"+File.separator+"Players"+File.separator+"Dave"+2+ani+".png"));
+						MainMenu.class.getResource("/Players/Dave"+2+ani+".png"));
 				sprites[ani] = img.getScaledInstance(img.getWidth(canvas)*IMAGE_SCALE,
 						img.getHeight(canvas)*IMAGE_SCALE, Image.SCALE_FAST);
 			}

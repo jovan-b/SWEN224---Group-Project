@@ -40,8 +40,8 @@ public class Torch implements Item {
 	 */
 	private void loadImages() {
 		try{
-		torchImage = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Torch.png"));
-		torchImageOn = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"TorchOn.png"));
+		torchImage = ImageIO.read(Torch.class.getResource("/Items/Torch.png"));
+		torchImageOn = ImageIO.read(Torch.class.getResource("/Items/TorchOn.png"));
 		scaledTorchImage = torchImage;
 		scaledTorchImageOn = torchImageOn;
 		} catch(IOException e){

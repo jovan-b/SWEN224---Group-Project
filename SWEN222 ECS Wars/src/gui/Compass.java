@@ -38,8 +38,8 @@ public class Compass {
 	 */
 	private void loadImages() {
 		try {
-			compassImage = ImageIO.read(new File("Resources"+File.separator+"Compass.png"));
-			largeImage = ImageIO.read(new File("Resources"+File.separator+"CompassLarge.png"));
+			compassImage = ImageIO.read(Compass.class.getResource("/Compass.png"));
+			largeImage = ImageIO.read(Compass.class.getResource("/CompassLarge.png"));
 			scaledCompass = compassImage;
 			rotated = scaledCompass;
 		} catch (IOException e) {

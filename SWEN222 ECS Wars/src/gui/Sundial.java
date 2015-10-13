@@ -40,8 +40,8 @@ public class Sundial {
 	 */
 	private void loadImages() {
 		try {
-			sundialImage = ImageIO.read(new File("Resources"+File.separator+"Sundial.png"));
-			largeImage = ImageIO.read(new File("Resources"+File.separator+"SundialLarge.png"));
+			sundialImage = ImageIO.read(Sundial.class.getResource("/Sundial.png"));
+			largeImage = ImageIO.read(Sundial.class.getResource("/SundialLarge.png"));
 			scaledSundial = sundialImage;
 			rotated = scaledSundial;
 		} catch (IOException e) {

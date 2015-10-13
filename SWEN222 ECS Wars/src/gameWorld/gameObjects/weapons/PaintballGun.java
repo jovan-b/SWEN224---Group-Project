@@ -25,7 +25,7 @@ public class PaintballGun extends Weapon {
 	
 	private void loadImages(){
 		try{
-			super.image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"gun1.png"));
+			super.image = ImageIO.read(PaintballGun.class.getResource("/Items/gun1.png"));
 			super.scaledImage = image;
 		} catch(IOException e){
 			System.out.println("Error loading weapon image file: "+e.getMessage());

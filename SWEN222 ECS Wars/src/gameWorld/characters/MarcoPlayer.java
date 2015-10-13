@@ -4,6 +4,7 @@ package gameWorld.characters;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
@@ -29,7 +30,8 @@ public class MarcoPlayer extends Player {
 		try {
 			for (int dir = 0; dir < 4; dir++){
 				for (int ani = 0; ani < 3; ani++){
-					sprites[dir][ani] = ImageIO.read(new File("Resources"+File.separator+"Players"+File.separator+"Marco"+dir+ani+".png"));
+					URL url = MarcoPlayer.class.getResource("/Players/Marco"+dir+ani+".png");
+					sprites[dir][ani] = ImageIO.read(url);
 				}
 			}
 		} catch (IOException e) {

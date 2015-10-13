@@ -24,7 +24,7 @@ public class MedicineBottle extends Sellable implements Item {
 
 	private void loadImages() {
 		try{
-			image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Medicine.png"));
+			image = ImageIO.read(MedicineBottle.class.getResource("/Items/Medicine.png"));
 			scaledImage = image;
 		} catch(IOException e){
 			System.out.println("Error loading image file: "+e.getMessage());

@@ -37,9 +37,9 @@ public class Desk implements Item {
 	 */
 	private void loadImages() {
 		try {
-			imageHz = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"DeskHor.png"));
+			imageHz = ImageIO.read(Desk.class.getResource("/Items/DeskHor.png"));
 			scaledImageHz = imageHz;
-			imageVt = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"DeskVer.png"));
+			imageVt = ImageIO.read(Desk.class.getResource("/Items/DeskVer.png"));
 			scaledImageVt = imageVt;
 		} catch (IOException e) {
 			System.out.println("Failed to read Desk image file: " + e.getMessage());

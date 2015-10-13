@@ -54,10 +54,10 @@ public class VanishingCabinet implements Item {
 		Image r = null;
 		// read image files
 		try {
-			f = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetBlueF.png"));
-			b = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetBlueB.png"));
-			l = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetBlueL.png"));
-			r = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CabinetBlueR.png"));
+			f = ImageIO.read(VanishingCabinet.class.getResource("/Items/CabinetBlueF.png"));
+			b = ImageIO.read(VanishingCabinet.class.getResource("/Items/CabinetBlueB.png"));
+			l = ImageIO.read(VanishingCabinet.class.getResource("/Items/CabinetBlueL.png"));
+			r = ImageIO.read(VanishingCabinet.class.getResource("/Items/CabinetBlueR.png"));
 		} catch (IOException e) {
 			System.out.println("Failed to read Photocopier image file: " + e.getMessage());
 		}

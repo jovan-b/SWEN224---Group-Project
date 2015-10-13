@@ -75,7 +75,7 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 		try {
 			GraphicsEnvironment ge = 
 					GraphicsEnvironment.getLocalGraphicsEnvironment();
-			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Resources"+File.separator+"pixelmix.ttf")));
+			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, PlayerSelectMenu.class.getResourceAsStream("/pixelmix.ttf")));
 		} catch (IOException|FontFormatException e) {
 			System.out.println("Error loading fonts : "+e.getMessage());
 		}
@@ -102,13 +102,13 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 		try {
 			for (int ani = 0; ani < 3; ani++){
 				spritesDave[ani] = ImageIO.read(
-						new File("Resources"+File.separator+"Players"+File.separator+"Dave"+2+ani+".png"));
+						PlayerSelectMenu.class.getResource("/Players/Dave"+2+ani+".png"));
 				spritesPondy[ani] = ImageIO.read(
-						new File("Resources"+File.separator+"Players"+File.separator+"Pondy"+2+ani+".png"));
+						PlayerSelectMenu.class.getResource("/Players/Pondy"+2+ani+".png"));
 				spritesMarco[ani] = ImageIO.read(
-						new File("Resources"+File.separator+"Players"+File.separator+"Marco"+2+ani+".png"));
+						PlayerSelectMenu.class.getResource("/Players/Marco"+2+ani+".png"));
 				spritesStreader[ani] = ImageIO.read(
-						new File("Resources"+File.separator+"Players"+File.separator+"Streader"+2+ani+".png"));
+						PlayerSelectMenu.class.getResource("/Players/Streader"+2+ani+".png"));
 			}
 		} catch (IOException e) {
 			System.out.println("Error loading player images: " + e.getMessage());

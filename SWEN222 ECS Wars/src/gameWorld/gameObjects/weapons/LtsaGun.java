@@ -25,7 +25,7 @@ public class LtsaGun extends Weapon {
 	
 	private void loadImages(){
 		try{
-			super.image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"gun3.png"));
+			super.image = ImageIO.read(LtsaGun.class.getResource("/Items/gun3.png"));
 			super.scaledImage = image;
 		} catch(IOException e){
 			System.out.println("Error loading weapon image file: "+e.getMessage());

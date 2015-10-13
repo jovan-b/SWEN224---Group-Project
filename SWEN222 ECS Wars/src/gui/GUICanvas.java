@@ -143,16 +143,16 @@ public class GUICanvas extends JComponent{
 	 */
 	private void loadImages() {
 		try {
-			compassControls = ImageIO.read(new File("Resources"+File.separator+"CompassControls.png"));
-			healthInventBack = ImageIO.read(new File("Resources"+File.separator+"HUDBackground.png"));
-			healthInventFront = ImageIO.read(new File("Resources"+File.separator+"HUDForeground.png"));
-			noTorch = ImageIO.read(new File("Resources"+File.separator+"noTorch.png"));
-			containerBg = ImageIO.read(new File("Resources"+File.separator+"ContainerBackground.png"));
-			containerFg = ImageIO.read(new File("Resources"+File.separator+"ContainerForeground.png"));
-			mapImage = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"Map.png"));
+			compassControls = ImageIO.read(GUICanvas.class.getResource("/CompassControls.png"));
+			healthInventBack = ImageIO.read(GUICanvas.class.getResource("/HUDBackground.png"));
+			healthInventFront = ImageIO.read(GUICanvas.class.getResource("/HUDForeground.png"));
+			noTorch = ImageIO.read(GUICanvas.class.getResource("/noTorch.png"));
+			containerBg = ImageIO.read(GUICanvas.class.getResource("/ContainerBackground.png"));
+			containerFg = ImageIO.read(GUICanvas.class.getResource("/ContainerForeground.png"));
+			mapImage = ImageIO.read(GUICanvas.class.getResource("/Items/Map.png"));
 			for (int dir = 0; dir < 4; dir++){
-				torchLight[dir] = ImageIO.read(new File("Resources"+File.separator+"torchLightDirectional"
-								+File.separator+"torchLight"+dir+".png"));
+				torchLight[dir] = ImageIO.read(GUICanvas.class.getResource("/torchLightDirectional"
+								+"/torchLight"+dir+".png"));
 			}
 		} catch (IOException e) {
 			System.out.println("Error loading UI Images: " + e.getMessage());
@@ -518,7 +518,7 @@ public class GUICanvas extends JComponent{
 		this.mainMenuView = isMainMenu;
 		
 		if(isMainMenu){
-			SoundManager.playSong("Main menu/8-Bit Survivor Eye Of The Tiger.mp3");
+			SoundManager.playSong("MainMenu/8-bit Survivor Eye Of The Tiger.mp3");
 			
 			this.removeController(controller);
 			this.addMouseListener(mainMenu);

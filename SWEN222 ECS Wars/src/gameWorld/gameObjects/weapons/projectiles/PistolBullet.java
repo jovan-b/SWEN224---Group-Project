@@ -22,7 +22,7 @@ public class PistolBullet extends BasicProjectile{
 	public PistolBullet(){
 		super();
 		try {
-			image = ImageIO.read(new File("Resources"+File.separator+"Projectiles"+File.separator+"BlackBullet.png"));
+			image = ImageIO.read(PistolBullet.class.getResource("/Projectiles/BlackBullet.png"));
 			largeImage = image.getScaledInstance(bulletSize*2, bulletSize*2, Image.SCALE_FAST);
 		} catch (IOException e) {
 			System.out.println("Error loading projectile image: " + e.getMessage());

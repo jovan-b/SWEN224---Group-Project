@@ -28,7 +28,7 @@ public class ScatterGun extends Weapon{
 	
 	private void loadImages(){
 		try{
-			super.image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"gun2.png"));
+			super.image = ImageIO.read(ScatterGun.class.getResource("/Items/gun2.png"));
 			super.scaledImage = image;
 		} catch(IOException e){
 			System.out.println("Error loading weapon image file: "+e.getMessage());

@@ -30,7 +30,7 @@ public class Pistol extends Weapon {
 	
 	private void loadImages(){
 		try{
-			super.image = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"gun0.png"));
+			super.image = ImageIO.read(Pistol.class.getResource("/Items/gun0.png"));
 			super.scaledImage = image;
 		} catch(IOException e){
 			System.out.println("Error loading weapon image file: "+e.getMessage());

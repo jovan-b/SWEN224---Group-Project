@@ -18,7 +18,7 @@ public class RubberBullet extends ReflectingProjectile {
 	public RubberBullet(){
 		super(MAX_BOUNCES);
 		try {
-			image = ImageIO.read(new File("Resources"+File.separator+"Projectiles"+File.separator+"RedBullet.png"));
+			image = ImageIO.read(RubberBullet.class.getResource("/Projectiles/RedBullet.png"));
 			largeImage = image.getScaledInstance(bulletSize*2, bulletSize*2, Image.SCALE_FAST);
 		} catch (IOException e) {
 			System.out.println("Error loading projectile image: " + e.getMessage());

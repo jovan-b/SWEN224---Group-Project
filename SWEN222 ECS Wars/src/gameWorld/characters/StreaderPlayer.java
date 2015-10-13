@@ -29,7 +29,7 @@ public class StreaderPlayer extends Player {
 		try {
 			for (int dir = 0; dir < 4; dir++){
 				for (int ani = 0; ani < 3; ani++){
-					sprites[dir][ani] = ImageIO.read(new File("Resources"+File.separator+"Players"+File.separator+"Streader"+dir+ani+".png"));
+					sprites[dir][ani] = ImageIO.read(StreaderPlayer.class.getResource("/Players/Streader"+dir+ani+".png"));
 				}
 			}
 		} catch (IOException e) {

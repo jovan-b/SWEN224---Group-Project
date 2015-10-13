@@ -88,10 +88,10 @@ public class Photocopier implements Item {
 		Image r = null;
 		// read image files
 		try {
-			f = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CopierF.png"));
-			b = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CopierB.png"));
-			l = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CopierL.png"));
-			r = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"CopierR.png"));
+			f = ImageIO.read(Photocopier.class.getResource("/Items/CopierF.png"));
+			b = ImageIO.read(Photocopier.class.getResource("/Items/CopierB.png"));
+			l = ImageIO.read(Photocopier.class.getResource("/Items/CopierL.png"));
+			r = ImageIO.read(Photocopier.class.getResource("/Items/CopierR.png"));
 		} catch (IOException e) {
 			System.out.println("Failed to read Photocopier image file: " + e.getMessage());
 		}

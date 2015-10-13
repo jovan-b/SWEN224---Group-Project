@@ -55,7 +55,7 @@ public class Door implements Item {
 	 */
 	private void loadImages() {
 		try{
-			doorImage = ImageIO.read(new File("Resources"+File.separator+"Items"+File.separator+"DoorLocked.png"));
+			doorImage = ImageIO.read(Door.class.getResource("/Items/DoorLocked.png"));
 			scaledDoorImage = doorImage;
 		} catch(IOException e){
 			System.out.println("Error loading Door image file: "+e.getMessage());
