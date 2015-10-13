@@ -44,14 +44,12 @@ public abstract class Weapon implements Item {
 	 * @param theta
 	 */
 	public Projectile fire(Player p, double theta) {
-		Projectile proj = projectile.newInstance(p, theta);
+		if (!canFire){return null;}
 		
-		if (!canFire){ //If we aren't allowed to shoot, fire a dud
-			proj.setActive(false);
-		} else {
-			canFire = false;
-			startFireDelay((long)(1000/fireRate));
-		}
+		Projectile proj = projectile.newInstance(p, theta);
+
+		canFire = false;
+		startFireDelay((long)(1000/fireRate));
 		
 		return proj;
 	}

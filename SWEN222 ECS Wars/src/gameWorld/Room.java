@@ -643,9 +643,10 @@ public class Room {
 	 * @param p The projectile to add
 	 */
 	public void addProjectile(Projectile p){
-			if (players.contains(p.getPlayer()) || npcs.contains(p.getPlayer())){
-				projectiles.add(p);
-			}
+		if (p == null){return;}
+		if (players.contains(p.getPlayer()) || npcs.contains(p.getPlayer())){
+			projectiles.add(p);
+		}
 	}
 	
 	/**
