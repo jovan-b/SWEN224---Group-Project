@@ -2,7 +2,6 @@ package gameWorld;
 
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
-import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
 import gameWorld.gameEvents.Event;
 import gameWorld.gameEvents.GameClock;
 import gameWorld.gameEvents.RespawnEvent;
@@ -61,7 +60,7 @@ public class Room {
 	private Set<Player> players = new HashSet<>();
 	private Set<NonPlayer> npcs = new HashSet<>();
 	private Set<Door> doors = new HashSet<>();
-	
+		
 	/**
 	 * Constructor for class Room
 	 * @param roomName Name of room/file to parse.
@@ -614,13 +613,13 @@ public class Room {
 	 * @param player The player to remove
 	 */
 	public void removePlayer(Player player){
-		players.remove(player);
-		
-		//If this is the last player in the room,
-		//clean up projectiles
-		if (players.size() == 0){
-			projectiles.removeAll(projectiles);
-		}
+			players.remove(player);
+			
+			//If this is the last player in the room,
+			//clean up projectiles
+			if (players.size() == 0){
+				projectiles.removeAll(projectiles);
+			}
 	}
 	
 	/**
@@ -628,7 +627,7 @@ public class Room {
 	 * @param npc The NPC to add
 	 */
 	public void addNPC(NonPlayer npc){
-		npcs.add(npc);
+			npcs.add(npc);
 	}
 	
 	/**
@@ -636,7 +635,7 @@ public class Room {
 	 * @param npc The NPC to remove
 	 */
 	public void removeNPC(NonPlayer npc){
-		npcs.remove(npc);
+			npcs.remove(npc);
 	}
 	
 	/**
@@ -644,9 +643,9 @@ public class Room {
 	 * @param p The projectile to add
 	 */
 	public void addProjectile(Projectile p){
-		if (players.contains(p.getPlayer()) || npcs.contains(p.getPlayer())){
-			projectiles.add(p);
-		}
+			if (players.contains(p.getPlayer()) || npcs.contains(p.getPlayer())){
+				projectiles.add(p);
+			}
 	}
 	
 	/**
@@ -654,7 +653,7 @@ public class Room {
 	 * @param p The projectile to remove
 	 */
 	public void removeProjectile(Projectile p){
-		projectiles.remove(p);
+			projectiles.remove(p);
 	}
 
 	/**
@@ -796,50 +795,45 @@ public class Room {
 	 * @return A Set of all characters in this room
 	 */
 	public Set<Player> getAllCharacters() {
-		Set<Player> rtn = new HashSet<Player>();
-		rtn.addAll(players);
-		rtn.addAll(npcs);
-		
-		return rtn;
+			Set<Player> rtn = new HashSet<Player>();
+			rtn.addAll(players);
+			rtn.addAll(npcs);
+			
+			return rtn;
 	}
 
 	/**
 	 * Updates the room and all contained objects for the next frame.
 	 */
 	public void update() {
-		updateProjectiles();
-		updatePlayer();
-		updateNPCs();
+			updateProjectiles();
+			updatePlayer();
+			updateNPCs();
 	}
 
 	/**
 	 * Updates all NPCs in the room for the next frame
 	 */
 	private void updateNPCs() {
-		Iterator<NonPlayer> npcIter = npcs.iterator();
+		Set<NonPlayer> temp = new HashSet<NonPlayer>(npcs);
 		
-		while(npcIter.hasNext()){
-			NonPlayer npc = npcIter.next();
+		for (NonPlayer npc : temp){
 			npc.update();
-			
 			if (npc.isDead()){
-				npcIter.remove();
+				npcs.remove(npc);
 			}
-		}
+		}		
 	}
 
 	/**
 	 * Updates they current player for the next frame.
 	 */
 	private void updatePlayer() {
-		Iterator<Player> playerIter = players.iterator();
+		Set<Player> temp = new HashSet<Player>(players);
 		
-		while(playerIter.hasNext()){
-			Player p = playerIter.next();
-			
-			//Player is dead
+		for(Player p : temp){
 			if (p.isDead()){
-				playerIter.remove(); //Make the player invisible
+				players.remove(p); //Make the player invisible
 				
 				//Schedule a respawn event
 				CharacterSpawner spawner = ctrl.getSpawner();
@@ -854,27 +848,19 @@ public class Room {
 	 * Updates all projectiles for the next frame.
 	 */
 	private void updateProjectiles() {
-		Iterator<Projectile> projectileIter = projectiles.iterator();
-		try{
-			while(projectileIter.hasNext()){
-				Projectile p = projectileIter.next();
-				
-				p.update();
-				// check if projectile is outside room bounds
-				if (p.getX() < 0 || p.getX() > width || p.getY() < 0 || p.getY() > height){
-					p.setActive(false);
-				}
-				
-				//Remove the projectile if it's inactive
-				if (!p.isActive()){
-					projectileIter.remove();
-				}
+		Set<Projectile> temp = new HashSet<Projectile>(projectiles);
+		
+		for(Projectile p : temp){
+			p.update();
+			// check if projectile is outside room bounds
+			if (p.getX() < 0 || p.getX() > width || p.getY() < 0 || p.getY() > height){
+				p.setActive(false);
 			}
-		} catch (ConcurrentModificationException e){
-			//If we get an exception, try again
-			//FIXME: Dirty as fuck. 
-			update();
-			return;
+			
+			//Remove the projectile if it's inactive
+			if (!p.isActive()){
+				projectiles.remove(p);
+			}
 		}
 	}
 	
