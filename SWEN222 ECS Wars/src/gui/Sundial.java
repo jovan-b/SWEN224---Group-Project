@@ -102,12 +102,13 @@ public class Sundial {
 	 * Updates the image to the next frame in its animation.
 	 */
 	public void update() {
-		if (rot == targetRot){
+		if (rot > targetRot && targetRot > rotateAngle){
 			return;
 		}
 		rot += rotateAngle;
 		rot = rot % 360;
 		rotateImage(rot);
+		System.out.println("Target Rotation: "+targetRot+" Rotation: "+rot);
 	}
 
 }
