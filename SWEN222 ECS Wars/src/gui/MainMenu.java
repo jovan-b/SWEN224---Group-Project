@@ -322,15 +322,12 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			int numberOfPlayers = input.readInt();
 			int uid = input.readInt();
 			
-			//ClientConnection client = new ClientConnection(s);
+			this.setRedrawLoop(false);
 			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers, canvas), uid);
-			redraw.stopRunning();
 		} catch (IOException e){
 			JOptionPane.showMessageDialog(canvas, "Error: could not find server");
 		} catch (NumberFormatException ne){
 			JOptionPane.showMessageDialog(canvas, "Error: port is not a number");
-		} catch(NullPointerException e){
-			//do nothing, will occasionally occur when the connect button is pressed (not sure why)
 		}
 	}
 
