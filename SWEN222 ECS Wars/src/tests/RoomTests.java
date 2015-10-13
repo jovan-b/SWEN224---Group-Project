@@ -9,6 +9,8 @@ import org.junit.Test;
 import gameWorld.*;
 import gameWorld.characters.DavePlayer;
 import gameWorld.characters.Player;
+import gameWorld.characters.nonplayer.NonPlayer;
+import gameWorld.characters.nonplayer.strategy.WanderingStrategy;
 import gameWorld.gameObjects.Desk;
 import gameWorld.gameObjects.Wall;
 import gameWorld.gameObjects.weapons.projectiles.LtsaBullet;
@@ -121,6 +123,18 @@ public class RoomTests {
 	
 	@Test
 	/**
+	 * Tests adding of an NPC to a room
+	 */
+	public void testAddNPC(){
+		Room room = classroom103;
+		NonPlayer p = new NonPlayer(room,0,0,new WanderingStrategy());
+		room.addNPC(p);
+		Set<Player> players = room.getAllCharacters();
+		assertTrue(players.contains(p));
+	}
+	
+	@Test
+	/**
 	 * Tests adding of a projectile to a room
 	 */
 	public void testAddProjectile(){
@@ -149,6 +163,19 @@ public class RoomTests {
 		room.addPlayer(p);
 		room.removePlayer(p);
 		Set<Player> players = room.getPlayers();
+		assertFalse(players.contains(p));
+	}
+	
+	@Test
+	/**
+	 * Tests adding of a player to a room
+	 */
+	public void testRemoveNPC(){
+		Room room = classroom103;
+		NonPlayer p = new NonPlayer(room,0,0, new WanderingStrategy());
+		room.addNPC(p);
+		room.removeNPC(p);
+		Set<Player> players = room.getAllCharacters();
 		assertFalse(players.contains(p));
 	}
 	
@@ -191,5 +218,27 @@ public class RoomTests {
 		Room room = classroom103;
 		assertTrue(room.itemAt(SQUARE_SIZE*2,
 				SQUARE_SIZE*3) instanceof Desk);
+	}
+	
+	@Test
+	/**
+	 * Tests getting item at certain position.
+	 * Use an out of bounds case and ensure that a Wall is returned.
+	 */
+	public void testItemAt3(){
+		Room room = classroom103;
+		assertTrue(room.itemAt(SQUARE_SIZE*-1,
+				SQUARE_SIZE) instanceof Wall);
+	}
+	
+	@Test
+	/**
+	 * Tests getting item at certain position
+	 * Use an out of bounds case and ensure that a Wall is returned.
+	 */
+	public void testItemAt4(){
+		Room room = classroom103;
+		assertTrue(room.itemAt(SQUARE_SIZE*room.getCols()+10,
+				SQUARE_SIZE) instanceof Wall);
 	}
 }
