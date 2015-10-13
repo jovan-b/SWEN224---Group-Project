@@ -277,7 +277,7 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 			if(selectedButtonCol == 0){
 				// select dave
 				System.out.println("picked dave");
-			} else {
+			} else if(selectedButtonCol == 1){
 				// select pondy
 				System.out.println("picked pondy");
 			}
@@ -285,11 +285,13 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 			if(selectedButtonCol == 0){
 				// select marco
 				System.out.println("picked marco");
-			} else {
+			} else if(selectedButtonCol == 1){
 				// select streader
 				System.out.println("picked streader");
 			}
 		}
+		selectedButtonRow = Integer.MAX_VALUE;
+		selectedButtonCol = Integer.MAX_VALUE;
 	}
 
 	@Override
