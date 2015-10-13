@@ -58,6 +58,7 @@ public class SinglePlayerController extends Controller {
 	 */
 	public SinglePlayerController(File selectedFile) {
 		super(0);
+		super.initialise();
 		LoadManager.loadGame(selectedFile, this);
 	}
 
@@ -231,6 +232,7 @@ public class SinglePlayerController extends Controller {
 
 
 	public void setCurrentPlayer(Player player) {
+		this.player = player;
 		players.set(0, player);
 	}
 

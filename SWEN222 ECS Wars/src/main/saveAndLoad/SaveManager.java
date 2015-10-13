@@ -84,6 +84,10 @@ public final class SaveManager {
 			
 			//Write players in room
 			savePlayers(room, r);
+			
+			//TODO: save NPC players positions and types
+			
+			//save room contents
 			saveCabinets(room, r);
 			saveRoomContents(room, r);
 		}
@@ -220,7 +224,7 @@ public final class SaveManager {
 		Element weapon = doc.createElement("Weapon");
 		player.appendChild(weapon);
 		
-		weapon.setAttribute("type", p.getWeapon().getWeaponType().name());
+		weapon.setAttribute("weaponType", p.getWeapon().getWeaponType().name());
 		
 	}
 	
@@ -229,12 +233,16 @@ public final class SaveManager {
 		Element inventory = doc.createElement("Inventory");
 		player.appendChild(inventory);
 		
-		//List the inventory items in order
-		//i.e. the first item in inventory should be attibute 0 = [item description]
-		for(int i = 0; i < p.getInventory().length; i++){
-			if(p.getInventory()[i] != null){
-				inventory.setAttribute(Integer.toString(i),	 
-						p.getInventory()[i].toString());
+		//put all the items inside the inventory
+		Item[] items = p.getInventory();
+		
+		Element innerItem;
+		for(int i = 0; i < items.length; i++){
+			if(items[i] != null){
+				Element inventoryItem = doc.createElement("Item");
+				inventoryItem.setAttribute("type", items[i].getType().name());
+				inventoryItem.setAttribute("index", Integer.toString(i));
+				inventory.appendChild(inventoryItem);
 			}
 		}
 	}

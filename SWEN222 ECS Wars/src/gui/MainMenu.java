@@ -260,14 +260,13 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 
 	
 	private void newGame() {
-		//controller.initialiseGame();
-		//canvas.setMainMenu(false);
 		
 		this.setRedrawLoop(false);
 		canvas.startGame(new SinglePlayerController(), 0);
 	}
 
 	private void loadGame() {
+		this.setRedrawLoop(false);
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 		        "XML Files", "xml");
@@ -280,7 +279,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		}
 		
 		canvas.startGame(new SinglePlayerController(chooser.getSelectedFile()), 0);
-		this.setRedrawLoop(false);
 		
 	}
 

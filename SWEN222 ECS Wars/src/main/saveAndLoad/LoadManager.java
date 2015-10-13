@@ -3,6 +3,7 @@ package main.saveAndLoad;
 import gameWorld.Controller;
 import gameWorld.Room;
 import gameWorld.characters.*;
+import gameWorld.characters.Player.PlayerType;
 import gameWorld.gameObjects.*;
 import gameWorld.gameObjects.Item.Type;
 import gameWorld.gameObjects.containers.*;
@@ -98,6 +99,11 @@ public class LoadManager {
 		
 		//add list of players to the controller
 		controller.setPlayers(players);
+		controller.setCurrentPlayer(players.get(0));
+		
+		//TODO: Test code, remove!
+		System.out.println(players.get(0).getName());
+		System.out.println(players.get(0).getX() + ", " + players.get(0).getY());
 	}
 
 	private static void loadCabinetContents(Controller controller, Room r,
@@ -259,21 +265,34 @@ public class LoadManager {
 				Player p;
 				
 				//create a player object from the node
-				switch(pelement.getAttribute("type")){
-				case("PondyPlayer"):	//PondyPlayer
+				switch(PlayerType.valueOf(pelement.getAttribute("type"))){
+				case PondyPlayer:
 					p = new PondyPlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
 							Integer.parseInt(pelement.getAttribute("y")));
 					break;
-				default:	//DavePlayer
+				case DavePlayer:
 					p = new DavePlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
 							Integer.parseInt(pelement.getAttribute("y")));
 					break;
+				case StreaderPlayer:
+					p = new StreaderPlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
+							Integer.parseInt(pelement.getAttribute("y")));
+					break;
+				case MarcoPlayer:
+					p = new MarcoPlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
+							Integer.parseInt(pelement.getAttribute("y")));
+					break;
+				default:	//MarcoPlayer for now
+					
+					p = new PondyPlayer(r, Integer.parseInt(pelement.getAttribute("x")), 
+							Integer.parseInt(pelement.getAttribute("y")));
+					break;
+					//TODO: add NPC players 
 				}
 				
-				//TODO: load inventory into player
-				loadInventory(controller, p, pelement);
+				//load inventory into player
+				loadPlayerItems(p.getInventory(), pelement);
 				
-				//TODO: load weapon into player
 				loadWeapon(controller, p, pelement);
 				
 				//add player object to room object
@@ -285,16 +304,74 @@ public class LoadManager {
 		}
 	}
 
-	private static void loadWeapon(Controller controller, Player p,
-			Element pelement) {
-		// TODO: finish loading weapon onto player
+	@SuppressWarnings("incomplete-switch")
+	private static void loadPlayerItems(Item[] inventory, Element pelement) {
+		NodeList items = pelement.getChildNodes();
 		
+		for(int i = 0; i < items.getLength(); i++){
+			
+			//check to see if of type Item
+			if(items.item(i).getNodeName() != "Item") continue;
+			
+			Element itemElem = (Element)items.item(i);
+			
+			switch(Type.valueOf(itemElem.getAttribute("type"))){
+			//add correct item to container
+			case KeyCard:
+				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = new KeyCard();
+				break;
+			case SmallTreasure:
+				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = new SmallTreasure();
+				break;
+			case Torch:
+				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = new Torch();
+				break;
+			case MedicineBottle:
+				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = new MedicineBottle();
+				break;
+			case PillBottle: 
+				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = new PillBottle();
+				break;
+			case Map:
+				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = new Map();
+				break;
+			//container items
+			case Pouch:
+				Pouch p = new Pouch();
+				//load inner pouch items
+				loadContainerItems(p, itemElem);
+				inventory[Integer.parseInt(itemElem.getAttribute("index"))] = p;
+				break;
+			}
+		}
 	}
 
-	private static void loadInventory(Controller controller, Player p,
+	private static void loadWeapon(Controller controller, Player p,
 			Element pelement) {
-		// TODO: finish loading player's inventory
+		NodeList weaponList = pelement.getChildNodes();
 		
+		for(int i = 0; i < weaponList.getLength(); i++){
+			//check if a weapon, if not, keep iterating
+			if(weaponList.item(i).getNodeName() != "Weapon") continue;
+			
+			Element weaponElem = (Element) weaponList.item(i);
+			
+			//if it is a weapon type, find out which one
+			switch(WeaponType.valueOf(weaponElem.getAttribute("weaponType"))){
+			case PaintballGun: 
+				p.setCurrentWeapon(new PaintballGun());
+				break;
+			case LTSAGun:
+				p.setCurrentWeapon(new LtsaGun());
+				break;
+			case ScatterGun:
+				p.setCurrentWeapon(new ScatterGun());
+				break;
+			case Pistol:
+				p.setCurrentWeapon(new Pistol());
+				break;
+			}
+		}
 	}
 	
 }

@@ -164,7 +164,7 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 		// draw border
 		g.drawRect(slotX, slotY, SLOT_WIDTH, SLOT_HEIGHT);
 		// determine which player type to draw
-		Player.Type type = p.getType();
+		Player.PlayerType type = p.getType();
 		Image toDraw;
 		switch(type){ //TODO add other player types
 		case DavePlayer : toDraw = daveImages[animState]; break;
