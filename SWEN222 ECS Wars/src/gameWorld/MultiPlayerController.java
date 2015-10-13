@@ -32,7 +32,6 @@ public class MultiPlayerController extends Controller {
 		this.canvas = canvas;
 		this.numPlayers = numPlayers;
 		initialise();
-		
 		client = new ClientConnection(socket, this, uid);
 	}
 	
@@ -64,7 +63,7 @@ public class MultiPlayerController extends Controller {
 	 */
 	@Override
 	public void update(){
-		client.dealWithInput();
+		client.checkForUpdates();
 		checkTooltip(getPlayer(uid));
 		players.get(uid).update();
 	}

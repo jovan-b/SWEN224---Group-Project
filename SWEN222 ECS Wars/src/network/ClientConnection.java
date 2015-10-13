@@ -17,6 +17,12 @@ import gameWorld.MultiPlayerController;
 import gameWorld.Room;
 import gameWorld.SinglePlayerController;
 import gameWorld.characters.Player;
+import gameWorld.gameObjects.weapons.LtsaGun;
+import gameWorld.gameObjects.weapons.PaintballGun;
+import gameWorld.gameObjects.weapons.Pistol;
+import gameWorld.gameObjects.weapons.ScatterGun;
+import gameWorld.gameObjects.weapons.Weapon;
+import gameWorld.gameObjects.weapons.Weapon.WeaponType;
 import gui.GUICanvas;
 import gui.GUIFrame;
 
@@ -34,12 +40,17 @@ public class ClientConnection extends Thread{
 	private DataInputStream input;
 	private DataOutputStream output;
 	private MultiPlayerController controller;
+	
 	private int uid;
+	private Player player;
+	private Weapon currentWeapon;
 
 	public ClientConnection(Socket socket, MultiPlayerController controller, int uid){
 		this.socket = socket;
 		this.controller = controller;
 		this.uid = uid;
+		this.player = controller.getPlayer(uid);
+		this.currentWeapon = player.getWeapon();
 		//Create the input and output streams
 		try {
 			input = new DataInputStream(socket.getInputStream());
@@ -57,7 +68,7 @@ public class ClientConnection extends Thread{
 	synchronized public void run(){
 		try{
 			//While the game is running, take incoming updates of other clients
-			while(true){
+			while(!socket.isClosed()){
 				//Read which player is trying to perform an action
 				int user = input.readInt();
 				Player player = controller.getPlayer(user);
@@ -84,6 +95,21 @@ public class ClientConnection extends Thread{
 					output.writeInt(3);
 					output.writeInt(user);
 					break;
+				case 4:
+					int weapon = input.readInt();
+					Weapon newWep;
+					if(weapon == 0){
+						newWep = new PaintballGun();
+					} else if(weapon == 1){
+						newWep = new LtsaGun();
+					} else if(weapon == 2){
+						newWep = new Pistol();
+					} else{
+						newWep = new ScatterGun();
+					}
+					//TODO: drop wep aswell
+					player.setCurrentWeapon(newWep);
+					break;
 				}
 			}
 		}
@@ -101,11 +127,11 @@ public class ClientConnection extends Thread{
 		}
 	}
 
-	public void dealWithInput() {
+	public void checkForUpdates() {
 		try{
 			boolean posChanged = false;
 			GUIFrame gui = controller.getGUI();
-			Player player = controller.getPlayer(uid);
+			Weapon weapon = player.getWeapon();
 			// Player Movement
 			if(isKeyPressed(KeyEvent.VK_RIGHT) || isKeyPressed(KeyEvent.VK_D)){
 				player.move(GUICanvas.convertStringToDir("right", gui.getCanvas().getViewDirection()));
@@ -125,6 +151,22 @@ public class ClientConnection extends Thread{
 			}
 			if(isKeyPressed(KeyEvent.VK_SHIFT)){
 				player.setSpeedModifier(2);
+			}
+			
+			if(!weapon.equals(currentWeapon)){
+				currentWeapon = weapon;
+				output.writeInt(4);
+				int wep;
+				if(weapon.getName().equals("Paintball Gun")){
+					wep = 0;
+				} else if(weapon.getName().equals("LTSA Gun")){
+					wep = 1;
+				} else if(weapon.getName().equals("Pistol")){
+					wep = 2;
+				} else{
+					wep = 3;
+				}
+				output.writeInt(wep);
 			}
 			
 			if (controller.isShooting()) {

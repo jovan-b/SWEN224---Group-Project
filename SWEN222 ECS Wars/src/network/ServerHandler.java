@@ -38,10 +38,8 @@ public class ServerHandler extends Thread{
 			input = new DataInputStream(socket.getInputStream());
 			output = new DataOutputStream(socket.getOutputStream());
 
-			boolean running = true;
-
 			//Continue to run the game reading the clients actions
-			while(running){
+			while(!socket.isClosed()){
 				//Reads what action the player is trying to do
 				int action = input.readInt();
 				switch(action){
@@ -94,6 +92,23 @@ public class ServerHandler extends Thread{
 					case 3:
 						int user = input.readInt();
 						serverHandlers[user].disconnected = true;
+						break;
+					//If 4 is the action, players weapon has changed
+					case 4:
+						int weapon = input.readInt();
+						for(int i = 0; i<serverHandlers.length; i++){
+							if(serverHandlers[i] == this){
+								continue; // don't need to broadcast to yourself
+							} else if(serverHandlers[i].disconnected == true){
+								continue;
+							} else{
+								Socket socket = serverHandlers[i].getSocket();
+								DataOutputStream socketOut = new DataOutputStream(socket.getOutputStream());
+								//4 is the code for a weapon change
+								socketOut.writeInt(uid);
+								socketOut.writeInt(4);
+								socketOut.writeInt(weapon);							}
+						}
 						break;
 				}
 			}
