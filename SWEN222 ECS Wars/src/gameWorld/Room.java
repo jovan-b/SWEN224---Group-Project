@@ -57,8 +57,8 @@ public class Room {
 	
 	// non-item contents of room
 	private Set<Projectile> projectiles = Collections.synchronizedSet(new HashSet<Projectile>());
-	private Set<Player> players = new HashSet<>();
-	private Set<NonPlayer> npcs = new HashSet<>();
+	private Set<Player> players = Collections.synchronizedSet(new HashSet<>());
+	private Set<NonPlayer> npcs = Collections.synchronizedSet(new HashSet<>());
 	private Set<Door> doors = new HashSet<>();
 		
 	/**
@@ -251,8 +251,8 @@ public class Room {
 		}
 		
 		// Create copy of projectile set to avoid concurrent modification
-		Set<Projectile> projectilesToDraw = new HashSet<Projectile>();
-		projectilesToDraw.addAll(projectiles);
+		Set<Projectile> projectilesToDraw = new HashSet<Projectile>(projectiles);
+		//projectilesToDraw.addAll(projectiles);
 		
 		// Set row value for projectiles and players
 		checkPlayers(viewDirection);

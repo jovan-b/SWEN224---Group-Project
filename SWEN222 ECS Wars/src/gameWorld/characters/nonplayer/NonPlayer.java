@@ -71,7 +71,7 @@ public class NonPlayer extends Player {
 	public void modifyHealth(int amt, Projectile p){
 		if (amt < 0){
 			this.respond(Events.COMBAT);
-//			this.interact(p.getPlayer());
+			this.interact(p.getPlayer());
 		}
 		super.modifyHealth(amt, null);
 		if (this.isDead()){
@@ -117,7 +117,7 @@ public class NonPlayer extends Player {
 		if (strat == null){
 			strat = strategies.get(Events.DEFAULT) != null ? strategies.get(Events.DEFAULT) : GLOBAL_DEFAULT;
 		}
-
+		
 		active = strat;
 		active.initialize();
 	}

@@ -1,18 +1,15 @@
 package gameWorld.characters.nonplayer.strategy;
 
-import gameWorld.Room;
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 
 public class ChaseCombatStrategy extends WaitStrategy {
 	public static double THRESHOLD = 5; //degree where it doesn't do anything
-	private NonPlayer npc;
 	private double range;
 	
 	private Player target = null;
 	
-	public ChaseCombatStrategy(NonPlayer npc, double range){
-		this.npc = npc;
+	public ChaseCombatStrategy(double range){
 		this.range = range;
 	}
 	

@@ -24,6 +24,15 @@ import java.util.BitSet;
 import main.saveAndLoad.LoadManager;
 import main.saveAndLoad.SaveManager;
 
+/**
+ * A controller implementation for single player games
+ * 
+ * @author Jah Seng Lee
+ * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
+ * @author Carl Anderson 300264124
+ *
+ */
 public class SinglePlayerController extends Controller {
 	
 
@@ -43,6 +52,10 @@ public class SinglePlayerController extends Controller {
 		initialise();
 	}
 
+	/**
+	 * Load single player game information from file
+	 * @param selectedFile
+	 */
 	public SinglePlayerController(File selectedFile) {
 		super(0);
 		LoadManager.loadGame(selectedFile, this);
@@ -55,34 +68,12 @@ public class SinglePlayerController extends Controller {
 		super.initialise();
 		player = new DavePlayer(rooms.get(0), 2 * 24, 2 * 24);
 		players.add(player);
-
-		NonPlayer npc = new NonPlayer(rooms.get(0), 5 * 24, 7 * 24,
-				new WanderingMerchantStrategy());
-		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
-		npc.setStrategy(NonPlayer.Events.COMBAT, new ChaseCombatStrategy(npc, 50));
-		rooms.get(0).addNPC(npc);
 		
 		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, DAY_LENGTH));
 		GameClock.getInstance().scheduleEvent(new SlowUpdateEvent(this, 1));
 	}
 
-	/**
-	 * Initialise the fields of the game
-	 */
-	public void initialiseGame() {
-		isRunning = true;
-		Room room = rooms.get(0); // FIXME
-		room.addPlayer(player);
-		player.setCanvas(gui.getCanvas());
-
-		SaveManager.saveGame(this, "test_save.xml");
-	}
-
-	/**
-	 * Update the game logic Take in user input and call appropriate methods
-	 * Update the positions of non-input deterministic objects
-	 * 
-	 */
+	@Override
 	protected void update() {
 		dealWithInput();// deal with user input
 		checkTooltip(player); // check if a tooltip should be displayed

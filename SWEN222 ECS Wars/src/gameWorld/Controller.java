@@ -37,14 +37,13 @@ import java.util.Set;
 
 /**
  * Main controller for ECS Wars
- * Runs the main game loop which:
- * 		deals with user input
- * 		updates the game logic
+ * Runs the main game loop which and holds all global game-state information
  * 
  * @author Jah Seng Lee
  * @author Sarah Dobie 300315033
  * @author Chris Read 300254724
  * @author Jovan Bogoievski 300305140
+ * @author Carl Anderson 300264124
  *
  */
 public abstract class Controller extends Thread implements KeyListener, MouseListener, MouseMotionListener{
@@ -102,37 +101,14 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		setupRooms();
 		loadItemsToSpawn();
 		setupSpawnItems();
-		startClock();
-	}
-
-	/**
-	 * Starts the game clock
-	 */
-	private void startClock() {
-		clock = GameClock.getInstance();
-	}
-
-	/**
-	 * Initialise the fields of the game
-	 */
-	public void initialiseGame() {
-		isRunning = true;
-		Room room = rooms.get(0); //FIXME
-		//room.addPlayer(player);
-		//player.setCanvas(gui.getCanvas());
-		
-//		NonPlayer npc = new NonPlayer(room, 5*24, 7*24, new WanderingMerchantStrategy());
-//		npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
-//		npc.setStrategy(NonPlayer.Events.COMBAT, new ChaseCombatStrategy(npc, 50));
-//		room.addNPC(npc);
-		
-		SaveManager.saveGame(this, "test_save.xml");
 	}
 	
+	/**
+	 * Starts the main game thread
+	 */
 	public void startGame(){
 		spawnPlayers();
-		//SoundManager.playSong("battle_1.mp3");
-		//SoundManager.playSong(SoundManager.CREDIT_SONGS[0]);
+
 		SoundManager.playQueue(SoundManager.BATTLE_SONGS);
 		
 		this.start();
@@ -471,6 +447,8 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 			CharacterSpawner spawner = charSpawners.get(j);
 			NonPlayer npc = new NonPlayer(spawner.getRoom(), spawner.getX(), spawner.getY(), 
 					new WanderingMerchantStrategy());
+			npc.setStrategy(NonPlayer.Events.COMBAT, new ChaseCombatStrategy(100));
+			npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
 			spawner.getRoom().addNPC(npc);
 		}
 	}
