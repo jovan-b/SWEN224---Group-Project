@@ -2,13 +2,6 @@ package gameWorld;
 
 import gameWorld.characters.DavePlayer;
 import gameWorld.characters.Player;
-import gameWorld.characters.nonplayer.NonPlayer;
-import gameWorld.characters.nonplayer.strategy.ChaseCombatStrategy;
-import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
-import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
-import gameWorld.gameEvents.DayNightEvent;
-import gameWorld.gameEvents.GameClock;
-import gameWorld.gameEvents.SlowUpdateEvent;
 import gameWorld.gameObjects.CharacterSpawner;
 import gui.GUICanvas;
 import main.SoundManager;
@@ -17,7 +10,6 @@ import network.ClientConnection;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.net.Socket;
-import java.util.Collections;
 
 public class MultiPlayerController extends Controller {
 	
@@ -41,7 +33,6 @@ public class MultiPlayerController extends Controller {
 			players.add(new DavePlayer(rooms.get(0), (i+2)*24, 2*24));
 		}
 		
-		//Set the canvas of the players in game locally, this is needed so the weapons can shoot
 		for(int i=0; i<numPlayers; i++){
 			Player player = players.get(i);
 			if(i == uid){
@@ -50,9 +41,6 @@ public class MultiPlayerController extends Controller {
 				player.setCanvas(canvas);
 			}
 		}
-		
-		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, DAY_LENGTH));
-		GameClock.getInstance().scheduleEvent(new SlowUpdateEvent(this, 1));
 	}
 	
 	@Override
@@ -64,19 +52,17 @@ public class MultiPlayerController extends Controller {
 		start();
 	}
 	
-//	@Override
-//	public void spawnPlayers(){
-//		Collections.shuffle(charSpawners);
-//		for(int i=0; i<players.size(); i++){
-//			if(i >= charSpawners.size()){break;}
-//			CharacterSpawner spawner = charSpawners.get(0);
-//			Player p = players.get(i);
-//			p.getCurrentRoom().removePlayer(p);
-//			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
-//			spawner.getRoom().addPlayer(p);
-//		}
-//
-//	}
+	public void spawnPlayers(){
+		for(int i=0; i<players.size(); i++){
+			if(i >= charSpawners.size()){break;}
+			CharacterSpawner spawner = charSpawners.get(0);
+			Player p = players.get(i);
+			p.getCurrentRoom().removePlayer(p);
+			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
+			spawner.getRoom().addPlayer(p);
+		}
+
+	}
 
 	@Override
 	public void update(){

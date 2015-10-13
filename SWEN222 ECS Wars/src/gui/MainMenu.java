@@ -329,8 +329,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			JOptionPane.showMessageDialog(canvas, "Error: could not find server");
 		} catch (NumberFormatException ne){
 			JOptionPane.showMessageDialog(canvas, "Error: port is not a number");
-		} catch(NullPointerException e){
-			//do nothing, will occasionally occur when the connect button is pressed (not sure why)
 		}
 	}
 
