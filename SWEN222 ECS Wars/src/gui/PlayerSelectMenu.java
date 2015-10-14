@@ -51,15 +51,21 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 	private int selectedButtonRow = Integer.MAX_VALUE; // the button row currently highlighted
 	private int selectedButtonCol = Integer.MAX_VALUE; // the button col currently highlighted
 	private boolean loading; // true if the game is currently loading
+	private Player selectedPlayer;
 
 
 	/**
 	 * Constructor for class PlayerSelectMenu.
 	 * @param canvas The GUICanvas the menu will be drawn on
 	 */
-	public PlayerSelectMenu(GUICanvas canvas) {
+	public PlayerSelectMenu(GUICanvas canvas, boolean multiplayer) {
 		this.canvas = canvas;
-		this.controller = new SinglePlayerController();
+		if(!multiplayer){
+			this.controller = new SinglePlayerController();
+		} else{
+			this.controller = null;
+		}
+		this.selectedPlayer = null;
 		loadImages();
 		loadFonts();
 		buttonLabels = new String[][]{{"David Pearce", "Peter Andrae"},
@@ -268,18 +274,18 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 		drawMenuItems(canvas.getGraphics());
 		
 		canvas.setRedrawLoop(false);
-		if(controller instanceof SinglePlayerController){
-			((SinglePlayerController)controller).initialise(selectedPlayer);
-		} else {
-			controller.initialise();
+		if(controller == null){
+			canvas.getMainMenu().setUpMultiplayerGame(selectedPlayer);
 		}
-		
-		canvas.togglePlayerSelectMenu();
-		canvas.startGame(controller, 0);
-		loading = false;
-		
-		selectedButtonRow = Integer.MAX_VALUE;
-		selectedButtonCol = Integer.MAX_VALUE;
+		else if(controller instanceof SinglePlayerController){
+			((SinglePlayerController)controller).initialise(selectedPlayer);
+			canvas.togglePlayerSelectMenu(false);
+			canvas.startGame(controller, 0);
+			loading = false;
+			
+			selectedButtonRow = Integer.MAX_VALUE;
+			selectedButtonCol = Integer.MAX_VALUE;
+		} 
 	}
 
 	@Override

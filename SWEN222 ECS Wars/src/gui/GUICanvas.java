@@ -591,9 +591,9 @@ public class GUICanvas extends JComponent{
 	/**
 	 * Opens or hides the player select menu.
 	 */
-	public void togglePlayerSelectMenu() {
+	public void togglePlayerSelectMenu(boolean multiplayer) {
 		if(playerSelectMenu == null){
-			playerSelectMenu = new PlayerSelectMenu(this);
+			playerSelectMenu = new PlayerSelectMenu(this, multiplayer);
 		}
 		playerSelectView = !playerSelectView; // toggle boolean
 		// change settings
@@ -679,6 +679,10 @@ public class GUICanvas extends JComponent{
 		
 		this.removeMouseListener(menu);
 		this.removeMouseMotionListener(menu);
+	}
+	
+	public MainMenu getMainMenu(){
+		return mainMenu;
 	}
 
 	public Container getCurrentContainer(){
