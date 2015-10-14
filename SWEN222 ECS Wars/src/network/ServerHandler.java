@@ -119,13 +119,30 @@ public class ServerHandler extends Thread{
 							} else{
 								Socket socket = serverHandlers[i].getSocket();
 								output = new DataOutputStream(socket.getOutputStream());
-								//4 is the code for a weapon change
+								//5 is the code for hp change
 								output.writeInt(uid);
 								output.writeInt(5);	
 								output.writeInt(hp);
 							}
 						}
 						break;
+					//If 6 is the action, update the players points
+					case 6:
+						int points = input.readInt();
+						for(int i = 0; i<serverHandlers.length; i++){
+							if(serverHandlers[i] == this){
+								continue; // don't need to broadcast to yourself
+							} else if(serverHandlers[i].disconnected == true){
+								continue;
+							} else{
+								Socket socket = serverHandlers[i].getSocket();
+								output = new DataOutputStream(socket.getOutputStream());
+								//4 is the code for a weapon change
+								output.writeInt(uid);
+								output.writeInt(6);	
+								output.writeInt(points);
+							}
+						}
 				}
 			}
 			socket.close();

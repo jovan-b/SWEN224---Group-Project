@@ -458,6 +458,8 @@ public abstract class Player {
 	public int getMaxHealth() {return maxHealth;}
 
 	public int getPoints() {return points;}
+	
+	public void setPoints(int points) {this.points = points;}
 
 	public int getGlobalDir() {
 		return lastDirMoved;

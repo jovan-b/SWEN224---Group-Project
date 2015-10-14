@@ -36,6 +36,7 @@ public class ClientConnection extends Thread{
 	
 	private int uid;
 	private Player player;
+	private int playerPoints;
 	private Weapon currentWeapon;
 
 	public ClientConnection(Socket socket, MultiPlayerController controller, int uid){
@@ -43,6 +44,7 @@ public class ClientConnection extends Thread{
 		this.controller = controller;
 		this.uid = uid;
 		this.player = controller.getPlayer(uid);
+		this.playerPoints = player.getPoints();
 		this.currentWeapon = player.getWeapon();
 		//Create the input and output streams
 		try {
@@ -109,6 +111,11 @@ public class ClientConnection extends Thread{
 					int hp = input.readInt();
 					player.setHealth(hp);
 					break;
+				//Update points
+				case 6:
+					int points = input.readInt();
+					player.setPoints(points);
+					break;
 				}
 			}
 		}
@@ -131,7 +138,6 @@ public class ClientConnection extends Thread{
 		try{
 			boolean posChanged = false;
 			GUIFrame gui = controller.getGUI();
-			Weapon weapon = player.getWeapon();
 			// Player Movement
 			if(isKeyPressed(KeyEvent.VK_RIGHT) || isKeyPressed(KeyEvent.VK_D)){
 				player.move(GUICanvas.convertStringToDir("right", gui.getCanvas().getViewDirection()));
@@ -157,16 +163,23 @@ public class ClientConnection extends Thread{
 			output.writeInt(5);
 			output.writeInt(player.getHealth());
 			
+			//Check if a player score has changed
+			if(playerPoints != player.getPoints()){
+				playerPoints = player.getPoints();
+				output.writeInt(6);
+				output.writeInt(playerPoints);
+			}
+			
 			//Check if a player has changed weapon
-			if(!weapon.equals(currentWeapon)){
-				currentWeapon = weapon;
+			if(!player.getWeapon().equals(currentWeapon)){
+				currentWeapon = player.getWeapon();
 				output.writeInt(4);
 				int wep;
-				if(weapon.getName().equals("Paintball Gun")){
+				if(currentWeapon.getName().equals("Paintball Gun")){
 					wep = 0;
-				} else if(weapon.getName().equals("LTSA Gun")){
+				} else if(currentWeapon.getName().equals("LTSA Gun")){
 					wep = 1;
-				} else if(weapon.getName().equals("Pistol")){
+				} else if(currentWeapon.getName().equals("Pistol")){
 					wep = 2;
 				} else{
 					wep = 3;
