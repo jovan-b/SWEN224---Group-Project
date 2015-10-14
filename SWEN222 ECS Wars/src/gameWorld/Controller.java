@@ -105,6 +105,138 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	}
 	
 	/**
+	 * Distributes players over the game world.
+	 */
+	protected void spawnPlayers(){
+		Collections.shuffle(charSpawners);
+		int i;
+		for(i=0; i<players.size(); i++){
+			if(i >= charSpawners.size()){break;}
+			CharacterSpawner spawner = charSpawners.get(i);
+			Player p = players.get(i);
+			if (p.getCurrentRoom() != null){
+				p.getCurrentRoom().removePlayer(p);
+			}
+			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
+			spawner.getRoom().addPlayer(p);
+		}
+		
+		//Fill the remaining spawns with random npcs
+		for (int j = i; j < charSpawners.size(); j++){
+			CharacterSpawner spawner = charSpawners.get(j);
+			double roll = Math.random();
+			Room room = spawner.getRoom();
+			int x = spawner.getX();
+			int y = spawner.getY();
+			
+			NonPlayer npc = null;
+			
+			if (roll-0.05 < 0){npc = new GhostNPC(room, x, y);}
+			else {
+				npc = new NonPlayer(room, x, y, new WanderingMerchantStrategy());
+				npc.setStrategy(NonPlayer.Events.COMBAT, new ChaseCombatStrategy(100));
+				npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
+			}
+			
+			room.addNPC(npc);
+		}
+		
+		//Special spawn cases
+		//Ghosts in server room
+		Room server = this.getRoom("Server Room");
+		if (server != null){
+			for (int k = 0; k < 1; k++){
+				int x = (int)(Math.random() * 24+1);
+				int y = (int)(Math.random() * 10+1);
+				
+				server.addNPC(new GhostNPC(server, x*24, y*24));
+			}
+		}
+		
+		Room shed = this.getRoom("Courtyard Shed");
+		if (shed != null){
+			shed.addNPC(new GhostNPC(shed, 5*24, 5*24));
+		}
+	}
+
+	/**
+	 * Randomly distributes spawned items.
+	 */
+	private void setupSpawnItems() {
+		// shuffle spawn item lists
+		Collections.shuffle(itemSpawners);
+		Collections.shuffle(itemsToSpawn);
+		// while there is an item left, add item to container
+		for(Item item : itemsToSpawn){
+			Collections.shuffle(itemSpawners);
+			ItemSpawner holder = itemSpawners.get(0);
+			while ((item instanceof Weapon && !(holder instanceof Floor))
+					|| holder.remainingCapacity() <= 0){
+				Collections.shuffle(itemSpawners);
+				holder = itemSpawners.get(0);
+			}
+			holder.addSpawnItem(item);
+		}
+	}
+
+	/**
+	 * Loads all items that will be spawned and stores them in
+	 * the itemsToSpawn List.
+	 */
+	private void loadItemsToSpawn() {
+		try	{
+			Scanner s = new Scanner(Controller.class.getResourceAsStream("/ItemsToSpawn.txt"));
+			// iterate over file
+			while(s.hasNextLine()){
+				String nextLine = s.nextLine();
+				Item toAdd = null;
+				// create item to spawn
+				switch(nextLine){
+				case "KeyCard" : toAdd = new KeyCard(); break;
+				case "Torch" : toAdd = new Torch(); break;
+				case "Pouch" : toAdd = new Pouch(); 
+							for (int i = 0; i < 3; i++){
+								itemSpawners.add((ItemSpawner) toAdd);
+							} break;
+				case "Map" : toAdd = new Map(); break;
+				case "Treasure" : toAdd = new SmallTreasure(); break;
+				case "Paintball Gun" : toAdd = new PaintballGun(); break;
+				case "Scatter Gun" : toAdd = new ScatterGun(); break;
+				case "LTSA Gun" : toAdd = new LTSAGun(); break;
+				case "Pistol" : toAdd = new Pistol(); break;
+				}
+				// add the item if it's not null, otherwise print error message
+				if(toAdd != null){
+					itemsToSpawn.add(toAdd);
+				} else {
+					System.out.println("Parse error: could not parse spawn item - "+ nextLine);
+				}
+				
+			}
+			s.close();
+		} catch(NullPointerException e){
+			System.out.println("Error loading spawn items: "+e.getMessage());
+		}
+	}
+
+	/**
+	 * Parses all the room objects in the game.
+	 */
+	private void setupRooms(){
+		try {
+			Scanner s = new Scanner(Controller.class.getResourceAsStream("/RoomIndex.txt"));
+			String roomName;
+			while (s.hasNextLine()){
+				roomName = s.nextLine();
+				rooms.add(new Room(roomName, this));
+			}
+			s.close();
+		} catch (NullPointerException e) {
+			System.out.println("Error loading RoomIndex file: " + e.getMessage());
+		}
+	}
+
+	/**
 	 * Starts the main game thread
 	 */
 	public void startGame(){
@@ -163,17 +295,86 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	}
 
 	/**
-	 * Checks if any player has won the game, and if they have,
-	 * return the winning player.
-	 * @return The Player that has won, or null if no player has won.
+	 * Decides what to do when a player uses right click
+	 * @param x
+	 * @param y
+	 * @param player
 	 */
-	private Player checkForWinner() {
-		for(Player p : players){
-			if(p.getPoints() >= PointValues.END_GAME_TARGET){
-				return p;
-			}
+	public void rightClickInteract(int x, int y, Player player) {
+		int viewScale = gui.getCanvas().getViewScale();
+		int viewDirection = gui.getCanvas().getViewDirection();
+		Container container = gui.getCanvas().getCurrentContainer();
+		int xMid = gui.getCanvas().getWidth() / 2;
+		int yMid = gui.getCanvas().getHeight() / 2;
+	
+		// check if mousing over merchant NPC
+		Room currentRoom = player.getCurrentRoom();
+		NonPlayer npc = currentRoom.npcAtMouse(x, y, player,
+				viewScale, viewDirection);
+		if (npc != null) {
+			NonPlayerStrategy strat = npc.getStrategy();
+			strat.interact(player, npc);
 		}
-		return null;
+		// check if the player has clicked on their inventory
+		else if (24 * 2 * viewScale < y && y < 24 * 3 * viewScale) {
+			if (24 * viewScale < x
+					&& x < 24 * (Player.INVENTORY_SIZE + 1) * viewScale) {
+				int index = (x - (24 * viewScale)) / (24 * viewScale);
+				player.dropItem(index, container);
+			} else {
+				Room room = player.getCurrentRoom();
+				Item item = room.itemAtMouse(x, y, viewScale, player,
+						viewDirection);
+				item.use(player, this);
+			}
+		} else if ((yMid - (24 * 2 * viewScale) < y && y < yMid
+				- (24 * viewScale))
+				&& container != null) {
+			if (xMid - (24 * 2 * viewScale) < x
+					&& x < xMid + (24 * 2 * viewScale)) {
+				// the player has clicked on an open container
+				int index = (x - (xMid - (24 * 2 * viewScale)))
+						/ (24 * viewScale);
+				container.pickUpItem(index, player);
+			} else {
+				Room room = player.getCurrentRoom();
+				Item item = room.itemAtMouse(x, y, viewScale, player,
+						viewDirection);
+				item.use(player, this);
+			}
+		} else {
+			Room room = player.getCurrentRoom();
+			Item item = room
+					.itemAtMouse(x, y, viewScale, player, viewDirection);
+			item.use(player, this);
+		}
+	}
+
+	/**
+	 * Adds an ItemSpawner to the list of all such types in
+	 * the game.
+	 * @param spawner The ItemSpawner to add.
+	 */
+	public void addItemSpawner(ItemSpawner spawner){
+		itemSpawners.add(spawner);
+	}
+
+	public void addCharacterSpawner(CharacterSpawner characterSpawner) {
+		charSpawners.add(characterSpawner);
+	}
+
+	/**
+	 * Spawns a given item at a random item spawn location
+	 * @param itemToSpawn
+	 */
+	public void reSpawnItem(Item itemToSpawn){
+		Collections.shuffle(itemSpawners);
+		ItemSpawner holder = itemSpawners.get(0);
+		while (holder instanceof Pouch || holder.remainingCapacity() <= 0){
+			Collections.shuffle(itemSpawners);
+			holder = itemSpawners.get(0);
+		}
+		holder.addSpawnItem(itemToSpawn);
 	}
 
 	/**
@@ -238,7 +439,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 						.itemAtMouse(x, y, viewScale, player, viewDirection)
 						.getDescription();
 			}
-
+	
 		} else {
 			// not hovering over inventory - check for items on floor
 			desc = player.getCurrentRoom()
@@ -247,22 +448,19 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		}
 		gui.getCanvas().setToolTip(desc, x, y);
 	}
-	
+
 	/**
-	 * Parses all the room objects in the game.
+	 * Checks if any player has won the game, and if they have,
+	 * return the winning player.
+	 * @return The Player that has won, or null if no player has won.
 	 */
-	private void setupRooms(){
-		try {
-			Scanner s = new Scanner(Controller.class.getResourceAsStream("/RoomIndex.txt"));
-			String roomName;
-			while (s.hasNextLine()){
-				roomName = s.nextLine();
-				rooms.add(new Room(roomName, this));
+	private Player checkForWinner() {
+		for(Player p : players){
+			if(p.getPoints() >= PointValues.END_GAME_TARGET){
+				return p;
 			}
-			s.close();
-		} catch (NullPointerException e) {
-			System.out.println("Error loading RoomIndex file: " + e.getMessage());
 		}
+		return null;
 	}
 
 	/**
@@ -355,200 +553,10 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		return image.getScaledInstance(image.getWidth(c)*scale, image.getHeight(c)*scale, Image.SCALE_FAST);
 	}
 
-	/**
-	 * Loads all items that will be spawned and stores them in
-	 * the itemsToSpawn List.
-	 */
-	private void loadItemsToSpawn() {
-		try	{
-			Scanner s = new Scanner(Controller.class.getResourceAsStream("/ItemsToSpawn.txt"));
-			// iterate over file
-			while(s.hasNextLine()){
-				String nextLine = s.nextLine();
-				Item toAdd = null;
-				// create item to spawn
-				switch(nextLine){
-				case "KeyCard" : toAdd = new KeyCard(); break;
-				case "Torch" : toAdd = new Torch(); break;
-				case "Pouch" : toAdd = new Pouch(); 
-							for (int i = 0; i < 3; i++){
-								itemSpawners.add((ItemSpawner) toAdd);
-							} break;
-				case "Map" : toAdd = new Map(); break;
-				case "Treasure" : toAdd = new SmallTreasure(); break;
-				case "Paintball Gun" : toAdd = new PaintballGun(); break;
-				case "Scatter Gun" : toAdd = new ScatterGun(); break;
-				case "LTSA Gun" : toAdd = new LTSAGun(); break;
-				case "Pistol" : toAdd = new Pistol(); break;
-				}
-				// add the item if it's not null, otherwise print error message
-				if(toAdd != null){
-					itemsToSpawn.add(toAdd);
-				} else {
-					System.out.println("Parse error: could not parse spawn item - "+ nextLine);
-				}
-				
-			}
-			s.close();
-		} catch(NullPointerException e){
-			System.out.println("Error loading spawn items: "+e.getMessage());
-		}
-	}
-	
-	/**
-	 * Randomly distributes spawned items.
-	 */
-	private void setupSpawnItems() {
-		// shuffle spawn item lists
-		Collections.shuffle(itemSpawners);
-		Collections.shuffle(itemsToSpawn);
-		// while there is an item left, add item to container
-		for(Item item : itemsToSpawn){
-			Collections.shuffle(itemSpawners);
-			ItemSpawner holder = itemSpawners.get(0);
-			while ((item instanceof Weapon && !(holder instanceof Floor))
-					|| holder.remainingCapacity() <= 0){
-				Collections.shuffle(itemSpawners);
-				holder = itemSpawners.get(0);
-			}
-			holder.addSpawnItem(item);
-		}
-	}
-	
-	/**
-	 * Spawns a given item at a random item spawn location
-	 * @param itemToSpawn
-	 */
-	public void reSpawnItem(Item itemToSpawn){
-		Collections.shuffle(itemSpawners);
-		ItemSpawner holder = itemSpawners.get(0);
-		while (holder instanceof Pouch || holder.remainingCapacity() <= 0){
-			Collections.shuffle(itemSpawners);
-			holder = itemSpawners.get(0);
-		}
-		holder.addSpawnItem(itemToSpawn);
+	public boolean isShooting(){
+		return shooting;
 	}
 
-	/**
-	 * Distributes players over the game world.
-	 */
-	protected void spawnPlayers(){
-		Collections.shuffle(charSpawners);
-		int i;
-		for(i=0; i<players.size(); i++){
-			if(i >= charSpawners.size()){break;}
-			CharacterSpawner spawner = charSpawners.get(i);
-			Player p = players.get(i);
-			if (p.getCurrentRoom() != null){
-				p.getCurrentRoom().removePlayer(p);
-			}
-			p.setCurrentRoom(spawner.getRoom(), spawner.getX(), spawner.getY());
-			spawner.getRoom().addPlayer(p);
-		}
-		
-		//Fill the remaining spawns with random npcs
-		for (int j = i; j < charSpawners.size(); j++){
-			CharacterSpawner spawner = charSpawners.get(j);
-			double roll = Math.random();
-			Room room = spawner.getRoom();
-			int x = spawner.getX();
-			int y = spawner.getY();
-			
-			NonPlayer npc = null;
-			
-			if (roll-0.05 < 0){npc = new GhostNPC(room, x, y);}
-			else {
-				npc = new NonPlayer(room, x, y, new WanderingMerchantStrategy());
-				npc.setStrategy(NonPlayer.Events.COMBAT, new ChaseCombatStrategy(100));
-				npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
-			}
-			
-			room.addNPC(npc);
-		}
-		
-		//Special spawn cases
-		//Ghosts in server room
-		Room server = this.getRoom("Server Room");
-		if (server != null){
-			for (int k = 0; k < 1; k++){
-				int x = (int)(Math.random() * 24+1);
-				int y = (int)(Math.random() * 10+1);
-				
-				server.addNPC(new GhostNPC(server, x*24, y*24));
-			}
-		}
-		
-		Room shed = this.getRoom("Courtyard Shed");
-		if (shed != null){
-			shed.addNPC(new GhostNPC(shed, 5*24, 5*24));
-		}
-	}
-	
-	/**
-	 * Adds an ItemSpawner to the list of all such types in
-	 * the game.
-	 * @param spawner The ItemSpawner to add.
-	 */
-	public void addItemSpawner(ItemSpawner spawner){
-		itemSpawners.add(spawner);
-	}
-
-	/**
-	 * Decides what to do when a player uses right click
-	 * @param x
-	 * @param y
-	 * @param player
-	 */
-	public void rightClickInteract(int x, int y, Player player) {
-		int viewScale = gui.getCanvas().getViewScale();
-		int viewDirection = gui.getCanvas().getViewDirection();
-		Container container = gui.getCanvas().getCurrentContainer();
-		int xMid = gui.getCanvas().getWidth() / 2;
-		int yMid = gui.getCanvas().getHeight() / 2;
-
-		// check if mousing over merchant NPC
-		Room currentRoom = player.getCurrentRoom();
-		NonPlayer npc = currentRoom.npcAtMouse(x, y, player,
-				viewScale, viewDirection);
-		if (npc != null) {
-			NonPlayerStrategy strat = npc.getStrategy();
-			strat.interact(player, npc);
-		}
-		// check if the player has clicked on their inventory
-		else if (24 * 2 * viewScale < y && y < 24 * 3 * viewScale) {
-			if (24 * viewScale < x
-					&& x < 24 * (Player.INVENTORY_SIZE + 1) * viewScale) {
-				int index = (x - (24 * viewScale)) / (24 * viewScale);
-				player.dropItem(index, container);
-			} else {
-				Room room = player.getCurrentRoom();
-				Item item = room.itemAtMouse(x, y, viewScale, player,
-						viewDirection);
-				item.use(player, this);
-			}
-		} else if ((yMid - (24 * 2 * viewScale) < y && y < yMid
-				- (24 * viewScale))
-				&& container != null) {
-			if (xMid - (24 * 2 * viewScale) < x
-					&& x < xMid + (24 * 2 * viewScale)) {
-				// the player has clicked on an open container
-				int index = (x - (xMid - (24 * 2 * viewScale)))
-						/ (24 * viewScale);
-				container.pickUpItem(index, player);
-			} else {
-				Room room = player.getCurrentRoom();
-				Item item = room.itemAtMouse(x, y, viewScale, player,
-						viewDirection);
-				item.use(player, this);
-			}
-		} else {
-			Room room = player.getCurrentRoom();
-			Item item = room
-					.itemAtMouse(x, y, viewScale, player, viewDirection);
-			item.use(player, this);
-		}
-	}
-	
 	/**
 	 * Gets all the doors in the game.
 	 * @return A Set of all doors in the game
@@ -572,14 +580,6 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	}
 
 
-	public void setPlayers(ArrayList<Player> players) {
-		this.players = players;
-	}
-
-	public void setCurrentPlayer(Player player) {
-		this.uid = players.indexOf(player);
-	}
-	
 	/**
 	 * Returns the player with the specified user id.
 	 * @param uid The user id of the player
@@ -609,10 +609,6 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		return keyBits;
 	}
 	
-	public boolean isShooting(){
-		return shooting;
-	}
-	
 	public int getMouseX(){
 		return mouseX;
 	}
@@ -622,14 +618,6 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	}
 	
 	/**
-	 * Sets the frame for this controller
-	 * @param gui
-	 */
-	public void setGUI(GUIFrame gui){
-		this.gui = gui;
-	}
-
-	/**
 	 * Returns all the rooms in the game.
 	 * @return An ArrayList containing every room in the game
 	 */
@@ -637,25 +625,37 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		return rooms;
 	}
 
-	public void addCharacterSpawner(CharacterSpawner characterSpawner) {
-		charSpawners.add(characterSpawner);
-	}
-
 	public CharacterSpawner getSpawner() {
 		Collections.shuffle(charSpawners);
 		return charSpawners.get(0);
 	}
 	
-	public void setRunning(boolean running){
-		isRunning = running;
-	}
-
 	/**
 	 * Gets the current alpha value for the day/night overlay
 	 * @return
 	 */
 	public float getNightAlpha() {
 		return (float)nightAlpha;
+	}
+
+	public void setPlayers(ArrayList<Player> players) {
+		this.players = players;
+	}
+
+	public void setCurrentPlayer(Player player) {
+		this.uid = players.indexOf(player);
+	}
+
+	/**
+	 * Sets the frame for this controller
+	 * @param gui
+	 */
+	public void setGUI(GUIFrame gui){
+		this.gui = gui;
+	}
+
+	public void setRunning(boolean running){
+		isRunning = running;
 	}
 
 	/**
