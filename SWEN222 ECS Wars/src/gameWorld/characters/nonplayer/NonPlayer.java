@@ -79,22 +79,6 @@ public class NonPlayer extends Player {
 	}
 	
 	@Override
-	public void modifyHealth(int amt, Projectile p){
-		if (amt < 0){
-			this.respond(Events.COMBAT);
-			this.interact(p.getPlayer());
-		}
-		super.modifyHealth(amt, null);
-		if (this.isDead()){
-			// remove player's points for killing npc
-			if(p != null && p.getPlayer() != this){
-				p.getPlayer().removePoints(PointValues.NPC_DEATH);
-			}
-			this.respond(Events.DEATH);
-		}
-	}
-	
-	@Override
 	public void shoot(int x, int y) {
 		double theta = Player.angleBetweenPlayerAndMouse(this.getX(), this.getY(),
 				x, y);
@@ -105,18 +89,12 @@ public class NonPlayer extends Player {
 		currentRoom.addProjectile(currentWeapon.fire(this, theta));
 	}
 	
-	@Override
-	public void setCurrentRoom(Room newRoom, int newX, int newY) {
-		currentRoom.removeNPC(this);
-		newRoom.addNPC(this);
-		this.currentRoom = newRoom;
-		
-		this.posX = newX;
-		this.posY = newY;
-
-		//Prevent the pesky move updates from overwriting the pos change
-		this.tempX = newX;
-		this.tempY = newY;	
+	/**
+	 * Player interacts with this character.
+	 * @param p The player interacting with me
+	 */
+	public void interact(Player p){
+		active.interact(p, this);
 	}
 	
 	/**
@@ -132,7 +110,23 @@ public class NonPlayer extends Player {
 		active = strat;
 		active.initialize();
 	}
-	
+
+	@Override
+	public void modifyHealth(int amt, Projectile p){
+		if (amt < 0){
+			this.respond(Events.COMBAT);
+			this.interact(p.getPlayer());
+		}
+		super.modifyHealth(amt, null);
+		if (this.isDead()){
+			// remove player's points for killing npc
+			if(p != null && p.getPlayer() != this){
+				p.getPlayer().removePoints(PointValues.NPC_DEATH);
+			}
+			this.respond(Events.DEATH);
+		}
+	}
+
 	/**
 	 * Sets which strategy the NPC will use for an event
 	 * @param event
@@ -144,20 +138,26 @@ public class NonPlayer extends Player {
 	}
 
 	@Override
-	public PlayerType getType() {
-		return type;
-	}
+	public void setCurrentRoom(Room newRoom, int newX, int newY) {
+		currentRoom.removeNPC(this);
+		newRoom.addNPC(this);
+		this.currentRoom = newRoom;
+		
+		this.posX = newX;
+		this.posY = newY;
 	
-	/**
-	 * Player interacts with this character.
-	 * @param p The player interacting with me
-	 */
-	public void interact(Player p){
-		active.interact(p, this);
+		//Prevent the pesky move updates from overwriting the pos change
+		this.tempX = newX;
+		this.tempY = newY;	
 	}
-	
+
 	public NonPlayerStrategy getStrategy(){
 		return active;
+	}
+
+	@Override
+	public PlayerType getType() {
+		return type;
 	}
 
 	@Override

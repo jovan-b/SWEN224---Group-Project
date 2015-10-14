@@ -117,7 +117,7 @@ public abstract class Player {
 	 */
 	public void shoot(int x, int y) {
 		double theta = getTheta(x, y);
-		currentRoom.addProjectile(currentWeapon.fire(this, theta));
+		shoot(theta);
 	}
 	
 	/**
@@ -128,19 +128,6 @@ public abstract class Player {
 		currentRoom.addProjectile(currentWeapon.fire(this, theta));
 	}
 	
-	/**
-	 * Calculates the direction to shoot from
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	public double getTheta(int x, int y){
-		Double theta = Player.angleBetweenPlayerAndMouse(canvas.getWidth()/2, canvas.getHeight()/2,
-				x, y);
-		theta += Math.toRadians(90)*canvas.getViewDirection();
-		return theta;
-	}
-
 	/**
 	 * Update player's position by "speed" amount
 	 * Direction is specified by dir (up, down, left, right)
@@ -290,6 +277,58 @@ public abstract class Player {
 	}
 
 	/**
+	 * Sets the players status as disconnected.
+	 */
+	public void disconnect(){
+		disconnected = true;
+		//Sets them out of the games bounds, will change this later
+		setPosition(99999999, 99999999, 1, currentRoom);
+	}
+
+	/**
+	 * Replace the player's current weapon with the one on the given
+	 * floor.
+	 * @param weapon The weapon to pick up
+	 * @param floor The floor the weapon is on
+	 */
+	public void pickUpWeapon(Weapon weapon, Floor floor) {
+		// drop current weapon
+		floor.setItem(currentWeapon);
+		// set my weapon to the new one
+		this.currentWeapon = weapon;
+	}
+
+	/**
+	 * Determines whether this player's inventory contains the given item.
+	 * @param item The item to search for
+	 * @return true iff the player's inventory contains item
+	 */
+	public Item inventoryContains(Item item){
+		for (Item i : inventory){
+			if (i != null && i.getDescription().equals(item.getDescription())){
+				return i;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the item at the given position in the player's inventory.
+	 * @param index The position of the item
+	 * @return The item at inventory[index]
+	 */
+	public Item inventoryItemAt(int index){
+		if (index < 0 || INVENTORY_SIZE <= index){
+			return new Wall();
+		}
+		Item item = inventory[index];
+		if (item == null){
+			return new Wall();
+		}
+		return item;
+	}
+
+	/**
 	 * Moves an item from the world into the player's inventory.
 	 * @param item The item to pick up
 	 * @return true iff the pick up was successful
@@ -317,44 +356,6 @@ public abstract class Player {
 		}
 		// no space in inventory
 		return false;
-	}
-
-	/**
-	 * Gets the inventory of this player.
-	 * @return The array of items the player has in their inventory.
-	 */
-	public Item[] getInventory(){
-		return inventory;
-	}
-
-	/**
-	 * Gets the item at the given position in the player's inventory.
-	 * @param index The position of the item
-	 * @return The item at inventory[index]
-	 */
-	public Item inventoryItemAt(int index){
-		if (index < 0 || INVENTORY_SIZE <= index){
-			return new Wall();
-		}
-		Item item = inventory[index];
-		if (item == null){
-			return new Wall();
-		}
-		return item;
-	}
-
-	/**
-	 * Determines whether this player's inventory contains the given item.
-	 * @param item The item to search for
-	 * @return true iff the player's inventory contains item
-	 */
-	public Item inventoryContains(Item item){
-		for (Item i : inventory){
-			if (i != null && i.getDescription().equals(item.getDescription())){
-				return i;
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -423,14 +424,18 @@ public abstract class Player {
 		this.points -= points;
 	}
 
-	/**
-	 * Gets the Type of player this is.
-	 * @return The Type of player
-	 */
-	public abstract PlayerType getType();
+	
 
 	//State booleans
 	
+	/**
+	 * Returns if a player is disconnected
+	 * @return true if disconnected, false if still in game.
+	 */
+	public boolean isDisconnected(){
+		return disconnected;
+	}
+
 	/**
 	 * Determine whether the player is dead.
 	 * @return true iff the player is dead
@@ -439,12 +444,39 @@ public abstract class Player {
 		return health <= 0;
 	}
 
+	/**
+	 * Gets the Type of player this is.
+	 * @return The Type of player
+	 */
+	public abstract PlayerType getType();
+
 	//Getters
 	public int getX() {return posX;}
 
 	public int getY() {return posY;}
 
 	public Room getCurrentRoom() {return currentRoom;}
+
+	/**
+	 * Gets the inventory of this player.
+	 * @return The array of items the player has in their inventory.
+	 */
+	public Item[] getInventory(){
+		return inventory;
+	}
+
+	/**
+	 * Calculates the direction to shoot from
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public double getTheta(int x, int y){
+		Double theta = Player.angleBetweenPlayerAndMouse(canvas.getWidth()/2, canvas.getHeight()/2,
+				x, y);
+		theta += Math.toRadians(90)*canvas.getViewDirection();
+		return theta;
+	}
 
 	public int getRow() {return currentRow;}
 
@@ -454,8 +486,6 @@ public abstract class Player {
 
 	public int getPoints() {return points;}
 	
-	public void setPoints(int points) {this.points = points;}
-
 	public int getGlobalDir() {
 		return lastDirMoved;
 	}
@@ -490,6 +520,8 @@ public abstract class Player {
 	public Rectangle getBoundingBox(){
 		return new Rectangle(posX-hitBox, posY-hitBox, hitBox*2, hitBox*2);
 	}
+
+	public void setPoints(int points) {this.points = points;}
 
 	//Setters
 	/**
@@ -560,19 +592,6 @@ public abstract class Player {
 		return currentWeapon;
 	}
 
-	/**
-	 * Replace the player's current weapon with the one on the given
-	 * floor.
-	 * @param weapon The weapon to pick up
-	 * @param floor The floor the weapon is on
-	 */
-	public void pickUpWeapon(Weapon weapon, Floor floor) {
-		// drop current weapon
-		floor.setItem(currentWeapon);
-		// set my weapon to the new one
-		this.currentWeapon = weapon;
-	}
-	
 	public void setCurrentWeapon(Weapon currentWeapon) {
 		this.currentWeapon = currentWeapon;
 	}
@@ -596,23 +615,6 @@ public abstract class Player {
 		}
 		setFacing(direction);
 		animate();
-	}
-
-	/**
-	 * Returns if a player is disconnected
-	 * @return true if disconnected, false if still in game.
-	 */
-	public boolean isDisconnected(){
-		return disconnected;
-	}
-
-	/**
-	 * Sets the players status as disconnected.
-	 */
-	public void disconnect(){
-		disconnected = true;
-		//Sets them out of the games bounds, will change this later
-		setPosition(99999999, 99999999, 1, currentRoom);
 	}
 
 }
