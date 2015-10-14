@@ -1,6 +1,7 @@
 package main;
 
 import java.net.URL;
+import java.util.Arrays;
 
 import javafx.animation.Transition;
 import javafx.scene.media.Media;
@@ -29,16 +30,14 @@ public final class SoundManager {
 	//Song collections
 	public static final String[] BATTLE_SONGS = new String[]{
 		"battle_1.mp3",
-		"organ.mp3"
+		"organ.mp3",
+		"Battle/8-bit The Knack My Sharona.mp3",
+		"Battle/8-bit Blur Song 2.mp3"
 	};
 	
 	public static final String[] CREDIT_SONGS = new String[]{
 		"Credits/8-Bit Rick Astley Never Gonna Give You Up.mp3",
 		"Credits/8-Bit David Glen Eisley Sweet Victory.mp3"
-	};
-	
-	public static final String[] NON_COMBAT_SONGS = new String[]{
-		
 	};
 	
 	private static MediaPlayer player;
@@ -180,13 +179,24 @@ public final class SoundManager {
 	}
 	
 	/**
-	 * Play a random song from a collection
+	 * Shuffles a collection, and plays it
 	 * @param songs
 	 * @param repeat
 	 */
-	public static void playRandom(String[] songs, boolean repeat){
-		int value = (int)(Math.random()*songs.length);
-		playSong(songs[value], repeat);
+	public static void playRandom(String[] songs){
+		String[] shuffled = songs.clone();
+		
+		//Shuffle the songs
+		for (int i = 0; i < shuffled.length; i++){
+			int value = (int)(Math.random()*shuffled.length);
+			
+			//Swap values
+			String temp = shuffled[value];
+			shuffled[value] = shuffled[i];
+			shuffled[i] = temp;
+		}
+		
+		playQueue(shuffled);
 	}
 	
 	/**

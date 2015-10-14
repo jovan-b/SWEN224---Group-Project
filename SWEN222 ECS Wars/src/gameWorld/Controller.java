@@ -240,7 +240,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	 * Starts the main game thread
 	 */
 	public void startGame(){
-		SoundManager.playQueue(SoundManager.BATTLE_SONGS);
+		SoundManager.playRandom(SoundManager.BATTLE_SONGS);
 		
 		this.start();
 
