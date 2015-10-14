@@ -6,7 +6,7 @@ import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 
 public class GhostStrategy extends WaitStrategy {
-	public static final int DAMAGE = 3;
+	public static final int DAMAGE = 1;
 	
 	private double range;
 	private Player target = null;

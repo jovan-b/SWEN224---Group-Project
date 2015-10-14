@@ -469,6 +469,23 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 			
 			room.addNPC(npc);
 		}
+		
+		//Special spawn cases
+		//Ghosts in server room
+		Room server = this.getRoom("Server Room");
+		if (server != null){
+			for (int k = 0; k < 1; k++){
+				int x = (int)(Math.random() * 24+1);
+				int y = (int)(Math.random() * 10+1);
+				
+				server.addNPC(new GhostNPC(server, x*24, y*24));
+			}
+		}
+		
+		Room shed = this.getRoom("Courtyard Shed");
+		if (shed != null){
+			shed.addNPC(new GhostNPC(shed, 5*24, 5*24));
+		}
 	}
 	
 	/**

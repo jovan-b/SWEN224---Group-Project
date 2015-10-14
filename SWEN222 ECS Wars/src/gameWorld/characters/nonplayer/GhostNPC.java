@@ -15,7 +15,7 @@ public class GhostNPC extends NonPlayer {
 		super(room, posX, posY, new GhostStrategy(240));
 		
 		this.speed = 1;
-		this.setStrategy(Events.DEATH, new RespawnStrategy(3000));
+		this.setStrategy(Events.DEATH, new RespawnStrategy(10000));
 	}
 	
 	@Override
