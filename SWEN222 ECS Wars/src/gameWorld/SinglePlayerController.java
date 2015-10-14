@@ -65,8 +65,9 @@ public class SinglePlayerController extends Controller {
 	/**
 	 * Initialise the pre-game fields of this class
 	 */
-	public void initialise() {
-		player = new DavePlayer(null, 2 * 24, 2 * 24);
+	public void initialise(Player p) {
+//		player = new DavePlayer(null, 2 * 24, 2 * 24);
+		player = p;
 		players.add(player);
 		
 		super.initialise();

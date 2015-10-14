@@ -24,6 +24,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import gameWorld.Controller;
 import gameWorld.MultiPlayerController;
 import gameWorld.SinglePlayerController;
+import gameWorld.characters.DavePlayer;
+import gameWorld.characters.MarcoPlayer;
+import gameWorld.characters.Player;
+import gameWorld.characters.PondyPlayer;
+import gameWorld.characters.StreaderPlayer;
 import network.Server;
 
 /**
@@ -232,27 +237,33 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		Player selectedPlayer = null;
 		if(selectedButtonRow == 0){
 			if(selectedButtonCol == 0){
 				// select dave
-				System.out.println("picked dave");
+				selectedPlayer = new DavePlayer(null, 2 * 24, 2 * 24);
 			} else if(selectedButtonCol == 1){
 				// select pondy
-				System.out.println("picked pondy");
+				selectedPlayer = new PondyPlayer(null, 2 * 24, 2 * 24);
 			}
 		} else if(selectedButtonRow == 1) {
 			if(selectedButtonCol == 0){
 				// select marco
-				System.out.println("picked marco");
+				selectedPlayer = new MarcoPlayer(null, 2 * 24, 2 * 24);
 			} else if(selectedButtonCol == 1){
 				// select streader
-				System.out.println("picked streader");
+				selectedPlayer = new StreaderPlayer(null, 2 * 24, 2 * 24);
 			}
 		} else {
 			return;
 		}
 		canvas.setRedrawLoop(false);
-		controller.initialise();
+		if(controller instanceof SinglePlayerController){
+			((SinglePlayerController)controller).initialise(selectedPlayer);
+		} else {
+			controller.initialise();
+		}
+		
 		canvas.startGame(controller, 0);
 		canvas.togglePlayerSelectMenu();
 		
