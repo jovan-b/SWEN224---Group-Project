@@ -302,8 +302,17 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 					+ "port for the server");
 			String numberOfClients = JOptionPane.showInputDialog(canvas, "Enter the "
 					+ "number of clients for the server");
+			
 			int port = Integer.parseInt(p);
 			int clients = Integer.parseInt(numberOfClients);
+			
+			//Check that the number of clients entered is not under or over clients limit
+			if(clients < 1 || clients > 4){
+				JOptionPane.showMessageDialog(canvas, "Error: number of"
+						+ " clients must be between 1 and 4.");
+				return;
+			}
+			
 			Server server = new Server(port, clients, canvas);
 			server.start();
 		} catch (NumberFormatException ne){
@@ -317,7 +326,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	 */
 	private void connect() {
 		try{
-			Player player = new PondyPlayer(null, 0, 0);
+			Player player = new MarcoPlayer(null, 0, 0);
 			String ip = JOptionPane.showInputDialog(canvas, "Enter the "
 					+ "IP of the server");
 			String p = JOptionPane.showInputDialog(canvas, "Enter the "
@@ -337,6 +346,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			int uid = input.readInt();
 			output.writeInt(playerNum);
 			
+			//Get every player in the game and add them to the player list
 			int[] playerNumbers = new int[4];
 			ArrayList<Player> players = new ArrayList<Player>();
 			for(int i = 0; i < numberOfPlayers; i++){
@@ -344,6 +354,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 				players.add(getPlayerFromNumber(playerNumbers[i]));
 			}
 			
+			//Start the game
 			this.setRedrawLoop(false);
 			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers, canvas, players), uid);
 		} catch (IOException e){
