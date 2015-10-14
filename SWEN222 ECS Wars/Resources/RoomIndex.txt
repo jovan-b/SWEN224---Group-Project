@@ -5,13 +5,13 @@ SE Hallway
 NE Hallway
 Courtyard
 Courtyard Shed
-Room 4
+Yoga Room
 Classroom 102
 Classroom 101
 Server Room
 Classroom 106
 Room 1
-Room 2
+Library
 Classroom 105
 Classroom 104
 Room 3
