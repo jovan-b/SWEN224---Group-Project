@@ -292,6 +292,9 @@ public abstract class Player {
 	 * @param floor The floor the weapon is on
 	 */
 	public void pickUpWeapon(Weapon weapon, Floor floor) {
+		if (weapon == null || floor == null || floor.getItem() != weapon){
+			return;
+		}
 		// drop current weapon
 		floor.setItem(currentWeapon);
 		// set my weapon to the new one
