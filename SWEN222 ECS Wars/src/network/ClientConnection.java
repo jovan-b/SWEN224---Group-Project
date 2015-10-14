@@ -101,7 +101,6 @@ public class ClientConnection extends Thread{
 					} else{
 						newWep = new ScatterGun();
 					}
-					//TODO: drop weapon as well
 					player.setCurrentWeapon(newWep);
 					break;
 				//Update health
@@ -114,6 +113,9 @@ public class ClientConnection extends Thread{
 					int points = input.readInt();
 					player.setPoints(points);
 					break;
+				//End game, set winner
+				case 7:
+					player.getCanvas().setWinnerView(true);
 				}
 			}
 		}
@@ -161,13 +163,6 @@ public class ClientConnection extends Thread{
 			output.writeInt(5);
 			output.writeInt(player.getHealth());
 			
-			//Check if a player score has changed
-			if(playerPoints != player.getPoints()){
-				playerPoints = player.getPoints();
-				output.writeInt(6);
-				output.writeInt(playerPoints);
-			}
-			
 			//Check if a player has changed weapon
 			if(!player.getWeapon().equals(currentWeapon)){
 				currentWeapon = player.getWeapon();
@@ -194,6 +189,13 @@ public class ClientConnection extends Thread{
 				double theta = player.getTheta(mx, my);
 				output.writeInt(2);
 				output.writeDouble(theta);
+			}
+			
+			//Check if a player score has changed
+			if(playerPoints != player.getPoints()){
+				playerPoints = player.getPoints();
+				output.writeInt(6);
+				output.writeInt(playerPoints);
 			}
 
 			//If there players position has changed, send there new position to every client in the game

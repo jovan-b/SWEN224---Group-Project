@@ -6,6 +6,8 @@ import network.ClientConnection;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -21,6 +23,7 @@ public class MultiPlayerController extends Controller {
 	//Number of players in the game
 	private int numPlayers;
 	private GUICanvas canvas;
+	private Socket socket;
 
 	public MultiPlayerController(Socket socket, int uid, int numPlayers,
 			GUICanvas canvas, ArrayList<Player> players) {
@@ -28,6 +31,7 @@ public class MultiPlayerController extends Controller {
 		this.canvas = canvas;
 		this.numPlayers = numPlayers;
 		this.players = players;
+		this.socket = socket;
 		initialise();
 		client = new ClientConnection(socket, this, uid);
 	}
@@ -128,6 +132,16 @@ public class MultiPlayerController extends Controller {
 			shooting = true;
 			mouseX = e.getX();
 			mouseY = e.getY();
+		}
+	}
+	
+	@Override
+	public void updateWinner(){
+		try {
+			DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+			output.writeInt(7);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	

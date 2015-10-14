@@ -493,6 +493,10 @@ public abstract class Player {
 		return lastDirMoved;
 	}
 	
+	public GUICanvas getCanvas(){
+		return canvas;
+	}
+	
 	public abstract String getName();
 
 

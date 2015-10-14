@@ -330,9 +330,9 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			int clients = Integer.parseInt(numberOfClients);
 			
 			//Check that the number of clients entered is not under or over clients limit
-			if(clients < 1 || clients > 4){
+			if(clients < 2 || clients > 4){
 				JOptionPane.showMessageDialog(canvas, "Error: number of"
-						+ " clients must be between 1 and 4.");
+						+ " clients must be between 2 and 4.");
 				return;
 			}
 			
@@ -352,8 +352,14 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		canvas.togglePlayerSelectMenu(true);
 	}
 	
+	/**
+	 * Sets up a multiplayer game by getting all players and starting the
+	 * controller
+	 * @param player
+	 */
 	public void setUpMultiplayerGame(Player player){
 		try{
+			//Get the port and ip from the user of the server they're trying to connect
 			String ip = JOptionPane.showInputDialog(canvas, "Enter the "
 					+ "IP of the server");
 			String p = JOptionPane.showInputDialog(canvas, "Enter the "
@@ -374,7 +380,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			output.writeInt(playerNum);
 			
 			//Get every player in the game and add them to the player list
-			int[] playerNumbers = new int[4];
+			int[] playerNumbers = new int[numberOfPlayers];
 			ArrayList<Player> players = new ArrayList<Player>();
 			for(int i = 0; i < numberOfPlayers; i++){
 				playerNumbers[i] = input.readInt();

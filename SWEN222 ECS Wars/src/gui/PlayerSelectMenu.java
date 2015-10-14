@@ -246,7 +246,6 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		Player selectedPlayer = null;
 		if(selectedButtonRow == 0){
 			if(selectedButtonCol == 0){
 				// select dave
@@ -273,7 +272,9 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 		
 		canvas.setRedrawLoop(false);
 		if(controller == null){
-			canvas.getMainMenu().setUpMultiplayerGame(selectedPlayer);
+			Player player = selectedPlayer;
+			selectedPlayer = null;
+			canvas.getMainMenu().setUpMultiplayerGame(player);
 		}
 		else if(controller instanceof SinglePlayerController){
 			((SinglePlayerController)controller).initialise(selectedPlayer);

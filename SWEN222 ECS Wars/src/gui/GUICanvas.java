@@ -129,7 +129,6 @@ public class GUICanvas extends JComponent{
 		this.addMouseMotionListener(controller);
 		frame.addKeyListener(controller);
 		
-		this.setMainMenu(false);
 		this.escMenuView = false;
 		this.escMenu = new EscMenu(this, controller);
 		
