@@ -113,6 +113,23 @@ public class SinglePlayerController extends Controller {
 	}
 
 	/**
+	 * Returns the player with the specified user id.
+	 * 
+	 * @param uid
+	 *            The user id of the player
+	 * @return The player with the given uid
+	 */
+	public Player getPlayer(int uid) {
+		return players.get(0);
+	}
+
+	public void setCurrentPlayer(Player player) {
+		super.setCurrentPlayer(player);
+		this.player = player;
+		players.set(0, player);
+	}
+
+	/**
 	 * If key is pressed by user, add to the keyBits set
 	 */
 	@Override
@@ -155,26 +172,6 @@ public class SinglePlayerController extends Controller {
 		keyBits.clear(e.getKeyCode());
 	}
 
-	// Don't care about this method
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
-
-	// don't care about this method
-	@Override
-	public void mouseClicked(MouseEvent e) {
-	}
-
-	// don't care about this method
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	// don't care about this method
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
-
 	/**
 	 * When mouse event is fired clear mouselocation get x, y position of mouse
 	 * add new xy to mouseLocation
@@ -204,31 +201,34 @@ public class SinglePlayerController extends Controller {
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
-	}
-
-	@Override
 	public void mouseMoved(MouseEvent e) {
 		super.mouseX = e.getX();
 		super.mouseY = e.getY();
 	}
 
-	public void setCurrentPlayer(Player player) {
-		super.setCurrentPlayer(player);
-		this.player = player;
-		players.set(0, player);
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
 	}
 
-	/**
-	 * Returns the player with the specified user id.
-	 * 
-	 * @param uid
-	 *            The user id of the player
-	 * @return The player with the given uid
-	 */
-	public Player getPlayer(int uid) {
-		return players.get(0);
+	// don't care about this method
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	// don't care about this method
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	// don't care about this method
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
+	// Don't care about this method
+	@Override
+	public void keyTyped(KeyEvent e) {
 	}
 }
