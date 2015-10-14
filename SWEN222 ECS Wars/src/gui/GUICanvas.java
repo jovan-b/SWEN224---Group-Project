@@ -62,7 +62,9 @@ public class GUICanvas extends JComponent{
 	private EscMenu escMenu; // the esc menu to display
 	private boolean winnerMenuView = false; // true if we are looking at winner menu
 	private WinnerMenu winnerMenu; // the winner menu to display
-	private PlayerSelectMenu playerSelectMenu = new PlayerSelectMenu(this);
+	private boolean playerSelectView; // true if looking at player select menu
+	private PlayerSelectMenu playerSelectMenu; // the player select menu to display
+	private static RedrawThread redraw;
 	
 
 	// Static UI Images
@@ -130,8 +132,9 @@ public class GUICanvas extends JComponent{
 		this.escMenu = new EscMenu(this, controller);
 		
 		//TODO: Set player & update compass
-		this.setMainMenu(false);
+//		this.setMainMenu(false);
 		this.escMenu = new EscMenu(this, controller);
+		setRedrawLoop(false);
 		controller.startGame();
 	}
 	
@@ -185,12 +188,15 @@ public class GUICanvas extends JComponent{
 	 */
 	public void paint(Graphics graphics){
 		Graphics2D g = (Graphics2D) graphics;
+		// paint other menu if one is active
 		if(mainMenuView){
 			mainMenu.paint(g);
 			return;
-		}
-		if(winnerMenuView){
+		} else if(winnerMenuView){
 			winnerMenu.paint(g);
+			return;
+		} else if(playerSelectView){
+			playerSelectMenu.paint(g);
 			return;
 		}
 		//paint background
@@ -529,12 +535,12 @@ public class GUICanvas extends JComponent{
 			this.addMouseListener(mainMenu);
 			this.addMouseMotionListener(mainMenu);
 			
-			mainMenu.setRedrawLoop(true);
+			this.setRedrawLoop(true);
 		} else {
 			this.removeMouseListener(mainMenu);
 			this.removeMouseMotionListener(mainMenu);
 			
-			mainMenu.setRedrawLoop(false);
+			this.setRedrawLoop(false);
 		}
 	}
 
@@ -554,6 +560,30 @@ public class GUICanvas extends JComponent{
 			removeMouseMotionListener(escMenu);
 			addMouseListener(controller);
 			addMouseMotionListener(controller);
+		}
+	}
+
+	/**
+	 * Opens or hides the player select menu.
+	 */
+	public void togglePlayerSelectMenu() {
+		if(playerSelectMenu == null){
+			playerSelectMenu = new PlayerSelectMenu(this);
+		}
+		playerSelectView = !playerSelectView; // toggle boolean
+		// change settings
+		if(playerSelectView){
+			removeMouseListener(controller);
+			removeMouseMotionListener(controller);
+			addMouseListener(playerSelectMenu);
+			addMouseMotionListener(playerSelectMenu);
+			setRedrawLoop(true);
+		} else {
+			removeMouseListener(playerSelectMenu);
+			removeMouseMotionListener(playerSelectMenu);
+			addMouseListener(controller);
+			addMouseMotionListener(controller);
+			setRedrawLoop(false);
 		}
 	}
 
@@ -722,5 +752,61 @@ public class GUICanvas extends JComponent{
 	  */
 	public void rotateSundial(double degrees){
 		sundial.rotate(degrees);
+	}
+	
+	/**
+	 * A class to constantly redraw the canvas while the main menu is running
+	 * before a controller is created
+	 * @author Carl
+	 *
+	 */
+	private class RedrawThread extends Thread {
+		public boolean isRunning = true;
+		
+		@Override
+		public void run(){
+			//convert time to seconds
+			double nextTime = (double)System.nanoTime()/1000000000.0;
+			while(isRunning){
+				//convert time to seconds
+				double currentTime = (double)System.nanoTime()/1000000000.0;
+				
+				if(currentTime >= nextTime){
+					nextTime += Controller.FRAME_RATE;
+					if(currentTime < nextTime){
+						GUICanvas.this.repaint();
+					}
+				}
+				else{
+					// calculate the time to sleep
+					int sleepTime = (int) (1000.0 * (nextTime - currentTime));
+					// sanity check
+					if (sleepTime > 0) {
+						// sleep until the next update
+						try {
+							Thread.sleep(sleepTime);
+						} catch (InterruptedException e) {
+							// do nothing
+						}
+					}
+				}
+			}
+			
+			redraw = null; //last thing is to destroy the parent reference to this object
+		}
+		
+		public void stopRunning(){
+			isRunning = false;
+			//redraw = null;
+		}
+	}
+	
+	public void setRedrawLoop(boolean looping){
+		if (looping && redraw == null){
+			redraw = new RedrawThread();
+			redraw.start();
+		} else if (!looping && redraw != null){
+			redraw.stopRunning();
+		}
 	}
 }

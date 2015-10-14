@@ -99,7 +99,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	/**
 	 * Initialise the pre-game fields of this class
 	 */
-	protected void initialise() {
+	public void initialise() {
 		setupRooms();
 		loadItemsToSpawn();
 		setupSpawnItems();

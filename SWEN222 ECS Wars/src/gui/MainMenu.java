@@ -48,7 +48,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	private String[] buttonLabels; // the button text
 	private int selectedButton = Integer.MAX_VALUE; // the button currently highlighted
 	
-	private static RedrawThread redraw;
 
 	/**
 	 * Constructor for class MainMenu.
@@ -61,7 +60,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		loadFonts();
 		buttonLabels = new String[]{"New Game", "Load Game", "New Server", "Connect", "Quit"};
 		
-		setRedrawLoop(true);
+//		setRedrawLoop(true);
 	}
 
 	/**
@@ -74,15 +73,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, MainMenu.class.getResourceAsStream("/pixelmix.ttf")));
 		} catch (IOException|FontFormatException e) {
 		     System.out.println("Error loading fonts : "+e.getMessage());
-		}
-	}
-	
-	public void setRedrawLoop(boolean looping){
-		if (looping && redraw == null){
-			redraw = new RedrawThread();
-			redraw.start();
-		} else if (!looping && redraw != null){
-			redraw.stopRunning();
 		}
 	}
 
@@ -264,13 +254,12 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 
 	
 	private void newGame() {
-		
-		this.setRedrawLoop(false);
-		canvas.startGame(new SinglePlayerController(), 0);
+		canvas.setMainMenu(false);
+		canvas.togglePlayerSelectMenu();
 	}
 
 	private void loadGame() {
-		this.setRedrawLoop(false);
+//		this.setRedrawLoop(false);
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 		        "XML Files", "xml");
@@ -325,7 +314,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			int numberOfPlayers = input.readInt();
 			int uid = input.readInt();
 			
-			this.setRedrawLoop(false);
+//			this.setRedrawLoop(false);
 			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers, canvas), uid);
 		} catch (IOException e){
 			JOptionPane.showMessageDialog(canvas, "Error: could not find server");
@@ -370,53 +359,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		}
 		// deselect buttons
 		this.selectedButton = Integer.MAX_VALUE;
-	}
-	
-	/**
-	 * A class to constantly redraw the canvas while the main menu is running
-	 * before a controller is created
-	 * @author Carl
-	 *
-	 */
-	private class RedrawThread extends Thread {
-		public boolean isRunning = true;
-		
-		@Override
-		public void run(){
-			//convert time to seconds
-			double nextTime = (double)System.nanoTime()/1000000000.0;
-			while(isRunning){
-				//convert time to seconds
-				double currentTime = (double)System.nanoTime()/1000000000.0;
-				
-				if(currentTime >= nextTime){
-					nextTime += Controller.FRAME_RATE;
-					if(currentTime < nextTime){
-						canvas.repaint();
-					}
-				}
-				else{
-					// calculate the time to sleep
-					int sleepTime = (int) (1000.0 * (nextTime - currentTime));
-					// sanity check
-					if (sleepTime > 0) {
-						// sleep until the next update
-						try {
-							Thread.sleep(sleepTime);
-						} catch (InterruptedException e) {
-							// do nothing
-						}
-					}
-				}
-			}
-			
-			redraw = null; //last thing is to destroy the parent reference to this object
-		}
-		
-		public void stopRunning(){
-			isRunning = false;
-			//redraw = null;
-		}
 	}
 	
 	

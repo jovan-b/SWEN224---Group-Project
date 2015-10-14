@@ -49,7 +49,7 @@ public class SinglePlayerController extends Controller {
 	 */
 	public SinglePlayerController() {
 		super(0);
-		initialise();
+//		initialise();
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class SinglePlayerController extends Controller {
 	/**
 	 * Initialise the pre-game fields of this class
 	 */
-	protected void initialise() {
+	public void initialise() {
 		player = new DavePlayer(null, 2 * 24, 2 * 24);
 		players.add(player);
 		
