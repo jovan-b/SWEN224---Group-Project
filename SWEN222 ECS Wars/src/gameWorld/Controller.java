@@ -4,6 +4,7 @@ import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.GhostNPC;
 import gameWorld.characters.nonplayer.NonPlayer;
 import gameWorld.characters.nonplayer.strategy.ChaseCombatStrategy;
+import gameWorld.characters.nonplayer.strategy.NonPlayerStrategy;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
 import gameWorld.gameEvents.DayNightEvent;
@@ -497,8 +498,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 		NonPlayer npc = currentRoom.npcAtMouse(x, y, player,
 				viewScale, viewDirection);
 		if (npc != null) {
-			WanderingMerchantStrategy strat = (WanderingMerchantStrategy) npc
-					.getStrategy();
+			NonPlayerStrategy strat = npc.getStrategy();
 			strat.interact(player, npc);
 		}
 		// check if the player has clicked on their inventory
