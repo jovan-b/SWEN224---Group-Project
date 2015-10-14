@@ -29,8 +29,10 @@ import main.SoundManager;
 /**
  * The main canvas inside the game window in which the game is drawn.
  * 
+ * @author Jah Seng Lee 300279468
  * @author Sarah Dobie 300315033
  * @author Chris Read 300254724
+ * @author Carl Anderson 300264124
  *
  */
 @SuppressWarnings("serial")

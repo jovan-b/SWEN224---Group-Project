@@ -33,8 +33,13 @@ import network.Server;
 
 /**
  * Displays the main menu for the game.
+ * 
+ * 
+ * @author Jah Seng Lee 300279468
  * @author Sarah Dobie 300315033
+ * @author Chris Read 300254724
  * @author Jovan Bogoievski 300305140
+ * @author Carl Anderson 300264124
  *
  */
 public class MainMenu implements MouseListener, MouseMotionListener {

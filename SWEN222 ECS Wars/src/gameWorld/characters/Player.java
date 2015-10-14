@@ -18,12 +18,9 @@ import gameWorld.gameObjects.weapons.projectiles.Projectile;
 import gui.GUICanvas;
 
 /**
- * An interface representing a playable character
- * Players base speed and size are defined
- * Implementations should change them by using multiplication constants e.g.
- * 		FIRERATE * firerateMulti
+ * An abstract class representing a playable character
  * 
- * @author Jah Seng Lee
+ * @author Jah Seng Lee 300279468
  * @author Chris Read 300254724
  * @author Sarah Dobie 300315033
  * @author Jovan Bogoievski 300305140

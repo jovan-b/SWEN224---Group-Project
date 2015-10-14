@@ -5,6 +5,12 @@ import gameWorld.Room;
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 
+/**
+ * Strategy describing how GhostNPC's behave
+ * 
+ * @author Carl Anderson 300264124
+ *
+ */
 public class GhostStrategy extends WaitStrategy {
 	public static final int DAMAGE = 1;
 	

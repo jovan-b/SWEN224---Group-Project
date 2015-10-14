@@ -8,6 +8,11 @@ import gameWorld.gameEvents.RespawnEvent;
 import gameWorld.gameObjects.CharacterSpawner;
 
 
+/**
+ * Lets NPC respawn
+ * 
+ * @author Carl Anderson 300264124
+ */
 public class RespawnStrategy extends WaitStrategy {
 	private final int time;
 	

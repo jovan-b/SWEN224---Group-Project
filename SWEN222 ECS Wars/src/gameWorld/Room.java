@@ -37,6 +37,7 @@ import javax.imageio.ImageIO;
  * 
  * @author Sarah Dobie 300315033
  * @author Chris Read 300254724
+ * @author Carl Anderson 300279468
  *
  */
 public class Room {

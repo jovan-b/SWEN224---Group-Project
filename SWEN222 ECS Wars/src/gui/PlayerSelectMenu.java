@@ -25,7 +25,9 @@ import gameWorld.characters.StreaderPlayer;
 
 /**
  * A menu which allows the player to select which character they want to play as.
+ * 
  * @author Sarah Dobie 300315033
+ * @author Carl Anderson 300264124
  *
  */
 public class PlayerSelectMenu implements MouseListener, MouseMotionListener {

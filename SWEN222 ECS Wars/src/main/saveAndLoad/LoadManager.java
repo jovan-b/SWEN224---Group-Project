@@ -34,7 +34,8 @@ import org.xml.sax.SAXException;
  * 	for each character, load all items,
  * 	etc.
  * 
- * @author Jah Seng Lee
+ * @author Jah Seng Lee 300279468
+ * @author Carl Anderson 300264124
  *
  */
 public class LoadManager {

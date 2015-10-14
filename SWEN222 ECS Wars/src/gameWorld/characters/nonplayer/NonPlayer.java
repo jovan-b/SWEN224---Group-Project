@@ -16,6 +16,12 @@ import gameWorld.characters.nonplayer.strategy.WaitStrategy;
 import gameWorld.gameObjects.weapons.PaintballGun;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
 
+/**
+ * Represents a non-playable character
+ * 
+ * @author Carl Anderson 300264124
+ *
+ */
 public class NonPlayer extends Player {
 	public static final NonPlayerStrategy GLOBAL_DEFAULT = new WaitStrategy();
 	public static final PlayerType type = Player.PlayerType.NonPlayer;

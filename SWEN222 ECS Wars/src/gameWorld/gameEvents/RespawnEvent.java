@@ -5,7 +5,8 @@ import gameWorld.characters.Player;
 
 /**
  * A one-time respawn event that spawns the given player at x,y in a given room
- * @author Carl
+ * 
+ * @author Carl Anderson 300264124
  *
  */
 public class RespawnEvent implements Event {

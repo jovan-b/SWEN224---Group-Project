@@ -21,16 +21,12 @@ import gameWorld.gameObjects.weapons.Weapon;
 import gui.GUICanvas;
 import gui.GUIFrame;
 import main.SoundManager;
-import main.saveAndLoad.SaveManager;
 import network.ClientConnection;
 
 import java.awt.Image;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
@@ -43,7 +39,7 @@ import java.util.Set;
  * Main controller for ECS Wars
  * Runs the main game loop which and holds all global game-state information
  * 
- * @author Jah Seng Lee
+ * @author Jah Seng Lee 300279468
  * @author Sarah Dobie 300315033
  * @author Chris Read 300254724
  * @author Jovan Bogoievski 300305140

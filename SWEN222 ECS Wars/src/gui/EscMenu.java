@@ -16,7 +16,9 @@ import gameWorld.SinglePlayerController;
 
 /**
  * An in-game menu which gives options to resume, save, or disconnect.
+ * 
  * @author Sarah Dobie 300315033
+ * @author Jah Seng Lee 300279468
  *
  */
 public class EscMenu implements MouseListener, MouseMotionListener{

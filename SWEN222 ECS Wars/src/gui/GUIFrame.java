@@ -7,6 +7,7 @@ import javax.swing.*;
 
 /**
  * The game winndow.
+ * 
  * @author Sarah Dobie 300315033
  * @author Chris Read 300254724
  *

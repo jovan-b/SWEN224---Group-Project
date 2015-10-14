@@ -11,6 +11,11 @@ import gameWorld.gameObjects.MedicineBottle;
 import gameWorld.gameObjects.PillBottle;
 import gameWorld.gameObjects.Sellable;
 
+/**
+ * NPC strategy describing random movement
+ * 
+ * @author Carl Anderson 300264124
+ */
 public class WanderingStrategy extends WaitStrategy {
 
 	public static final int MAX_WAIT_TIME = 2000;

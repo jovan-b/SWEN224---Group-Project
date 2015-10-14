@@ -5,6 +5,12 @@ import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 import gameWorld.characters.nonplayer.strategy.SentryCombatStrategy;
 import gameWorld.characters.nonplayer.strategy.WanderingStrategy;
 
+/**
+ * Represents a Student NPC
+ * 
+ * @author Carl Anderson 300264124
+ *
+ */
 public class StudentNPC extends NonPlayer {
 
 	public StudentNPC(Room room, int posX, int posY) {

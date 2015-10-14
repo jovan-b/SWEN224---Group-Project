@@ -2,6 +2,14 @@ package gameWorld.gameEvents;
 
 import gameWorld.Controller;
 
+/**
+ * Represents the day/night cycle in the game
+ * When outdoors and nighttime, visibility will decrease
+ * 
+ * @author Chris Read 300254724
+ * @author Carl Anderson 300264124
+ *
+ */
 public class DayNightEvent implements Event{
 	
 	private final int duration;

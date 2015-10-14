@@ -9,6 +9,14 @@ import gameWorld.Room;
 import gameWorld.characters.nonplayer.strategy.GhostStrategy;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 
+/**
+ * NPC describing a Ghost
+ * It follows a player whenever a player is within range
+ * GhostNPC cannot fire
+ * GhostNPC deal a large amount damage when making contact with player
+ * 
+ * @author Carl Anderson 300264124
+ */
 public class GhostNPC extends NonPlayer {
 
 	public GhostNPC(Room room, int posX, int posY) {

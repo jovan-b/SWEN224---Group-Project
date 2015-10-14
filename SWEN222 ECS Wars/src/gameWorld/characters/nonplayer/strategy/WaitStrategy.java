@@ -3,6 +3,13 @@ package gameWorld.characters.nonplayer.strategy;
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 
+/**
+ * NPC Strategy where NPC just stands still
+ * 
+ * @author Carl Anderson 300264124
+ *
+ */
+
 public class WaitStrategy implements NonPlayerStrategy {
 	
 	protected NonPlayer npc;

@@ -13,7 +13,7 @@ import javafx.event.ActionEvent;
 /**
  * A class that manages the playing of music tracks, and sound files.
  * 
- * @author Carl
+ * @author Carl Anderson 300264124
  *
  */
 public final class SoundManager {

@@ -11,7 +11,9 @@ import gameWorld.gameObjects.Sellable;
 /**
  * A strategy representing a merchant NPC, from
  * which the player can buy recovery items
- * @author Sarah Dobie 300315033
+ * 
+ * @author Sarah Dobie 3003150330
+ * @author Carl Anderson 300264124
  *
  */
 public class WanderingMerchantStrategy extends WanderingStrategy {

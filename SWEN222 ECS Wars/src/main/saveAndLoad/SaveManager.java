@@ -36,8 +36,8 @@ import org.w3c.dom.Element;
  * 	a Room object has a Player object in it
  * 	a Room XML element has a Player XML element in it
  * 
- * @author Carl
- * Edited by Jah Seng Lee
+ * @author Jah Seng Lee 300279468
+ * @author Carl Anderson 300264124
  */
 public final class SaveManager {
 	public static String SAVE_DIR = "";

@@ -7,7 +7,7 @@ import gameWorld.characters.Player;
  * A combat strategy where the NPC stands still, and shoots at the
  * nearest player
  * 
- * @author Carl
+ * @author Carl Anderson 300264124
  *
  */
 public class SentryCombatStrategy extends WaitStrategy {

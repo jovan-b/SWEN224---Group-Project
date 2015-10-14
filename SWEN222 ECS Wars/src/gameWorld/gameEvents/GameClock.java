@@ -8,8 +8,8 @@ import java.util.TimerTask;
 
 /**
  * A clock which times clock based events
- * @author Carl
- *
+ * 
+ * @author Carl Anderson 300264124
  */
 public final class GameClock {
 	public static final int CLOCK_TICK = 1000; //in ms

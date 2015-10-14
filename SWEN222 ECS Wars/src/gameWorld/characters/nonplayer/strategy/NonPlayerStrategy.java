@@ -3,6 +3,13 @@ package gameWorld.characters.nonplayer.strategy;
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 
+/**
+ * Interface descibing NPC strategies
+ * 
+ * @author Carl Anderson 300264124
+ *
+ */
+
 public interface NonPlayerStrategy {
 	
 	/**

@@ -3,6 +3,17 @@ package gameWorld.characters.nonplayer.strategy;
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
 
+/**
+ * If an NPC is provoked, will invoke this strategy
+ * Will follow player and attempt to kill player until:
+ * 	-player leaves room
+ * 	-player dies
+ *  -npc dies
+ * 
+ * @author Carl Anderson 300264124
+ *
+ */
+
 public class ChaseCombatStrategy extends WaitStrategy {
 	public static double THRESHOLD = 5; //degree where it doesn't do anything
 	private double range;

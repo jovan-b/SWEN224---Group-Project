@@ -5,8 +5,8 @@ import gameWorld.Room;
 
 /**
  * A timer event which allows update events to occur in non-loaded rooms
- * @author Carl
- *
+ * 
+ * @author Carl Anderson 300264124
  */
 public class SlowUpdateEvent implements Event {
 	private int ticks;
