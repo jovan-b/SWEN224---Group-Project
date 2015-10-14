@@ -1,9 +1,11 @@
 package gameWorld.characters.nonplayer.strategy;
 
+import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer.Events;
 import gameWorld.gameEvents.Event;
 import gameWorld.gameEvents.GameClock;
 import gameWorld.gameEvents.RespawnEvent;
+import gameWorld.gameObjects.CharacterSpawner;
 
 
 public class RespawnStrategy extends WaitStrategy {
@@ -15,6 +17,7 @@ public class RespawnStrategy extends WaitStrategy {
 
 	@Override
 	public void initialize() {
+		//Schedule a respawn event		
 		Event respawn = new RespawnEvent(npc, npc.getCurrentRoom(), npc.getX(), npc.getY());
 		GameClock.getInstance().scheduleEvent(respawn , time);
 		

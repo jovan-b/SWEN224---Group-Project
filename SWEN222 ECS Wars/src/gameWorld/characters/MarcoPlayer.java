@@ -47,6 +47,6 @@ public class MarcoPlayer extends Player {
 
 	@Override
 	public String getName() {
-		return "Dave";
+		return "Marco";
 	}
 }

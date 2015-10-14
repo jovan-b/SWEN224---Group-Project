@@ -12,9 +12,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -24,6 +26,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import gameWorld.Controller;
 import gameWorld.MultiPlayerController;
 import gameWorld.SinglePlayerController;
+import gameWorld.characters.DavePlayer;
+import gameWorld.characters.MarcoPlayer;
+import gameWorld.characters.Player;
+import gameWorld.characters.PondyPlayer;
+import gameWorld.characters.StreaderPlayer;
 import network.Server;
 
 /**
@@ -284,8 +291,17 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 					+ "port for the server");
 			String numberOfClients = JOptionPane.showInputDialog(canvas, "Enter the "
 					+ "number of clients for the server");
+			
 			int port = Integer.parseInt(p);
 			int clients = Integer.parseInt(numberOfClients);
+			
+			//Check that the number of clients entered is not under or over clients limit
+			if(clients < 1 || clients > 4){
+				JOptionPane.showMessageDialog(canvas, "Error: number of"
+						+ " clients must be between 1 and 4.");
+				return;
+			}
+			
 			Server server = new Server(port, clients, canvas);
 			server.start();
 		} catch (NumberFormatException ne){
@@ -299,6 +315,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	 */
 	private void connect() {
 		try{
+			Player player = new MarcoPlayer(null, 0, 0);
 			String ip = JOptionPane.showInputDialog(canvas, "Enter the "
 					+ "IP of the server");
 			String p = JOptionPane.showInputDialog(canvas, "Enter the "
@@ -308,14 +325,26 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			Socket s = new Socket(ip, port);
 			
 			//Create the socket input stream to wait for the user input
+			DataOutputStream output = new DataOutputStream(s.getOutputStream());
 			DataInputStream input = new DataInputStream(s.getInputStream());
-
+			
+			int playerNum = getPlayerNumber(player);
+			
 			//Waits for the server to send an amount of players in the game
 			int numberOfPlayers = input.readInt();
 			int uid = input.readInt();
+			output.writeInt(playerNum);
 			
-//			this.setRedrawLoop(false);
-			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers, canvas), uid);
+			//Get every player in the game and add them to the player list
+			int[] playerNumbers = new int[4];
+			ArrayList<Player> players = new ArrayList<Player>();
+			for(int i = 0; i < numberOfPlayers; i++){
+				playerNumbers[i] = input.readInt();
+				players.add(getPlayerFromNumber(playerNumbers[i]));
+			}
+			
+			//Start the game
+			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers, canvas, players), uid);
 		} catch (IOException e){
 			JOptionPane.showMessageDialog(canvas, "Error: could not find server");
 		} catch (NumberFormatException ne){
@@ -323,6 +352,43 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	/**
+	 * Get a player id to send across the server to tell every client what
+	 * your player is
+	 * @return
+	 */
+	public int getPlayerNumber(Player player){
+		String name = player.getName();
+		switch(name){
+			case("Dave"):
+				return 1;
+			case("Marco"):
+				return 2;
+			case("Pondy"):
+				return 3;
+			default:
+				return 4;
+		}
+	}
+	
+	/**
+	 * return a player from a given number
+	 * @param i
+	 * @return
+	 */
+	public Player getPlayerFromNumber(int i){
+		switch(i){
+			case(1):
+				return new DavePlayer(null, 0, 0);
+			case(2):
+				return new MarcoPlayer(null, 0, 0);
+			case(3):
+				return new PondyPlayer(null, 0, 0);
+			default:
+				return new StreaderPlayer(null, 0, 0);
+		}
+	}
+	
 	private void quit() {
 		System.exit(0);
 	}

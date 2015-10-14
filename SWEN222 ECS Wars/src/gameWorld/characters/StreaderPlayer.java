@@ -45,6 +45,6 @@ public class StreaderPlayer extends Player {
 
 	@Override
 	public String getName() {
-		return "Dave";
+		return "DaveS";
 	}
 }

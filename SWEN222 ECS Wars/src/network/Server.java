@@ -1,5 +1,6 @@
 package network;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -75,7 +76,10 @@ public class Server extends Thread{
 	 */
 	public void startMultiplayer(ServerHandler[] clientsConnected) {
 		Socket socket;
+		DataInputStream input;
 		DataOutputStream output;
+		
+		int[] playerNumbers = new int[4];
 		try{
 			//Go through the server handlers for each client to start their game
 			for(int i = 0; i<clientsConnected.length; i++){
@@ -84,10 +88,22 @@ public class Server extends Thread{
 				socket = clientsConnected[i].getSocket();
 		
 				output = new DataOutputStream(socket.getOutputStream());
+				input = new DataInputStream(socket.getInputStream());
 				//Tells the player how many players are in the game and their user ID
 				output.writeInt(clientsConnected.length);
 				output.writeInt(i);
+				playerNumbers[i] = input.readInt();
 			}
+			
+			//Send every client what every player is
+			for(int i = 0; i < clientsConnected.length; i++){
+				socket = clientsConnected[i].getSocket();
+				output = new DataOutputStream(socket.getOutputStream());
+				for(int j = 0; j<clientsConnected.length; j++){
+					output.writeInt(playerNumbers[j]);
+				}
+			}
+			
 			while(clientsConnected(clientsConnected)){
 				//Keep running the game
 			}
