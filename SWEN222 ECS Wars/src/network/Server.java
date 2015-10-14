@@ -94,6 +94,16 @@ public class Server extends Thread{
 				output.writeInt(i);
 				playerNumbers[i] = input.readInt();
 			}
+			
+			//Send every client what every player is
+			for(int i = 0; i < clientsConnected.length; i++){
+				socket = clientsConnected[i].getSocket();
+				output = new DataOutputStream(socket.getOutputStream());
+				for(int j = 0; j<clientsConnected.length; j++){
+					output.writeInt(playerNumbers[j]);
+				}
+			}
+			
 			while(clientsConnected(clientsConnected)){
 				//Keep running the game
 			}

@@ -16,6 +16,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -26,7 +27,10 @@ import gameWorld.Controller;
 import gameWorld.MultiPlayerController;
 import gameWorld.SinglePlayerController;
 import gameWorld.characters.DavePlayer;
+import gameWorld.characters.MarcoPlayer;
 import gameWorld.characters.Player;
+import gameWorld.characters.PondyPlayer;
+import gameWorld.characters.StreaderPlayer;
 import network.Server;
 
 /**
@@ -313,7 +317,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	 */
 	private void connect() {
 		try{
-			Player player = new DavePlayer(null, 0, 0);
+			Player player = new PondyPlayer(null, 0, 0);
 			String ip = JOptionPane.showInputDialog(canvas, "Enter the "
 					+ "IP of the server");
 			String p = JOptionPane.showInputDialog(canvas, "Enter the "
@@ -333,8 +337,15 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			int uid = input.readInt();
 			output.writeInt(playerNum);
 			
+			int[] playerNumbers = new int[4];
+			ArrayList<Player> players = new ArrayList<Player>();
+			for(int i = 0; i < numberOfPlayers; i++){
+				playerNumbers[i] = input.readInt();
+				players.add(getPlayerFromNumber(playerNumbers[i]));
+			}
+			
 			this.setRedrawLoop(false);
-			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers, canvas), uid);
+			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers, canvas, players), uid);
 		} catch (IOException e){
 			JOptionPane.showMessageDialog(canvas, "Error: could not find server");
 		} catch (NumberFormatException ne){
@@ -358,6 +369,24 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 				return 3;
 			default:
 				return 4;
+		}
+	}
+	
+	/**
+	 * return a player from a given number
+	 * @param i
+	 * @return
+	 */
+	public Player getPlayerFromNumber(int i){
+		switch(i){
+			case(1):
+				return new DavePlayer(null, 0, 0);
+			case(2):
+				return new MarcoPlayer(null, 0, 0);
+			case(3):
+				return new PondyPlayer(null, 0, 0);
+			default:
+				return new StreaderPlayer(null, 0, 0);
 		}
 	}
 	
