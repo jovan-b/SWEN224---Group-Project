@@ -34,7 +34,6 @@ public class ClientConnection extends Thread{
 	private DataOutputStream output;
 	private MultiPlayerController controller;
 	
-	private int uid;
 	private Player player;
 	private int playerPoints;
 	private Weapon currentWeapon;
@@ -42,7 +41,6 @@ public class ClientConnection extends Thread{
 	public ClientConnection(Socket socket, MultiPlayerController controller, int uid){
 		this.socket = socket;
 		this.controller = controller;
-		this.uid = uid;
 		this.player = controller.getPlayer(uid);
 		this.playerPoints = player.getPoints();
 		this.currentWeapon = player.getWeapon();

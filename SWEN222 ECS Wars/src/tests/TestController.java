@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import gameWorld.Controller;
-import gui.GUIFrame;
 
 /**
  * A controller class that does the bare minimum to exist.

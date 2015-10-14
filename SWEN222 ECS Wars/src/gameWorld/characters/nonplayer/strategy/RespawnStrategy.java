@@ -1,11 +1,9 @@
 package gameWorld.characters.nonplayer.strategy;
 
-import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer.Events;
 import gameWorld.gameEvents.Event;
 import gameWorld.gameEvents.GameClock;
 import gameWorld.gameEvents.RespawnEvent;
-import gameWorld.gameObjects.CharacterSpawner;
 
 
 /**

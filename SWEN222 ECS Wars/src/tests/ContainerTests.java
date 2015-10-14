@@ -14,7 +14,6 @@ import gameWorld.gameObjects.SmallTreasure;
 import gameWorld.gameObjects.Torch;
 import gameWorld.gameObjects.Wall;
 import gameWorld.gameObjects.containers.Cabinet;
-import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.containers.Pouch;
 
 /**

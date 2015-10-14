@@ -3,11 +3,9 @@ package gameWorld.gameObjects.weapons;
 import gameWorld.Controller;
 import gameWorld.characters.Player;
 import gameWorld.gameObjects.weapons.projectiles.LtsaBullet;
-import gameWorld.gameObjects.weapons.projectiles.PaintBall;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
 
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;

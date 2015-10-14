@@ -24,8 +24,6 @@ public class Server extends Thread{
 	private int numberOfClients;
 	private ServerSocket server;
 	private GUICanvas canvas;
-	private ServerHandler[] clientsConnected;
-	
 	public Server(int port, int numberOfClients, GUICanvas canvas){
 		this.port = port;
 		this.numberOfClients = numberOfClients;

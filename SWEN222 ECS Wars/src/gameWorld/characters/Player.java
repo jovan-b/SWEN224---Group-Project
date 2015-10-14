@@ -3,7 +3,6 @@ package gameWorld.characters;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-import main.SoundManager;
 import gameWorld.PointValues;
 import gameWorld.Room;
 import gameWorld.gameObjects.Door;
@@ -12,7 +11,6 @@ import gameWorld.gameObjects.Item;
 import gameWorld.gameObjects.Wall;
 import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.weapons.PaintballGun;
-import gameWorld.gameObjects.weapons.ScatterGun;
 import gameWorld.gameObjects.weapons.Weapon;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
 import gui.GUICanvas;

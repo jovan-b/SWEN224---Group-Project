@@ -5,11 +5,6 @@ import java.util.TimerTask;
 
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
-import gameWorld.gameObjects.Floor;
-import gameWorld.gameObjects.Item;
-import gameWorld.gameObjects.MedicineBottle;
-import gameWorld.gameObjects.PillBottle;
-import gameWorld.gameObjects.Sellable;
 
 /**
  * NPC strategy describing random movement

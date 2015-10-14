@@ -1,14 +1,12 @@
 package gameWorld.gameObjects.weapons;
 
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import gameWorld.Controller;
 import gameWorld.characters.Player;
-import gameWorld.gameObjects.weapons.Weapon.WeaponType;
 import gameWorld.gameObjects.weapons.projectiles.PistolBullet;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
 

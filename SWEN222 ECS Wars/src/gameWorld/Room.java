@@ -19,13 +19,11 @@ import gameWorld.gameObjects.weapons.projectiles.Projectile;
 import gui.GUICanvas;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
 

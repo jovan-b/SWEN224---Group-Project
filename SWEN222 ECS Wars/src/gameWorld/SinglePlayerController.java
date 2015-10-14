@@ -1,19 +1,6 @@
 package gameWorld;
 
-import gameWorld.characters.DavePlayer;
-import gameWorld.characters.MarcoPlayer;
 import gameWorld.characters.Player;
-import gameWorld.characters.PondyPlayer;
-import gameWorld.characters.StreaderPlayer;
-import gameWorld.characters.nonplayer.NonPlayer;
-import gameWorld.characters.nonplayer.strategy.ChaseCombatStrategy;
-import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
-import gameWorld.characters.nonplayer.strategy.WanderingMerchantStrategy;
-import gameWorld.gameEvents.DayNightEvent;
-import gameWorld.gameEvents.GameClock;
-import gameWorld.gameEvents.SlowUpdateEvent;
-import gameWorld.gameObjects.Item;
-import gameWorld.gameObjects.containers.Container;
 import gui.GUICanvas;
 
 import java.awt.event.KeyEvent;
@@ -22,7 +9,6 @@ import java.io.File;
 import java.util.BitSet;
 
 import main.saveAndLoad.LoadManager;
-import main.saveAndLoad.SaveManager;
 
 /**
  * A controller implementation for single player games

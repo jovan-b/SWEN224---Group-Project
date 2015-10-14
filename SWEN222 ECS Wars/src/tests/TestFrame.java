@@ -8,6 +8,7 @@ import gui.GUIFrame;
  * @author Sarah Dobie 300315033
  *
  */
+@SuppressWarnings("serial")
 public class TestFrame extends GUIFrame {
 	public TestFrame(){
 		super();

@@ -9,13 +9,9 @@ import gameWorld.gameObjects.Item.Type;
 import gameWorld.gameObjects.containers.*;
 import gameWorld.gameObjects.weapons.*;
 import gameWorld.gameObjects.weapons.Weapon.WeaponType;
-import gameWorld.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;

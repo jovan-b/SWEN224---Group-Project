@@ -16,8 +16,6 @@ import gameWorld.gameObjects.Wall;
 import gameWorld.gameObjects.weapons.projectiles.LtsaBullet;
 import gameWorld.gameObjects.weapons.projectiles.Projectile;
 import gameWorld.gameObjects.weapons.projectiles.RubberBullet;
-import gui.GUICanvas;
-import gui.GUIFrame;
 
 /**
  * A test class to verify qualities of the Room class.
