@@ -1,5 +1,6 @@
 package gameWorld.characters.nonplayer.strategy;
 
+import main.SoundManager;
 import gameWorld.Room;
 import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.NonPlayer;
@@ -38,8 +39,12 @@ public class GhostStrategy extends WaitStrategy {
 				}
 			}
 			
-			if (min < range){ 
+			if (min > range){ 
 				target = null;
+			}
+			
+			if (target != null){
+				SoundManager.playSound("mgs_alert.mp3");
 			}
 		}
 		
@@ -80,6 +85,9 @@ public class GhostStrategy extends WaitStrategy {
 	
 	@Override
 	public void interact(Player p, NonPlayer npc){
+		if (p != target){
+			SoundManager.playSound("mgs_alert.mp3");
+		}
 		target = p;
 	}
 	
