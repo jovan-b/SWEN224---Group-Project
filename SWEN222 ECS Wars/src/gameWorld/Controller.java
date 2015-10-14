@@ -1,6 +1,7 @@
 package gameWorld;
 
 import gameWorld.characters.Player;
+import gameWorld.characters.nonplayer.GhostNPC;
 import gameWorld.characters.nonplayer.NonPlayer;
 import gameWorld.characters.nonplayer.strategy.ChaseCombatStrategy;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
@@ -99,7 +100,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	/**
 	 * Initialise the pre-game fields of this class
 	 */
-	protected void initialise() {
+	public void initialise() {
 		setupRooms();
 		loadItemsToSpawn();
 		setupSpawnItems();
@@ -448,14 +449,24 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 			spawner.getRoom().addPlayer(p);
 		}
 		
-		// Fill empty spawns with NPCs
+		//Fill the remaining spawns with random npcs
 		for (int j = i; j < charSpawners.size(); j++){
 			CharacterSpawner spawner = charSpawners.get(j);
-			NonPlayer npc = new NonPlayer(spawner.getRoom(), spawner.getX(), spawner.getY(), 
-					new WanderingMerchantStrategy());
-			npc.setStrategy(NonPlayer.Events.COMBAT, new ChaseCombatStrategy(100));
-			npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
-			spawner.getRoom().addNPC(npc);
+			double roll = Math.random();
+			Room room = spawner.getRoom();
+			int x = spawner.getX();
+			int y = spawner.getY();
+			
+			NonPlayer npc = null;
+			
+			if (roll-0.05 < 0){npc = new GhostNPC(room, x, y);}
+			else {
+				npc = new NonPlayer(room, x, y, new WanderingMerchantStrategy());
+				npc.setStrategy(NonPlayer.Events.COMBAT, new ChaseCombatStrategy(100));
+				npc.setStrategy(NonPlayer.Events.DEATH, new RespawnStrategy(5000));
+			}
+			
+			room.addNPC(npc);
 		}
 	}
 	

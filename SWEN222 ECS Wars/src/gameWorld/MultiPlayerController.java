@@ -40,15 +40,6 @@ public class MultiPlayerController extends Controller {
 	
 	@Override
 	public void initialise(){
-		//Create every play in the game
-//		for (int i=0; i<numPlayers; i++){
-//			/*
-//			 * Set every player's initial position be outside of the game world
-//			 * as every player will update for every client when they first move in the game
-//			 */
-//			players.add(new DavePlayer(null, 0, 0));
-//		}
-		
 		//Set the canvas of the players in game locally, this is needed so the weapons can shoot
 		for(int i=0; i<numPlayers; i++){
 			Player player = players.get(i);
@@ -80,11 +71,9 @@ public class MultiPlayerController extends Controller {
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_Q){
 			this.getGUI().getCanvas().rotateViewLeft();
-			//controller.getPlayer(uid).rotateViewLeft();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_E){
 			this.getGUI().getCanvas().rotateViewRight();
-			//controller.getPlayer(uid).rotateViewRight();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_1){
 			this.getPlayer(uid).inventoryItemAt(0).use(this.getPlayer(uid), this);

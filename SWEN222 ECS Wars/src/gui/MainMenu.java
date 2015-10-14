@@ -55,7 +55,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	private String[] buttonLabels; // the button text
 	private int selectedButton = Integer.MAX_VALUE; // the button currently highlighted
 	
-	private static RedrawThread redraw;
 
 	/**
 	 * Constructor for class MainMenu.
@@ -68,7 +67,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		loadFonts();
 		buttonLabels = new String[]{"New Game", "Load Game", "New Server", "Connect", "Quit"};
 		
-		setRedrawLoop(true);
+//		setRedrawLoop(true);
 	}
 
 	/**
@@ -81,15 +80,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, MainMenu.class.getResourceAsStream("/pixelmix.ttf")));
 		} catch (IOException|FontFormatException e) {
 		     System.out.println("Error loading fonts : "+e.getMessage());
-		}
-	}
-	
-	public void setRedrawLoop(boolean looping){
-		if (looping && redraw == null){
-			redraw = new RedrawThread();
-			redraw.start();
-		} else if (!looping && redraw != null){
-			redraw.stopRunning();
 		}
 	}
 
@@ -271,13 +261,12 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 
 	
 	private void newGame() {
-		
-		this.setRedrawLoop(false);
-		canvas.startGame(new SinglePlayerController(), 0);
+		canvas.setMainMenu(false);
+		canvas.togglePlayerSelectMenu();
 	}
 
 	private void loadGame() {
-		this.setRedrawLoop(false);
+//		this.setRedrawLoop(false);
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 		        "XML Files", "xml");
@@ -302,8 +291,17 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 					+ "port for the server");
 			String numberOfClients = JOptionPane.showInputDialog(canvas, "Enter the "
 					+ "number of clients for the server");
+			
 			int port = Integer.parseInt(p);
 			int clients = Integer.parseInt(numberOfClients);
+			
+			//Check that the number of clients entered is not under or over clients limit
+			if(clients < 1 || clients > 4){
+				JOptionPane.showMessageDialog(canvas, "Error: number of"
+						+ " clients must be between 1 and 4.");
+				return;
+			}
+			
 			Server server = new Server(port, clients, canvas);
 			server.start();
 		} catch (NumberFormatException ne){
@@ -317,7 +315,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	 */
 	private void connect() {
 		try{
-			Player player = new PondyPlayer(null, 0, 0);
+			Player player = new MarcoPlayer(null, 0, 0);
 			String ip = JOptionPane.showInputDialog(canvas, "Enter the "
 					+ "IP of the server");
 			String p = JOptionPane.showInputDialog(canvas, "Enter the "
@@ -337,6 +335,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			int uid = input.readInt();
 			output.writeInt(playerNum);
 			
+			//Get every player in the game and add them to the player list
 			int[] playerNumbers = new int[4];
 			ArrayList<Player> players = new ArrayList<Player>();
 			for(int i = 0; i < numberOfPlayers; i++){
@@ -344,7 +343,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 				players.add(getPlayerFromNumber(playerNumbers[i]));
 			}
 			
-			this.setRedrawLoop(false);
+			//Start the game
 			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers, canvas, players), uid);
 		} catch (IOException e){
 			JOptionPane.showMessageDialog(canvas, "Error: could not find server");
@@ -426,53 +425,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		}
 		// deselect buttons
 		this.selectedButton = Integer.MAX_VALUE;
-	}
-	
-	/**
-	 * A class to constantly redraw the canvas while the main menu is running
-	 * before a controller is created
-	 * @author Carl
-	 *
-	 */
-	private class RedrawThread extends Thread {
-		public boolean isRunning = true;
-		
-		@Override
-		public void run(){
-			//convert time to seconds
-			double nextTime = (double)System.nanoTime()/1000000000.0;
-			while(isRunning){
-				//convert time to seconds
-				double currentTime = (double)System.nanoTime()/1000000000.0;
-				
-				if(currentTime >= nextTime){
-					nextTime += Controller.FRAME_RATE;
-					if(currentTime < nextTime){
-						canvas.repaint();
-					}
-				}
-				else{
-					// calculate the time to sleep
-					int sleepTime = (int) (1000.0 * (nextTime - currentTime));
-					// sanity check
-					if (sleepTime > 0) {
-						// sleep until the next update
-						try {
-							Thread.sleep(sleepTime);
-						} catch (InterruptedException e) {
-							// do nothing
-						}
-					}
-				}
-			}
-			
-			redraw = null; //last thing is to destroy the parent reference to this object
-		}
-		
-		public void stopRunning(){
-			isRunning = false;
-			//redraw = null;
-		}
 	}
 	
 	

@@ -40,6 +40,7 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 	private static final int TEXT_SIZE = 15;
 
 	private GUICanvas canvas; // the canvas this draws on
+	private Controller controller;
 	private Image[] spritesDave; // the sprite images to animate
 	private Image[] spritesPondy; // the sprite images to animate
 	private Image[] spritesMarco; // the sprite images to animate
@@ -51,7 +52,6 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 	private int selectedButtonRow = Integer.MAX_VALUE; // the button currently highlighted
 	private int selectedButtonCol = Integer.MAX_VALUE; // the button currently highlighted
 
-	private static RedrawThread redraw;
 
 	/**
 	 * Constructor for class MainMenu.
@@ -60,12 +60,11 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 	 */
 	public PlayerSelectMenu(GUICanvas canvas) {
 		this.canvas = canvas;
+		this.controller = new SinglePlayerController();
 		loadImages();
 		loadFonts();
 		buttonLabels = new String[][]{{"David Pearce", "Peter Andrae"},
 			{"Marco Servetto", "David Streader"}};
-
-			setRedrawLoop(true);
 	}
 
 	/**
@@ -78,15 +77,6 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, PlayerSelectMenu.class.getResourceAsStream("/pixelmix.ttf")));
 		} catch (IOException|FontFormatException e) {
 			System.out.println("Error loading fonts : "+e.getMessage());
-		}
-	}
-
-	public void setRedrawLoop(boolean looping){
-		if (looping && redraw == null){
-			redraw = new RedrawThread();
-			redraw.start();
-		} else if (!looping && redraw != null){
-			redraw.stopRunning();
 		}
 	}
 
@@ -242,37 +232,6 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		//		// calculate positional values
-		//		int midX = canvas.getWidth()/2;
-		//		int midY = canvas.getHeight()/2;
-		//		int x = e.getX();
-		//		int y = e.getY();
-		//		int buttonY = midY - BUTTON_TOP_DIFF;
-		//		int gap = 20 + BUTTON_HEIGHT;
-		//		int buttonX = midX - BUTTON_LEFT_DIFF;
-		//
-		//		Graphics g = canvas.getGraphics();
-		//
-		//		// check if x is within button bounds
-		//		if(buttonX <= x && x < buttonX+BUTTON_WIDTH){
-		//			// check which y it is on
-		//			for(int i=0; i<buttonLabels.length; i++){
-		//				for(int j=0; j<buttonLabels[0].length; j++){
-		//					// check if we are on a button
-		//					if(buttonY <= y && y < buttonY + BUTTON_HEIGHT){
-		//						// figure out the button we're on
-		//						switch(i){
-		//						case 0 : break;
-		//						case 1 : break;
-		//						case 2 : break;
-		//						case 3 : break;
-		//						}
-		//					}
-		//					// increment y
-		//					buttonY += gap;
-		//				}
-		//			}
-		//		}
 		if(selectedButtonRow == 0){
 			if(selectedButtonCol == 0){
 				// select dave
@@ -281,7 +240,7 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 				// select pondy
 				System.out.println("picked pondy");
 			}
-		} else {
+		} else if(selectedButtonRow == 1) {
 			if(selectedButtonCol == 0){
 				// select marco
 				System.out.println("picked marco");
@@ -289,7 +248,14 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 				// select streader
 				System.out.println("picked streader");
 			}
+		} else {
+			return;
 		}
+		canvas.setRedrawLoop(false);
+		controller.initialise();
+		canvas.startGame(controller, 0);
+		canvas.togglePlayerSelectMenu();
+		
 		selectedButtonRow = Integer.MAX_VALUE;
 		selectedButtonCol = Integer.MAX_VALUE;
 	}
@@ -328,53 +294,6 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 			
 		// deselect buttons
 		this.selectedButtonRow = Integer.MAX_VALUE;
-	}
-
-	/**
-	 * A class to constantly redraw the canvas while the main menu is running
-	 * before a controller is created
-	 * @author Carl
-	 *
-	 */
-	private class RedrawThread extends Thread {
-		public boolean isRunning = true;
-
-		@Override
-		public void run(){
-			//convert time to seconds
-			double nextTime = (double)System.nanoTime()/1000000000.0;
-			while(isRunning){
-				//convert time to seconds
-				double currentTime = (double)System.nanoTime()/1000000000.0;
-
-				if(currentTime >= nextTime){
-					nextTime += Controller.FRAME_RATE;
-					if(currentTime < nextTime){
-						canvas.repaint();
-					}
-				}
-				else{
-					// calculate the time to sleep
-					int sleepTime = (int) (1000.0 * (nextTime - currentTime));
-					// sanity check
-					if (sleepTime > 0) {
-						// sleep until the next update
-						try {
-							Thread.sleep(sleepTime);
-						} catch (InterruptedException e) {
-							// do nothing
-						}
-					}
-				}
-			}
-
-			redraw = null; //last thing is to destroy the parent reference to this object
-		}
-
-		public void stopRunning(){
-			isRunning = false;
-			//redraw = null;
-		}
 	}
 
 
