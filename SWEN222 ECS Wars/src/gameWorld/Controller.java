@@ -114,10 +114,11 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	public void startGame(){
 		SoundManager.playQueue(SoundManager.BATTLE_SONGS);
 		
+		this.start();
+
 		//Start the day and night cycle
 		GameClock.getInstance().scheduleEvent(new DayNightEvent(this, DAY_LENGTH));
 		GameClock.getInstance().scheduleEvent(new SlowUpdateEvent(this, 1));
-		this.start();
 	}
 	
 	/**
@@ -162,8 +163,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 					}
 				}
 			}
-		}
-		
+		}		
 	}
 
 	/**
