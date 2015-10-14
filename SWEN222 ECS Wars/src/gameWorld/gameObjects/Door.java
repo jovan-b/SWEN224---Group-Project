@@ -139,17 +139,20 @@ public class Door implements Item {
 		}
 	}
 
-	@Override
-	public Image getImage(int viewDirection) {
-		return doorImage;
-	}
-
 	/**
 	 * returns true if the door is currently unlocked
 	 */
 	@Override
 	public boolean canWalk() {
 		return tempUnlocked;
+	}
+
+	/**
+	 * Returns true if the door is unlocked by default.
+	 * @return true if and only if the door is unlocked by default
+	 */
+	public boolean isUnlocked() {
+		return unlocked;
 	}
 
 	@Override
@@ -166,8 +169,8 @@ public class Door implements Item {
 	}
 
 	@Override
-	public void setScaledImage(int viewDirection, Image scaledImage) {
-		scaledDoorImage = scaledImage;
+	public Image getImage(int viewDirection) {
+		return doorImage;
 	}
 
 	@Override
@@ -234,14 +237,6 @@ public class Door implements Item {
 		return room2Row;
 	}
 
-	/**
-	 * Returns true if the door is unlocked by default.
-	 * @return true if and only if the door is unlocked by default
-	 */
-	public boolean isUnlocked() {
-		return unlocked;
-	}
-
 	@Override
 	public String getDescription() {
 		if (!tempUnlocked){
@@ -253,6 +248,11 @@ public class Door implements Item {
 	@Override
 	public Type getType() {
 		return null;
+	}
+
+	@Override
+	public void setScaledImage(int viewDirection, Image scaledImage) {
+		scaledDoorImage = scaledImage;
 	}
 	
 }
