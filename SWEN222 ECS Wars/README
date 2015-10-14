@@ -11,3 +11,24 @@ Step 1: Disable Errors with restricted access
 	
 Step 2: Include the Resources folder into Build Path
 	Right Click Resources folder > Build Path > Add to Build Path
+	
+	
+	
+	
+How to play:
+	Use WASD to move around.
+	Use Q and E to rotate view.
+	Press + to zoom in and - to zoom out. (Note this refers to the keys along the top of the keyboard, not to the number pad ones.)
+	Hold shift to sprint.
+	Left-click to shoot.
+	Right-click to interact with certain characters or pick up/interact with items.
+	To use an item in your inventory, press the number key that corresponds to the inventory space.
+	To get points from gems you have picked up, interact with a vanishing cabinet while the gems are in your inventory.
+	To put items in a pouch, 'use' the pouch from your inventory, and right-click an inventory item to put it in the pouch.
+	To drop an item, right-click it from your inventory.
+	To put an item in a container, right-click the inventory item while a container is open.
+	Key cards open locked doors.
+	Torches can be used in dark places.
+	Health rejuvenating items can be bought from certain NPCs by spending points.
+	
+	
