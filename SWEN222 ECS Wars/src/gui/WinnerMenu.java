@@ -139,7 +139,7 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 	}
 
 	/**
-	 * Draw the buttons of this menu.
+	 * Draw the results of the game.
 	 * @param g The graphics object with which to draw
 	 */
 	private void drawResults(Graphics g) {
@@ -165,6 +165,14 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 		animate();
 	}
 
+	/**
+	 * Draw the end-game info about a particular player.
+	 * @param g 
+	 * @param midX
+	 * @param slotX
+	 * @param slotY
+	 * @param p
+	 */
 	private void drawPlayerInfo(Graphics g, int midX, int slotX, int slotY, Player p) {
 		// draw border
 		g.drawRect(slotX, slotY, SLOT_WIDTH, SLOT_HEIGHT);
