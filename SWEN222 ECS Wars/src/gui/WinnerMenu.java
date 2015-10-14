@@ -9,7 +9,6 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -21,18 +20,18 @@ import gameWorld.Controller;
 import gameWorld.characters.Player;
 
 /**
- * An in-game menu which gives options to resume, save, or disconnect.
+ * An in-game menu which displays the results of the game.
  * @author Sarah Dobie 300315033
  *
  */
 public class WinnerMenu implements MouseListener, MouseMotionListener{
 	private static final int SLOT_WIDTH = 400;
 	private static final int SLOT_HEIGHT = 50;
-	private static final int SLOT_TOP_DIFF = SLOT_HEIGHT*3;
-	private static final int SLOT_LEFT_DIFF = SLOT_WIDTH/2;
 	private static final int BUTTON_WIDTH = 200;
 	private static final int BUTTON_HEIGHT = 20;
-	private static final int BUTTON_BOT_DIFF = BUTTON_HEIGHT*2;
+	private static final int SLOT_TOP_DIFF = SLOT_HEIGHT*3; // difference between center and top of buttons
+	private static final int SLOT_LEFT_DIFF = SLOT_WIDTH/2; // difference between center and left of buttons
+	private static final int BUTTON_BOT_DIFF = BUTTON_HEIGHT*2; // difference between center and bottom of buttons
 	private static final int SPRITE_WIDTH = 32;
 	private static final int TEXT_SIZE = SLOT_HEIGHT/2-10;
 
@@ -120,7 +119,6 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 	private void drawButton(Graphics g) {
 		// calculate canvas centre
 		int midX = canvas.getWidth()/2;
-		int midY = canvas.getHeight()/2;
 		int buttonX = midX - BUTTON_WIDTH/2;
 		int buttonY = canvas.getHeight() - BUTTON_BOT_DIFF;
 		g.setFont(new Font("pixelmix", Font.PLAIN, TEXT_SIZE));
@@ -150,7 +148,6 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 		// set up positions
 		int gap = 20 + SLOT_HEIGHT;
 		int slotX = midX - SLOT_LEFT_DIFF;
-		int nameX = slotX + SPRITE_WIDTH;
 		int slotY = midY - SLOT_TOP_DIFF;
 		// edit graphics settings
 		Graphics2D g2 = ((Graphics2D)g);
@@ -167,11 +164,11 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 
 	/**
 	 * Draw the end-game info about a particular player.
-	 * @param g 
-	 * @param midX
-	 * @param slotX
-	 * @param slotY
-	 * @param p
+	 * @param g The graphics object with which to draw
+	 * @param midX The horizontal centre of the screen
+	 * @param slotX The left x of this area
+	 * @param slotY The top y of this area
+	 * @param p The player whose info should be drawn
 	 */
 	private void drawPlayerInfo(Graphics g, int midX, int slotX, int slotY, Player p) {
 		// draw border

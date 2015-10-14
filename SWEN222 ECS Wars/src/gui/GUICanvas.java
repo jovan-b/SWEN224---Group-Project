@@ -17,7 +17,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -131,9 +130,6 @@ public class GUICanvas extends JComponent{
 		this.escMenuView = false;
 		this.escMenu = new EscMenu(this, controller);
 		
-		//TODO: Set player & update compass
-//		this.setMainMenu(false);
-		this.escMenu = new EscMenu(this, controller);
 		setRedrawLoop(false);
 		controller.startGame();
 	}

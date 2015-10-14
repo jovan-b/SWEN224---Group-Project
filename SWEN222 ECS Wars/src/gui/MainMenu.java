@@ -13,7 +13,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import gameWorld.Controller;
 import gameWorld.MultiPlayerController;
 import gameWorld.SinglePlayerController;
 import gameWorld.characters.DavePlayer;
@@ -44,8 +42,8 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	private static final int IMAGE_SCALE = 8;
 	private static final int BUTTON_WIDTH = 300;
 	private static final int BUTTON_HEIGHT = 40;
-	private static final int BUTTON_TOP_DIFF = BUTTON_HEIGHT*4;
-	private static final int BUTTON_LEFT_DIFF = (BUTTON_WIDTH/2)+100;
+	private static final int BUTTON_TOP_DIFF = BUTTON_HEIGHT*4; // difference between center and top of buttons
+	private static final int BUTTON_LEFT_DIFF = (BUTTON_WIDTH/2)+100; // difference between center and left of buttons
 	
 	private GUICanvas canvas; // the canvas this draws on
 	private Image[] sprites; // the sprite images to animate
@@ -236,8 +234,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		int gap = 20 + BUTTON_HEIGHT;
 		int buttonX = midX - BUTTON_LEFT_DIFF;
 		
-		Graphics g = canvas.getGraphics();
-		
 		// check if x is within button bounds
 		if(buttonX <= x && x < buttonX+BUTTON_WIDTH){
 			// check which y it is on
@@ -409,7 +405,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		int buttonY = midY - BUTTON_TOP_DIFF;
 		int gap = 20 + BUTTON_HEIGHT;
 		int buttonX = midX - BUTTON_LEFT_DIFF;
-		Graphics g = canvas.getGraphics();
 		
 		// check if x is within button bounds
 		if(buttonX <= x && x < buttonX+BUTTON_WIDTH){

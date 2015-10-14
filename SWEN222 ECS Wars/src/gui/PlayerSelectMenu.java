@@ -11,25 +11,17 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.DataInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.net.Socket;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import gameWorld.Controller;
-import gameWorld.MultiPlayerController;
 import gameWorld.SinglePlayerController;
 import gameWorld.characters.DavePlayer;
 import gameWorld.characters.MarcoPlayer;
 import gameWorld.characters.Player;
 import gameWorld.characters.PondyPlayer;
 import gameWorld.characters.StreaderPlayer;
-import network.Server;
 
 /**
  * A menu which allows the player to select which character they want to play as.
@@ -290,7 +282,6 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 		int gapX = 20 + BUTTON_WIDTH;
 		int buttonY = midY - gapY;
 		int buttonX = midX - gapX;
-		Graphics g = canvas.getGraphics();
 		
 		// check which x,y it is on
 		for(int i=0; i<buttonLabels.length; i++){

@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.FileWriter;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -23,8 +22,8 @@ import gameWorld.SinglePlayerController;
 public class EscMenu implements MouseListener, MouseMotionListener{
 	private static final int BUTTON_WIDTH = 100;
 	private static final int BUTTON_HEIGHT = 20;
-	private static final int BUTTON_TOP_DIFF = BUTTON_HEIGHT*2;
-	private static final int BUTTON_LEFT_DIFF = BUTTON_HEIGHT/2;
+	private static final int BUTTON_TOP_DIFF = BUTTON_HEIGHT*2; // difference between center and top of buttons
+	private static final int BUTTON_LEFT_DIFF = BUTTON_HEIGHT/2; // difference between center and left of buttons
 	private static final int TEXT_SIZE = 25;
 
 	private GUICanvas canvas;
@@ -116,8 +115,6 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 		int buttonY = midY - BUTTON_TOP_DIFF;
 		int gap = 20 + BUTTON_HEIGHT;
 
-		Graphics g = canvas.getGraphics();
-
 		// check if x is within button bounds
 		if(buttonX <= x && x < buttonX+BUTTON_WIDTH){
 			// check which y it is on
@@ -150,7 +147,6 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 		int buttonY = midY - BUTTON_TOP_DIFF;
 		int gap = 20 + BUTTON_HEIGHT;
 		int buttonLeft = midX - BUTTON_LEFT_DIFF;
-		Graphics g = canvas.getGraphics();
 
 		// check if x is within button bounds
 		if(buttonLeft <= x && x < buttonLeft+BUTTON_WIDTH){
