@@ -46,19 +46,26 @@ public class NonPlayer extends Player {
 		
 		this.setStrategy(Events.DEFAULT, initial);
 		
+		loadSprites();
+	}
+	
+	/**
+	 * Loads the sprites from this 
+	 */
+	protected void loadSprites(){
 		// Load sprites
-		sprites = new Image[4][3];
-		int spriteNo = (int) (Math.random()*3)+1;
-		try {
-			for (int dir = 0; dir < 4; dir++){
-				for (int ani = 0; ani < 3; ani++){
-					sprites[dir][ani] = ImageIO.read(NonPlayer.class.getResource("/NPC/npc"+spriteNo+dir+ani+".png"));
+				sprites = new Image[4][3];
+				int spriteNo = (int) (Math.random()*3)+1;
+				try {
+					for (int dir = 0; dir < 4; dir++){
+						for (int ani = 0; ani < 3; ani++){
+							sprites[dir][ani] = ImageIO.read(NonPlayer.class.getResource("/NPC/npc"+spriteNo+dir+ani+".png"));
+						}
+					}
+				} catch (IOException e) {
+					System.out.println("Error loading player images: " + e.getMessage());
 				}
-			}
-		} catch (IOException e) {
-			System.out.println("Error loading player images: " + e.getMessage());
-		}
-		scaledSprites = sprites;
+				scaledSprites = sprites;
 	}
 	
 	@Override
