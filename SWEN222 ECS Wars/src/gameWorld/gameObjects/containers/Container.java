@@ -93,4 +93,23 @@ public abstract class Container implements ItemSpawner {
 		return capacity - contents.size();
 	}
 	
+	@Override
+	public boolean equals(Object o){
+		if(!(o instanceof Container)){return false;}
+		if(this.getType() == ((Container)o).getType()){
+			for(int i = 0; i < this.getContents().size(); i++){
+				if(((Container)o).getContents().get(i) == null){
+					//item is not in o, return false
+					return false;
+				}
+				if(!this.getContents().get(i).equals(((Container)o).getContents().get(i))){
+					//items are not equal
+					return false;
+				}	
+			}
+		}
+		
+		return true;
+	}
+	
 }
