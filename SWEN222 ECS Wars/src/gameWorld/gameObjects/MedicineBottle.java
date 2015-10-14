@@ -81,5 +81,13 @@ public class MedicineBottle extends Sellable implements Item {
 	public Type getType() {
 		return Type.MedicineBottle;
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Item){
+			return this.getType() == ((Item) o).getType();
+		}
+		return false;
+	}
 
 }

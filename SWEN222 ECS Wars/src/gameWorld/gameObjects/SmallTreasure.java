@@ -144,4 +144,14 @@ public class SmallTreasure implements Item {
 	public String getQuality(){
 		return quality;
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Item){
+			return this.getType() == ((Item) o).getType() && 
+					this.getPoints() == ((SmallTreasure)o).getPoints() &&
+					this.getQuality().equals(((SmallTreasure)o).getQuality());
+		}
+		return false;
+	}
 }

@@ -86,4 +86,12 @@ public abstract class Weapon implements Item {
 		return name;
 	}
 	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Weapon){
+			return ((Weapon)o).getWeaponType() == this.getWeaponType();
+		}
+		return false;
+	}
+	
 }

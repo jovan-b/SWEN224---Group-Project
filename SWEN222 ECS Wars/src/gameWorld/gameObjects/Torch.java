@@ -110,5 +110,13 @@ public class Torch implements Item {
 	public Type getType() {
 		return Type.Torch;
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Item){
+			return this.getType() == ((Item) o).getType();
+		}
+		return false;
+	}
 
 }
