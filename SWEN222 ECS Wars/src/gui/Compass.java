@@ -33,6 +33,18 @@ public class Compass {
 	}
 
 	/**
+	 * Updates the image to the next frame in its animation.
+	 */
+	public void update() {
+		if (rot == targetRot){ // dont need to rotate image if the angles are the same
+			return;
+		}
+		double rotateAngle = (targetRot-rot)*0.1;
+		rot += rotateAngle;
+		rotateImage(rot);
+	}
+
+	/**
 	 * Parses and stores all required images.
 	 */
 	private void loadImages() {
@@ -69,14 +81,6 @@ public class Compass {
 	}
 	
 	/**
-	 * Returns the current compass image.
-	 * @return The current compass image
-	 */
-	public Image getImage(){
-		return rotated;
-	}
-	
-	/**
 	 * Scales the compass image according to the given scale.
 	 * @param scale The scale (1 or 2) to use
 	 * @param c The canvas the compass will be drawn on
@@ -94,15 +98,11 @@ public class Compass {
 	}
 
 	/**
-	 * Updates the image to the next frame in its animation.
+	 * Returns the current compass image.
+	 * @return The current compass image
 	 */
-	public void update() {
-		if (rot == targetRot){ // dont need to rotate image if the angles are the same
-			return;
-		}
-		double rotateAngle = (targetRot-rot)*0.1;
-		rot += rotateAngle;
-		rotateImage(rot);
+	public Image getImage(){
+		return rotated;
 	}
 
 }

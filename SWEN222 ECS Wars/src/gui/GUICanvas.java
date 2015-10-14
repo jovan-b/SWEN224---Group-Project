@@ -136,7 +136,6 @@ public class GUICanvas extends JComponent{
 		setRedrawLoop(false);
 		controller.startGame();
 	}
-	
 
 	/**
 	 * Parses and stores all images used in the UI.
@@ -166,15 +165,15 @@ public class GUICanvas extends JComponent{
 		scaledContainerFg = containerFg;
 		scaledMapImage = mapImage;
 	}
-	
-	@Override
-	protected void paintComponent(Graphics g){
-		super.paintComponent(g);
-	}
-	
+
 	@Override
 	public Dimension getPreferredSize(){
 		return new Dimension(GUIFrame.INIT_WIDTH, GUIFrame.INIT_HEIGHT);
+	}
+
+	@Override
+	protected void paintComponent(Graphics g){
+		super.paintComponent(g);
 	}
 	
 	@Override
@@ -421,34 +420,6 @@ public class GUICanvas extends JComponent{
 	}
 
 	/**
-	 * Gets the current view scale of this canvas.
-	 * @return The current view scale: either 1 or 2
-	 */
-	public int getViewScale() {
-		return viewScale;
-	}
-
-	/**
-	 * Sets the current view scale.
-	 * @param viewScale The new view scale: either 1 or 2.
-	 */
-	public void setViewScale(int viewScale) {
-		this.viewScale = viewScale;
-	}
-
-	/**
-	 * Update the tooltip info
-	 * @param toolTip The tooltip text
-	 * @param x The tooltip's x position
-	 * @param y The tooltip's y position
-	 */
-	public void setToolTip(String toolTip, int x, int y) {
-		this.toolTip = toolTip;
-		this.toolTipX = x;
-		this.toolTipY = y;
-	}
-	
-	/**
 	 * Display the current tooltip.
 	 * @param g The graphics object with which to draw
 	 */
@@ -479,15 +450,7 @@ public class GUICanvas extends JComponent{
 		g.drawRect(boxX, boxY, boxWidth, 20);
 		g.drawString(toolTip, lineX, lineY);
 	}
-	
-	/**
-	 * Gets the current player.
-	 * @return the current player
-	 */
-	public Player getCurrentPlayer(){
-		return controller.getCurrentPlayer();
-	}
-	
+
 	/**
 	 * Sets UI image sizes based on the current view scale.
 	 */
@@ -521,127 +484,6 @@ public class GUICanvas extends JComponent{
 	}
 
 	/**
-	 * Opens or hides the main menu.
-	 * @param isMainMenu true to show the main menu, false otherwise
-	 */
-	public void setMainMenu(boolean isMainMenu) {
-		this.mainMenuView = isMainMenu;
-		
-		if(isMainMenu){
-			SoundManager.playSong("MainMenu/8-bit Survivor Eye Of The Tiger.mp3");
-			
-			this.removeController(controller);
-			this.addMouseListener(mainMenu);
-			this.addMouseMotionListener(mainMenu);
-			
-			this.setRedrawLoop(true);
-		} else {
-			this.removeMouseListener(mainMenu);
-			this.removeMouseMotionListener(mainMenu);
-			
-			this.setRedrawLoop(false);
-		}
-	}
-
-	/**
-	 * Opens or hides the esc menu.
-	 */
-	public void toggleEscMenu() {
-		escMenuView = !escMenuView; // toggle boolean
-		// change settings
-		if(escMenuView){
-			removeMouseListener(controller);
-			removeMouseMotionListener(controller);
-			addMouseListener(escMenu);
-			addMouseMotionListener(escMenu);
-		} else {
-			removeMouseListener(escMenu);
-			removeMouseMotionListener(escMenu);
-			addMouseListener(controller);
-			addMouseMotionListener(controller);
-		}
-	}
-
-	/**
-	 * Opens or hides the player select menu.
-	 */
-	public void togglePlayerSelectMenu() {
-		if(playerSelectMenu == null){
-			playerSelectMenu = new PlayerSelectMenu(this);
-		}
-		playerSelectView = !playerSelectView; // toggle boolean
-		// change settings
-		if(playerSelectView){
-			removeMouseListener(controller);
-			removeMouseMotionListener(controller);
-			addMouseListener(playerSelectMenu);
-			addMouseMotionListener(playerSelectMenu);
-			setRedrawLoop(true);
-		} else {
-			removeMouseListener(playerSelectMenu);
-			removeMouseMotionListener(playerSelectMenu);
-			setRedrawLoop(false);
-		}
-	}
-
-	/**
-	 * Opens or hides the end-game winner view.
-	 * @param display true to display menu, false to hide it
-	 */
-	public void setWinnerView(boolean display) {
-		if(winnerMenu == null){
-			this.winnerMenu = new WinnerMenu(this, controller);
-		}
-		winnerMenuView = display; // toggle boolean
-		// change settings
-		if(winnerMenuView){			
-			removeMouseListener(controller);
-			removeMouseMotionListener(controller);
-			
-			addMouseListener(winnerMenu);
-			addMouseMotionListener(winnerMenu);
-			
-			SoundManager.playQueue(SoundManager.CREDIT_SONGS);
-		} else {
-			removeMouseListener(winnerMenu);
-			removeMouseMotionListener(winnerMenu);
-		
-//			addMouseListener(controller);
-//			addMouseMotionListener(controller);
-		}
-	}
-
-	/**
-	 * Sets the container inventory to display.
-	 * Null = display nothing.
-	 * @param currentContainer The container to show
-	 */
-	public void setCurrentContainer(Container container) {
-		if (currentContainer == container){
-			currentContainer = null;
-		} else {
-			this.currentContainer = container;
-		}
-	}
-	
-	public Container getCurrentContainer(){
-		return currentContainer;
-	}
-
-	public int getViewDirection() {
-		return viewDirection;
-	}
-	
-	/**
-	 * Change the view direction.
-	 * @param dir The new view direction
-	 */
-	public void setViewDirection(int dir){
-		if (dir < 0 || dir > 3){return;}
-		viewDirection = dir;
-	}
-	
-	/**
 	 * Rotates the player's view clockwise
 	 */
 	public void rotateViewRight() {
@@ -663,6 +505,14 @@ public class GUICanvas extends JComponent{
 		compass.rotate(-90);
 	}
 	
+	/**
+	  * Rotates the sundial by the specified number of degrees
+	  * @param degrees The degrees to rotate
+	  */
+	public void rotateSundial(double degrees){
+		sundial.rotate(degrees);
+	}
+
 	/**
 	 * Utility method to convert a direction relative to the view direction
 	 * back to the direction of the global coordinates
@@ -716,6 +566,97 @@ public class GUICanvas extends JComponent{
 	}
 
 	/**
+	 * Opens or hides the main menu.
+	 * @param isMainMenu true to show the main menu, false otherwise
+	 */
+	public void setMainMenu(boolean isMainMenu) {
+		this.mainMenuView = isMainMenu;
+		
+		if(isMainMenu){
+			SoundManager.playSong("MainMenu/8-bit Survivor Eye Of The Tiger.mp3");
+			
+			this.removeController(controller);
+			this.addMouseListener(mainMenu);
+			this.addMouseMotionListener(mainMenu);
+			
+			this.setRedrawLoop(true);
+		} else {
+			this.removeMouseListener(mainMenu);
+			this.removeMouseMotionListener(mainMenu);
+			
+			this.setRedrawLoop(false);
+		}
+	}
+
+	/**
+	 * Opens or hides the player select menu.
+	 */
+	public void togglePlayerSelectMenu() {
+		if(playerSelectMenu == null){
+			playerSelectMenu = new PlayerSelectMenu(this);
+		}
+		playerSelectView = !playerSelectView; // toggle boolean
+		// change settings
+		if(playerSelectView){
+			removeMouseListener(controller);
+			removeMouseMotionListener(controller);
+			addMouseListener(playerSelectMenu);
+			addMouseMotionListener(playerSelectMenu);
+			setRedrawLoop(true);
+		} else {
+			removeMouseListener(playerSelectMenu);
+			removeMouseMotionListener(playerSelectMenu);
+			setRedrawLoop(false);
+		}
+	}
+
+	/**
+	 * Opens or hides the esc menu.
+	 */
+	public void toggleEscMenu() {
+		escMenuView = !escMenuView; // toggle boolean
+		// change settings
+		if(escMenuView){
+			removeMouseListener(controller);
+			removeMouseMotionListener(controller);
+			addMouseListener(escMenu);
+			addMouseMotionListener(escMenu);
+		} else {
+			removeMouseListener(escMenu);
+			removeMouseMotionListener(escMenu);
+			addMouseListener(controller);
+			addMouseMotionListener(controller);
+		}
+	}
+
+	/**
+		 * Opens or hides the end-game winner view.
+		 * @param display true to display menu, false to hide it
+		 */
+		public void setWinnerView(boolean display) {
+			if(winnerMenu == null){
+				this.winnerMenu = new WinnerMenu(this, controller);
+			}
+			winnerMenuView = display; // toggle boolean
+			// change settings
+			if(winnerMenuView){			
+				removeMouseListener(controller);
+				removeMouseMotionListener(controller);
+				
+				addMouseListener(winnerMenu);
+				addMouseMotionListener(winnerMenu);
+				
+				SoundManager.playQueue(SoundManager.CREDIT_SONGS);
+			} else {
+				removeMouseListener(winnerMenu);
+				removeMouseMotionListener(winnerMenu);
+			
+	//			addMouseListener(controller);
+	//			addMouseMotionListener(controller);
+			}
+		}
+
+	/**
 	 * Clean up the controller, removing it from this 
 	 * canvas
 	 * @param controller
@@ -732,25 +673,84 @@ public class GUICanvas extends JComponent{
 			this.controller = null;
 		}
 	}
-	
+
 	public void removeEscMenu(EscMenu menu){
 		if(menu == null){return;}
 		
 		this.removeMouseListener(menu);
 		this.removeMouseMotionListener(menu);
 	}
-	
-	public boolean getShowWinnerView(){
+
+	public Container getCurrentContainer(){
+		return currentContainer;
+	}
+
+	/**
+	 * Gets the current player.
+	 * @return the current player
+	 */
+	public Player getCurrentPlayer(){
+		return controller.getCurrentPlayer();
+	}
+
+	/**
+	 * Gets the current view scale of this canvas.
+	 * @return The current view scale: either 1 or 2
+	 */
+	public int getViewScale() {
+		return viewScale;
+	}
+
+	public int getViewDirection() {
+		return viewDirection;
+	}
+
+	public boolean isWinnerView(){
 		return this.winnerMenuView;
 	}
-	 /**
-	  * Rotates the sundial by the specified number of degrees
-	  * @param degrees The degrees to rotate
-	  */
-	public void rotateSundial(double degrees){
-		sundial.rotate(degrees);
+
+	/**
+	 * Sets the container inventory to display.
+	 * Null = display nothing.
+	 * @param currentContainer The container to show
+	 */
+	public void setCurrentContainer(Container container) {
+		if (currentContainer == container){
+			currentContainer = null;
+		} else {
+			this.currentContainer = container;
+		}
 	}
-	
+
+	/**
+	 * Sets the current view scale.
+	 * @param viewScale The new view scale: either 1 or 2.
+	 */
+	public void setViewScale(int viewScale) {
+		this.viewScale = viewScale;
+	}
+
+	/**
+	 * Change the view direction.
+	 * @param dir The new view direction
+	 */
+	public void setViewDirection(int dir){
+		if (dir < 0 || dir > 3){return;}
+		viewDirection = dir;
+	}
+
+	/**
+	 * Update the tooltip info
+	 * @param toolTip The tooltip text
+	 * @param x The tooltip's x position
+	 * @param y The tooltip's y position
+	 */
+	public void setToolTip(String toolTip, int x, int y) {
+		this.toolTip = toolTip;
+		this.toolTipX = x;
+		this.toolTipY = y;
+	}
+
 	/**
 	 * A class to constantly redraw the canvas while the main menu is running
 	 * before a controller is created

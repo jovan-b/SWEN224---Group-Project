@@ -49,6 +49,17 @@ public class Sundial {
 	}
 	
 	/**
+	 * Updates the image to the next frame in its animation.
+	 */
+	public void update() {
+		if (rot > targetRot && targetRot > rotateAngle){
+			return;
+		}
+		rot += rotateAngle;
+		rotateImage(rot);
+	}
+
+	/**
 	 * Rotates the sundial clockwise by the given angle.
 	 * @param angle The angle to rotate by
 	 */
@@ -94,17 +105,6 @@ public class Sundial {
 			scaledSundial = largeImage;
 			rotated = scaledSundial;
 		}
-	}
-
-	/**
-	 * Updates the image to the next frame in its animation.
-	 */
-	public void update() {
-		if (rot > targetRot && targetRot > rotateAngle){
-			return;
-		}
-		rot += rotateAngle;
-		rotateImage(rot);
 	}
 
 }

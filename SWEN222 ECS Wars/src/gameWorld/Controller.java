@@ -141,7 +141,7 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 				nextTime += FRAME_RATE;
 				update();
 				// check if game is over
-				if(checkForWinner() != null && !gui.getCanvas().getShowWinnerView()){
+				if(checkForWinner() != null && !gui.getCanvas().isWinnerView()){
 					gui.getCanvas().setWinnerView(true);
 				}
 				if(currentTime < nextTime) gui.draw();

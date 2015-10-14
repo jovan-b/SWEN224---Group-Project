@@ -213,6 +213,39 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	}
 
 	@Override
+	/**
+	 * Checks which button the mouse is over and highlights that button
+	 */
+	public void mouseMoved(MouseEvent e) {
+		// calculate canvas centre
+		int midX = canvas.getWidth()/2;
+		int midY = canvas.getHeight()/2;
+		int x = e.getX();
+		int y = e.getY();
+		int buttonY = midY - BUTTON_TOP_DIFF;
+		int gap = 20 + BUTTON_HEIGHT;
+		int buttonX = midX - BUTTON_LEFT_DIFF;
+		
+		// check if x is within button bounds
+		if(buttonX <= x && x < buttonX+BUTTON_WIDTH){
+			// check which y it is on
+			for(int i=0; i<buttonLabels.length; i++){
+				if(buttonY <= y && y < buttonY + BUTTON_HEIGHT){
+					// found the selected button
+					this.selectedButton = i;
+					return;
+				}
+				buttonY += gap;
+			}
+		}
+		// deselect buttons
+		this.selectedButton = Integer.MAX_VALUE;
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {}
+
+	@Override
 	public void mouseClicked(MouseEvent e) {}
 
 	@Override
@@ -353,6 +386,10 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	private void quit() {
+		System.exit(0);
+	}
+
 	/**
 	 * Get a player id to send across the server to tell every client what
 	 * your player is
@@ -388,43 +425,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			default:
 				return new StreaderPlayer(null, 0, 0);
 		}
-	}
-	
-	private void quit() {
-		System.exit(0);
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {}
-
-	@Override
-	/**
-	 * Checks which button the mouse is over and highlights that button
-	 */
-	public void mouseMoved(MouseEvent e) {
-		// calculate canvas centre
-		int midX = canvas.getWidth()/2;
-		int midY = canvas.getHeight()/2;
-		int x = e.getX();
-		int y = e.getY();
-		int buttonY = midY - BUTTON_TOP_DIFF;
-		int gap = 20 + BUTTON_HEIGHT;
-		int buttonX = midX - BUTTON_LEFT_DIFF;
-		
-		// check if x is within button bounds
-		if(buttonX <= x && x < buttonX+BUTTON_WIDTH){
-			// check which y it is on
-			for(int i=0; i<buttonLabels.length; i++){
-				if(buttonY <= y && y < buttonY + BUTTON_HEIGHT){
-					// found the selected button
-					this.selectedButton = i;
-					return;
-				}
-				buttonY += gap;
-			}
-		}
-		// deselect buttons
-		this.selectedButton = Integer.MAX_VALUE;
 	}
 	
 	
