@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
@@ -24,6 +25,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import gameWorld.Controller;
 import gameWorld.MultiPlayerController;
 import gameWorld.SinglePlayerController;
+import gameWorld.characters.DavePlayer;
+import gameWorld.characters.Player;
 import network.Server;
 
 /**
@@ -310,6 +313,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	 */
 	private void connect() {
 		try{
+			Player player = new DavePlayer(null, 0, 0);
 			String ip = JOptionPane.showInputDialog(canvas, "Enter the "
 					+ "IP of the server");
 			String p = JOptionPane.showInputDialog(canvas, "Enter the "
@@ -319,11 +323,15 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			Socket s = new Socket(ip, port);
 			
 			//Create the socket input stream to wait for the user input
+			DataOutputStream output = new DataOutputStream(s.getOutputStream());
 			DataInputStream input = new DataInputStream(s.getInputStream());
-
+			
+			int playerNum = getPlayerNumber(player);
+			
 			//Waits for the server to send an amount of players in the game
 			int numberOfPlayers = input.readInt();
 			int uid = input.readInt();
+			output.writeInt(playerNum);
 			
 			this.setRedrawLoop(false);
 			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers, canvas), uid);
@@ -334,6 +342,25 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	/**
+	 * Get a player id to send across the server to tell every client what
+	 * your player is
+	 * @return
+	 */
+	public int getPlayerNumber(Player player){
+		String name = player.getName();
+		switch(name){
+			case("Dave"):
+				return 1;
+			case("Marco"):
+				return 2;
+			case("Pondy"):
+				return 3;
+			default:
+				return 4;
+		}
+	}
+	
 	private void quit() {
 		System.exit(0);
 	}
