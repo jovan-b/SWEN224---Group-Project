@@ -58,9 +58,6 @@ public class SaveLoadTests {
 		
 		//check player has right items and inventory
 		checkPlayerInventory(base, clone);
-		
-		//check room items on floor are the same
-		checkRoomItems(base, clone);
 	}
 	
 	/*
@@ -85,30 +82,5 @@ public class SaveLoadTests {
 		assertTrue(baseInventory[2].equals(cloneInventory[2]));
 		
 		assertTrue(base.getCurrentPlayer().getWeapon().equals(clone.getCurrentPlayer().getWeapon()));
-	}
-
-	/*
-	 * Checks items on room floor are same in base and clone
-	 */
-	private void checkRoomItems(Controller base, Controller clone){
-		List<Room> baseRooms = base.getRooms();
-		List<Room> cloneRooms = clone.getRooms();
-		
-		for(int i = 0; i< baseRooms.size(); i++){
-			Item[][] baseContents = baseRooms.get(i).getContents();
-			Item[][] cloneContents = cloneRooms.get(i).getContents();
-			
-			for(int j = 0; j < baseContents.length; j++){
-				for(int k = 0; k < baseContents[j].length; k++){
-					if(!(baseContents[j][k] instanceof Floor) || 
-							!(cloneContents[j][k] instanceof Floor)) continue;
-					if(((Floor)baseContents[j][k]).getItem() != null &&
-							((Floor)cloneContents[j][k]).getItem() != null){
-					assertTrue(((Floor)baseContents[j][k]).getItem().equals
-							(((Floor)cloneContents[j][k]).getItem()));
-					}
-				}
-			}
-		}
 	}
 }
