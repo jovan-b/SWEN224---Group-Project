@@ -577,8 +577,6 @@ public class GUICanvas extends JComponent{
 		} else {
 			removeMouseListener(playerSelectMenu);
 			removeMouseMotionListener(playerSelectMenu);
-			addMouseListener(controller);
-			addMouseMotionListener(controller);
 			setRedrawLoop(false);
 		}
 	}

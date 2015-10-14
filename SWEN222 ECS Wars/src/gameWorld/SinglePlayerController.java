@@ -200,10 +200,6 @@ public class SinglePlayerController extends Controller {
 			shooting = true;
 			mouseX = e.getX();
 			mouseY = e.getY();
-		} else if (e.getButton() == 3) {
-			int x = e.getX();
-			int y = e.getY();
-			rightClickInteract(x, y, player);
 		}
 	}
 
@@ -214,6 +210,10 @@ public class SinglePlayerController extends Controller {
 	public void mouseReleased(MouseEvent e) {
 		if (e.getButton() == 1) {
 			shooting = false;
+		} else if (e.getButton() == 3) {
+			int x = e.getX();
+			int y = e.getY();
+			rightClickInteract(x, y, player);
 		}
 	}
 
