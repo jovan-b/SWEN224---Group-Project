@@ -48,6 +48,7 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 	private String[][] buttonLabels; // the button text
 	private int selectedButtonRow = Integer.MAX_VALUE; // the button row currently highlighted
 	private int selectedButtonCol = Integer.MAX_VALUE; // the button col currently highlighted
+	private boolean loading; // true if the game is currently loading
 
 
 	/**
@@ -131,6 +132,11 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 		drawButtons(g, midX, midY);
 		// return stroke to default
 		g2.setStroke(new BasicStroke(1));
+		if(loading){
+			int loadingX = 10;
+			int loadingY = canvas.getHeight() - TEXT_SIZE - 10;
+			g.drawString("Loading...", loadingX, loadingY);
+		}
 	}
 
 	/**
@@ -254,6 +260,11 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 		} else {
 			return;
 		}
+		
+		// draw the text 'loading'
+		loading = true;
+		drawMenuItems(canvas.getGraphics());
+		
 		canvas.setRedrawLoop(false);
 		if(controller instanceof SinglePlayerController){
 			((SinglePlayerController)controller).initialise(selectedPlayer);
@@ -261,8 +272,9 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 			controller.initialise();
 		}
 		
-		canvas.startGame(controller, 0);
 		canvas.togglePlayerSelectMenu();
+		canvas.startGame(controller, 0);
+		loading = false;
 		
 		selectedButtonRow = Integer.MAX_VALUE;
 		selectedButtonCol = Integer.MAX_VALUE;
