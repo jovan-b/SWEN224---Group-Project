@@ -83,11 +83,13 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 		try {
 			for (int ani = 0; ani < 3; ani++){
 				daveImages[ani] = ImageIO.read(WinnerMenu.class.getResource("/Players/Dave"+2+ani+".png"));
+				pondyImages[ani] = ImageIO.read(WinnerMenu.class.getResource("/Players/Pondy"+2+ani+".png"));
+				marcoImages[ani] = ImageIO.read(WinnerMenu.class.getResource("/Players/Marco"+2+ani+".png"));
+				streaderImages[ani] = ImageIO.read(WinnerMenu.class.getResource("/Players/Streader"+2+ani+".png"));
 			}
 		} catch (IOException e) {
 			System.out.println("Error loading player images: " + e.getMessage());
 		}
-		// TODO other players
 	}
 
 	/**
@@ -166,8 +168,10 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 		// determine which player type to draw
 		Player.PlayerType type = p.getType();
 		Image toDraw;
-		switch(type){ //TODO add other player types
-		case DavePlayer : toDraw = daveImages[animState]; break;
+		switch(type){
+		case PondyPlayer : toDraw = pondyImages[animState]; break;
+		case MarcoPlayer : toDraw = marcoImages[animState]; break;
+		case StreaderPlayer : toDraw = streaderImages[animState]; break;
 		default : toDraw = daveImages[animState];
 		}
 		// draw player name and points
