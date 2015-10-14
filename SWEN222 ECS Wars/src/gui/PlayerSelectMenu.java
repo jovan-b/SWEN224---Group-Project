@@ -32,7 +32,7 @@ import gameWorld.characters.StreaderPlayer;
 import network.Server;
 
 /**
- * Displays the player select menu for the game.
+ * A menu which allows the player to select which character they want to play as.
  * @author Sarah Dobie 300315033
  *
  */
@@ -54,14 +54,13 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 	private int animModifier = 1; // flicks between 1 and -1 to loop animation
 	private int animCounter = 0; // counts each frame the player has moved
 	private String[][] buttonLabels; // the button text
-	private int selectedButtonRow = Integer.MAX_VALUE; // the button currently highlighted
-	private int selectedButtonCol = Integer.MAX_VALUE; // the button currently highlighted
+	private int selectedButtonRow = Integer.MAX_VALUE; // the button row currently highlighted
+	private int selectedButtonCol = Integer.MAX_VALUE; // the button col currently highlighted
 
 
 	/**
-	 * Constructor for class MainMenu.
+	 * Constructor for class PlayerSelectMenu.
 	 * @param canvas The GUICanvas the menu will be drawn on
-	 * @param controller The controller running this
 	 */
 	public PlayerSelectMenu(GUICanvas canvas) {
 		this.canvas = canvas;
@@ -111,7 +110,7 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 	}
 
 	/**
-	 * Displays the main menu.
+	 * Displays the menu.
 	 * @param g The Graphics object with which to draw the menu
 	 */
 	public void paint(Graphics g){
@@ -145,7 +144,6 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 	/**
 	 * Draws the title 'Player Select' at the top of the menu.
 	 * @param g The graphics object with which to draw
-	 * @param textSize The button text size
 	 * @param midX The horizontal centre of the screen
 	 * @param midY The vertical centre of the screen
 	 */
@@ -196,6 +194,13 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	/**
+	 * Draws a sprite inside a button.
+	 * @param g The graphics object with which to draw
+	 * @param buttonX The left pos of the button
+	 * @param buttonY The top pos of the button
+	 * @param player The player name of the sprite to draw
+	 */
 	private void drawSprite(Graphics g, int buttonX, int buttonY, String player) {
 		Image toDraw;
 		switch(player){

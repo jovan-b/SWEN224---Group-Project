@@ -50,7 +50,7 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 	private int animCounter = 0; // counts each frame the player has moved
 
 	/**
-	 * Constructor for class EscMenu.
+	 * Constructor for class WinnerMenu.
 	 * @param canvas The canvas to draw on
 	 * @param ctrl The controller running the game
 	 */
@@ -80,6 +80,9 @@ public class WinnerMenu implements MouseListener, MouseMotionListener{
 	private void loadImages() {
 		// dave
 		daveImages = new Image[3];
+		pondyImages = new Image[3];
+		marcoImages = new Image[3];
+		streaderImages = new Image[3];
 		try {
 			for (int ani = 0; ani < 3; ani++){
 				daveImages[ani] = ImageIO.read(WinnerMenu.class.getResource("/Players/Dave"+2+ani+".png"));
