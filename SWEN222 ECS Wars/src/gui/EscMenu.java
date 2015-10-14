@@ -6,6 +6,10 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.FileWriter;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.saveAndLoad.SaveManager;
 import gameWorld.Controller;
@@ -168,8 +172,25 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 	}
 
 	private void saveGame() {
-		//TODO: change so player can specify name
-		SaveManager.saveGame(controller, "test_save.xml");
+		JFileChooser chooser = new JFileChooser();
+		
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		        "XML Files", "xml");
+		chooser.setFileFilter(filter);
+		
+		int returnVal = chooser.showSaveDialog(canvas);
+		
+		if(chooser.getSelectedFile() == null || 
+				returnVal != JFileChooser.APPROVE_OPTION){	//Player hasn't choosen a file
+			return;
+		}
+		
+		if(!chooser.getSelectedFile().getName().contains(".xml")){
+			SaveManager.saveGame(controller, chooser.getSelectedFile().getName() + ".xml");
+		}
+		else{
+			SaveManager.saveGame(controller, chooser.getSelectedFile().getName());
+		}
 	}
 
 	private void disconnect() {
