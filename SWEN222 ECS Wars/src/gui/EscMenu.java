@@ -41,7 +41,7 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 	public EscMenu(GUICanvas canvas, Controller ctrl){
 		this.canvas = canvas;
 		this.controller = ctrl;
-		buttonLabels = new String[]{"Resume", "Save", "Disconnect"};
+		buttonLabels = new String[]{"Resume", "Save"};
 	}
 
 	/**
@@ -127,7 +127,6 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 					switch(i){
 					case 0 : resume(); break;
 					case 1 : saveGame(); break;
-					case 2 : disconnect(); break;
 					}
 				}
 				// increment y
@@ -185,7 +184,7 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 		int returnVal = chooser.showSaveDialog(canvas);
 		
 		if(chooser.getSelectedFile() == null || 
-				returnVal != JFileChooser.APPROVE_OPTION){	//Player hasn't choosen a file
+				returnVal != JFileChooser.APPROVE_OPTION){	//Player hasn't chosen a file
 			return;
 		}
 		
@@ -195,10 +194,6 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 		else{
 			SaveManager.saveGame(controller, chooser.getSelectedFile().getName());
 		}
-	}
-
-	private void disconnect() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
