@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
  */
 public class Sundial {
 	
+	GUICanvas canvas;
 	BufferedImage sundialImage;
 	BufferedImage largeImage;
 	BufferedImage scaledSundial;
@@ -27,7 +28,8 @@ public class Sundial {
 	/**
 	 * Constructor for class Sundial.
 	 */
-	public Sundial() {
+	public Sundial(GUICanvas canvas) {
+		this.canvas = canvas;
 		rot = 0;
 		targetRot = 0;
 		rotateAngle = 0;
@@ -57,6 +59,9 @@ public class Sundial {
 		}
 		rot += rotateAngle;
 		rotateImage(rot);
+		
+		float alpha = (float) ((-Math.cos(Math.toRadians(rot)))*0.5+0.5);
+		canvas.getController().setNightAlpha(alpha);
 	}
 
 	/**

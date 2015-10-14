@@ -97,7 +97,7 @@ public class GUICanvas extends JComponent{
 	public GUICanvas(GUIFrame frame){
 		this.frame = frame;
 		this.compass = new Compass();
-		this.sundial = new Sundial();
+		this.sundial = new Sundial(this);
 		this.toolTip = null;
 				
 		torchLight = new Image[4];
@@ -679,6 +679,10 @@ public class GUICanvas extends JComponent{
 		
 		this.removeMouseListener(menu);
 		this.removeMouseMotionListener(menu);
+	}
+	
+	public Controller getController(){
+		return controller;
 	}
 
 	public Container getCurrentContainer(){

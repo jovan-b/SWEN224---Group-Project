@@ -25,7 +25,6 @@ public class DayNightEvent implements Event{
 //		if (time % duration == 0){
 //			controller.setDayTime(!controller.isDayTime());	
 //		}
-		controller.updateNightAlpha();
 		controller.getGUI().getCanvas().rotateSundial(180/duration);
 	}
 

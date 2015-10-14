@@ -32,7 +32,7 @@ public class GhostStrategy extends WaitStrategy {
 		double min = Double.MAX_VALUE;
 		
 		//If we have no target, search for a target in range
-		if (target == null){
+		if (target == null && !npc.isDead()){
 			//Find the closest player in the room
 			for (Player p : room.getPlayers() ){			
 				int dx = npc.getX() - p.getX();

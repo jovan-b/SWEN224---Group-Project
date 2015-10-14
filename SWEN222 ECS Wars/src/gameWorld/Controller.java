@@ -653,24 +653,13 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	public void setGUI(GUIFrame gui){
 		this.gui = gui;
 	}
+	
+	public void setNightAlpha(float alpha){
+		nightAlpha = alpha;
+	}
 
 	public void setRunning(boolean running){
 		isRunning = running;
-	}
-
-	/**
-	 * Updates the alpha value of the day/night display according to the 
-	 * current time
-	 */
-	public void updateNightAlpha() {
-		nightAlpha += nightAlphaMod;
-		if (nightAlpha > 1){
-			nightAlpha = 1;
-			nightAlphaMod *= -1;
-		} else if (nightAlpha < 0){
-			nightAlpha = 0;
-			nightAlphaMod *= -1;
-		}		
 	}
 
 }

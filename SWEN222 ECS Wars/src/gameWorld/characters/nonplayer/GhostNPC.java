@@ -47,6 +47,7 @@ public class GhostNPC extends NonPlayer {
 	@Override
 	public void onDeath(Player p){
 		p.givePoints(PointValues.NPC_HOSTILE_DEATH);
+		active.interact(null, this);
 	}
 	
 	@Override
