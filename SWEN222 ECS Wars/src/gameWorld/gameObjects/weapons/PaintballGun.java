@@ -55,11 +55,6 @@ public class PaintballGun extends Weapon {
 	}
 
 	@Override
-	public void setScaledImage(int viewDirection, Image scaledImage) {
-		super.scaledImage = scaledImage;
-	}
-
-	@Override
 	public Image getScaledImage(int viewDirection) {
 		return super.scaledImage;
 	}
@@ -72,6 +67,11 @@ public class PaintballGun extends Weapon {
 	@Override
 	public WeaponType getWeaponType() {
 		return WeaponType.PaintballGun;
+	}
+
+	@Override
+	public void setScaledImage(int viewDirection, Image scaledImage) {
+		super.scaledImage = scaledImage;
 	}
 
 }

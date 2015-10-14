@@ -51,11 +51,6 @@ public class ScatterGun extends Weapon{
 	public void use(Player p, Controller ctrl) {}
 
 	@Override
-	public Image getImage(int viewDirection) {
-		return super.image;
-	}
-
-	@Override
 	public int yOffset(int viewDirection) {
 		return 0;
 	}
@@ -66,8 +61,8 @@ public class ScatterGun extends Weapon{
 	}
 
 	@Override
-	public void setScaledImage(int viewDirection, Image scaledImage) {
-		super.scaledImage = scaledImage;
+	public Image getImage(int viewDirection) {
+		return super.image;
 	}
 
 	@Override
@@ -83,6 +78,11 @@ public class ScatterGun extends Weapon{
 	@Override
 	public WeaponType getWeaponType() {
 		return WeaponType.ScatterGun;
+	}
+
+	@Override
+	public void setScaledImage(int viewDirection, Image scaledImage) {
+		super.scaledImage = scaledImage;
 	}
 
 }

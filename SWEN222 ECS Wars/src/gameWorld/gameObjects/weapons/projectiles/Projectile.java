@@ -21,19 +21,6 @@ public interface Projectile {
 	public void update();
 	
 	/**
-	 * getters for the x and y pos of the projectile - for drawing
-	 * @return
-	 */
-	public int getX();
-	public int getY();
-	
-	public void setRow(int x);
-	public int getRow();
-	
-	public boolean isActive();
-	public void setActive(boolean active);
-	
-	/**
 	 * Creates a new instance of this projectile which heads 
 	 * in a given direction
 	 * 
@@ -44,6 +31,24 @@ public interface Projectile {
 	 */
 	public Projectile newInstance(Player p, double theta);
 	
+	public static double xDiff(double theta, double speed){
+		return Math.cos(theta)*speed;
+	}
+
+	public static double yDiff(double theta, double speed){
+		return Math.sin(theta)*speed;
+	}
+
+	public boolean isActive();
+
+	/**
+	 * getters for the x and y pos of the projectile - for drawing
+	 * @return
+	 */
+	public int getX();
+
+	public int getY();
+
 	/**
 	 * Returns the bounding box for this projectile
 	 * @return
@@ -56,22 +61,19 @@ public interface Projectile {
 	 */
 	public Player getPlayer();
 	
+	public int getRow();
+
+	public Image getImage(int scale);
+
+	public int getSize();
+
+	public void setActive(boolean active);
+
 	/**
 	 * Sets the speed multiplier for this projectile
 	 * @param multi
 	 */
 	public void setSpeedMultiplier(double multi);
-	
-	
-	public static double xDiff(double theta, double speed){
-		return Math.cos(theta)*speed;
-	}
-	
-	public static double yDiff(double theta, double speed){
-		return Math.sin(theta)*speed;
-	}
-	
-	public Image getImage(int scale);
 
-	public int getSize();
+	public void setRow(int x);
 }

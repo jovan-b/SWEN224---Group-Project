@@ -63,11 +63,6 @@ public class LTSAGun extends Weapon {
 	}
 
 	@Override
-	public void setScaledImage(int viewDirection, Image scaledImage) {
-		super.scaledImage = scaledImage;
-	}
-
-	@Override
 	public Image getScaledImage(int viewDirection) {
 		return super.scaledImage;
 	}
@@ -80,6 +75,11 @@ public class LTSAGun extends Weapon {
 	@Override
 	public WeaponType getWeaponType() {
 		return WeaponType.LTSAGun;
+	}
+
+	@Override
+	public void setScaledImage(int viewDirection, Image scaledImage) {
+		super.scaledImage = scaledImage;
 	}
 
 }

@@ -60,11 +60,6 @@ public class Pistol extends Weapon {
 	}
 
 	@Override
-	public void setScaledImage(int viewDirection, Image scaledImage) {
-		super.scaledImage = scaledImage;
-	}
-
-	@Override
 	public Image getScaledImage(int viewDirection) {
 		return super.scaledImage;
 	}
@@ -77,6 +72,11 @@ public class Pistol extends Weapon {
 	@Override
 	public WeaponType getWeaponType() {
 		return WeaponType.Pistol;
+	}
+
+	@Override
+	public void setScaledImage(int viewDirection, Image scaledImage) {
+		super.scaledImage = scaledImage;
 	}
 
 }

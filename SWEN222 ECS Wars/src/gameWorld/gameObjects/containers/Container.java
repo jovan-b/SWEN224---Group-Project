@@ -28,47 +28,6 @@ public abstract class Container implements ItemSpawner {
 	}
 	
 	/**
-	 * Returns a shallow clone of the contents of this container.
-	 * @return A shallow clone of this container's contents
-	 */
-	public List<Item> getContents() {
-		return new ArrayList<Item>(contents);
-	}
-	
-	/**
-	 * Adds an item to the contents of this container.
-	 * @param item The item to add
-	 * @return True if the item was successfully added, false otherwise.
-	 */
-	public boolean addItem(Item item){
-		if(contents.size() < capacity && item != this){
-			contents.add(item);
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * Removes all items from this container.
-	 */
-	public void empty(){
-		contents.clear();
-	}
-	
-	/**
-	 * returns the item at the specified index in the Container
-	 * or a blank wall if outside the bounds
-	 * @param index The index of the item to return
-	 * @return the item at index
-	 */
-	public Item getItem(int index){
-		if (0 <= index && index < contents.size()){
-			return contents.get(index);
-		}
-		return new Wall();
-	}
-	
-	/**
 	 * Moves an item at the specified index into the player's 
 	 * inventory if they have room. Removes the item from
 	 * the Container
@@ -83,6 +42,40 @@ public abstract class Container implements ItemSpawner {
 		if (player.pickUp(item)){
 			contents.remove(index);
 		}
+	}
+
+	/**
+	 * Adds an item to the contents of this container.
+	 * @param item The item to add
+	 * @return True if the item was successfully added, false otherwise.
+	 */
+	public boolean addItem(Item item){
+		if(contents.size() < capacity && item != this){
+			contents.add(item);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns a shallow clone of the contents of this container.
+	 * @return A shallow clone of this container's contents
+	 */
+	public List<Item> getContents() {
+		return new ArrayList<Item>(contents);
+	}
+
+	/**
+	 * returns the item at the specified index in the Container
+	 * or a blank wall if outside the bounds
+	 * @param index The index of the item to return
+	 * @return the item at index
+	 */
+	public Item getItem(int index){
+		if (0 <= index && index < contents.size()){
+			return contents.get(index);
+		}
+		return new Wall();
 	}
 	
 	/**

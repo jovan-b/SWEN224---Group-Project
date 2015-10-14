@@ -52,13 +52,13 @@ public class Pouch extends Container implements ItemSpawner {
 	}
 
 	@Override
-	public Image getImage(int viewDirection) {
-		return image;
+	public boolean canWalk() {
+		return true;
 	}
 
 	@Override
-	public boolean canWalk() {
-		return true;
+	public Image getImage(int viewDirection) {
+		return image;
 	}
 
 	@Override
@@ -69,11 +69,6 @@ public class Pouch extends Container implements ItemSpawner {
 	@Override
 	public int xOffset(int viewDirection) {
 		return 0;
-	}
-
-	@Override
-	public void setScaledImage(int viewDirection, Image scaledImage) {
-		this.scaledImage = scaledImage;
 	}
 
 	@Override
@@ -97,6 +92,11 @@ public class Pouch extends Container implements ItemSpawner {
 	@Override
 	public Type getType() {
 		return Type.Pouch;
+	}
+
+	@Override
+	public void setScaledImage(int viewDirection, Image scaledImage) {
+		this.scaledImage = scaledImage;
 	}
 
 }

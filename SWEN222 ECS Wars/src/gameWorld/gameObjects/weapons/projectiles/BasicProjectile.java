@@ -84,6 +84,10 @@ public abstract class BasicProjectile implements Projectile {
 		}
 	}
 	
+	public boolean isActive(){
+		return isActive;
+	}
+
 	@Override
 	public Rectangle getBoundingBox(){
 		return new Rectangle((int)x-hitBox, (int)y-hitBox, hitBox*2, hitBox*2);
@@ -103,20 +107,16 @@ public abstract class BasicProjectile implements Projectile {
 		return row;
 	}
 
+	public Player getPlayer(){
+		return this.player;
+	}
+
 	public void setRow(int row) {
 		this.row = row;
 	}
 	
-	public boolean isActive(){
-		return isActive;
-	}
-	
 	public void setActive(boolean active){
 		this.isActive = active;
-	}
-	
-	public Player getPlayer(){
-		return this.player;
 	}
 	
 	public void setSpeedMultiplier(double multi){

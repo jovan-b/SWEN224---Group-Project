@@ -49,6 +49,20 @@ public class LtsaBullet extends BasicProjectile{
 		this.largeImages = largeImages;
 	}
 
+	/**
+	 * Returns an incremented version of the state field or wraps it around to zero
+	 * if it reaches maximum state.
+	 * @return The next animation state of a bullet.
+	 */
+	public int nextState(){
+		int newState = state+1;
+		if(newState >= images.length){
+			newState = 0;
+		}
+		state = newState;
+		return newState;
+	}
+
 	@Override
 	public Projectile newInstance(Player p, double theta) {
 		return new LtsaBullet(p, p.getX(), p.getY(), state, theta, images, largeImages);
@@ -66,20 +80,6 @@ public class LtsaBullet extends BasicProjectile{
 	@Override
 	public int getSize() {
 		return bulletSize;
-	}
-	
-	/**
-	 * Returns an incremented version of the state field or wraps it around to zero
-	 * if it reaches maximum state.
-	 * @return The next animation state of a bullet.
-	 */
-	public int nextState(){
-		int newState = state+1;
-		if(newState >= images.length){
-			newState = 0;
-		}
-		state = newState;
-		return newState;
 	}
 	
 }

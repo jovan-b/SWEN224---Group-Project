@@ -119,6 +119,11 @@ public class Cabinet extends Container implements ItemSpawner {
 	}
 
 	@Override
+	public boolean addSpawnItem(Item item) {
+		return super.addItem(item);
+	}
+
+	@Override
 	public boolean canWalk() {
 		return false;
 	}
@@ -131,16 +136,6 @@ public class Cabinet extends Container implements ItemSpawner {
 	@Override
 	public int xOffset(int viewDirection) {
 		return 0;
-	}
-
-	@Override
-	public void setScaledImage(int viewDirection, Image scaledImage) {
-		switch(viewDirection){
-		case 1 : scaledImageEast = scaledImage; return; // EAST
-		case 2 : scaledImageSouth = scaledImage; return; // SOUTH
-		case 3 : scaledImageWest = scaledImage; return; // WEST
-		default : scaledImageNorth = scaledImage; return; // NORTH
-		}
 	}
 
 	@Override
@@ -159,11 +154,6 @@ public class Cabinet extends Container implements ItemSpawner {
 	}
 
 	@Override
-	public boolean addSpawnItem(Item item) {
-		return super.addItem(item);
-	}
-
-	@Override
 	public int remainingCapacity() {
 		return super.capacity - contents.size();
 	}
@@ -171,6 +161,16 @@ public class Cabinet extends Container implements ItemSpawner {
 	@Override
 	public Type getType() {
 		return Type.Cabinet;
+	}
+
+	@Override
+	public void setScaledImage(int viewDirection, Image scaledImage) {
+		switch(viewDirection){
+		case 1 : scaledImageEast = scaledImage; return; // EAST
+		case 2 : scaledImageSouth = scaledImage; return; // SOUTH
+		case 3 : scaledImageWest = scaledImage; return; // WEST
+		default : scaledImageNorth = scaledImage; return; // NORTH
+		}
 	}
 	
 }
