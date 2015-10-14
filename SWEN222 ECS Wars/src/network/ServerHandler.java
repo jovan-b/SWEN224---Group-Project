@@ -143,21 +143,6 @@ public class ServerHandler extends Thread{
 								output.writeInt(points);
 							}
 						}
-					//Set winner
-					case 7:
-						for(int i = 0; i<serverHandlers.length; i++){
-							if(serverHandlers[i] == this){
-								continue; // don't need to broadcast to yourself
-							} else if(serverHandlers[i].disconnected == true){
-								continue;
-							} else{
-								Socket socket = serverHandlers[i].getSocket();
-								output = new DataOutputStream(socket.getOutputStream());
-								//6 is the code for play point update
-								output.writeInt(uid);
-								output.writeInt(7);	
-							}
-						}
 				}
 			}
 			socket.close();

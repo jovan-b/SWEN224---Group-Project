@@ -113,9 +113,6 @@ public class ClientConnection extends Thread{
 					int points = input.readInt();
 					player.setPoints(points);
 					break;
-				//End game, set winner
-				case 7:
-					player.getCanvas().setWinnerView(true);
 				}
 			}
 		}

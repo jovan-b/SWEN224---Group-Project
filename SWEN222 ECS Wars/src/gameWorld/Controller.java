@@ -458,15 +458,10 @@ public abstract class Controller extends Thread implements KeyListener, MouseLis
 	private Player checkForWinner() {
 		for(Player p : players){
 			if(p.getPoints() >= PointValues.END_GAME_TARGET){
-				updateWinner();
 				return p;
 			}
 		}
 		return null;
-	}
-
-	public void updateWinner() {
-		//For multiplayer
 	}
 
 	/**
