@@ -51,7 +51,7 @@ public class PlayerSelectMenu implements MouseListener, MouseMotionListener {
 	private int selectedButtonRow = Integer.MAX_VALUE; // the button row currently highlighted
 	private int selectedButtonCol = Integer.MAX_VALUE; // the button col currently highlighted
 	private boolean loading; // true if the game is currently loading
-
+	private Player selectedPlayer;
 
 	/**
 	 * Constructor for class PlayerSelectMenu.
