@@ -81,12 +81,14 @@ public class ClientConnection extends Thread{
 					double theta = input.readDouble();
 					player.shoot(theta);
 					break;
+				//Disconnect
 				case 3:
 					//Tell the server handler to remove writing to the disconnected player
 					controller.getPlayer(user).disconnect();
 					output.writeInt(3);
 					output.writeInt(user);
 					break;
+				//Change weapon
 				case 4:
 					int weapon = input.readInt();
 					Weapon newWep;
@@ -102,6 +104,7 @@ public class ClientConnection extends Thread{
 					//TODO: drop weapon as well
 					player.setCurrentWeapon(newWep);
 					break;
+				//Update health
 				case 5:
 					int hp = input.readInt();
 					player.setHealth(hp);
