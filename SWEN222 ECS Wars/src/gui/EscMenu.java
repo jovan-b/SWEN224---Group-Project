@@ -13,6 +13,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.saveAndLoad.SaveManager;
 import gameWorld.Controller;
+import gameWorld.SinglePlayerController;
 
 /**
  * An in-game menu which gives options to resume, save, or disconnect.
@@ -172,6 +173,11 @@ public class EscMenu implements MouseListener, MouseMotionListener{
 	}
 
 	private void saveGame() {
+		//only save single player games
+		if(!(controller instanceof SinglePlayerController)){
+			return;
+		}
+		
 		JFileChooser chooser = new JFileChooser();
 		
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
