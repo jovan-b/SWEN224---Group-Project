@@ -296,7 +296,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	
 	private void newGame() {
 		canvas.setMainMenu(false);
-		canvas.togglePlayerSelectMenu();
+		canvas.togglePlayerSelectMenu(false);
 	}
 
 	private void loadGame() {
@@ -348,8 +348,12 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	 * Gets which server the client wants to connect to then starts the game.
 	 */
 	private void connect() {
+		canvas.setMainMenu(false);
+		canvas.togglePlayerSelectMenu(true);
+	}
+	
+	public void setUpMultiplayerGame(Player player){
 		try{
-			Player player = new MarcoPlayer(null, 0, 0);
 			String ip = JOptionPane.showInputDialog(canvas, "Enter the "
 					+ "IP of the server");
 			String p = JOptionPane.showInputDialog(canvas, "Enter the "
@@ -378,11 +382,14 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 			}
 			
 			//Start the game
+			canvas.togglePlayerSelectMenu(true);
 			canvas.startGame(new MultiPlayerController(s, uid, numberOfPlayers, canvas, players), uid);
 		} catch (IOException e){
 			JOptionPane.showMessageDialog(canvas, "Error: could not find server");
+			canvas.setMainMenu(true);
 		} catch (NumberFormatException ne){
 			JOptionPane.showMessageDialog(canvas, "Error: port is not a number");
+			canvas.setMainMenu(true);
 		}
 	}
 

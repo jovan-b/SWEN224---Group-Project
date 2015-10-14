@@ -1,3 +1,5 @@
+IMPORTANT: This project can only be run in Java 8!
+
 Setting up the Project Workspace for JavaFX:
 
 Eclipse has some problems with the JavaFX library (which is a default part of Java 8)

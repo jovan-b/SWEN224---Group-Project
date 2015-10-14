@@ -9,7 +9,6 @@ import gameWorld.gameObjects.SmallTreasure;
 import gameWorld.gameObjects.containers.Cabinet;
 import gameWorld.gameObjects.containers.Container;
 import gameWorld.gameObjects.weapons.LTSAGun;
-import gameWorld.gameObjects.weapons.PaintballGun;
 import gameWorld.gameObjects.weapons.Weapon;
 
 import org.junit.*;
