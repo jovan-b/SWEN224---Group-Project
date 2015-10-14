@@ -8,8 +8,7 @@ import org.junit.runners.Suite;
 	CharacterTests.class,
 	ContainerTests.class,
 	RoomTests.class,
-	SaveLoadTests.class,
-	WeaponAndProjectileTests.class
+	SaveLoadTests.class
 })
 
 public class TestSuite {
