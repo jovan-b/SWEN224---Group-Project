@@ -5,7 +5,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import gameWorld.PointValues;
 import gameWorld.Room;
+import gameWorld.characters.Player;
 import gameWorld.characters.nonplayer.strategy.GhostStrategy;
 import gameWorld.characters.nonplayer.strategy.RespawnStrategy;
 
@@ -40,6 +42,11 @@ public class GhostNPC extends NonPlayer {
 			System.out.println("Error loading player images: " + e.getMessage());
 		}
 		scaledSprites = sprites;
+	}
+	
+	@Override
+	public void onDeath(Player p){
+		p.givePoints(PointValues.NPC_HOSTILE_DEATH);
 	}
 	
 	@Override

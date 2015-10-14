@@ -14,7 +14,11 @@ import gameWorld.gameObjects.weapons.Weapon;
 
 import org.junit.*;
 
-
+/**
+ * Tests for Players
+ * @author Carl Anderson 300264124
+ *
+ */
 public class CharacterTests {
 	
 	@Test

@@ -113,7 +113,7 @@ public class NonPlayer extends Player {
 
 	@Override
 	public void modifyHealth(int amt, Projectile p){
-		if (amt < 0){
+		if (amt < 0 && p != null){
 			this.respond(Events.COMBAT);
 			this.interact(p.getPlayer());
 		}
@@ -121,10 +121,18 @@ public class NonPlayer extends Player {
 		if (this.isDead()){
 			// remove player's points for killing npc
 			if(p != null && p.getPlayer() != this){
-				p.getPlayer().removePoints(PointValues.NPC_DEATH);
+				onDeath(p.getPlayer());
 			}
 			this.respond(Events.DEATH);
 		}
+	}
+	
+	/**
+	 * Hook method called when the NPC is killed by another player
+	 * @param p
+	 */
+	protected void onDeath(Player p){
+		p.removePoints(PointValues.NPC_DEATH);
 	}
 
 	/**
