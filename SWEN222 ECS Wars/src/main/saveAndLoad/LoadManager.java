@@ -9,9 +9,11 @@ import gameWorld.gameObjects.Item.Type;
 import gameWorld.gameObjects.containers.*;
 import gameWorld.gameObjects.weapons.*;
 import gameWorld.gameObjects.weapons.Weapon.WeaponType;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -98,198 +100,6 @@ public class LoadManager {
 		controller.setPlayers(players);
 		controller.setCurrentPlayer(players.get(0));
 
-	}
-
-	private static void loadCabinetContents(Controller controller, Room r,
-			Element e) {
-		NodeList itemlist = e.getChildNodes();
-		
-		for(int i = 0; i < itemlist.getLength(); i++){
-			Element itemElem = (Element) itemlist.item(i);
-			
-			//if not a cabinet, start again
-			if(!itemElem.getTagName().equals("Cabinet")) continue;
-			//else, load cabinet contents
-			
-			//firstly, get the correct cabinet
-			Cabinet c = (Cabinet)r.getContents()[Integer.parseInt(itemElem.getAttribute("x"))]
-					[Integer.parseInt(itemElem.getAttribute("y"))];
-			
-			//then, load all items into cabinet
-			loadContainerItems(c, itemElem);
-		}
-	}
-
-	private static void loadRoomItems(Controller controller, Room r, Element e) {
-		NodeList itemlist = e.getChildNodes();
-		
-		for(int i = 0; i < itemlist.getLength(); i++){
-			Node inode = (Node) itemlist.item(i);
-			if(inode.getNodeType() == Node.ELEMENT_NODE
-					&& inode.getNodeName() == "Item"){
-				Element ielement = (Element) inode;	//item element
-				Item[][] roomContents = r.getContents();	//load room contents to modify
-				
-				switch(Type.valueOf(ielement.getAttribute("type"))){
-				case KeyCard:
-					
-					//load item into room at correct position
-					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-							[Integer.parseInt(ielement.getAttribute("y"))]
-							= new KeyCard();
-					break;
-				case Diamond:
-					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-							[Integer.parseInt(ielement.getAttribute("y"))] = 
-					new SmallTreasure(ielement.getAttribute("type"),
-							Integer.parseInt(ielement.getAttribute("points")), 
-							ielement.getAttribute("quality"));
-					break;
-				case Ruby: 
-					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-							[Integer.parseInt(ielement.getAttribute("y"))] = 
-					new SmallTreasure(ielement.getAttribute("type"),
-							Integer.parseInt(ielement.getAttribute("points")), 
-							ielement.getAttribute("quality"));
-					break;
-				case Emerald:
-					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-							[Integer.parseInt(ielement.getAttribute("y"))] = 
-					new SmallTreasure(ielement.getAttribute("type"),
-							Integer.parseInt(ielement.getAttribute("points")), 
-							(ielement.getAttribute("quality")));
-					break;
-				case Sapphire:
-					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-							[Integer.parseInt(ielement.getAttribute("y"))] = 
-					new SmallTreasure(ielement.getAttribute("type"),
-							Integer.parseInt(ielement.getAttribute("points")), 
-							(ielement.getAttribute("quality")));
-					break;
-				case Torch:
-					
-					//load item into room at correct position
-					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-							[Integer.parseInt(ielement.getAttribute("y"))]
-							= new Torch();
-					break;
-				case MedicineBottle:
-					
-					//load item into room at correct position
-					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-							[Integer.parseInt(ielement.getAttribute("y"))]
-							= new MedicineBottle();
-					break;
-				case PillBottle: 
-					
-					//load item into room at correct position
-					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-							[Integer.parseInt(ielement.getAttribute("y"))]
-							= new PillBottle();
-					break;
-				case Map:
-					
-					//load item into room at correct position
-					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-							[Integer.parseInt(ielement.getAttribute("y"))]
-							= new Map();
-					break;
-				//container items
-				case Pouch:
-					Pouch p = new Pouch();
-					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-							[Integer.parseInt(ielement.getAttribute("y"))]
-							= p;
-					loadContainerItems(p, ielement);
-					break;
-				default:	//weapon
-					loadRoomWeapons(controller, r, roomContents, ielement);
-					break;
-				}
-			}
-		}
-	}
-
-	@SuppressWarnings("incomplete-switch")
-	private static void loadContainerItems(Container c, Element e) {
-		NodeList items = e.getChildNodes();
-		
-		for(int i = 0; i < items.getLength(); i++){
-			Element itemElem = (Element)items.item(i);
-			
-			
-			switch(Type.valueOf(itemElem.getAttribute("type"))){
-			//add correct item to container
-			case KeyCard:
-				c.addItem(new KeyCard());
-				break;
-			case Diamond:
-				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
-						Integer.parseInt(itemElem.getAttribute("points")), 
-						itemElem.getAttribute("quality")));
-				break;
-			case Ruby: 
-				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
-						Integer.parseInt(itemElem.getAttribute("points")), 
-						itemElem.getAttribute("quality")));
-				break;
-			case Emerald:
-				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
-						Integer.parseInt(itemElem.getAttribute("points")), 
-						itemElem.getAttribute("quality")));
-				break;
-			case Sapphire:
-				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
-						Integer.parseInt(itemElem.getAttribute("points")), 
-						itemElem.getAttribute("quality")));
-				break;
-			case Torch:
-				c.addItem(new Torch());
-				break;
-			case MedicineBottle:
-				c.addItem(new MedicineBottle());
-				break;
-			case PillBottle: 
-				c.addItem(new PillBottle());
-				break;
-			case Map:
-				c.addItem(new Map());
-				break;
-			//container items
-			case Pouch:
-				Pouch p = new Pouch();
-				//load inner pouch items
-				loadContainerItems(p, itemElem);
-				c.addItem(p);
-				break;
-			}
-		}
-		
-	}
-
-	private static void loadRoomWeapons(Controller controller, Room r, 
-			Item[][] roomContents, Element ielement) {
-		switch(WeaponType.valueOf(ielement.getAttribute("weaponType"))){
-		case PaintballGun:
-			roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-					[Integer.parseInt(ielement.getAttribute("y"))]
-							= new PaintballGun();
-			break;
-		case ScatterGun:
-			roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-					[Integer.parseInt(ielement.getAttribute("y"))]
-							= new ScatterGun();
-			break;
-		case LTSAGun:roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-				[Integer.parseInt(ielement.getAttribute("y"))]
-						= new LTSAGun();
-			break;
-		case Pistol:
-			roomContents[Integer.parseInt(ielement.getAttribute("x"))]
-					[Integer.parseInt(ielement.getAttribute("y"))]
-							= new Pistol();
-			break;
-		}
 	}
 
 	private static void loadPlayers(Controller controller, Room r, Element e, 
@@ -402,6 +212,63 @@ public class LoadManager {
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
+	private static void loadContainerItems(Container c, Element e) {
+		NodeList items = e.getChildNodes();
+		
+		for(int i = 0; i < items.getLength(); i++){
+			Element itemElem = (Element)items.item(i);
+			
+			
+			switch(Type.valueOf(itemElem.getAttribute("type"))){
+			//add correct item to container
+			case KeyCard:
+				c.addItem(new KeyCard());
+				break;
+			case Diamond:
+				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
+						Integer.parseInt(itemElem.getAttribute("points")), 
+						itemElem.getAttribute("quality")));
+				break;
+			case Ruby: 
+				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
+						Integer.parseInt(itemElem.getAttribute("points")), 
+						itemElem.getAttribute("quality")));
+				break;
+			case Emerald:
+				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
+						Integer.parseInt(itemElem.getAttribute("points")), 
+						itemElem.getAttribute("quality")));
+				break;
+			case Sapphire:
+				c.addItem(new SmallTreasure(itemElem.getAttribute("type"),
+						Integer.parseInt(itemElem.getAttribute("points")), 
+						itemElem.getAttribute("quality")));
+				break;
+			case Torch:
+				c.addItem(new Torch());
+				break;
+			case MedicineBottle:
+				c.addItem(new MedicineBottle());
+				break;
+			case PillBottle: 
+				c.addItem(new PillBottle());
+				break;
+			case Map:
+				c.addItem(new Map());
+				break;
+			//container items
+			case Pouch:
+				Pouch p = new Pouch();
+				//load inner pouch items
+				loadContainerItems(p, itemElem);
+				c.addItem(p);
+				break;
+			}
+		}
+		
+	}
+
 	private static void loadWeapon(Controller controller, Player p,
 			Element pelement) {
 		NodeList weaponList = pelement.getChildNodes();
@@ -427,6 +294,141 @@ public class LoadManager {
 				p.setCurrentWeapon(new Pistol());
 				break;
 			}
+		}
+	}
+
+	private static void loadRoomWeapons(Controller controller, Room r, 
+			Item[][] roomContents, Element ielement) {
+		switch(WeaponType.valueOf(ielement.getAttribute("weaponType"))){
+		case PaintballGun:
+			roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+					[Integer.parseInt(ielement.getAttribute("y"))]
+							= new PaintballGun();
+			break;
+		case ScatterGun:
+			roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+					[Integer.parseInt(ielement.getAttribute("y"))]
+							= new ScatterGun();
+			break;
+		case LTSAGun:roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+				[Integer.parseInt(ielement.getAttribute("y"))]
+						= new LTSAGun();
+			break;
+		case Pistol:
+			roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+					[Integer.parseInt(ielement.getAttribute("y"))]
+							= new Pistol();
+			break;
+		}
+	}
+
+	private static void loadRoomItems(Controller controller, Room r, Element e) {
+		NodeList itemlist = e.getChildNodes();
+		
+		for(int i = 0; i < itemlist.getLength(); i++){
+			Node inode = (Node) itemlist.item(i);
+			if(inode.getNodeType() == Node.ELEMENT_NODE
+					&& inode.getNodeName() == "Item"){
+				Element ielement = (Element) inode;	//item element
+				Item[][] roomContents = r.getContents();	//load room contents to modify
+				
+				switch(Type.valueOf(ielement.getAttribute("type"))){
+				case KeyCard:
+					
+					//load item into room at correct position
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= new KeyCard();
+					break;
+				case Diamond:
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))] = 
+					new SmallTreasure(ielement.getAttribute("type"),
+							Integer.parseInt(ielement.getAttribute("points")), 
+							ielement.getAttribute("quality"));
+					break;
+				case Ruby: 
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))] = 
+					new SmallTreasure(ielement.getAttribute("type"),
+							Integer.parseInt(ielement.getAttribute("points")), 
+							ielement.getAttribute("quality"));
+					break;
+				case Emerald:
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))] = 
+					new SmallTreasure(ielement.getAttribute("type"),
+							Integer.parseInt(ielement.getAttribute("points")), 
+							(ielement.getAttribute("quality")));
+					break;
+				case Sapphire:
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))] = 
+					new SmallTreasure(ielement.getAttribute("type"),
+							Integer.parseInt(ielement.getAttribute("points")), 
+							(ielement.getAttribute("quality")));
+					break;
+				case Torch:
+					
+					//load item into room at correct position
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= new Torch();
+					break;
+				case MedicineBottle:
+					
+					//load item into room at correct position
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= new MedicineBottle();
+					break;
+				case PillBottle: 
+					
+					//load item into room at correct position
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= new PillBottle();
+					break;
+				case Map:
+					
+					//load item into room at correct position
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= new Map();
+					break;
+				//container items
+				case Pouch:
+					Pouch p = new Pouch();
+					roomContents[Integer.parseInt(ielement.getAttribute("x"))]
+							[Integer.parseInt(ielement.getAttribute("y"))]
+							= p;
+					loadContainerItems(p, ielement);
+					break;
+				default:	//weapon
+					loadRoomWeapons(controller, r, roomContents, ielement);
+					break;
+				}
+			}
+		}
+	}
+
+	private static void loadCabinetContents(Controller controller, Room r,
+			Element e) {
+		NodeList itemlist = e.getChildNodes();
+		
+		for(int i = 0; i < itemlist.getLength(); i++){
+			Element itemElem = (Element) itemlist.item(i);
+			
+			//if not a cabinet, start again
+			if(!itemElem.getTagName().equals("Cabinet")) continue;
+			//else, load cabinet contents
+			
+			//firstly, get the correct cabinet
+			Cabinet c = (Cabinet)r.getContents()[Integer.parseInt(itemElem.getAttribute("x"))]
+					[Integer.parseInt(itemElem.getAttribute("y"))];
+			
+			//then, load all items into cabinet
+			loadContainerItems(c, itemElem);
 		}
 	}
 	

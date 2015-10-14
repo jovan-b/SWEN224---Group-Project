@@ -93,29 +93,62 @@ public final class SaveManager {
 	}
 
 	/**
-	 * Save all items stored inside cabinets
-	 * The saveRoomContents() method is unable to safely parse cabinets
-	 * Thus, this method is needed to properly store cabinets states
+	 * Write Player objects into XML file
+	 * Player tags should contain:
+	 * 	-inventory tag
+	 * Player should have attributes:
+	 * 	-x, y position
+	 * 	-type(DavePlayer, PondyPlayer, etc)
+	 * 	-weapon
+	 * 	-health
 	 * 
 	 * @param room
 	 * @param r
 	 */
-	private static void saveCabinets(Element room, Room r) {
-		Item[][] contents = r.getContents();
+	private static void savePlayers(Element room, Room r) {
+		for (Player p : r.getPlayers()){
+			Element player = doc.createElement("Player");
+			room.appendChild(player);
+			
+			player.setAttribute("type", p.getType().name());
+			player.setAttribute("x", Integer.toString(p.getX()));
+			player.setAttribute("y", Integer.toString(p.getY()));
+			
+			//Save player Weapon
+			saveWeapon(p, player);
+			
+			//Write items player currently holds
+			saveInventory(p, player);
+		}
+	}
+
+	private static void saveInventory(Player p, Element player){
 		
-		for(int i = 0; i < contents.length; i++){
-			for(int j = 0; j < contents[0].length; j++){
-				if(!(contents[i][j] instanceof Cabinet)) continue;
-				
-				Cabinet c = (Cabinet)contents[i][j];
-				
-				Element e = doc.createElement("Cabinet");
-				saveContainerItems(e, c);
-				e.setAttribute("x", Integer.toString(i));
-				e.setAttribute("y", Integer.toString(j));
-				room.appendChild(e);
+		//put all the items inside player element
+		Item[] items = p.getInventory();
+		
+		for(int i = 0; i < items.length; i++){
+			if(items[i] != null){
+				Element inventoryItem = doc.createElement("Item");
+				inventoryItem.setAttribute("type", items[i].getType().name());
+				inventoryItem.setAttribute("index", Integer.toString(i));
+				if(items[i] instanceof SmallTreasure){
+					inventoryItem.setAttribute("quality", ((SmallTreasure)items[i]).getQuality());
+					inventoryItem.setAttribute("points", 
+							Integer.toString(((SmallTreasure)items[i]).getPrice()));
+				}
+				player.appendChild(inventoryItem);
 			}
 		}
+	}
+
+	private static void saveWeapon(Player p, Element player){
+		//initialise weapon
+		Element weapon = doc.createElement("Weapon");
+		player.appendChild(weapon);
+		
+		weapon.setAttribute("weaponType", p.getWeapon().getWeaponType().name());
+		
 	}
 
 	/**
@@ -176,6 +209,32 @@ public final class SaveManager {
 	}
 
 	/**
+	 * Save all items stored inside cabinets
+	 * The saveRoomContents() method is unable to safely parse cabinets
+	 * Thus, this method is needed to properly store cabinets states
+	 * 
+	 * @param room
+	 * @param r
+	 */
+	private static void saveCabinets(Element room, Room r) {
+		Item[][] contents = r.getContents();
+		
+		for(int i = 0; i < contents.length; i++){
+			for(int j = 0; j < contents[0].length; j++){
+				if(!(contents[i][j] instanceof Cabinet)) continue;
+				
+				Cabinet c = (Cabinet)contents[i][j];
+				
+				Element e = doc.createElement("Cabinet");
+				saveContainerItems(e, c);
+				e.setAttribute("x", Integer.toString(i));
+				e.setAttribute("y", Integer.toString(j));
+				room.appendChild(e);
+			}
+		}
+	}
+
+	/**
 	 * Save all the items inside a container
 	 * If no items are present, no XML element is created
 	 * 
@@ -194,65 +253,6 @@ public final class SaveManager {
 				innerItem.setAttribute("points", Integer.toString(((SmallTreasure)i).getPrice()));
 			}
 			e.appendChild(innerItem);
-		}
-	}
-
-	/**
-	 * Write Player objects into XML file
-	 * Player tags should contain:
-	 * 	-inventory tag
-	 * Player should have attributes:
-	 * 	-x, y position
-	 * 	-type(DavePlayer, PondyPlayer, etc)
-	 * 	-weapon
-	 * 	-health
-	 * 
-	 * @param room
-	 * @param r
-	 */
-	private static void savePlayers(Element room, Room r) {
-		for (Player p : r.getPlayers()){
-			Element player = doc.createElement("Player");
-			room.appendChild(player);
-			
-			player.setAttribute("type", p.getType().name());
-			player.setAttribute("x", Integer.toString(p.getX()));
-			player.setAttribute("y", Integer.toString(p.getY()));
-			
-			//Save player Weapon
-			saveWeapon(p, player);
-			
-			//Write items player currently holds
-			saveInventory(p, player);
-		}
-	}
-	
-	private static void saveWeapon(Player p, Element player){
-		//initialise weapon
-		Element weapon = doc.createElement("Weapon");
-		player.appendChild(weapon);
-		
-		weapon.setAttribute("weaponType", p.getWeapon().getWeaponType().name());
-		
-	}
-	
-	private static void saveInventory(Player p, Element player){
-		
-		//put all the items inside player element
-		Item[] items = p.getInventory();
-		
-		for(int i = 0; i < items.length; i++){
-			if(items[i] != null){
-				Element inventoryItem = doc.createElement("Item");
-				inventoryItem.setAttribute("type", items[i].getType().name());
-				inventoryItem.setAttribute("index", Integer.toString(i));
-				if(items[i] instanceof SmallTreasure){
-					inventoryItem.setAttribute("quality", ((SmallTreasure)items[i]).getQuality());
-					inventoryItem.setAttribute("points", 
-							Integer.toString(((SmallTreasure)items[i]).getPrice()));
-				}
-				player.appendChild(inventoryItem);
-			}
 		}
 	}
 }
