@@ -966,4 +966,8 @@ public class Room {
 			return false;
 		return true;
 	}
+	
+	public Controller getController(){
+		return ctrl;
+	}
 }

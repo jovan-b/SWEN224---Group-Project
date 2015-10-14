@@ -43,7 +43,8 @@ public class GhostStrategy extends WaitStrategy {
 				target = null;
 			}
 			
-			if (target != null){
+			//Play a sound if the ghost has acquired the current player as a target
+			if (target != null && target == npc.getCurrentRoom().getController().getCurrentPlayer()){
 				SoundManager.playSound("mgs_alert.mp3");
 			}
 		}
@@ -85,7 +86,8 @@ public class GhostStrategy extends WaitStrategy {
 	
 	@Override
 	public void interact(Player p, NonPlayer npc){
-		if (p != target){
+		//Play alert sound if there is new target, and it's the current player
+		if (p != target && npc.getCurrentRoom().getController().getCurrentPlayer() == p){
 			SoundManager.playSound("mgs_alert.mp3");
 		}
 		target = p;
