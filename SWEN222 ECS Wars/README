@@ -2,6 +2,11 @@ IMPORTANT: This project can only be run in Java 8!
 
 Setting up the Project Workspace for JavaFX:
 
+NOTE: JavaFX is currently throwing an error with JavaFX on the ECS machines,
+throwing a MediaException when attempting to create the media player. David has
+been informed, and has said to consult him when attempting to run this to decide
+on a workaround.
+
 Eclipse has some problems with the JavaFX library (which is a default part of Java 8)
 so in order to correctly set up our work environment, we need to change some things.
 
@@ -13,8 +18,6 @@ Step 1: Disable Errors with restricted access
 	
 Step 2: Include the Resources folder into Build Path
 	Right Click Resources folder > Build Path > Add to Build Path
-	
-	
 	
 	
 How to play:
@@ -32,5 +35,8 @@ How to play:
 	Key cards open locked doors.
 	Torches can be used in dark places.
 	Health rejuvenating items can be bought from certain NPCs by spending points.
+	
+15/10/15 : Added line 313 in MainMenu, with David's permission, to allow loading to work correctly. A git
+pull may be required in the team repository to get this additional code.
 	
 	
