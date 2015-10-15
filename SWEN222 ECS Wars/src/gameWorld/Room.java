@@ -777,7 +777,7 @@ public class Room {
 	 * @return the contents array
 	 */
 	public Item[][] getContents() {
-		return contents.clone();
+		return contents;
 	}
 
 	//FIXME: Do we want to hand back the actual collection, or a copy?

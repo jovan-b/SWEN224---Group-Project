@@ -300,7 +300,6 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 	}
 
 	private void loadGame() {
-//		this.setRedrawLoop(false);
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 		        "XML Files", "xml");
@@ -311,7 +310,7 @@ public class MainMenu implements MouseListener, MouseMotionListener {
 				returnVal != JFileChooser.APPROVE_OPTION){	//Player hasn't choosen a file
 			return;
 		}
-		
+		canvas.setMainMenu(false);
 		canvas.startGame(new SinglePlayerController(chooser.getSelectedFile()), 0);
 		
 	}
